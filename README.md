@@ -85,10 +85,15 @@ Remerciements à **Jazz Ferry** pour ses conseils en game design.
 ## 📁 Arborescence du projet
 
 ROOT/
+
 ├── src/ # Code source du jeu (à venir)
+
 ├── assets/ # Graphismes, sons, logos
+
 ├── README.md # Présentation du projet
+
 ├── cahier_initialisation.pdf # Cahier du sprint
+
 └── rootlogo1.png # Logo du jeu
 
 
