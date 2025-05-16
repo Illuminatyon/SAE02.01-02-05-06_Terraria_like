@@ -22,13 +22,24 @@ public enum Tiles {
     }
 
     public Image getTexture(/*int damageAmount*/) {
-        if (this.type == TileTypes.AIR) return null;
+        /**
+         * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
+         */
+        if (this.type == TileTypes.AIR)
+            return null;
         String path = "/fr/iut/hev/terraria/terraria/img/tile/".concat(this.name)./*concat(Integer.toString(damageAmount)).*/concat(".png");
-        System.out.println(path);
         return new Image(getClass().getResource(path).toExternalForm());
     }
 
-    //public Image getTexture_background()
+    public Image getTexture_background() {
+        /**
+         * Retourne le sprite background de la Tile
+         */
+        if (this.type == TileTypes.AIR)
+            return null;
+        String path = "/fr/iut/hev/terraria/terraria/img/tile/".concat(this.name).concat("_background.png");
+        return new Image(getClass().getResource(path).toExternalForm());
+    }
 
     public TileTypes getType() {
         return this.type;

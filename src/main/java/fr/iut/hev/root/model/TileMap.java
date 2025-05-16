@@ -8,20 +8,22 @@ public class TileMap {
     private final Tile[][] tileMap;
 
     public TileMap(int width, int height, int format) {
+        /**
+         * Constructeur de TileMap. "width" et "height" en pixel.
+         */
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
 
-        /*for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                tileMap[x][y] = new Tile(Tiles.AIR, 0, x, y);
-            }
-        }*/
+        //génération de la map test
         this.setTestMap();
 
     }
 
     public Tile getTile(int tileX, int tileY) {
+        /**
+         * Retourne la Tile de position tileX et tileY dans la TileMap
+         */
         if (!(tileX < 0 || tileY < 0 || tileX >= width || tileY >= height))
             return tileMap[tileY][tileX];
         else
@@ -29,6 +31,9 @@ public class TileMap {
     }
 
     public void setTestMap() {
+        /**
+         * crée une map en 1920p avec 120*67 tile de test
+         */
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
@@ -46,8 +51,10 @@ public class TileMap {
         }
     }
 
-    // Faire une verification pour pas que deux tiles se superposent et ajoute une tile précisé en  paramètre
     public void addTile(Tile tile) {
+        /**
+         * Fait une verification pour pas que deux tiles se superposent et ajoute une tile précisé en  paramètre
+         */
         int x = tile.getX();
         int y = tile.getY();
         if (getTile(x,y) == null)

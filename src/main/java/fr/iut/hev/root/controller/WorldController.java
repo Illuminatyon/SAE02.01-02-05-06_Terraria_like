@@ -1,6 +1,7 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.enums.Tiles;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
@@ -20,12 +21,21 @@ public class WorldController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("intialize");
         TileMap tilemaptest= new TileMap(1920,1072,16);
+        Tiles currentTile;
+        ImageView tileBreakable;
+        ImageView tileBackground;
+        int index = 0;
         for (int i = 0; i < tilemaptest.getHeight(); i++) {
             for (int j = 0; j < tilemaptest.getWidth(); j++) {
-                tileMap.getChildren().add(new ImageView(tilemaptest.getTile(j,i).getTile().getTexture()));
-                System.out.println("exéc boucle");
+                currentTile = tilemaptest.getTile(j,i).getTile();
+                tileBreakable = new ImageView(currentTile.getTexture());
+                tileBackground = new ImageView(currentTile.getTexture_background());
+                tileBreakable.setId(Integer.toString(index));
+                tileBackground.setId(Integer.toString(index));
+                tileMap.getChildren().add(tileBreakable);
+                backgroundTileMap.getChildren().add(tileBackground);
+                index++;
             }
         }
     }
