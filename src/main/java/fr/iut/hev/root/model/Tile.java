@@ -1,6 +1,8 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.enums.TileTypes;
 import fr.iut.hev.root.model.enums.Tiles;
+import javafx.scene.image.Image;
 
 public class Tile {
     private Tiles tile;
@@ -28,9 +30,25 @@ public class Tile {
         return this.tile;
     }
 
-    /*public Image getCurrentTexture() {
-        return this.tile.getTexture(this.maxHealth - this.health);
-    }*/
+    public Image getTexture(/*int damageAmount*/) {
+        /**
+         * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
+         */
+        if (this.tile.getType() == TileTypes.AIR)
+            return null;
+        String path = "/fr/iut/hev/terraria/terraria/img/tile/".concat(this.tile.getName())./*concat(Integer.toString(damageAmount)).*/concat(".png");
+        return new Image(getClass().getResource(path).toExternalForm());
+    }
+
+    public Image getTexture_background() {
+        /**
+         * Retourne le sprite background de la Tile
+         */
+        if (this.tile.getType() == TileTypes.AIR)
+            return null;
+        String path = "/fr/iut/hev/terraria/terraria/img/tile/".concat(this.tile.getName()).concat("_background.png");
+        return new Image(getClass().getResource(path).toExternalForm());
+    }
 
     public int getX() {
         return this.tileX;

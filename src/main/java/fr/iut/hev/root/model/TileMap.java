@@ -7,7 +7,9 @@ public class TileMap {
     private final int height;
     private final Tile[][] tileMap;
 
-    public TileMap(int width, int height, int format) {
+    public static final int format = 16;
+
+    public TileMap(int width, int height) {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
