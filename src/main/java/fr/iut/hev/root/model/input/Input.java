@@ -19,5 +19,5 @@ public abstract class Input {
         return this.key;
     }
 
-    protected abstract boolean isActive(InputListener listener);
+    public abstract boolean isActive(InputListener listener);
 }

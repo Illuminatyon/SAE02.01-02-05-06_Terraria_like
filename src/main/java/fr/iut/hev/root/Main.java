@@ -3,16 +3,25 @@ package fr.iut.hev.root;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main extends Application {
+    public static Scene scene;
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        StackPane root = new StackPane();
+        Pane background = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("world-background.fxml")));
+        ImageView player  = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("player.fxml")));
+        root.getChildren().addAll(background, player);
+        scene = new Scene(root, 300, 300);
+        stage.setTitle("ROOT");
         stage.setScene(scene);
         stage.show();
     }
