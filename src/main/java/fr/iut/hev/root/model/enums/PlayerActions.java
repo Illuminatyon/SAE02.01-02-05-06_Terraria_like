@@ -5,8 +5,6 @@ public enum PlayerActions {
     INTERACT,
     MOVE_RIGHT,
     MOVE_LEFT,
-    MOVE_UP,
-    MOVE_DOWN,
     JUMP,
     INVENTORY,
     HOTBAR_1,
