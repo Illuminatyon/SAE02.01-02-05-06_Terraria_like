@@ -1,10 +1,13 @@
 package fr.iut.hev.root.model;
 
+import static fr.iut.hev.root.model.TileMap.format;
+
 public class Collision {
+
     private Actor actor;
     private TileMap tileMap;
-    private int formatX;
-    private int formatY;
+    private int formatX; //Taille en nombre de tile horizontale de la collision (de l'acteur en question par conséquent)
+    private int formatY; //Même chose qu'au dessus mais verticalement
 
     public Collision(Actor actor,TileMap tileMap, int formatX, int formatY){
         this.actor = actor;
@@ -19,20 +22,122 @@ public class Collision {
     }
     public TileMap getTileMap() {return this.tileMap;}
 
-    public Boolean hasTopCollision() {
+    public boolean hasTopCollision() {
+        /**
+         * Renvoie True s'il existe une collision avec un bloc de terrain au dessus de l'acteur.
+         */
 
-        int x = this.actor.getX();
-        int y = this.actor.getY();
+        boolean hasCollision = false;
+        int x = this.actor.getX() + (format*formatX)/2;
+        int y = this.actor.getY() + (format*formatY)/2;
+        int i = 0, j = 0;
 
-        int[] indexTile = this.cooToTileInd(x,y);
-        return this.tileMap.getTile(indexTile[0],indexTile[1]).getTile().getType().getHasCollision();
+        while (i < formatX && !hasCollision) {
+            while (j < 2 && !hasCollision) {
+                hasCollision = checkCollisionFromTileOnPx(cooToTileInd(x,y));
+                if (j == 0)
+                    x-=(format - 1);
+                j++;
+            }
+            j = 0;
+            x--;
+            i++;
+        }
+        return hasCollision;
+    }
+
+    public boolean hasBottomCollision() {
+        /**
+         * Renvoie True s'il existe une collision avec un bloc de terrain en dessous de l'acteur.
+         */
+
+        boolean hasCollision = false;
+        int x = this.actor.getX() - (format*formatX)/2 + 1;
+        int y = this.actor.getY() - (format*formatY)/2 - 1;
+        int i = 0, j = 0;
+
+        while (i < formatX && !hasCollision) {
+            while (j < 2 && !hasCollision) {
+                hasCollision = checkCollisionFromTileOnPx(cooToTileInd(x,y));
+                if (j == 0)
+                    x+=(format - 1);
+                j++;
+            }
+            j = 0;
+            x++;
+            i++;
+        }
+        return hasCollision;
+    }
+
+    public boolean hasRightCollision() {
+        /**
+         * Renvoie True s'il existe une collision avec un bloc de terrain à droite de l'acteur.
+         */
+
+        boolean hasCollision = false;
+        int x = this.actor.getX() + (format*formatX)/2 + 1;
+        int y = this.actor.getY() - (format*formatY)/2;
+        int i = 0, j = 0;
+
+        while (i < formatX && !hasCollision) {
+            while (j < 2 && !hasCollision) {
+                hasCollision = checkCollisionFromTileOnPx(cooToTileInd(x,y));
+                if (j == 0)
+                    y+=(format - 1);
+                j++;
+            }
+            j = 0;
+            y++;
+            i++;
+        }
+        return hasCollision;
+    }
+
+    public boolean hasLeftCollision() {
+        /**
+         * Renvoie True s'il existe une collision avec un bloc de terrain à gauche de l'acteur.
+         */
+
+        boolean hasCollision = false;
+        int x = this.actor.getX() - (format*formatX)/2;
+        int y = this.actor.getY() + (format*formatY)/2 - 1;
+        int i = 0, j = 0;
+
+        while (i < formatX && !hasCollision) {
+            while (j < 2 && !hasCollision) {
+                hasCollision = checkCollisionFromTileOnPx(cooToTileInd(x,y));
+                if (j == 0)
+                    y-=(format - 1);
+                j++;
+            }
+            j = 0;
+            y--;
+            i++;
+        }
+        return hasCollision;
     }
 
     public int[] cooToTileInd(int x, int y) {
+        /**
+         * Renvoie dans un tableau de int à une dimension dans la forme [indice 1ere dimension, indice 2eme dimension]
+         * les indices de la position de la Tile, sur laquelle se trouve le point (x,y), dans la TileMap.
+         */
+
         int[] coordonnéesTile = {x/format, y/format};
         return coordonnéesTile;
 
     }
+
+    public boolean checkCollisionFromTileOnPx(int [] cooTile) {
+        /**
+         * Renvoie la présence d'une collision sur la Tile de coordonnées cooTile sous la forme [indice 1ere dimension,
+         * indice 2eme dimension].
+         */
+        return this.tileMap.getTile(cooTile[0],cooTile[1]).getTile().getType().getHasCollision();
+    }
+
+    //Eventuellement regrouper les 4 méthode de check de collision en une pour éviter la répétition de code.
 }
 
 /*
