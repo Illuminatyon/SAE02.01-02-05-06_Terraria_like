@@ -55,7 +55,9 @@ public class Player extends Actor {
     }
 
     private void updateHorizontalMovements() {
-        if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)) {
+        if (inputManager.getActiveActions().size() > 1) {
+            super.setVelocityX(0);
+        } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)) {
             super.setVelocityX(super.getMoveSpeed());
         } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
             super.setVelocityX(-super.getMoveSpeed());
