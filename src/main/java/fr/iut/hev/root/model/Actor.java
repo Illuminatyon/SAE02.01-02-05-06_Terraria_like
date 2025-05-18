@@ -1,20 +1,22 @@
 package fr.iut.hev.root.model;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class Actor {
-    private DoubleProperty posXProperty;
-    private DoubleProperty posYProperty;
-    private double moveSpeed;
-    private double jumpForce;
-    private double velocityX;
-    private double velocityY;
-    private double velocityMultiplier;
+    private IntegerProperty posXProperty;
+    private IntegerProperty posYProperty;
+    private int moveSpeed;
+    private int jumpForce;
+    private int velocityX;
+    private int velocityY;
+    private int velocityMultiplier;
 
-    public Actor(double posXProperty, double posYProperty, double moveSpeed, double jumpForce) {
-        this.posXProperty = new SimpleDoubleProperty(posXProperty);
-        this.posYProperty = new SimpleDoubleProperty(posYProperty);
+    public Actor(int posXProperty, int posYProperty, int moveSpeed, int jumpForce) {
+        this.posXProperty = new SimpleIntegerProperty(posXProperty);
+        this.posYProperty = new SimpleIntegerProperty(posYProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
     }
@@ -23,7 +25,7 @@ public class Actor {
         velocityY += Gravity.getGravityForce();
     }
 
-    public final double getPosX() {
+    public final int getPosX() {
         return this.posXProperty.getValue();
     }
 
@@ -31,11 +33,11 @@ public class Actor {
         posXProperty.setValue(newPosX);
     }
 
-    public final DoubleProperty posXProperty() {
+    public final IntegerProperty posXProperty() {
         return this.posXProperty;
     }
 
-    public final double getPosY() {
+    public final int getPosY() {
         return this.posYProperty.getValue();
     }
 
@@ -43,31 +45,31 @@ public class Actor {
         this.posYProperty.setValue(newPosY);
     }
 
-    public final DoubleProperty posYProperty() {
+    public final IntegerProperty posYProperty() {
         return this.posYProperty;
     }
 
-    public double getMoveSpeed() {
+    public int getMoveSpeed() {
         return this.moveSpeed;
     }
 
-    public double getJumpForce() {
+    public int getJumpForce() {
         return this.jumpForce;
     }
 
-    public double getVelocityX() {
+    public int getVelocityX() {
         return this.velocityX;
     }
 
-    public void setVelocityX(double velocity) {
+    public void setVelocityX(int velocity) {
         this.velocityX = velocity;
     }
 
-    public double getVelocityY() {
+    public int getVelocityY() {
         return this.velocityY;
     }
 
-    public void setVelocityY(double velocity) {
+    public void setVelocityY(int velocity) {
         this.velocityY = velocity;
     }
 }

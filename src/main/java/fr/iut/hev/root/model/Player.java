@@ -15,7 +15,7 @@ public class Player extends Actor {
     private InputManager inputManager;
     private Set<PlayerActions> activeActions;
 
-    public Player(Scene scene, double posX, double posY, double moveSpeed, double jumpForce) {
+    public Player(Scene scene, int posX, int posY, int moveSpeed, int jumpForce) {
         super(posX, posY, moveSpeed, jumpForce);
         inputListener = new InputListener(scene);
         inputManager = new InputManager(inputListener);

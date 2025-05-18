@@ -28,8 +28,8 @@ public class Collision {
          */
 
         boolean hasCollision = false;
-        int x = this.actor.getX() + (format*formatX)/2;
-        int y = this.actor.getY() + (format*formatY)/2;
+        int x = this.actor.getPosX() + (format*formatX)/2;
+        int y = this.actor.getPosY() + (format*formatY)/2;
         int i = 0, j = 0;
 
         while (i < formatX && !hasCollision) {
@@ -52,8 +52,8 @@ public class Collision {
          */
 
         boolean hasCollision = false;
-        int x = this.actor.getX() - (format*formatX)/2 + 1;
-        int y = this.actor.getY() - (format*formatY)/2 - 1;
+        int x = this.actor.getPosX() - (format*formatX)/2 + 1;
+        int y = this.actor.getPosY() - (format*formatY)/2 - 1;
         int i = 0, j = 0;
 
         while (i < formatX && !hasCollision) {
@@ -76,8 +76,8 @@ public class Collision {
          */
 
         boolean hasCollision = false;
-        int x = this.actor.getX() + (format*formatX)/2 + 1;
-        int y = this.actor.getY() - (format*formatY)/2;
+        int x = this.actor.getPosX() + (format*formatX)/2 + 1;
+        int y = this.actor.getPosY() - (format*formatY)/2;
         int i = 0, j = 0;
 
         while (i < formatX && !hasCollision) {
@@ -100,8 +100,8 @@ public class Collision {
          */
 
         boolean hasCollision = false;
-        int x = this.actor.getX() - (format*formatX)/2;
-        int y = this.actor.getY() + (format*formatY)/2 - 1;
+        int x = this.actor.getPosX() - (format*formatX)/2;
+        int y = this.actor.getPosY() + (format*formatY)/2 - 1;
         int i = 0, j = 0;
 
         while (i < formatX && !hasCollision) {
