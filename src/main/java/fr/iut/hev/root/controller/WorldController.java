@@ -18,10 +18,10 @@ public class WorldController implements Initializable {
     @FXML
     private TilePane tileMap;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TileMap tilemaptest= new TileMap(1920,1072);
+        TileMap tilemaptest = new TileMap(1920,1072);
+        PlayerController.setTileMap(tilemaptest);
         Tile currentTile;
         ImageView tileBreakable;
         ImageView tileBackground;

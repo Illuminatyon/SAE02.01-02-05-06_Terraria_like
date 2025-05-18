@@ -1,24 +1,30 @@
 package fr.iut.hev.root.model;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Actor {
+    private TileMap tileMap;
     private IntegerProperty posXProperty;
     private IntegerProperty posYProperty;
+    private int width;
+    private int height;
     private int moveSpeed;
     private int jumpForce;
     private int velocityX;
     private int velocityY;
     private int velocityMultiplier;
+    private Collider collider;
 
-    public Actor(int posXProperty, int posYProperty, int moveSpeed, int jumpForce) {
-        this.posXProperty = new SimpleIntegerProperty(posXProperty);
-        this.posYProperty = new SimpleIntegerProperty(posYProperty);
+    public Actor(TileMap tileMap, int posX, int posY, int width, int height, int moveSpeed, int jumpForce) {
+        this.tileMap = tileMap;
+        this.posXProperty = new SimpleIntegerProperty(posX);
+        this.posYProperty = new SimpleIntegerProperty(posY);
+        this.width = width;
+        this.height = height;
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
+        this.collider = new Collider(this.tileMap, this);
     }
 
     public void updateMovements() {
@@ -49,6 +55,14 @@ public class Actor {
         return this.posYProperty;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
     public int getMoveSpeed() {
         return this.moveSpeed;
     }
@@ -71,5 +85,9 @@ public class Actor {
 
     public void setVelocityY(int velocity) {
         this.velocityY = velocity;
+    }
+
+    public Collider getCollider() {
+        return this.collider;
     }
 }

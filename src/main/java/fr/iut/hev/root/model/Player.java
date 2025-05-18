@@ -14,9 +14,11 @@ public class Player extends Actor {
     private InputListener inputListener;
     private InputManager inputManager;
     private Set<PlayerActions> activeActions;
+    private boolean isJumping;
+    private int jumpingTestDecay;
 
-    public Player(Scene scene, int posX, int posY, int moveSpeed, int jumpForce) {
-        super(posX, posY, moveSpeed, jumpForce);
+    public Player(Scene scene, TileMap tileMap, int posX, int posY, int width, int height, int moveSpeed, int jumpForce) {
+        super(tileMap, posX, posY, width, height, moveSpeed, jumpForce);
         inputListener = new InputListener(scene);
         inputManager = new InputManager(inputListener);
 
@@ -24,10 +26,12 @@ public class Player extends Actor {
         Input input2 = new KeyInput(InputDevices.KEYBOARD, KeyCode.Q);
         Input input3 = new AnalogInput(InputDevices.CONTROLLER, ControllerInputs.STICK_LEFT_X, AnalogInput.Direction.POSITIVE, 0.3f);
         Input input4 = new AnalogInput(InputDevices.CONTROLLER, ControllerInputs.STICK_LEFT_X, AnalogInput.Direction.NEGATIVE, 0.3f);
+        Input input5 = new KeyInput(InputDevices.KEYBOARD, KeyCode.SPACE);
         inputManager.bind(input1, PlayerActions.MOVE_RIGHT);
         inputManager.bind(input2, PlayerActions.MOVE_LEFT);
         inputManager.bind(input3, PlayerActions.MOVE_RIGHT);
         inputManager.bind(input4, PlayerActions.MOVE_LEFT);
+        inputManager.bind(input5, PlayerActions.JUMP);
 
         AnimationTimer inputTimer = new AnimationTimer() {
             @Override
@@ -39,30 +43,54 @@ public class Player extends Actor {
     }
 
     public void updateMovements() {
-        //super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
-
-        super.posXProperty().set(super.posXProperty().get() + super.getVelocityX() * super.getMoveSpeed());
-        super.posYProperty().set(super.posYProperty().get() + super.getVelocityY() * super.getMoveSpeed());
-
-        //playerCollision.checkCollision() // A rename
-        /*
-        If is on ground then
-            velocityY = 0
-         */
+        if (!super.getCollider().hasCollisionBottom() && !isJumping) {
+            //if (super.getVelocityY() < maxVelocityY)
+            super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
+            System.out.println(super.getVelocityY());
+        } else {
+            super.setVelocityY(0);
+        }
 
         updateHorizontalMovements();
-        //System.out.println("x : " + super.posXProperty().get());
+        updateVerticalMovements();
+        super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
+        super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
     }
 
     private void updateHorizontalMovements() {
-        if (inputManager.getActiveActions().size() > 1) {
+        // Code pas propre a nettoyer
+        if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)
+                && inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
             super.setVelocityX(0);
         } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)) {
-            super.setVelocityX(super.getMoveSpeed());
+            if (!super.getCollider().hasCollisionRight()) {
+                super.setVelocityX(super.getMoveSpeed());
+            } else {
+                super.setVelocityX(0);
+            }
         } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
-            super.setVelocityX(-super.getMoveSpeed());
+            if (!super.getCollider().hasCollisionLeft()) {
+                super.setVelocityX(-super.getMoveSpeed());
+            } else {
+                super.setVelocityX(0);
+            }
         } else {
             super.setVelocityX(0);
+        }
+    }
+
+    private void updateVerticalMovements() {
+        if (activeActions.contains(PlayerActions.JUMP) && super.getCollider().hasCollisionBottom() && !isJumping) {
+            isJumping = true;
+            jumpingTestDecay = 0;
+        } else if (isJumping) {
+            if (jumpingTestDecay == super.getJumpForce()) {
+                super.setVelocityY(0);
+                isJumping = false;
+            } else {
+                super.setVelocityY(-super.getJumpForce() + jumpingTestDecay);
+                jumpingTestDecay += 1;
+            }
         }
     }
 }

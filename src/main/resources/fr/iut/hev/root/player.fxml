@@ -4,8 +4,8 @@
 <?import javafx.scene.image.ImageView?>
 
 
-<ImageView fx:id="player_imageview" fx:controller="fr.iut.hev.root.controller.PlayerController" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<ImageView fx:id="player_imageview" fx:controller="fr.iut.hev.root.controller.PlayerController" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <image>
-      <Image url="@img/rootlogo1.png" />
+      <Image url="@img/jhon_fallout.png" />
    </image>
 </ImageView>

@@ -4,6 +4,8 @@ import fr.iut.hev.root.model.enums.TileTypes;
 import fr.iut.hev.root.model.enums.Tiles;
 import javafx.scene.image.Image;
 
+import java.net.URL;
+
 public class Tile {
     private Tiles tile;
     private int health;
@@ -36,7 +38,7 @@ public class Tile {
          */
         if (this.tile.getType() == TileTypes.AIR)
             return null;
-        String path = "/fr/iut/hev/terraria/terraria/img/tile/".concat(this.tile.getName())./*concat(Integer.toString(damageAmount)).*/concat(".png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(this.tile.getName())./*concat(Integer.toString(damageAmount)).*/concat(".png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 
@@ -46,7 +48,7 @@ public class Tile {
          */
         if (this.tile.getType() == TileTypes.AIR)
             return null;
-        String path = "/fr/iut/hev/terraria/terraria/img/tile/".concat(this.tile.getName()).concat("_background.png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(this.tile.getName()).concat("_background.png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 

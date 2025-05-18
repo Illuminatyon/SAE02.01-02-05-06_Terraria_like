@@ -1,11 +1,13 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.model.Player;
+import fr.iut.hev.root.model.TileMap;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
 public class PlayerController {
+    private static TileMap tileMap;
     private Player player;
 
     @FXML
@@ -15,18 +17,27 @@ public class PlayerController {
     public void initialize() {
         player_imageview.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                player = new Player(newScene, 0, 0, 2, 10);
+                player = new Player(newScene, tileMap, 0, 75, 32, 64, 2, 10);
                 player_imageview.translateXProperty().bind(player.posXProperty());
                 player_imageview.translateYProperty().bind(player.posYProperty());
 
                 AnimationTimer inputTimer = new AnimationTimer() {
+                    private long lastUpdate = 0;
+
                     @Override
-                    public void handle(long l) {
-                        player.updateMovements();
+                    public void handle(long now) {
+                        if (now - lastUpdate >= 1_000_000_000 / 120) {
+                            player.updateMovements();
+                            lastUpdate = now;
+                        }
                     }
                 };
                 inputTimer.start();
             }
         });
+    }
+
+    public static void setTileMap(TileMap tilemap) {
+        tileMap = tilemap; // Peut etre erreur au niveau de l'ordre d'execution
     }
 }
