@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.WorldController">
+    <children>
+        <TilePane fx:id="backgroundTileMap" prefHeight="1056.0" prefWidth="1920.0" />
+        <TilePane fx:id="tileMap" prefHeight="1056.0" prefWidth="1920.0" />
+    </children>
+</StackPane>
