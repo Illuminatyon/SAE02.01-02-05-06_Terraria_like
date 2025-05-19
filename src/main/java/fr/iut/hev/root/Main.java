@@ -16,10 +16,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         StackPane root = new StackPane();
+        ImageView worldBackground = FXMLLoader.load(Main.class.getResource("view/world-background.fxml"));
         StackPane land = FXMLLoader.load(Main.class.getResource("view/Stack-background+land.fxml"));
         ImageView player  = FXMLLoader.load(Main.class.getResource("player.fxml"));
-        root.getChildren().addAll(land, player);
-        scene = new Scene(root, 1920, 1072);
+        root.getChildren().addAll(worldBackground, land, player);
+        //scene = new Scene(root, 1920, 1072);
+        scene = new Scene(root, 1920, 1056);
         stage.setTitle("ROOT");
         stage.setScene(scene);
         stage.show();

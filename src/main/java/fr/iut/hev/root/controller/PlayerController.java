@@ -1,5 +1,6 @@
 package fr.iut.hev.root.controller;
 
+import fr.iut.hev.root.model.FixedAnimationTimer;
 import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import javafx.animation.AnimationTimer;
@@ -17,23 +18,17 @@ public class PlayerController {
     public void initialize() {
         player_imageview.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                player = new Player(newScene, tileMap, 0, -500, 32, 64, 2, 10);
+                player = new Player(newScene, tileMap, 0, -10, 32, 64, 2, 10);
                 player_imageview.translateXProperty().bind(player.posXProperty());
                 player_imageview.translateYProperty().bind(player.posYProperty());
                 player_imageview.scaleXProperty().bind(player.lookDirectionProperty());
 
-                AnimationTimer inputTimer = new AnimationTimer() {
-                    //private long lastUpdate = 0;
-
+                new FixedAnimationTimer() {
                     @Override
-                    public void handle(long now) {
-                        //if (now - lastUpdate >= 1_000_000_000 / 120) {
-                            player.updateMovements();
-                        //    lastUpdate = now;
-                        //}
+                    protected void update() {
+                        player.updateMovements();
                     }
-                };
-                inputTimer.start();
+                }.start();
             }
         });
     }

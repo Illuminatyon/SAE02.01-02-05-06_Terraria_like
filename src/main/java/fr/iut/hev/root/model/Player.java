@@ -45,7 +45,7 @@ public class Player extends Actor {
     }
 
     public void updateMovements() {
-        if (!super.getCollider().hasCollisionBottom(super.getVelocityY()) && !isJumping) {
+        if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !isJumping) {
             //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
         } else {
@@ -71,7 +71,7 @@ public class Player extends Actor {
                 super.setVelocityX(0);
             }
         } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
-            super.setLookDirection(LookDirections.LEFT);
+            super.setLookDirection(LookDirections.LEFT); // IL FAUT JUSTE FIX LE LEFT COLLIDER
             if (!super.getCollider().hasCollisionLeft()) {
                 super.setVelocityX(-super.getMoveSpeed());
             } else {

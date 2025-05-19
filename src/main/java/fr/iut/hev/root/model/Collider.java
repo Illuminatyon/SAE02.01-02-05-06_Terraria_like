@@ -1,20 +1,32 @@
 package fr.iut.hev.root.model;
 
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+
 public class Collider {
     private TileMap tileMap;
     private Actor actor;
     private int offsetX;
     private int offsetY;
+    private int marge;
 
     public Collider(TileMap tileMap, Actor actor) {
         this.tileMap = tileMap;
         this.actor = actor;
-        this.offsetX = tileMap.getWidth() * TileMap.format / 2;
-        this.offsetY = tileMap.getHeight() * TileMap.format / 2;
+        this.offsetX = (tileMap.getWidth() * TileMap.format) / 2;
+        this.offsetY = (tileMap.getHeight() * TileMap.format) / 2;
+        this.marge = 1;
     }
 
-    private boolean hasCollision(double x, double y) {
-        int tileX = (int)((x + offsetX) / TileMap.format);
+    private boolean hasCollision(double x, double y, boolean negativeCheck) {
+        int tileX = 0;
+        if (negativeCheck) {
+            tileX = (int) ((x + offsetX - 1) / TileMap.format);
+        } else {
+            tileX = (int) ((x + offsetX) / TileMap.format);
+        }
         int tileY = (int)((y + offsetY) / TileMap.format);
 
         if (tileX < 0 || tileY < 0 || tileX >= tileMap.getWidth() || tileY >= tileMap.getHeight()) {
@@ -29,8 +41,8 @@ public class Collider {
         double y = actor.getPosY();
         double w = actor.getWidth();
         double h = actor.getHeight();
-        return hasCollision(x - w / 2 + 1, y - h / 2)
-                || hasCollision(x + w / 2 - 1, y - h / 2);
+        return hasCollision(x - w / 2 + marge, y - h / 2, false)
+                || hasCollision(x + w / 2 - marge, y - h / 2, false);
     }
 
     public boolean hasCollisionBottom(int n) {
@@ -42,8 +54,8 @@ public class Collider {
         int lastTrue = -1;
 
         for (int i = n; i > 0; i--) {
-            if (hasCollision(x - w / 2 + 1, y + h / 2 + i)
-                    || hasCollision(x + w / 2 - 1, y + h / 2 + i)) {
+            if (hasCollision(x - w / 2 + marge, y + h / 2 + i, false)
+                    || hasCollision(x + w / 2 - marge, y + h / 2 + i, false)) {
                 lastTrue = i;
             } else if (lastTrue >= 0) {
                 actor.setPosY(actor.getPosY() + lastTrue);
@@ -51,8 +63,8 @@ public class Collider {
             }
         }
 
-        if (hasCollision(x - w / 2 + 1, y + h / 2)
-                || hasCollision(x + w / 2 - 1, y + h / 2)) {
+        if (hasCollision(x - w / 2 + marge, y + h / 2, false)
+                || hasCollision(x + w / 2 - marge, y + h / 2, false)) {
             return true;
         }
         return false;
@@ -63,8 +75,9 @@ public class Collider {
         double y = actor.getPosY();
         double w = actor.getWidth();
         double h = actor.getHeight();
-        return hasCollision(x + w / 2, y + h / 2 - 1)
-                || hasCollision(x + w / 2, y - h / 2 + 1);
+
+        return hasCollision(x + w / 2, y + h / 2 - marge, false)
+                || hasCollision(x + w / 2, y - h / 2 + marge, false);
     }
 
     public boolean hasCollisionLeft() {
@@ -72,7 +85,8 @@ public class Collider {
         double y = actor.getPosY();
         double w = actor.getWidth();
         double h = actor.getHeight();
-        return hasCollision(x - w / 2, y + h / 2 - 1)
-                || hasCollision(x - w / 2, y - h / 2 + 1);
+
+        return hasCollision(x - w / 2, y + h / 2 - marge, true)
+                || hasCollision(x - w / 2, y - h / 2 + marge, true);
     }
 }

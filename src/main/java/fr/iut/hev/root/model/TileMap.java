@@ -7,7 +7,8 @@ public class TileMap {
     private final int height;
     private final Tile[][] tileMap;
 
-    public static final int format = 16;
+    //public static final int format = 16;
+    public static final int format = 32;
 
     public TileMap(int width, int height) {
         /**
@@ -39,19 +40,37 @@ public class TileMap {
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
-                if (index < 5160) {
+                //if (index < 5160) {
+                if (index < 1080) {
                     this.addTile(new Tile(Tiles.AIR, 0, j, i));
                 }
-                else if (index >= 5160 && index < 5280) {
+                //else if (index >= 5160 && index < 5280) {
+                else if (index >= 1080 && index < 1140) {
                     this.addTile(new Tile(Tiles.GRASS,0,j,i));
                 }
-                else if (index >= 5280) {
+                //else if (index >= 5280) {
+                else if (index >= 1140) {
                     this.addTile(new Tile(Tiles.DIRT,0,j,i));
                 }
                 index++;
             }
         }
-        this.getTile(5, 0).setTile(Tiles.DIRT);
+        this.getTile(15, 17).setTile(Tiles.DIRT);
+        this.getTile(14, 17).setTile(Tiles.DIRT);
+        this.getTile(13, 17).setTile(Tiles.DIRT);
+        this.getTile(12, 17).setTile(Tiles.DIRT);
+        this.getTile(11, 17).setTile(Tiles.DIRT);
+        this.getTile(10, 17).setTile(Tiles.DIRT);
+        this.getTile(14, 16).setTile(Tiles.DIRT);
+        this.getTile(11, 16).setTile(Tiles.DIRT);
+
+        /*for (int i = 16; i > 0; i--) {
+            this.getTile(20, i).setTile(Tiles.DIRT);
+        }
+
+        for (int i = 16; i > 0; i--) {
+            this.getTile(40, i).setTile(Tiles.DIRT);
+        }*/
     }
 
     public void addTile(Tile tile) {
