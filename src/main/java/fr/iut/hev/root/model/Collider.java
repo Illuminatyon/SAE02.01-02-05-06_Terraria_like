@@ -33,18 +33,29 @@ public class Collider {
                 || hasCollision(x + w / 2 - 1, y - h / 2);
     }
 
-    public boolean hasCollisionBottom(/*int n, int yMultiplier*/) {
+    public boolean hasCollisionBottom(int n) {
         double x = actor.getPosX();
-        double y = actor.getPosY() /*+ yMultiplier*/;
+        double y = actor.getPosY();
         double w = actor.getWidth();
         double h = actor.getHeight();
 
-        //if (n == 0) {
-            return hasCollision(x - w / 2 + 1, y + h / 2)
-                    || hasCollision(x + w / 2 - 1, y + h / 2);
-        //} else {
-        //    return hasCollisionBottom(n - 1, n + yMultiplier);
-        //}
+        int lastTrue = -1;
+
+        for (int i = n; i > 0; i--) {
+            if (hasCollision(x - w / 2 + 1, y + h / 2 + i)
+                    || hasCollision(x + w / 2 - 1, y + h / 2 + i)) {
+                lastTrue = i;
+            } else if (lastTrue >= 0) {
+                actor.setPosY(actor.getPosY() + lastTrue);
+                return true;
+            }
+        }
+
+        if (hasCollision(x - w / 2 + 1, y + h / 2)
+                || hasCollision(x + w / 2 - 1, y + h / 2)) {
+            return true;
+        }
+        return false;
     }
 
     public boolean hasCollisionRight() {

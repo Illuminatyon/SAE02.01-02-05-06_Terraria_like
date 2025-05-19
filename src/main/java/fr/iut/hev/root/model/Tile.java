@@ -32,6 +32,10 @@ public class Tile {
         return this.tile;
     }
 
+    public void setTile(Tiles tile) {
+        this.tile = tile;
+    }
+
     public Image getTexture(/*int damageAmount*/) {
         /**
          * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.

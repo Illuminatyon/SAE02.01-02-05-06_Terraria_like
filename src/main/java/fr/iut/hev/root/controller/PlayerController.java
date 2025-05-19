@@ -17,19 +17,20 @@ public class PlayerController {
     public void initialize() {
         player_imageview.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                player = new Player(newScene, tileMap, 0, 75, 32, 64, 2, 10);
+                player = new Player(newScene, tileMap, 0, -500, 32, 64, 2, 10);
                 player_imageview.translateXProperty().bind(player.posXProperty());
                 player_imageview.translateYProperty().bind(player.posYProperty());
+                player_imageview.scaleXProperty().bind(player.lookDirectionProperty());
 
                 AnimationTimer inputTimer = new AnimationTimer() {
-                    private long lastUpdate = 0;
+                    //private long lastUpdate = 0;
 
                     @Override
                     public void handle(long now) {
-                        if (now - lastUpdate >= 1_000_000_000 / 120) {
+                        //if (now - lastUpdate >= 1_000_000_000 / 120) {
                             player.updateMovements();
-                            lastUpdate = now;
-                        }
+                        //    lastUpdate = now;
+                        //}
                     }
                 };
                 inputTimer.start();

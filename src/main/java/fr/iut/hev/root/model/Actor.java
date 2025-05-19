@@ -1,7 +1,9 @@
 package fr.iut.hev.root.model;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class Actor {
     private TileMap tileMap;
@@ -15,6 +17,17 @@ public class Actor {
     private int velocityY;
     private int velocityMultiplier;
     private Collider collider;
+    public enum LookDirections {
+        RIGHT(1),
+        LEFT(-1);
+
+        private int value;
+
+        LookDirections(int value) {
+            this.value = value;
+        }
+    };
+    private IntegerProperty lookDirectionProperty;
 
     public Actor(TileMap tileMap, int posX, int posY, int width, int height, int moveSpeed, int jumpForce) {
         this.tileMap = tileMap;
@@ -25,6 +38,7 @@ public class Actor {
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
         this.collider = new Collider(this.tileMap, this);
+        this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value);
     }
 
     public void updateMovements() {
@@ -89,5 +103,17 @@ public class Actor {
 
     public Collider getCollider() {
         return this.collider;
+    }
+
+    /*public LookDirections getLookDirection() { // TODO: fix
+        return this.lookDirectionProperty;
+    }*/
+
+    public void setLookDirection(LookDirections newLookDirection) {
+        this.lookDirectionProperty.setValue(newLookDirection.value);
+    }
+
+    public IntegerProperty lookDirectionProperty() {
+        return this.lookDirectionProperty;
     }
 }

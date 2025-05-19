@@ -27,11 +27,13 @@ public class Player extends Actor {
         Input input3 = new AnalogInput(InputDevices.CONTROLLER, ControllerInputs.STICK_LEFT_X, AnalogInput.Direction.POSITIVE, 0.3f);
         Input input4 = new AnalogInput(InputDevices.CONTROLLER, ControllerInputs.STICK_LEFT_X, AnalogInput.Direction.NEGATIVE, 0.3f);
         Input input5 = new KeyInput(InputDevices.KEYBOARD, KeyCode.SPACE);
+        Input input6 = new KeyInput(InputDevices.CONTROLLER, ControllerInputs.BUTTON_BOTTOM);
         inputManager.bind(input1, PlayerActions.MOVE_RIGHT);
         inputManager.bind(input2, PlayerActions.MOVE_LEFT);
         inputManager.bind(input3, PlayerActions.MOVE_RIGHT);
         inputManager.bind(input4, PlayerActions.MOVE_LEFT);
         inputManager.bind(input5, PlayerActions.JUMP);
+        inputManager.bind(input6, PlayerActions.JUMP);
 
         AnimationTimer inputTimer = new AnimationTimer() {
             @Override
@@ -43,10 +45,9 @@ public class Player extends Actor {
     }
 
     public void updateMovements() {
-        if (!super.getCollider().hasCollisionBottom() && !isJumping) {
+        if (!super.getCollider().hasCollisionBottom(super.getVelocityY()) && !isJumping) {
             //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
-            System.out.println(super.getVelocityY());
         } else {
             super.setVelocityY(0);
         }
@@ -63,12 +64,14 @@ public class Player extends Actor {
                 && inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
             super.setVelocityX(0);
         } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)) {
+            super.setLookDirection(LookDirections.RIGHT);
             if (!super.getCollider().hasCollisionRight()) {
                 super.setVelocityX(super.getMoveSpeed());
             } else {
                 super.setVelocityX(0);
             }
         } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
+            super.setLookDirection(LookDirections.LEFT);
             if (!super.getCollider().hasCollisionLeft()) {
                 super.setVelocityX(-super.getMoveSpeed());
             } else {
@@ -80,7 +83,7 @@ public class Player extends Actor {
     }
 
     private void updateVerticalMovements() {
-        if (activeActions.contains(PlayerActions.JUMP) && super.getCollider().hasCollisionBottom() && !isJumping) {
+        if (activeActions.contains(PlayerActions.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !isJumping) {
             isJumping = true;
             jumpingTestDecay = 0;
         } else if (isJumping) {

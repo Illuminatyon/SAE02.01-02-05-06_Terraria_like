@@ -51,6 +51,7 @@ public class TileMap {
                 index++;
             }
         }
+        this.getTile(5, 0).setTile(Tiles.DIRT);
     }
 
     public void addTile(Tile tile) {

@@ -33,6 +33,8 @@ public class WorldController implements Initializable {
                 tileBackground = new ImageView(currentTile.getTexture_background());
                 tileBreakable.setId(Integer.toString(index));
                 tileBackground.setId(Integer.toString(index));
+                tileBreakable.setFitWidth(TileMap.format);
+                tileBreakable.setFitHeight(TileMap.format);
                 tileMap.getChildren().add(tileBreakable);
                 backgroundTileMap.getChildren().add(tileBackground);
                 index++;
