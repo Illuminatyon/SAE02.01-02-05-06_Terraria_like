@@ -1,34 +1,37 @@
 package fr.iut.hev.root.model.enums;
 
 public enum Items {
-    WOOD("wood",ItemTypes.RESOURCES),
-    STONE("stone",ItemTypes.BLOCK),
-    IRON_INGOT("iron_ingot",ItemTypes.RESOURCES),
-    IRON_BLOCK("iron_block",ItemTypes.BLOCK),
-    DIRT("dirt",ItemTypes.BLOCK),
-    STICK("stick",ItemTypes.RESOURCES),
-    FEATHER("feather",ItemTypes.RESOURCES),
+    WOOD("wood",100,ItemTypes.RESOURCES),
+    STONE("stone",100,ItemTypes.BLOCK),
+    IRON_INGOT("iron_ingot",100,ItemTypes.RESOURCES),
+    IRON_BLOCK("iron_block",100,ItemTypes.BLOCK),
+    DIRT("dirt",100,ItemTypes.BLOCK),
+    STICK("stick",100,ItemTypes.RESOURCES),
+    FEATHER("feather",100,ItemTypes.RESOURCES),
 
-    PIOCHE("pioche",ItemTypes.TOOL),
-    HAX("hax",ItemTypes.TOOL),
-    HAMMER("hammer",ItemTypes.TOOL),
-    CRAFTING_TABLE("crafting_table",ItemTypes.TOOL),
-    FURNACE("furnace",ItemTypes.TOOL),
+    PIOCHE("pioche",1,ItemTypes.TOOL),
+    HAX("hax",1,ItemTypes.TOOL),
+    HAMMER("hammer",1,ItemTypes.TOOL),
+    CRAFTING_TABLE("crafting_table",1,ItemTypes.TOOL),
+    FURNACE("furnace",100,ItemTypes.TOOL),
 
-    DAGGER("dagger",ItemTypes.WEAPON),
+    DAGGER("dagger",1,ItemTypes.WEAPON),
 
-    IRON_HELMET("iron_helmet",ItemTypes.ARMOR_PIECE),
-    IRON_CHESTPLATE("iron_chestplate",ItemTypes.ARMOR_PIECE),
-    IRON_LEGGINGS("iron_leggings",ItemTypes.ARMOR_PIECE);
+    IRON_HELMET("iron_helmet",1,ItemTypes.ARMOR_PIECE),
+    IRON_CHESTPLATE("iron_chestplate",1,ItemTypes.ARMOR_PIECE),
+    IRON_LEGGINGS("iron_leggings",1,ItemTypes.ARMOR_PIECE);
 
     private String name;
+    private int limitStacking;
     private ItemTypes itemType;
 
-    Items(String name, ItemTypes itemType) {
+    Items(String name,int limitStacking, ItemTypes itemType) {
         this.name = name;
+        this.limitStacking = limitStacking;
         this.itemType = itemType;
     }
 
     public String getName() {return this.name;}
     public ItemTypes getItemType() {return this.itemType;}
+
 }
