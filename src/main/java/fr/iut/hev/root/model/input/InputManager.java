@@ -20,20 +20,17 @@ public class InputManager {
     }
 
     public void unbind(PlayerActions action) {
-        //
+        // TODO
     }
 
     public Set<PlayerActions> getActiveActions() {
         Set<PlayerActions> activeActions = new HashSet<>();
 
         for (Map.Entry<PlayerActions, Set<Input>> entry : bindings.entrySet()) {
-            PlayerActions action = entry.getKey();
-            Set<Input> inputs = entry.getValue();
-
-            boolean isActive = false;
-
-            if (isActive) {
-                activeActions.add(action);
+            for (Input input : entry.getValue()) {
+                if (input.isActive(listener)) {
+                    activeActions.add(entry.getKey());
+                }
             }
         }
 

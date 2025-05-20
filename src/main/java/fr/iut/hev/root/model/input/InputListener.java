@@ -1,8 +1,9 @@
 package fr.iut.hev.root.model.input;
 
+import com.studiohartman.jamepad.ControllerButton;
 import com.studiohartman.jamepad.ControllerManager;
 import com.studiohartman.jamepad.ControllerState;
-import fr.iut.hev.root.model.enums.ControllerInputs;
+import fr.iut.hev.root.model.SceneWrapper;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -14,7 +15,8 @@ import java.util.Set;
 public class InputListener {
     private Set<KeyCode> activeKeys = new HashSet<>();
     private Set<MouseButton> activeMouseButtons = new HashSet<>();
-    private EnumMap<ControllerInputs, Boolean> controllerStates = new EnumMap<>(ControllerInputs.class);
+    private Set<ControllerButton> activeControllerButtons = new HashSet<>();
+    //private EnumMap<ControllerInput, Boolean> controllerStates = new EnumMap<>(ControllerInput.class);
 
     private ControllerManager controllerManager;
 
@@ -23,10 +25,11 @@ public class InputListener {
     private float stickLeftX;
     private float stickLeftY;
 
-    public InputListener(Scene scene) {
+    public InputListener(SceneWrapper scene) {
         handleKeyPress(scene);
         handleMousePress(scene);
-        handleControllerInput();
+        //handleControllerInput();
+        handleControllerPress(scene);
     }
 
     private void handleKeyPress(Scene scene) {
@@ -39,7 +42,12 @@ public class InputListener {
         scene.setOnMouseReleased(e -> activeMouseButtons.remove(e.getButton()));
     }
 
-    private void handleControllerInput() {
+    private void handleControllerPress(SceneWrapper scene) {
+        scene.setOnControllerButtonPressed(e -> activeControllerButtons.add(e.getButton()));
+        scene.setOnControllerButtonReleased(e -> activeControllerButtons.remove(e.getButton()));
+    }
+
+    /*private void handleControllerInput() {
         controllerManager = new ControllerManager();
         controllerManager.initSDLGamepad();
 
@@ -47,7 +55,7 @@ public class InputListener {
             while (true) {
                 ControllerState state = controllerManager.getState(0); // Controller 0
                 if (state.isConnected) {
-                    for (ControllerInputs input : ControllerInputs.values()) {
+                    for (ControllerInput input : ControllerInput.values()) {
                         boolean isActive = checkControllerInput(state, input);
                         controllerStates.put(input, isActive);
                     }
@@ -67,7 +75,7 @@ public class InputListener {
         controllerThread.start();
     }
 
-    private boolean checkControllerInput(ControllerState state, ControllerInputs input) {
+    private boolean checkControllerInput(ControllerState state, ControllerInput input) {
         return switch (input) {
             case START -> state.start;
             case SELECT -> state.back;
@@ -88,7 +96,7 @@ public class InputListener {
             case STICK_RIGHT_X -> Math.abs(state.rightStickX) > 0.3f;
             case STICK_RIGHT_Y -> Math.abs(state.rightStickY) > 0.3f;
         };
-    }
+    }*/
 
     public boolean isKeyPressed(KeyCode key) {
         return activeKeys.contains(key);
@@ -98,7 +106,11 @@ public class InputListener {
         return activeMouseButtons.contains(button);
     }
 
-    public boolean isControllerInputActive(ControllerInputs input) {
+    public boolean isControllerButtonPressed(ControllerButton button) {
+        return activeControllerButtons.contains(button);
+    }
+/*
+    public boolean isControllerInputActive(ControllerInput input) {
         return controllerStates.getOrDefault(input, false);
     }
 
@@ -116,7 +128,7 @@ public class InputListener {
 
     public float getStickLeftY() {
         return stickLeftY;
-    }
+    }*/
 
     public void stop() {
         controllerManager.quitSDLGamepad();

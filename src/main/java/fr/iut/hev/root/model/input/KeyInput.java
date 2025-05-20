@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model.input;
 
-import fr.iut.hev.root.model.enums.ControllerInputs;
+import com.studiohartman.jamepad.ControllerButton;
 import fr.iut.hev.root.model.enums.InputDevices;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -18,7 +18,8 @@ public class KeyInput extends Input {
             return switch (super.getDevice()) {
                 case KEYBOARD -> listener.isKeyPressed((KeyCode) super.getKey());
                 case MOUSE -> listener.isMouseButtonPressed((MouseButton) super.getKey());
-                case CONTROLLER -> listener.isControllerInputActive((ControllerInputs) super.getKey());
+                //case CONTROLLER -> listener.isControllerInputActive((ControllerInput) super.getKey());
+                case CONTROLLER -> listener.isControllerButtonPressed((ControllerButton) super.getKey());
             };
         } catch (ClassCastException e) {
             return false;

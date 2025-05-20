@@ -4,6 +4,6 @@ module fr.iut.hev.root {
     requires jamepad;
 
 
-    opens fr.iut.hev.root to javafx.fxml;
+    opens fr.iut.hev.root.controller to javafx.fxml;
     exports fr.iut.hev.root;
 }
