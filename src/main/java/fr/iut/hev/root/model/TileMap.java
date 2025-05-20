@@ -55,14 +55,43 @@ public class TileMap {
                 index++;
             }
         }
-        this.getTile(15, 17).setTile(Tiles.DIRT);
-        this.getTile(14, 17).setTile(Tiles.DIRT);
-        this.getTile(13, 17).setTile(Tiles.DIRT);
-        this.getTile(12, 17).setTile(Tiles.DIRT);
-        this.getTile(11, 17).setTile(Tiles.DIRT);
-        this.getTile(10, 17).setTile(Tiles.DIRT);
-        this.getTile(14, 16).setTile(Tiles.DIRT);
-        this.getTile(11, 16).setTile(Tiles.DIRT);
+
+        for (int i = 0; i < 15; i++) {
+            this.getTile(i, 18).setTile(Tiles.DIRT);
+            if (i < 14) {
+                this.getTile(i, 17).setTile(Tiles.DIRT);
+            }
+            if (i < 13) {
+                this.getTile(i, 16).setTile(Tiles.DIRT);
+            }
+            if (i < 12) {
+                this.getTile(i, 15).setTile(Tiles.DIRT);
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            this.getTile(14 - i, 17 - i).setTile(Tiles.GRASS);
+        }
+
+        for (int i = 0; i < 11; i++) {
+            this.getTile(11 - i, 14).setTile(Tiles.GRASS);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            this.getTile(0, 14 - i).setTile(Tiles.DIRT);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            this.getTile(25 + i, 14).setTile(Tiles.GRASS);
+        }
+
+        this.getTile(27, 15).setTile(Tiles.DIRT);
+
+        for (int i = 0; i < 5; i++) {
+            this.getTile(35, 17 - i).setTile(Tiles.DIRT);
+        }
+
+        this.getTile(40, 15).setTile(Tiles.DIRT);
 
         /*for (int i = 16; i > 0; i--) {
             this.getTile(20, i).setTile(Tiles.DIRT);

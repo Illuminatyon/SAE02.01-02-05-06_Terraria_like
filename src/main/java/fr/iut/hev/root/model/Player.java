@@ -90,9 +90,11 @@ public class Player extends Actor {
             if (jumpingTestDecay == super.getJumpForce()) {
                 super.setVelocityY(0);
                 isJumping = false;
-            } else {
+            } else if (!super.getCollider().hasCollisionTop(super.getVelocityY() + 1)) {
                 super.setVelocityY(-super.getJumpForce() + jumpingTestDecay);
                 jumpingTestDecay += 1;
+            } else {
+                isJumping = false;
             }
         }
     }

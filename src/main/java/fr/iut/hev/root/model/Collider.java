@@ -20,14 +20,20 @@ public class Collider {
         this.marge = 1;
     }
 
-    private boolean hasCollision(double x, double y, boolean negativeCheck) {
+    private boolean hasCollision(double x, double y, boolean negativeCheckX, boolean negativeCheckY) {
         int tileX = 0;
-        if (negativeCheck) {
+        int tileY = 0;
+        if (negativeCheckX) {
             tileX = (int) ((x + offsetX - 1) / TileMap.format);
         } else {
             tileX = (int) ((x + offsetX) / TileMap.format);
         }
-        int tileY = (int)((y + offsetY) / TileMap.format);
+
+        if (negativeCheckY) {
+            tileY = (int) ((y + offsetY - 1) / TileMap.format);
+        } else {
+            tileY = (int) ((y + offsetY) / TileMap.format);
+        }
 
         if (tileX < 0 || tileY < 0 || tileX >= tileMap.getWidth() || tileY >= tileMap.getHeight()) {
             return true; // mettre des murs invisibles (colliders) au bords de la map
@@ -36,13 +42,32 @@ public class Collider {
         return tileMap.getTile(tileX, tileY).getTile().getType().getHasCollision();
     }
 
-    public boolean hasCollisionTop() {
+    public boolean hasCollisionTop(int n) {
         double x = actor.getPosX();
         double y = actor.getPosY();
         double w = actor.getWidth();
         double h = actor.getHeight();
-        return hasCollision(x - w / 2 + marge, y - h / 2, false)
-                || hasCollision(x + w / 2 - marge, y - h / 2, false);
+
+        /*return hasCollision(x - w / 2 + marge, y - h / 2, false, true)
+                || hasCollision(x + w / 2 - marge, y - h / 2, false, true);*/
+
+        int lastTrue = -1;
+
+        for (int i = n; i > 0; i--) {
+            if (hasCollision(x - w / 2 + marge, y - h / 2 + i, false, true)
+                    || hasCollision(x + w / 2 - marge, y - h / 2 + i, false, true)) {
+                lastTrue = i;
+            } else if (lastTrue >= 0) {
+                actor.setPosY(actor.getPosY() + lastTrue);
+                return true;
+            }
+        }
+
+        if (hasCollision(x - w / 2 + marge, y - h / 2, false, true)
+                || hasCollision(x + w / 2 - marge, y - h / 2, false, true)) {
+            return true;
+        }
+        return false;
     }
 
     public boolean hasCollisionBottom(int n) {
@@ -54,8 +79,8 @@ public class Collider {
         int lastTrue = -1;
 
         for (int i = n; i > 0; i--) {
-            if (hasCollision(x - w / 2 + marge, y + h / 2 + i, false)
-                    || hasCollision(x + w / 2 - marge, y + h / 2 + i, false)) {
+            if (hasCollision(x - w / 2 + marge, y + h / 2 + i, false, false)
+                    || hasCollision(x + w / 2 - marge, y + h / 2 + i, false, false)) {
                 lastTrue = i;
             } else if (lastTrue >= 0) {
                 actor.setPosY(actor.getPosY() + lastTrue);
@@ -63,8 +88,8 @@ public class Collider {
             }
         }
 
-        if (hasCollision(x - w / 2 + marge, y + h / 2, false)
-                || hasCollision(x + w / 2 - marge, y + h / 2, false)) {
+        if (hasCollision(x - w / 2 + marge, y + h / 2, false, false)
+                || hasCollision(x + w / 2 - marge, y + h / 2, false, false)) {
             return true;
         }
         return false;
@@ -76,8 +101,8 @@ public class Collider {
         double w = actor.getWidth();
         double h = actor.getHeight();
 
-        return hasCollision(x + w / 2, y + h / 2 - marge, false)
-                || hasCollision(x + w / 2, y - h / 2 + marge, false);
+        return hasCollision(x + w / 2, y + h / 2 - marge, false, false)
+                || hasCollision(x + w / 2, y - h / 2 + marge, false, false);
     }
 
     public boolean hasCollisionLeft() {
@@ -86,7 +111,7 @@ public class Collider {
         double w = actor.getWidth();
         double h = actor.getHeight();
 
-        return hasCollision(x - w / 2, y + h / 2 - marge, true)
-                || hasCollision(x - w / 2, y - h / 2 + marge, true);
+        return hasCollision(x - w / 2, y + h / 2 - marge, true, false)
+                || hasCollision(x - w / 2, y - h / 2 + marge, true, false);
     }
 }
