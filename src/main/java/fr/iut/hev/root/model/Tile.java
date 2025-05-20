@@ -36,26 +36,6 @@ public class Tile {
         this.tile = tile;
     }
 
-    public Image getTexture(/*int damageAmount*/) {
-        /**
-         * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
-         */
-        if (this.tile.getType() == TileTypes.AIR)
-            return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(this.tile.getName())./*concat(Integer.toString(damageAmount)).*/concat(".png");
-        return new Image(getClass().getResource(path).toExternalForm());
-    }
-
-    public Image getTexture_background() {
-        /**
-         * Retourne le sprite background de la Tile
-         */
-        if (this.tile.getType() == TileTypes.AIR)
-            return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(this.tile.getName()).concat("_background.png");
-        return new Image(getClass().getResource(path).toExternalForm());
-    }
-
     public int getX() {
         return this.tileX;
     }
