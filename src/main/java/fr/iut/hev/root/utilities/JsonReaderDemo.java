@@ -47,7 +47,8 @@ public class JsonReaderDemo {
     public static void main(String[] args) {
 
         try {
-            String filePath = "C:\\Users\\fabio\\OneDrive\\Bureau\\SAE02.01-02-05-06_Terraria_like\\src\\main\\resources\\fr\\iut\\hev\\root\\data\\items.json";
+            // ajouter un truc pour pouvoir aller directement dans le fichier, pas de le absplute path
+            String filePath = "src\\main\\resources\\fr\\iut\\hev\\root\\data\\items.json";
             JSONArray items = JsonReader.readJsonArrayFromFile(filePath);
 
             // Filtrer les items avec un champ "heal"
