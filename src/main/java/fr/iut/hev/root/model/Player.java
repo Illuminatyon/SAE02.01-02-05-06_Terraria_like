@@ -14,11 +14,10 @@ public class Player extends Actor {
     private InputListener inputListener;
     private InputManager inputManager;
     private Set<PlayerActions> activeActions;
-    private boolean isJumping;
-    private int jumpingTestDecay;
 
-    public Player(Scene scene, TileMap tileMap, int posX, int posY, int width, int height, int moveSpeed, int jumpForce) {
-        super(tileMap, posX, posY, width, height, moveSpeed, jumpForce);
+    public Player(Scene scene, int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
+        super(posX, posY, width, height, tileMap, moveSpeed, jumpForce);
+
         inputListener = new InputListener(scene);
         inputManager = new InputManager(inputListener);
 
@@ -44,21 +43,23 @@ public class Player extends Actor {
         inputTimer.start();
     }
 
-    public void updateMovements() {
-        if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !isJumping) {
+    @Override
+    public void updatePosition() {
+        if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !super.getIsJumping()) {
             //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
         } else {
             super.setVelocityY(0);
         }
 
-        updateHorizontalMovements();
-        updateVerticalMovements();
+        updateHorizontalMovement();
+        updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
     }
 
-    private void updateHorizontalMovements() {
+    @Override
+    public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
         if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)
                 && inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
@@ -82,19 +83,20 @@ public class Player extends Actor {
         }
     }
 
-    private void updateVerticalMovements() {
-        if (activeActions.contains(PlayerActions.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !isJumping) {
-            isJumping = true;
-            jumpingTestDecay = 0;
-        } else if (isJumping) {
-            if (jumpingTestDecay == super.getJumpForce()) {
+    @Override
+    public void updateVerticalMovement() {
+        if (activeActions.contains(PlayerActions.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping()) {
+            super.setIsJumping(true);
+            super.setJumpingTestDecay(0);
+        } else if (super.getIsJumping()) {
+            if (super.getJumpingTestDecay() == super.getJumpForce()) {
                 super.setVelocityY(0);
-                isJumping = false;
+                super.setIsJumping(false);
             } else if (!super.getCollider().hasCollisionTop(super.getVelocityY() + 1)) {
-                super.setVelocityY(-super.getJumpForce() + jumpingTestDecay);
-                jumpingTestDecay += 1;
+                super.setVelocityY(-super.getJumpForce() + super.getJumpingTestDecay());
+                super.setJumpingTestDecay(super.getJumpingTestDecay() + 1);
             } else {
-                isJumping = false;
+                super.setIsJumping(false);
             }
         }
     }
