@@ -61,7 +61,6 @@ public class GlobalView {
         if (tile.getTile().getType() == TileTypes.AIR)
             return null;
         String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_background.png");
-        System.out.println(path);
         return new Image(getClass().getResource(path).toExternalForm());
     }
 }
