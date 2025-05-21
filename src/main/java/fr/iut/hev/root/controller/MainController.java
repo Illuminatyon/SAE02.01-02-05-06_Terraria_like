@@ -1,6 +1,7 @@
 package fr.iut.hev.root.controller;
 
 import com.studiohartman.jamepad.ControllerButton;
+import com.studiohartman.jamepad.ControllerManager;
 import fr.iut.hev.root.model.ControllerEvent;
 import fr.iut.hev.root.model.SceneWrapper;
 import fr.iut.hev.root.model.enums.InputDevices;
@@ -24,6 +25,8 @@ public class MainController implements Initializable {
     private AnchorPane root;
 
     private Set<PlayerActions> activeActions;
+
+    private ControllerManager controllerManager;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

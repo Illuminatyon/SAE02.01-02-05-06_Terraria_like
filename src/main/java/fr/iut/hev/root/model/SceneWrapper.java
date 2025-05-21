@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model;
 
+import com.studiohartman.jamepad.ControllerManager;
 import javafx.beans.NamedArg;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
