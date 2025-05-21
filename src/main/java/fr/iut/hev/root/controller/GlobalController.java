@@ -34,7 +34,7 @@ public class GlobalController implements Initializable {
         vue.loadWorld();
         player_imageview.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                player = new Player(newScene, tilemap, 0, -10, 32, 64, 2, 10);
+                player = new Player(newScene, tilemap, 0, -25, 32, 64, 2, 10);
                 player_imageview.translateXProperty().bind(player.posXProperty());
                 player_imageview.translateYProperty().bind(player.posYProperty());
                 player_imageview.scaleXProperty().bind(player.lookDirectionProperty());
