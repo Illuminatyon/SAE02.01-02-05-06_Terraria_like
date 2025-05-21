@@ -29,6 +29,8 @@ public class GlobalController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         TileMap tilemap = new TileMap(1920,1056);
         GlobalView vue = new GlobalView(tilemap,tileMap,backgroundTileMap);
+        player_imageview.setLayoutX((double) (tilemap.getWidth() * TileMap.format) / 2);
+        player_imageview.setLayoutY((double) (tilemap.getHeight() * TileMap.format) / 2);
         vue.loadWorld();
         player_imageview.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {

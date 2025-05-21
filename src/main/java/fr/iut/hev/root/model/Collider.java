@@ -15,8 +15,8 @@ public class Collider {
     public Collider(TileMap tileMap, Actor actor) {
         this.tileMap = tileMap;
         this.actor = actor;
-        this.offsetX = (tileMap.getWidth() * TileMap.format) / 2;
-        this.offsetY = (tileMap.getHeight() * TileMap.format) / 2;
+        this.offsetX = (tileMap.getWidth() * TileMap.format) / 2 + actor.getWidth() / 2;
+        this.offsetY = (tileMap.getHeight() * TileMap.format) / 2 + actor.getHeight() / 2;
         this.marge = 1;
     }
 

@@ -14,7 +14,7 @@
         </ImageView>
         <TilePane fx:id="backgroundTileMap" prefHeight="1056.0" prefWidth="1920.0" />
         <TilePane fx:id="tileMap" prefHeight="1056.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1920.0" />
-        <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" layoutX="944.0" layoutY="496.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../img/blackbox.png" /> <!-- @img/jhon_fallout.png -->
             </image>
