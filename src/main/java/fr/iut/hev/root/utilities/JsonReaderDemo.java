@@ -1,76 +1,58 @@
 package fr.iut.hev.root.utilities;
 
+import fr.iut.hev.root.utilities.Consummable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 /**
  * La classe {@code JsonReaderDemo} sert de démonstration pour la lecture,
  * le filtrage et le tri d'un fichier JSON contenant des objets d'inventaire.
  *
- * <p>Cette classe lit un fichier JSON local contenant une liste d'objets (items),
- * sélectionne ceux qui possèdent une propriété "heal", puis les trie par valeur
- * croissante de soin. Enfin, elle affiche les informations de ces objets triés
- * dans la console.
- *
- * <p>Le fichier JSON doit être un tableau contenant des objets ayant au minimum
- * les champs suivants pour être sélectionnés :
- * <ul>
- *     <li><b>id</b> : identifiant numérique de l'objet</li>
- *     <li><b>name</b> : nom de l'objet</li>
- *     <li><b>type</b> : type de l'objet</li>
- *     <li><b>heal</b> : quantité de soin que l'objet procure</li>
- * </ul>
+ * <p>Elle lit un fichier JSON local, sélectionne les objets ayant un champ "heal",
+ * les convertit en objets {@code Consommable}, les trie, et les affiche.
  *
  * <p>Exemple d'utilisation :
- * <pre>
- * {@code
- * JsonReaderDemo.main(new String[]{});
- * }
- * </pre>
+ * {@code JsonReaderDemo.main(new String[]{});}
  *
  * @author Fabio
- **/
+ */
 public class JsonReaderDemo {
 
     /**
      * Méthode principale.
      *
-     * Elle lit le fichier JSON, récupère les objets qui ont un champ "heal",
-     * les trie par valeur de soin, puis affiche leurs informations.
+     * Lit le fichier JSON, extrait les objets consommables, les trie par "heal",
+     * et affiche leurs informations dans la console.
      *
      * @param args non utilisé ici
      */
-
     public static void main(String[] args) {
-
         try {
-            // ajouter un truc pour pouvoir aller directement dans le fichier, pas de le absplute path
-            String filePath = "src\\main\\resources\\fr\\iut\\hev\\root\\data\\items.json";
+            // Utilisation d'un chemin relatif
+            String filePath = "src/main/resources/fr/iut/hev/root/data/items.json";
             JSONArray items = JsonReader.readJsonArrayFromFile(filePath);
 
-            // Filtrer les items avec un champ "heal"
-            List<JSONObject> healingItems = new ArrayList<>();
+            // Création d'une liste de consommables à partir des objets JSON
+            List<Consummable> healingItems = new ArrayList<>();
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
                 if (item.has("heal")) {
-                    healingItems.add(item);
+                    Consummable consommable = ConsommableFactory.fromJson(item);
+                    healingItems.add(consommable);
                 }
             }
 
-            // Trier les objets selon la valeur de "heal" (ordre croissant)
-            healingItems.sort(Comparator.comparingInt(o -> o.getInt("heal")));
+            // Tri des consommables par valeur de soin
+            healingItems.sort(Comparator.comparingInt(Consummable::getHeal));
 
             // Affichage
-            System.out.println("=== Items triés par soin (ordre croissant) ===");
-            for (JSONObject item : healingItems) {
-                System.out.println("ID: " + item.getInt("id"));
-                System.out.println("Name: " + item.getString("name"));
-                System.out.println("Type: " + item.getString("type"));
-                System.out.println("Heal: " + item.getInt("heal"));
-                System.out.println("-----");
+            System.out.println("=== Consommables triés par soin (ordre croissant) ===");
+            for (Consummable c : healingItems) {
+                System.out.println(c);
             }
 
         } catch (Exception e) {
