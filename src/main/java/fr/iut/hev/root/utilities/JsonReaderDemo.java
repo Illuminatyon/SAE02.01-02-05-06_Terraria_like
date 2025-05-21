@@ -3,7 +3,6 @@ package fr.iut.hev.root.utilities;
 import fr.iut.hev.root.utilities.Consummable;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
