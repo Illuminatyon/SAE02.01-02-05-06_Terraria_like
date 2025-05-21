@@ -7,9 +7,13 @@ import fr.iut.hev.root.view.GlobalView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.Node;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class GlobalController implements Initializable {
@@ -24,6 +28,9 @@ public class GlobalController implements Initializable {
 
     @FXML
     private ImageView player_imageview;
+
+    @FXML
+    private GridPane inventoryGridPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -47,5 +54,14 @@ public class GlobalController implements Initializable {
                 }.start();
             }
         });
+
+    }
+
+    @FXML
+    void openInventory(KeyEvent event) {
+        System.out.println("event");
+        if (Objects.equals(event.getCharacter(), "e") || Objects.equals(event.getCharacter(), "E")) {
+            inventoryGridPane.setVisible(!inventoryGridPane.isVisible());
+        }
     }
 }
