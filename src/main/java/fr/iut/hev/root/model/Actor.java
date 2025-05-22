@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
     private boolean isAlive;
-    private int half_heart;
+    private IntegerProperty healthProperty;
     private int moveSpeed;
     private int jumpForce;
     private boolean isJumping;
@@ -23,10 +23,10 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap,int half_heart,int moveSpeed, int jumpForce) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce) {
         super(posX, posY, width, height, tileMap);
         this.isAlive = true;
-        this.half_heart = half_heart;
+        this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
         this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value);
@@ -85,13 +85,15 @@ public abstract class Actor extends Entity {
         this.jumpingTestDecay = newValue;
     }
 
-    public int getHalf_heart() {return this.half_heart;}
+    public final int getHealth() {return this.healthProperty.getValue();}
 
-    public void setHalf_heart(int halfHeart) {this.half_heart = halfHeart;}
+    public final void setHealth(int halfHeart) {this.healthProperty.setValue(halfHeart);}
+
+    public final IntegerProperty healthProperty() {return this.healthProperty;}
 
     public void receiveDamage(int damage) {
-        if (!(damage > this.half_heart))
-            this.half_heart -= damage;
+        if (!(damage > this.getHealth()))
+            this.setHealth(getHealth() - damage);
     }
 
     public boolean getIsAlive() {return this.isAlive;}

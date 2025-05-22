@@ -5,6 +5,7 @@ import fr.iut.hev.root.model.Actor;
 import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.view.GlobalView;
+import fr.iut.hev.root.view.HUDView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -12,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
@@ -22,7 +25,8 @@ import java.util.ResourceBundle;
 public class GlobalController implements Initializable {
     private Timeline gameLoop;
     private Player player;
-    private GlobalView vue;
+    private GlobalView globalView;
+    private HUDView hudView;
     private TileMap tileMap;
     private ArrayList<Actor> aliveActors;
 
@@ -34,6 +38,9 @@ public class GlobalController implements Initializable {
 
     @FXML
     private ImageView player_imageview;
+
+    @FXML
+    private HBox heartsHbox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,13 +71,15 @@ public class GlobalController implements Initializable {
 
     private void initMap() {
         tileMap = new TileMap(1920,1056);
-        vue = new GlobalView(tileMap, landTileMap,backgroundTileMap);
-        vue.loadWorld();
+        globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
+        globalView.loadWorld();
     }
 
     private void initPlayer() {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10);
         aliveActors.add(player);
+        hudView = new HUDView(player,hudAnchorPane);
+        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         KeyInputHandler keyboardHandler = new KeyInputHandler(player);
 
         player_imageview.setLayoutX((double) (tileMap.getWidth() * TileMap.format) / 2);

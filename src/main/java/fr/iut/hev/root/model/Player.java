@@ -84,7 +84,7 @@ public class Player extends Actor {
     }
 
     public void diesQuestionMark() {
-        if (this.getHalf_heart() == 0)
+        if (this.getHealthProperty() == 0)
             this.setIsAlive(false);
     }
 }

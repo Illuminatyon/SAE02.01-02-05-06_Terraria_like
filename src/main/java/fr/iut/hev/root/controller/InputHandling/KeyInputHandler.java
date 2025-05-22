@@ -25,7 +25,7 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                 case KeyCode.TAB -> player.addActiveActions(PlayerActions.MAP);
                 case KeyCode.Z -> {
                     player.receiveDamage(1);
-                    System.out.println("pv = " + player.getHalf_heart());
+                    System.out.println("pv = " + player.getHealthProperty());
                 }
             }
         }
