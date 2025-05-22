@@ -21,7 +21,7 @@ public class Collider {
     }
 
     private boolean hasCollision(double x, double y, boolean negativeCheck) {
-        int tileX = 0;
+        int tileX;
         if (negativeCheck) {
             tileX = (int) ((x + offsetX - 1) / TileMap.format);
         } else {
