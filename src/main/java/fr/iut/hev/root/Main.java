@@ -9,8 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
-    public static Scene scene;
-//--enable-native-access=javafx.graphics
+    public Scene scene;
     @Override
     public void start(Stage stage) throws IOException {
         Pane root = FXMLLoader.load(Main.class.getResource("view/globalView.fxml"));
