@@ -10,8 +10,8 @@ import javafx.scene.layout.TilePane;
 import static fr.iut.hev.root.model.TileMap.format;
 
 public class GlobalView {
-
-    private TileMap tileMap;
+    private TileMap tileMap; // Pas sur, la vue n'est pas censé voir le modele ?
+    // Peut etre plutot adapter pour charger quelque chose
     private TilePane tileMapLand;
     private TilePane tileMapBackground;
 

@@ -28,7 +28,7 @@
          <children>
             <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <GridPane alignment="CENTER" hgap="5.0" VBox.vgrow="NEVER">
+                  <GridPane fx:id="hotbarInventory" alignment="CENTER" hgap="5.0" VBox.vgrow="NEVER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
                       <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
@@ -57,7 +57,7 @@
                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
                      </children>
                   </GridPane>
-                  <GridPane alignment="CENTER" hgap="5.0" layoutX="10.0" layoutY="10.0" vgap="5.0">
+                  <GridPane fx:id="expandedInventory" alignment="CENTER" hgap="5.0" layoutX="10.0" layoutY="10.0" vgap="5.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
                         <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
