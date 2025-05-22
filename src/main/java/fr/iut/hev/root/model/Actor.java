@@ -3,7 +3,9 @@ package fr.iut.hev.root.model;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class Actor extends Entity {
+public abstract class Actor extends Entity {
+    private boolean isAlive;
+    private int half_heart;
     private int moveSpeed;
     private int jumpForce;
     private boolean isJumping;
@@ -21,8 +23,10 @@ public class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap,int half_heart,int moveSpeed, int jumpForce) {
         super(posX, posY, width, height, tileMap);
+        this.isAlive = true;
+        this.half_heart = half_heart;
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
         this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value);
@@ -81,6 +85,19 @@ public class Actor extends Entity {
         this.jumpingTestDecay = newValue;
     }
 
+    public int getHalf_heart() {return this.half_heart;}
+
+    public void setHalf_heart(int halfHeart) {this.half_heart = halfHeart;}
+
+    public void receiveDamage(int damage) {
+        if (!(damage > this.half_heart))
+            this.half_heart -= damage;
+    }
+
+    public boolean getIsAlive() {return this.isAlive;}
+
+    public void setIsAlive(boolean isAlive) {this.isAlive = isAlive;}
+
     /*public LookDirections getLookDirection() { // TODO: fix
         return this.lookDirectionProperty;
     }*/
@@ -92,4 +109,6 @@ public class Actor extends Entity {
     public IntegerProperty lookDirectionProperty() {
         return this.lookDirectionProperty;
     }
+
+    public abstract void diesQuestionMark();
 }

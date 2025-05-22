@@ -10,7 +10,7 @@ public class Player extends Actor {
     private final Set<PlayerActions> activeActions;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
-        super(posX, posY, width, height, tileMap, moveSpeed, jumpForce);
+        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce);
         this.activeActions = new HashSet<>();
     }
 
@@ -37,6 +37,7 @@ public class Player extends Actor {
         updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
+        diesQuestionMark();
     }
 
     @Override
@@ -80,5 +81,10 @@ public class Player extends Actor {
                 super.setIsJumping(false);
             }
         }
+    }
+
+    public void diesQuestionMark() {
+        if (this.getHalf_heart() == 0)
+            this.setIsAlive(false);
     }
 }
