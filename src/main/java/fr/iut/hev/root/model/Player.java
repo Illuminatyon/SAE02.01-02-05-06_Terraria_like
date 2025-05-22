@@ -1,7 +1,5 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.enums.ControllerInputs;
-import fr.iut.hev.root.model.enums.InputDevices;
 import fr.iut.hev.root.model.enums.PlayerActions;
 import fr.iut.hev.root.model.input.*;
 import javafx.animation.AnimationTimer;
