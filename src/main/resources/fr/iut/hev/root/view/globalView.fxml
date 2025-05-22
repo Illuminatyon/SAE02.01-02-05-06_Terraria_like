@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+
+<AnchorPane prefHeight="1056.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.GlobalController">
+   <children>
+      <ImageView fitHeight="1056.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../img/background.png" />
+         </image>
+      </ImageView>
+      <TilePane fx:id="backgroundTileMap" prefHeight="1056.0" prefWidth="1920.0" />
+      <TilePane fx:id="tileMap" prefHeight="1056.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1920.0" />
+      <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/blackbox.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

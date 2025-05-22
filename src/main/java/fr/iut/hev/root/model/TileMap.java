@@ -1,0 +1,135 @@
+package fr.iut.hev.root.model;
+
+import fr.iut.hev.root.model.enums.Tiles;
+
+public class TileMap {
+    private final int width;
+    private final int height;
+    private final Tile[][] tileMap;
+
+    //public static final int format = 16;
+    public static final int format = 32;
+
+    public TileMap(int width, int height) {
+        /**
+         * Constructeur de TileMap. "width" et "height" en pixel.
+         */
+        this.width = width/format;
+        this.height = height/format;
+        this.tileMap = new Tile[height/format][width/format];
+
+        //génération de la map test
+        this.setTestMap();
+
+    }
+
+    public Tile getTile(int tileX, int tileY) {
+        /**
+         * Retourne la Tile de position tileX et tileY dans la TileMap
+         */
+        if (!(tileX < 0 || tileY < 0 || tileX >= width || tileY >= height))
+            return tileMap[tileY][tileX];
+        else
+            return null;
+    }
+
+    public void setTestMap() {
+        /**
+         * crée une map en 1920p avec 120*67 tile de test
+         */
+        int index = 0;
+        for (int i = 0; i < this.getHeight(); i++) {
+            for (int j = 0; j < this.getWidth(); j++) {
+                //if (index < 5160) {
+                if (index < 1080) {
+                    this.addTile(new Tile(Tiles.AIR, 0, j, i));
+                }
+                //else if (index >= 5160 && index < 5280) {
+                else if (index >= 1080 && index < 1140) {
+                    this.addTile(new Tile(Tiles.GRASS,0,j,i));
+                }
+                //else if (index >= 5280) {
+                else if (index >= 1140) {
+                    this.addTile(new Tile(Tiles.DIRT,0,j,i));
+                }
+                index++;
+            }
+        }
+
+        for (int i = 0; i < 15; i++) {
+            this.getTile(i, 18).setTile(Tiles.DIRT);
+            if (i < 14) {
+                this.getTile(i, 17).setTile(Tiles.DIRT);
+            }
+            if (i < 13) {
+                this.getTile(i, 16).setTile(Tiles.DIRT);
+            }
+            if (i < 12) {
+                this.getTile(i, 15).setTile(Tiles.DIRT);
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            this.getTile(14 - i, 17 - i).setTile(Tiles.GRASS);
+        }
+
+        for (int i = 0; i < 11; i++) {
+            this.getTile(11 - i, 14).setTile(Tiles.GRASS);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            this.getTile(0, 14 - i).setTile(Tiles.DIRT);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            this.getTile(25 + i, 14).setTile(Tiles.GRASS);
+        }
+
+        this.getTile(27, 15).setTile(Tiles.DIRT);
+
+        for (int i = 0; i < 5; i++) {
+            this.getTile(35, 17 - i).setTile(Tiles.DIRT);
+        }
+
+        this.getTile(40, 15).setTile(Tiles.DIRT);
+
+        /*for (int i = 16; i > 0; i--) {
+            this.getTile(20, i).setTile(Tiles.DIRT);
+        }
+
+        for (int i = 16; i > 0; i--) {
+            this.getTile(40, i).setTile(Tiles.DIRT);
+        }*/
+    }
+
+    public void addTile(Tile tile) {
+        /**
+         * Fait une verification pour pas que deux tiles se superposent et ajoute une tile précisé en  paramètre
+         */
+        int x = tile.getX();
+        int y = tile.getY();
+        if (getTile(x,y) == null)
+            this.tileMap[y][x] = tile;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    // Charger la TileMap d'un fichier
+    // Peut etre va surement charger une partie, et charger plus tard aussi qlq parties de la TileMap pour les perfs
+    // Retourne true si l'operation est reussie, false sinon
+    private boolean readTileMap() {
+        return false;
+    }
+
+    // Ecrire la TileMap dans un fichier
+    // Retourne true si l'operation est reussie, false sinon
+    private boolean writeTileMap() {
+        return false;
+    }
+}
