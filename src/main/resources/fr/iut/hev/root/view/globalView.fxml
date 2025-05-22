@@ -20,11 +20,5 @@
             <Image url="@../img/blackbox.png" />
          </image>
       </ImageView>
-      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: red;" AnchorPane.leftAnchor="0.0" />
-            <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: blue;" AnchorPane.rightAnchor="0.0" />
-         </children>
-      </AnchorPane>
    </children>
 </AnchorPane>
