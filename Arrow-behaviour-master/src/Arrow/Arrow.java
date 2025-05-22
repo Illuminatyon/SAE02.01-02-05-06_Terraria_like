@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Arrow {
     double x, y;       // Position actuelle
     double vx, vy;     // Vitesse par axe
-    double gravity = 0.3; // Force de gravité
+    double gravity = 2; // Force de gravité
 
     public Arrow(double startX, double startY, double targetX, double targetY, double speed) {
         x = startX;
@@ -32,4 +32,9 @@ public class Arrow {
         g.setColor(Color.RED);
         g.fillOval((int)x, (int)y, 6, 6);
     }
+
+    public Rectangle getHitbox() {
+        return new Rectangle((int)x, (int)y, 6, 6);
+    }
+
 }

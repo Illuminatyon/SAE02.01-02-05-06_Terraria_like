@@ -8,6 +8,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener {
     ArrayList<Arrow> arrows = new ArrayList<>();
     int playerX = 300, playerY = 300;
 
+    Enemy enemy = new Enemy(500, 300);
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(800, 600));
         this.setBackground(Color.BLACK);
@@ -21,23 +23,36 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Dessin du joueur
+        // Joueur
         g2.setColor(Color.WHITE);
         g2.fillOval(playerX - 10, playerY - 10, 20, 20);
 
-        // Dessin des flèches
+        // Flèches
         for (Arrow arrow : arrows) {
             arrow.draw(g2);
         }
+
+        // Ennemi
+        enemy.draw(g2);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        ArrayList<Arrow> toRemove = new ArrayList<>();
+
         for (Arrow arrow : arrows) {
             arrow.update();
+
+            if (enemy.isAlive && arrow.getHitbox().intersects(enemy.getHitbox())) {
+                enemy.hit();
+                toRemove.add(arrow); // flèche supprimée après le tir
+            }
         }
+
+        arrows.removeAll(toRemove);
         repaint();
     }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
