@@ -7,6 +7,7 @@ public enum PlayerActions {
     MOVE_LEFT,
     JUMP,
     INVENTORY,
+    MAP,
     HOTBAR_1,
     HOTBAR_2,
     HOTBAR_3,

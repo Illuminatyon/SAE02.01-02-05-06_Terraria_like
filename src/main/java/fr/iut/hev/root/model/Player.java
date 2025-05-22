@@ -1,47 +1,28 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.enums.ControllerInputs;
-import fr.iut.hev.root.model.enums.InputDevices;
 import fr.iut.hev.root.model.enums.PlayerActions;
-import fr.iut.hev.root.model.input.*;
-import javafx.animation.AnimationTimer;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends Actor {
-    private InputListener inputListener;
-    private InputManager inputManager;
-    private Set<PlayerActions> activeActions;
 
-    public Player(Scene scene, int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
+    private final Set<PlayerActions> activeActions;
+
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
         super(posX, posY, width, height, tileMap, moveSpeed, jumpForce);
-
-        inputListener = new InputListener(scene);
-        inputManager = new InputManager(inputListener);
-
-        Input input1 = new KeyInput(InputDevices.KEYBOARD, KeyCode.D);
-        Input input2 = new KeyInput(InputDevices.KEYBOARD, KeyCode.Q);
-        Input input3 = new AnalogInput(InputDevices.CONTROLLER, ControllerInputs.STICK_LEFT_X, AnalogInput.Direction.POSITIVE, 0.3f);
-        Input input4 = new AnalogInput(InputDevices.CONTROLLER, ControllerInputs.STICK_LEFT_X, AnalogInput.Direction.NEGATIVE, 0.3f);
-        Input input5 = new KeyInput(InputDevices.KEYBOARD, KeyCode.SPACE);
-        Input input6 = new KeyInput(InputDevices.CONTROLLER, ControllerInputs.BUTTON_BOTTOM);
-        inputManager.bind(input1, PlayerActions.MOVE_RIGHT);
-        inputManager.bind(input2, PlayerActions.MOVE_LEFT);
-        inputManager.bind(input3, PlayerActions.MOVE_RIGHT);
-        inputManager.bind(input4, PlayerActions.MOVE_LEFT);
-        inputManager.bind(input5, PlayerActions.JUMP);
-        inputManager.bind(input6, PlayerActions.JUMP);
-
-        AnimationTimer inputTimer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                activeActions = inputManager.getActiveActions();
-            }
-        };
-        inputTimer.start();
+        this.activeActions = new HashSet<>();
     }
+
+    public void addActiveActions(PlayerActions playerActions) {
+        this.activeActions.add(playerActions);
+    }
+
+    public void removeActiveActions(PlayerActions playerActions) {
+        this.activeActions.remove(playerActions);
+    }
+
+    public Set<PlayerActions> getActiveActions() {return activeActions;}
 
     @Override
     public void updatePosition() {
@@ -61,17 +42,17 @@ public class Player extends Actor {
     @Override
     public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
-        if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)
-                && inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
+        if (activeActions.contains(PlayerActions.MOVE_RIGHT)
+                && activeActions.contains(PlayerActions.MOVE_LEFT)) {
             super.setVelocityX(0);
-        } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_RIGHT)) {
+        } else if (activeActions.contains(PlayerActions.MOVE_RIGHT)) {
             super.setLookDirection(LookDirections.RIGHT);
             if (!super.getCollider().hasCollisionRight()) {
                 super.setVelocityX(super.getMoveSpeed());
             } else {
                 super.setVelocityX(0);
             }
-        } else if (inputManager.getActiveActions().contains(PlayerActions.MOVE_LEFT)) {
+        } else if (activeActions.contains(PlayerActions.MOVE_LEFT)) {
             super.setLookDirection(LookDirections.LEFT); // IL FAUT JUSTE FIX LE LEFT COLLIDER
             if (!super.getCollider().hasCollisionLeft()) {
                 super.setVelocityX(-super.getMoveSpeed());
