@@ -1,6 +1,5 @@
 package fr.iut.hev.root.controller;
 
-import fr.iut.hev.root.model.FixedAnimationTimer;
 import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.view.GlobalView;
