@@ -23,19 +23,20 @@ public class HUDView {
         int loopIteration;
 
         heartsHbox.getChildren().clear();
-
-        if (nbHearts % 1 > 0)
-            loopIteration = (int) nbHearts + 1;
-        else
-            loopIteration = (int) nbHearts;
-        for (int i = 0; i < loopIteration; i++) {
-            if (nbHearts % 1 > 0 && i == loopIteration -1)
-                heart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_half.png").toExternalForm()));
+        if (player.getIsAlive()) {
+            if (nbHearts % 1 > 0)
+                loopIteration = (int) nbHearts + 1;
             else
-                heart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_full.png").toExternalForm()));
-            heart.setFitHeight(format);
-            heart.setFitWidth(format);
-            heartsHbox.getChildren().add(heart);
+                loopIteration = (int) nbHearts;
+            for (int i = 0; i < loopIteration; i++) {
+                if (nbHearts % 1 > 0 && i == loopIteration - 1)
+                    heart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_half.png").toExternalForm()));
+                else
+                    heart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_full.png").toExternalForm()));
+                heart.setFitHeight(format);
+                heart.setFitWidth(format);
+                heartsHbox.getChildren().add(heart);
+            }
         }
     }
 }

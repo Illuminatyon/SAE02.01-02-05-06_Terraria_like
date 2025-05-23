@@ -6,6 +6,7 @@ import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.HUDView;
+import fr.iut.hev.root.view.PlayerView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -41,6 +42,9 @@ public class GlobalController implements Initializable {
 
     @FXML
     private HBox heartsHbox;
+
+    @FXML
+    private AnchorPane globalPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -79,9 +83,13 @@ public class GlobalController implements Initializable {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10);
         aliveActors.add(player);
         hudView = new HUDView(player,heartsHbox);
-        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
-        KeyInputHandler keyboardHandler = new KeyInputHandler(player);
+        player.healthProperty().addListener(((obs, old, t1) -> {
+            hudView.updateHealth();
+            if (!player.getIsAlive())
 
+        }));
+        KeyInputHandler keyboardHandler = new KeyInputHandler(player);
+        player_imageview  = new PlayerView();
         player_imageview.setLayoutX((double) (tileMap.getWidth() * TileMap.format) / 2);
         player_imageview.setLayoutY((double) (tileMap.getHeight() * TileMap.format) / 2);
         player_imageview.translateXProperty().bind(player.posXProperty());
