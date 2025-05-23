@@ -1,6 +1,11 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.enums.Tiles;
+import fr.iut.hev.root.utilities.CreateHashmap;
+import fr.iut.hev.root.utilities.SaveReader;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class TileMap {
     private final int width;
@@ -31,6 +36,17 @@ public class TileMap {
             return tileMap[tileY][tileX];
         else
             return null;
+    }
+
+    public void setMap() throws IOException {
+        HashMap<Integer, Tile> tileMap = CreateHashmap.HashMapReader();
+        int[][] save = SaveReader.map();
+        int index = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                this.addTile(new Tile (tileMap.get(save[y][x]);
+            }
+        }
     }
 
     public void setTestMap() {
