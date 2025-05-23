@@ -42,15 +42,15 @@ public class TileMap {
             for (int j = 0; j < this.getWidth(); j++) {
                 //if (index < 5160) {
                 if (index < 1080) {
-                    this.addTile(new Tile(Tiles.AIR, 0, j, i));
+                    this.addTile(new Tile(Tiles.AIR,j, i));
                 }
                 //else if (index >= 5160 && index < 5280) {
                 else if (index >= 1080 && index < 1140) {
-                    this.addTile(new Tile(Tiles.GRASS,0,j,i));
+                    this.addTile(new Tile(Tiles.GRASS,j,i));
                 }
                 //else if (index >= 5280) {
                 else if (index >= 1140) {
-                    this.addTile(new Tile(Tiles.DIRT,0,j,i));
+                    this.addTile(new Tile(Tiles.DIRT,j,i));
                 }
                 index++;
             }
