@@ -78,7 +78,7 @@ public class GlobalController implements Initializable {
     private void initPlayer() {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10);
         aliveActors.add(player);
-        hudView = new HUDView(player,hudAnchorPane);
+        hudView = new HUDView(player,heartsHbox);
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         KeyInputHandler keyboardHandler = new KeyInputHandler(player);
 
