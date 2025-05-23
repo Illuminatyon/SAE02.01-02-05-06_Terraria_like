@@ -37,7 +37,6 @@ public class Player extends Actor {
         updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
-        diesQuestionMark();
     }
 
     @Override
@@ -85,6 +84,6 @@ public class Player extends Actor {
 
     public void diesQuestionMark() {
         if (this.getHealth() == 0)
-            this.setIsAlive(false);
+            this.setIsAliveProperty(false);
     }
 }

@@ -1,10 +1,12 @@
 package fr.iut.hev.root.model;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
-    private boolean isAlive;
+    private BooleanProperty isAliveProperty;
     private IntegerProperty healthProperty;
     private int moveSpeed;
     private int jumpForce;
@@ -25,7 +27,7 @@ public abstract class Actor extends Entity {
 
     public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce) {
         super(posX, posY, width, height, tileMap);
-        this.isAlive = true;
+        this.isAliveProperty = new SimpleBooleanProperty(true);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
@@ -96,9 +98,11 @@ public abstract class Actor extends Entity {
             this.setHealth(getHealth() - damage);
     }
 
-    public boolean getIsAlive() {return this.isAlive;}
+    public boolean getIsAliveProperty() {return this.isAliveProperty.getValue();}
 
-    public void setIsAlive(boolean isAlive) {this.isAlive = isAlive;}
+    public void setIsAliveProperty(boolean isAliveProperty) {this.isAliveProperty.setValue(isAliveProperty);}
+
+    public BooleanProperty isAliveProperty() {return this.isAliveProperty;}
 
     /*public LookDirections getLookDirection() { // TODO: fix
         return this.lookDirectionProperty;

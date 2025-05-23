@@ -28,6 +28,7 @@ public class GlobalController implements Initializable {
     private Player player;
     private GlobalView globalView;
     private HUDView hudView;
+    private PlayerView playerView;
     private TileMap tileMap;
     private ArrayList<Actor> aliveActors;
 
@@ -59,7 +60,8 @@ public class GlobalController implements Initializable {
                 (ev -> {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
                         Actor currentActor = aliveActors.get(i);
-                        if (currentActor.getIsAlive()) {
+                        currentActor.diesQuestionMark();
+                        if (currentActor.getIsAliveProperty()) {
                             currentActor.updatePosition();
                         }
                         else {
@@ -83,18 +85,11 @@ public class GlobalController implements Initializable {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10);
         aliveActors.add(player);
         hudView = new HUDView(player,heartsHbox);
-        player.healthProperty().addListener(((obs, old, t1) -> {
-            hudView.updateHealth();
-            if (!player.getIsAlive())
-
-        }));
+        playerView = new PlayerView(player,player_imageview,tileMap);
+        playerView.load();
+        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
+        player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
         KeyInputHandler keyboardHandler = new KeyInputHandler(player);
-        player_imageview  = new PlayerView();
-        player_imageview.setLayoutX((double) (tileMap.getWidth() * TileMap.format) / 2);
-        player_imageview.setLayoutY((double) (tileMap.getHeight() * TileMap.format) / 2);
-        player_imageview.translateXProperty().bind(player.posXProperty());
-        player_imageview.translateYProperty().bind(player.posYProperty());
-        player_imageview.scaleXProperty().bind(player.lookDirectionProperty());
         Platform.runLater(() -> landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler));
 
     }

@@ -23,7 +23,7 @@ public class HUDView {
         int loopIteration;
 
         heartsHbox.getChildren().clear();
-        if (player.getIsAlive()) {
+        if (player.getIsAliveProperty()) {
             if (nbHearts % 1 > 0)
                 loopIteration = (int) nbHearts + 1;
             else
