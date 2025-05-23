@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.TilePane?>
 
-<AnchorPane prefHeight="1056.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.GlobalController">
+<AnchorPane fx:id="globalPane" prefHeight="1056.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.GlobalController">
    <children>
       <ImageView fitHeight="1056.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
@@ -19,5 +21,40 @@
             <Image url="@../img/blackbox.png" />
          </image>
       </ImageView>
+      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="heartsHbox" prefHeight="50.0" prefWidth="400.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView id="0" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/HUD/heart_full.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView id="1" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/HUD/heart_full.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView id="2" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/HUD/heart_full.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView id="3" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/HUD/heart_full.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/HUD/heart_full.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets left="40.0" top="30.0" />
+               </padding></HBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

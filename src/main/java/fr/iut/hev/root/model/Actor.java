@@ -1,9 +1,13 @@
 package fr.iut.hev.root.model;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class Actor extends Entity {
+public abstract class Actor extends Entity {
+    private BooleanProperty isAliveProperty;
+    private IntegerProperty healthProperty;
     private int moveSpeed;
     private int jumpForce;
     private boolean isJumping;
@@ -21,8 +25,10 @@ public class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce) {
         super(posX, posY, width, height, tileMap);
+        this.isAliveProperty = new SimpleBooleanProperty(true);
+        this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
         this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value);
@@ -81,6 +87,23 @@ public class Actor extends Entity {
         this.jumpingTestDecay = newValue;
     }
 
+    public final int getHealth() {return this.healthProperty.getValue();}
+
+    public final void setHealth(int halfHeart) {this.healthProperty.setValue(halfHeart);}
+
+    public final IntegerProperty healthProperty() {return this.healthProperty;}
+
+    public void receiveDamage(int damage) {
+        if (!(damage > this.getHealth()))
+            this.setHealth(getHealth() - damage);
+    }
+
+    public boolean getIsAliveProperty() {return this.isAliveProperty.getValue();}
+
+    public void setIsAliveProperty(boolean isAliveProperty) {this.isAliveProperty.setValue(isAliveProperty);}
+
+    public BooleanProperty isAliveProperty() {return this.isAliveProperty;}
+
     /*public LookDirections getLookDirection() { // TODO: fix
         return this.lookDirectionProperty;
     }*/
@@ -92,4 +115,6 @@ public class Actor extends Entity {
     public IntegerProperty lookDirectionProperty() {
         return this.lookDirectionProperty;
     }
+
+    public abstract void diesQuestionMark();
 }

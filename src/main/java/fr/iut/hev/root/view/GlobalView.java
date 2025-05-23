@@ -44,6 +44,10 @@ public class GlobalView {
         }
     }
 
+    public void deletePlayerSprite() {
+
+    }
+
     public Image getTexture(Tile tile) {
         /**
          * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.

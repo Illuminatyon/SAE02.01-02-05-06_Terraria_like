@@ -10,7 +10,7 @@ public class Player extends Actor {
     private final Set<PlayerActions> activeActions;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
-        super(posX, posY, width, height, tileMap, moveSpeed, jumpForce);
+        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce);
         this.activeActions = new HashSet<>();
     }
 
@@ -80,5 +80,10 @@ public class Player extends Actor {
                 super.setIsJumping(false);
             }
         }
+    }
+
+    public void diesQuestionMark() {
+        if (this.getHealth() == 0)
+            this.setIsAliveProperty(false);
     }
 }
