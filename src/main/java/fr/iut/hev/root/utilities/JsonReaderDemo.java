@@ -11,7 +11,7 @@ import java.util.List;
 
 public class JsonReaderDemo {
 
-    public static void main(String[] args) throws IOException {
+    public static void testjsonreader() throws IOException {
 
             // Utilisation d'un chemin relatif
             String filePath = "src/main/resources/fr/iut/hev/root/data/items.json";

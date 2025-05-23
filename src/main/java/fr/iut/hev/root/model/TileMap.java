@@ -39,12 +39,11 @@ public class TileMap {
     }
 
     public void setMap() throws IOException {
-        HashMap<Integer, Tile> tileMap = CreateHashmap.HashMapReader();
+        HashMap<Integer, Tiles> index = CreateHashmap.HashMapReader();
         int[][] save = SaveReader.map();
-        int index = 0;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                this.addTile(new Tile (tileMap.get(save[y][x]);
+                this.addTile(new Tile (index.get(save[y][x]), x,y));
             }
         }
     }
@@ -58,15 +57,15 @@ public class TileMap {
             for (int j = 0; j < this.getWidth(); j++) {
                 //if (index < 5160) {
                 if (index < 1080) {
-                    this.addTile(new Tile(Tiles.AIR, 0, j, i));
+                    this.addTile(new Tile(Tiles.AIR, j, i));
                 }
                 //else if (index >= 5160 && index < 5280) {
                 else if (index >= 1080 && index < 1140) {
-                    this.addTile(new Tile(Tiles.GRASS,0,j,i));
+                    this.addTile(new Tile(Tiles.GRASS,j,i));
                 }
                 //else if (index >= 5280) {
                 else if (index >= 1140) {
-                    this.addTile(new Tile(Tiles.DIRT,0,j,i));
+                    this.addTile(new Tile(Tiles.DIRT,j,i));
                 }
                 index++;
             }

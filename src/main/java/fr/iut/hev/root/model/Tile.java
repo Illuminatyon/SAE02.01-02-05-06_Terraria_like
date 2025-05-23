@@ -9,16 +9,14 @@ import java.net.URL;
 public class Tile {
     private Tiles tile;
     private int health;
-    private int maxHealth;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
     private int tileX;
     private int tileY;
 
-    public Tile(Tiles tile, int maxHealth, int x, int y) {
+    public Tile(Tiles tile,  int x, int y) {
         this.tile = tile;
-        this.health = maxHealth;
-        this.maxHealth = maxHealth;
+        this.health = tile.getMaxHealth();
         this.tileX = x;
         this.tileY = y;
 
