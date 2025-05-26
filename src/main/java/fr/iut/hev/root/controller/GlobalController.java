@@ -6,6 +6,7 @@ import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.HUDView;
+import fr.iut.hev.root.testing.MouseCursorCircle;
 import fr.iut.hev.root.view.PlayerView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -31,6 +32,7 @@ public class GlobalController implements Initializable {
     private PlayerView playerView;
     private TileMap tileMap;
     private ArrayList<Actor> aliveActors;
+    private MouseCursorCircle playerLightCircle;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -51,7 +53,6 @@ public class GlobalController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
-
         initMap();
         initActors();
 
@@ -63,10 +64,16 @@ public class GlobalController implements Initializable {
                         currentActor.diesQuestionMark();
                         if (currentActor.getIsAliveProperty()) {
                             currentActor.updatePosition();
-                        }
-                        else {
+                        } else {
                             aliveActors.remove(currentActor);
                         }
+                    }
+
+                    // Mise à jour de la position de la lumière autour du joueur
+                    if (playerLightCircle != null) {
+                        double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
+                        double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+                        playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
                 })
         );
@@ -76,27 +83,35 @@ public class GlobalController implements Initializable {
     }
 
     private void initMap() {
-        tileMap = new TileMap(1920,1056);
-        globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
+        tileMap = new TileMap(1920, 1056);
+        globalView = new GlobalView(tileMap, landTileMap, backgroundTileMap);
         globalView.loadWorld();
     }
 
     private void initPlayer() {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10);
         aliveActors.add(player);
-        hudView = new HUDView(player,heartsHbox);
-        playerView = new PlayerView(player,player_imageview,tileMap);
+        hudView = new HUDView(player, heartsHbox);
+        playerView = new PlayerView(player, player_imageview, tileMap);
         playerView.load();
+
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
-        KeyInputHandler keyboardHandler = new KeyInputHandler(player);
-        Platform.runLater(() -> landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler));
 
+        KeyInputHandler keyboardHandler = new KeyInputHandler(player);
+        Platform.runLater(() -> landTileMap.getScene().addEventHandler(KeyEvent.ANY, keyboardHandler));
+
+        // Création de la lumière autour du joueur après chargement de la scène
+        Platform.runLater(() -> {
+            double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
+            double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+
+            playerLightCircle = new MouseCursorCircle(globalPane, playerCenterX, playerCenterY, 250, 10);
+        });
     }
 
     private void initActors() {
         aliveActors = new ArrayList<>();
-
         initPlayer();
     }
 }
