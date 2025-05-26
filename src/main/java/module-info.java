@@ -1,5 +1,6 @@
 module fr.iut.hev.root {
     requires javafx.controls;
+    exports fr.iut.hev.root.testing;
     requires javafx.fxml;
     requires jdk.xml.dom;
 
