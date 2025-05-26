@@ -22,7 +22,7 @@ public class Tile {
 
     }
 
-    public void damage(int amount) {
+    public void takesDamage(int amount) {
         this.health = Math.max(0, this.health - amount); // Retourne le plus grand
     }
 
@@ -42,6 +42,8 @@ public class Tile {
         return this.tileY;
     }
 
+    public int getHealth() {return this.health;}
+
     /*public String toString() {
         return "{"
                 .concat(this.name)
@@ -57,5 +59,9 @@ public class Tile {
     @Override
     public String toString() {
         return this.getTile().toString();
+    }
+
+    public void breaks() {
+        this.tile = Tiles.AIR;
     }
 }

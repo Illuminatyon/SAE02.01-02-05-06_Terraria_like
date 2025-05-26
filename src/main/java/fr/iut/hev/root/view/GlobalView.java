@@ -4,6 +4,8 @@ import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.TileTypes;
 import fr.iut.hev.root.view.Listener.TileListener;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -30,7 +32,7 @@ public class GlobalView {
         for (int i = 0; i < this.tileMap.getHeight(); i++) {
             for (int j = 0; j < this.tileMap.getWidth(); j++) {
                 currentTile = this.tileMap.getTile(j,i);
-                tileBreakable = new ImageView(getTexture(currentTile));
+                tileBreakable = new ImageView(getTexture(currentTile,4));
                 tileBreakable.imageProperty().addListener(new TileListener(tileBreakable));
                 tileBackground = new ImageView(getTexture_background(currentTile));
                 tileBreakable.setId(Integer.toString(index));
@@ -46,21 +48,30 @@ public class GlobalView {
         }
     }
 
-    public void resetTile(int x, int y) {
-        tileMapLand.getChildren().set(y*60 + x,new ImageView());
+    public void updateTile(int x, int y,Tile tile) {
+        //ObservableList<Node> children = tileMapLand.getChildren();
+        int textureNumber = 0;
+        if (tile.getHealth() > 0) {
+            textureNumber = tile.getHealth() / 2;
+            if ((tile.getHealth() / 2.0) % 1 != 0)
+                textureNumber++;
+            tileMapLand.getChildren().set(y * 60 + x, new ImageView(getTexture(tile, textureNumber)));
+        }
+        else
+            tileMapLand.getChildren().set(y*60 + x,new ImageView());
     }
 
     public void deletePlayerSprite() {
 
     }
 
-    public Image getTexture(Tile tile) {
+    public Image getTexture(Tile tile, int tileHealth) {
         /**
          * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
          */
         if (tile.getTile().getType() == TileTypes.AIR)
             return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName())./*concat(Integer.toString(damageAmount)).*/concat(".png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_").concat(Integer.toString(tileHealth)).concat(".png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 

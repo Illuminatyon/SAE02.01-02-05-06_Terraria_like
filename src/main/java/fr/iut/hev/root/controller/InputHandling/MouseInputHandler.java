@@ -25,7 +25,7 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent mouseEvent) {
-        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED) || mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
             x = (int)mouseEvent.getX();
             y = (int)mouseEvent.getY();
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
@@ -49,7 +49,7 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
         else if (true) {
             int xModel = x/format,yModel = y/format;
             player.updateBreaksBlock(xModel,yModel,tileMap);
-            worldView.resetTile(xModel,yModel);
+            worldView.updateTile(xModel,yModel,tileMap.getTile(xModel,yModel));
         }
     }
 

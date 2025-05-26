@@ -120,8 +120,13 @@ public class TileMap {
         return height;
     }
 
-    public void breakBlock(int x,int y) {
-        this.getTile(x,y).setTile(Tiles.AIR);
+    public void tileGetsMined(int x, int y) {
+        Tile currentTile = this.getTile(x,y);
+
+        if ((currentTile.getHealth() <= 0))
+            currentTile.takesDamage(1);
+        else
+            currentTile.breaks();
     }
 
     // Charger la TileMap d'un fichier
