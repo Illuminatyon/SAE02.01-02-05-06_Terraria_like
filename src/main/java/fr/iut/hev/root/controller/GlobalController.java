@@ -1,6 +1,7 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
+import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
 import fr.iut.hev.root.model.Actor;
 import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -90,7 +92,11 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
         KeyInputHandler keyboardHandler = new KeyInputHandler(player);
-        Platform.runLater(() -> landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler));
+        MouseInputHandler mouseHandler = new MouseInputHandler(tileMap,globalView);
+        Platform.runLater(() -> {
+            landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.ANY,mouseHandler);
+        });
 
     }
 

@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model.enums;
 
 public enum PlayerActions {
+    BREAK_BlOCK,
     USE_ITEM,
     INTERACT,
     MOVE_RIGHT,
