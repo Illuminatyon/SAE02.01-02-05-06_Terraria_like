@@ -120,6 +120,10 @@ public class TileMap {
         return height;
     }
 
+    public void breakBlock(int x,int y) {
+        this.getTile(x,y).setTile(Tiles.AIR);
+    }
+
     // Charger la TileMap d'un fichier
     // Peut etre va surement charger une partie, et charger plus tard aussi qlq parties de la TileMap pour les perfs
     // Retourne true si l'operation est reussie, false sinon

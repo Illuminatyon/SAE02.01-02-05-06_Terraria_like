@@ -3,6 +3,7 @@ package fr.iut.hev.root.view;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.TileTypes;
+import fr.iut.hev.root.view.Listener.TileListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -30,6 +31,7 @@ public class GlobalView {
             for (int j = 0; j < this.tileMap.getWidth(); j++) {
                 currentTile = this.tileMap.getTile(j,i);
                 tileBreakable = new ImageView(getTexture(currentTile));
+                tileBreakable.imageProperty().addListener(new TileListener(tileBreakable));
                 tileBackground = new ImageView(getTexture_background(currentTile));
                 tileBreakable.setId(Integer.toString(index));
                 tileBackground.setId(Integer.toString(index));
@@ -42,6 +44,10 @@ public class GlobalView {
                 index++;
             }
         }
+    }
+
+    public void resetTile(int x, int y) {
+        tileMapLand.getChildren().set(y*60 + x,new ImageView());
     }
 
     public void deletePlayerSprite() {

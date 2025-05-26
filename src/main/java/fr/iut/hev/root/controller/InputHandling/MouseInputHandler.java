@@ -7,46 +7,53 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import static fr.iut.hev.root.model.TileMap.format;
+
 public class MouseInputHandler implements EventHandler<MouseEvent> {
 
     private TileMap tileMap;
     private GlobalView worldView;
     private Player player;
+    private int x;
+    private int y;
 
-    public MouseInputHandler(TileMap tileMap,GlobalView worldView) {
+    public MouseInputHandler(TileMap tileMap,GlobalView worldView,Player player) {
         this.tileMap = tileMap;
         this.worldView = worldView;
+        this.player = player;
     }
 
     @Override
     public void handle(MouseEvent mouseEvent) {
-        if (true) { //condition à rajouter
-            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    onLeftClickPressed();
-                } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                    onRightClickPressed();
-                }
-            } else if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    onLeftClickReleased();
-                } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                    onRightClickReleased();
-                }
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+            x = (int)mouseEvent.getX();
+            y = (int)mouseEvent.getY();
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                onLeftClickPressed();
+            } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                onRightClickPressed();
+            }
+        } else if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                onLeftClickReleased();
+            } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                onRightClickReleased();
             }
         }
     }
 
     public void onLeftClickPressed() {
-        if (true) { //condition lorsqu'on aura l'inventaire pour vérifier l'objet dans la main
+        if (false) { //condition lorsqu'on aura l'inventaire pour vérifier l'objet dans la main
 
         }
         else if (true) {
-
+            int xModel = x/format,yModel = y/format;
+            player.updateBreaksBlock(xModel,yModel,tileMap);
+            worldView.resetTile(xModel,yModel);
         }
     }
 
-    public void onRightClickPressed () {
+    public void onRightClickPressed() {
 
     }
 

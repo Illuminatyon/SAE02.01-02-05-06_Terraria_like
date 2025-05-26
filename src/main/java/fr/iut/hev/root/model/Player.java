@@ -86,4 +86,10 @@ public class Player extends Actor {
         if (this.getHealth() == 0)
             this.setIsAliveProperty(false);
     }
+
+    public void updateBreaksBlock(int x,int y, TileMap tileMap) {
+        if (true) { //condition de la reach
+            tileMap.breakBlock(x,y);
+        }
+    }
 }
