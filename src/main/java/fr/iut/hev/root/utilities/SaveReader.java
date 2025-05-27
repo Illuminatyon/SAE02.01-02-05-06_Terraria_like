@@ -1,5 +1,6 @@
 package fr.iut.hev.root.utilities;
 
+import fr.iut.hev.root.model.TileMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,9 +9,7 @@ import java.io.IOException;
 
 public class SaveReader {
 
-    public static int[][] map() throws IOException {
-
-        String filePath = "src/main/resources/fr/iut/hev/root/data/map.json";
+    public static int[][] map(String filePath) throws IOException {
 
 
         FileReader reader = new FileReader(filePath);
@@ -47,5 +46,9 @@ public class SaveReader {
         }
 
     return map;
+    }
+    public static int[] newgame() throws IOException {
+        SaveReader.map("fr/iut/hev/root/data/spawn.json");
+
     }
 }

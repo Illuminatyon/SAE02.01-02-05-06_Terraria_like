@@ -38,9 +38,9 @@ public class TileMap {
             return null;
     }
 
-    public void setMap() throws IOException {
+    public void setMap(String Path) throws IOException {
         HashMap<Integer, Tiles> index = CreateHashmap.HashMapReader();
-        int[][] save = SaveReader.map();
+        int[][] save = SaveReader.map(Path);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 this.addTile(new Tile (index.get(save[y][x]), x,y));
