@@ -92,12 +92,16 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
         KeyInputHandler keyboardHandler = new KeyInputHandler(player);
-        MouseInputHandler mouseHandler = new MouseInputHandler(tileMap,globalView,player);
+        MouseInputHandler mouseClicksPressedHandler = new MouseInputHandler(tileMap,globalView,player);
+        //MouseInputHandler mouseClicksReleasedHandler = new MouseInputHandler(tileMap,globalView,player);
         Platform.runLater(() -> {
+//            landTileMap.getScene().onMouseReleasedProperty().addListener((observableValue, eventHandler, t1) -> {
+//                mouseClicksPressedHandler.setMouseClickIsPressed(false);
+//            });
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.ANY,mouseHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseClicksPressedHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseClicksPressedHandler);
         });
-
     }
 
     private void initActors() {

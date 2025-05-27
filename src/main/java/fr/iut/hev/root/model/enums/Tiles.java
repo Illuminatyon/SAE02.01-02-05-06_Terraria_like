@@ -5,9 +5,9 @@ import javafx.scene.image.Image;
 // Ca ou deux enums ?
 public enum Tiles {
     AIR("air", TileTypes.AIR,0), // Peut etre pas nécessaire
-    GRASS("grass", TileTypes.BLOCK,10),
-    DIRT("dirt", TileTypes.BLOCK,10),
-    STONE("stone", TileTypes.BLOCK,20),
+    GRASS("grass", TileTypes.BLOCK,8),
+    DIRT("dirt", TileTypes.BLOCK,8),
+    STONE("stone", TileTypes.BLOCK,8),
     //WATER("water", TileTypes.LIQUID),
     //LAVA("lava", TileTypes.LIQUID);
     CRAFTING_TABLE("crafting_table",TileTypes.UTILITIES,15),

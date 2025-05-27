@@ -62,6 +62,8 @@ public class Tile {
     }
 
     public void breaks() {
-        this.tile = Tiles.AIR;
+        //System.out.println("model death");
+        if (this.health == 0)
+            this.tile = Tiles.AIR;
     }
 }

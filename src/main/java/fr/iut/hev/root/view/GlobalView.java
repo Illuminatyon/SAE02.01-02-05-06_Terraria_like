@@ -3,7 +3,6 @@ package fr.iut.hev.root.view;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.TileTypes;
-import fr.iut.hev.root.view.Listener.TileListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -33,7 +32,6 @@ public class GlobalView {
             for (int j = 0; j < this.tileMap.getWidth(); j++) {
                 currentTile = this.tileMap.getTile(j,i);
                 tileBreakable = new ImageView(getTexture(currentTile,4));
-                tileBreakable.imageProperty().addListener(new TileListener(tileBreakable));
                 tileBackground = new ImageView(getTexture_background(currentTile));
                 tileBreakable.setId(Integer.toString(index));
                 tileBackground.setId(Integer.toString(index));
@@ -51,14 +49,17 @@ public class GlobalView {
     public void updateTile(int x, int y,Tile tile) {
         //ObservableList<Node> children = tileMapLand.getChildren();
         int textureNumber = 0;
-        if (tile.getHealth() > 0) {
+        //System.out.println(tile);
+        if (tile.getHealth() > 0 && tile.getHealth()%2 == 0) {
+            //System.out.println("vivant");
             textureNumber = tile.getHealth() / 2;
-            if ((tile.getHealth() / 2.0) % 1 != 0)
-                textureNumber++;
             tileMapLand.getChildren().set(y * 60 + x, new ImageView(getTexture(tile, textureNumber)));
         }
-        else
-            tileMapLand.getChildren().set(y*60 + x,new ImageView());
+        else if (tile.getHealth() <= 0){
+            //System.out.println("mort");
+            //System.out.println(tile.getHealth());
+            tileMapLand.getChildren().set(y * 60 + x, new ImageView());
+        }
     }
 
     public void deletePlayerSprite() {

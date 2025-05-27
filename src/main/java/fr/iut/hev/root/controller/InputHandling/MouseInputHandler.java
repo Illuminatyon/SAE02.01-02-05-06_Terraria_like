@@ -16,16 +16,18 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     private Player player;
     private int x;
     private int y;
+    private boolean mouseClickIsPressed;
 
     public MouseInputHandler(TileMap tileMap,GlobalView worldView,Player player) {
         this.tileMap = tileMap;
         this.worldView = worldView;
         this.player = player;
+        this.mouseClickIsPressed = false;
     }
 
     @Override
     public void handle(MouseEvent mouseEvent) {
-        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED) || mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+        /*if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED) || mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
             x = (int)mouseEvent.getX();
             y = (int)mouseEvent.getY();
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
@@ -38,6 +40,24 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
                 onLeftClickReleased();
             } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
                 onRightClickReleased();
+            }
+        }*/
+
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+            mouseClickIsPressed = true;
+            System.out.println("entered MOUSE_PRESSED");
+        }
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
+            mouseClickIsPressed = false;
+            System.out.println("entered MOUSE_RELEASED");
+        }
+
+        while (mouseClickIsPressed) {
+            x = (int)mouseEvent.getX();
+            y = (int)mouseEvent.getY();
+
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                onLeftClickPressed();
             }
         }
     }
@@ -64,4 +84,6 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     public void onRightClickReleased() {
 
     }
+
+    public void setMouseClickIsPressed(boolean mouseClickIsPressed) {this.mouseClickIsPressed = mouseClickIsPressed;}
 }

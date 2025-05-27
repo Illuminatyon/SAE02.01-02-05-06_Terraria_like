@@ -122,11 +122,11 @@ public class TileMap {
 
     public void tileGetsMined(int x, int y) {
         Tile currentTile = this.getTile(x,y);
-
-        if ((currentTile.getHealth() <= 0))
+        //System.out.println("health = " + currentTile.getHealth());
+        if (!(currentTile.getHealth() <= 0))
             currentTile.takesDamage(1);
-        else
-            currentTile.breaks();
+        currentTile.breaks();
+        //System.out.println("health after = " + currentTile.getHealth());
     }
 
     // Charger la TileMap d'un fichier
