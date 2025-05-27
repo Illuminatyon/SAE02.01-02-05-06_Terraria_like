@@ -34,6 +34,7 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                 case KeyCode.Q -> player.removeActiveActions(PlayerActions.MOVE_LEFT);
                 case KeyCode.D -> player.removeActiveActions(PlayerActions.MOVE_RIGHT);
                 case KeyCode.SPACE -> player.removeActiveActions(PlayerActions.JUMP);
+                case KeyCode.TAB -> player.removeActiveActions(PlayerActions.MAP);
             }
         }
     }

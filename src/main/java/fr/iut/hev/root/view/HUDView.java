@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 
 import static fr.iut.hev.root.model.TileMap.format;
 
-public class HUDView {
+public class    HUDView {
 
     private Player player;
     private HBox heartsHbox;
