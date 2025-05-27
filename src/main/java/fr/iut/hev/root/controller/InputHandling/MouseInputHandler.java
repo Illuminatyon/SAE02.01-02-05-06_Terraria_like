@@ -2,6 +2,7 @@ package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.enums.TileTypes;
 import fr.iut.hev.root.view.GlobalView;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
@@ -16,13 +17,15 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     private Player player;
     private int x;
     private int y;
-    private boolean mouseClickIsPressed;
+    private volatile boolean mouseClickIsPressed;
+    private volatile MouseEvent mouseEvent;
 
     public MouseInputHandler(TileMap tileMap,GlobalView worldView,Player player) {
         this.tileMap = tileMap;
         this.worldView = worldView;
         this.player = player;
         this.mouseClickIsPressed = false;
+
     }
 
     @Override
@@ -44,21 +47,13 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
         }*/
 
         if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-            mouseClickIsPressed = true;
+            this.mouseClickIsPressed = true;
+            this.mouseEvent = mouseEvent;
             System.out.println("entered MOUSE_PRESSED");
         }
         if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
             mouseClickIsPressed = false;
             System.out.println("entered MOUSE_RELEASED");
-        }
-
-        while (mouseClickIsPressed) {
-            x = (int)mouseEvent.getX();
-            y = (int)mouseEvent.getY();
-
-            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                onLeftClickPressed();
-            }
         }
     }
 
@@ -86,4 +81,18 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     }
 
     public void setMouseClickIsPressed(boolean mouseClickIsPressed) {this.mouseClickIsPressed = mouseClickIsPressed;}
+
+    public void checkClickRelevent(double x,double y) {
+        setMouseClickIsPressed(tileMap.getTile((int)x / format, (int)y / format).getTile().getType() != TileTypes.AIR);
+    }
+
+    public MouseEvent getMouseEvent() {return this.mouseEvent;}
+
+    public Player getPlayer() {return this.player;}
+
+    public TileMap getTileMap() {return this.tileMap;}
+
+    public GlobalView getWorldView() {return this.worldView;}
+
+    public boolean getMouseClickIsPressed() {return this.mouseClickIsPressed;}
 }
