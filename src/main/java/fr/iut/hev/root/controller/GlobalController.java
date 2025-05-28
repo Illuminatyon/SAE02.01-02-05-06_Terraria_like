@@ -1,12 +1,10 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseClickReleasedHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
 import fr.iut.hev.root.model.Actor;
 import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.thread.ReleaseClickthread;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.HUDView;
 import fr.iut.hev.root.view.PlayerView;
@@ -34,6 +32,7 @@ public class GlobalController implements Initializable {
     private HUDView hudView;
     private PlayerView playerView;
     private TileMap tileMap;
+    private MouseInputHandler mouseClicksPressedHandler;
     private ArrayList<Actor> aliveActors;
 
     @FXML
@@ -72,6 +71,9 @@ public class GlobalController implements Initializable {
                             aliveActors.remove(currentActor);
                         }
                     }
+                    if (mouseClicksPressedHandler.getMouseClickIsPressed()) {
+                        mouseClicksPressedHandler.clickPressedHandler();
+                    }
                 })
         );
         gameLoop.getKeyFrames().add(kf);
@@ -94,17 +96,12 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
         KeyInputHandler keyboardHandler = new KeyInputHandler(player);
-        MouseInputHandler mouseClicksPressedHandler = new MouseInputHandler(tileMap,globalView,player);
-        //MouseClickReleasedHandler mouseClickReleasedHandler = new MouseClickReleasedHandler(mouseClicksPressedHandler);
+        mouseClicksPressedHandler = new MouseInputHandler(tileMap,globalView,player);
         Platform.runLater(() -> {
-//            landTileMap.getScene().onMouseReleasedProperty().addListener((observableValue, eventHandler, t1) -> {
-//                mouseClicksPressedHandler.setMouseClickIsPressed(false);
-//            });
-            ReleaseClickthread mouseClickReleasedHandler = new ReleaseClickthread(mouseClicksPressedHandler,mouseClicksPressedHandler.getMouseEvent(),mouseClicksPressedHandler.getMouseClickIsPressed());
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseClicksPressedHandler);
-            //landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseClickReleasedHandler);
-            mouseClickReleasedHandler.start();
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseClicksPressedHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseClicksPressedHandler);
         });
     }
 

@@ -17,8 +17,8 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     private Player player;
     private int x;
     private int y;
-    private volatile boolean mouseClickIsPressed;
-    private volatile MouseEvent mouseEvent;
+    private boolean mouseClickIsPressed;
+    private MouseEvent mouseEvent;
 
     public MouseInputHandler(TileMap tileMap,GlobalView worldView,Player player) {
         this.tileMap = tileMap;
@@ -30,30 +30,29 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent mouseEvent) {
-        /*if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED) || mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-            x = (int)mouseEvent.getX();
-            y = (int)mouseEvent.getY();
-            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                onLeftClickPressed();
-            } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                onRightClickPressed();
-            }
-        } else if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
-            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                onLeftClickReleased();
-            } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                onRightClickReleased();
-            }
-        }*/
-
         if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
             this.mouseClickIsPressed = true;
             this.mouseEvent = mouseEvent;
-            System.out.println("entered MOUSE_PRESSED");
         }
         if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
             mouseClickIsPressed = false;
-            System.out.println("entered MOUSE_RELEASED");
+            this.mouseEvent = null;
+        }
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
+            this.mouseEvent = mouseEvent;
+        }
+    }
+
+    public void clickPressedHandler() {
+        x = (int)mouseEvent.getX() / format;
+        y = (int)mouseEvent.getY() / format;
+        if (checkClickRelevent(x,y)) {
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                onLeftClickPressed();
+            }
+            else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                onRightClickPressed();
+            }
         }
     }
 
@@ -62,37 +61,18 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
 
         }
         else if (true) {
-            int xModel = x/format,yModel = y/format;
-            player.updateBreaksBlock(xModel,yModel,tileMap);
-            worldView.updateTile(xModel,yModel,tileMap.getTile(xModel,yModel));
+            player.updateBreaksBlock(x,y,tileMap);
+            worldView.updateTile(x,y,tileMap.getTile(x,y));
         }
     }
 
     public void onRightClickPressed() {
-
+        System.out.println("right click triggered");
     }
 
-    public void onLeftClickReleased() {
-
+    public boolean checkClickRelevent(int x,int y) {
+        return tileMap.getTile(x,y).getTile().getType() != TileTypes.AIR;
     }
-
-    public void onRightClickReleased() {
-
-    }
-
-    public void setMouseClickIsPressed(boolean mouseClickIsPressed) {this.mouseClickIsPressed = mouseClickIsPressed;}
-
-    public void checkClickRelevent(double x,double y) {
-        setMouseClickIsPressed(tileMap.getTile((int)x / format, (int)y / format).getTile().getType() != TileTypes.AIR);
-    }
-
-    public MouseEvent getMouseEvent() {return this.mouseEvent;}
-
-    public Player getPlayer() {return this.player;}
-
-    public TileMap getTileMap() {return this.tileMap;}
-
-    public GlobalView getWorldView() {return this.worldView;}
 
     public boolean getMouseClickIsPressed() {return this.mouseClickIsPressed;}
 }

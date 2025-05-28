@@ -3,8 +3,6 @@ package fr.iut.hev.root.view;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.TileTypes;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -47,23 +45,14 @@ public class GlobalView {
     }
 
     public void updateTile(int x, int y,Tile tile) {
-        //ObservableList<Node> children = tileMapLand.getChildren();
-        int textureNumber = 0;
-        //System.out.println(tile);
+        int textureNumber;
         if (tile.getHealth() > 0 && tile.getHealth()%2 == 0) {
-            //System.out.println("vivant");
             textureNumber = tile.getHealth() / 2;
             tileMapLand.getChildren().set(y * 60 + x, new ImageView(getTexture(tile, textureNumber)));
         }
         else if (tile.getHealth() <= 0){
-            //System.out.println("mort");
-            //System.out.println(tile.getHealth());
             tileMapLand.getChildren().set(y * 60 + x, new ImageView());
         }
-    }
-
-    public void deletePlayerSprite() {
-
     }
 
     public Image getTexture(Tile tile, int tileHealth) {
