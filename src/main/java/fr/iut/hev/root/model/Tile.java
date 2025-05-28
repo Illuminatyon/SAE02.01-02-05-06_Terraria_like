@@ -16,7 +16,7 @@ public class Tile {
 
     public Tile(Tiles tile, int x, int y) {
         this.tile = tile;
-        this.health = tile.getMaxHealth();
+        this.health = tile.getMaxHealth()*10;
         this.tileX = x;
         this.tileY = y;
 
@@ -43,6 +43,8 @@ public class Tile {
     }
 
     public int getHealth() {return this.health;}
+
+    public void resetHealth() {this.health = this.tile.getMaxHealth()*10;}
 
     /*public String toString() {
         return "{"

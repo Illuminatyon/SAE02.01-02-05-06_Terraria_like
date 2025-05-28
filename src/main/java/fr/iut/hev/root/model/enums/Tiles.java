@@ -7,7 +7,7 @@ public enum Tiles {
     AIR("air", TileTypes.AIR,0), // Peut etre pas nécessaire
     GRASS("grass", TileTypes.BLOCK,8),
     DIRT("dirt", TileTypes.BLOCK,8),
-    STONE("stone", TileTypes.BLOCK,8),
+    STONE("stone", TileTypes.BLOCK,12),
     //WATER("water", TileTypes.LIQUID),
     //LAVA("lava", TileTypes.LIQUID);
     CRAFTING_TABLE("crafting_table",TileTypes.UTILITIES,15),

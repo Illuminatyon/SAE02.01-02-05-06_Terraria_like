@@ -46,8 +46,9 @@ public class GlobalView {
 
     public void updateTile(int x, int y,Tile tile) {
         int textureNumber;
-        if (tile.getHealth() > 0 && tile.getHealth()%2 == 0) {
-            textureNumber = tile.getHealth() / 2;
+        int tileHealthStep = ((tile.getTile().getMaxHealth()*10) / 4);
+        if (tile.getHealth() > 0 && tile.getHealth()%tileHealthStep == 0) {
+            textureNumber = tile.getHealth() / tileHealthStep;
             tileMapLand.getChildren().set(y * 60 + x, new ImageView(getTexture(tile, textureNumber)));
         }
         else if (tile.getHealth() <= 0){

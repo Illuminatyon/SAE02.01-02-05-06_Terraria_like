@@ -74,6 +74,9 @@ public class GlobalController implements Initializable {
                     if (mouseClicksPressedHandler.getMouseClickIsPressed()) {
                         mouseClicksPressedHandler.clickPressedHandler();
                     }
+                    if (mouseClicksPressedHandler.getMouseClickIsReleased()) {
+                        mouseClicksPressedHandler.clickReleasedHandler();
+                    }
                 })
         );
         gameLoop.getKeyFrames().add(kf);
