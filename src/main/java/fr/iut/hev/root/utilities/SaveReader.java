@@ -47,8 +47,11 @@ public class SaveReader {
 
     return map;
     }
-    public static int[] newgame() throws IOException {
-        SaveReader.map("fr/iut/hev/root/data/spawn.json");
+
+    public static int[][] newgame() throws IOException {
+        int[][] map = SaveReader.map("fr/iut/hev/root/data/spawn.json");
+        return map;
+
 
     }
 }
