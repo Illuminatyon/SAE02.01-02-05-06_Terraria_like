@@ -69,7 +69,7 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
         if (false) { //condition lorsqu'on aura l'inventaire pour vérifier l'objet dans la main
 
         }
-        else if (checkTileNotEmpty(x,y) && ()) {
+        else if (checkTileNotEmpty() /*&& ()*/) {
             player.updateBreaksBlock(x,y,tileMap);
             worldView.updateTile(x,y,tileMap.getTile(x,y));
         }
@@ -80,7 +80,7 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     }
 
     public void onLeftClickReleased() {
-        if (checkTileNotEmpty(x,y)) {
+        if (checkTileNotEmpty()) {
             tileMap.getTile(x,y).resetHealth();
             worldView.updateTile(x,y,tileMap.getTile(x,y));
         }
@@ -91,11 +91,18 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
         System.out.println("right click released");
     }
 
-    public boolean checkTileNotEmpty(int x, int y) {
+    public boolean checkTileNotEmpty() {
         return tileMap.getTile(x,y).getTile().getType() != TileTypes.AIR;
     }
 
     public boolean getMouseClickIsPressed() {return this.mouseClickIsPressed;}
 
     public boolean getMouseClickIsReleased() {return this.mouseClickIsReleased;}
+
+    /*public boolean checkIfBlockOnTheWay() {
+        int xB = x - (x/32)*32 + 16,yB = y - (y/32)*32 + 16;
+
+        while ()
+    }*/
+    //début de truc pour checker si il y a un block entre le joueur et le bloc qu'il veut casser
 }
