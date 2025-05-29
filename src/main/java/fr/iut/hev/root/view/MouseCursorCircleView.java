@@ -28,11 +28,11 @@ public class MouseCursorCircleView {
 
         parent.getChildren().addAll(boundary, cursor);
 
-        parent.setOnMouseMoved(this::handleMouseMove);
+        //parent.setOnMouseMoved(this::handleMouseMove);
         //il faut rendre le handleMouseMove détectable aussi lors de l'appuie d'une touche de clavier de mouvement
     }
 
-    private void handleMouseMove(MouseEvent event) {
+    public void handleMouseMove(MouseEvent event) {
         double mouseX = event.getX();
         double mouseY = event.getY();
 
@@ -71,4 +71,8 @@ public class MouseCursorCircleView {
         //cursor.setCenterY(y);
         //pour éviter le recentrage du curseur à chaque fois
     }
+
+    public double getCursorX() {return this.cursor.getCenterX();}
+
+    public double getCursorY() {return this.cursor.getCenterY();}
 }
