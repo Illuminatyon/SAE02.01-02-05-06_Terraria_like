@@ -1,25 +1,18 @@
 package fr.iut.hev.root.controller;
 
-import fr.iut.hev.root.model.FixedAnimationTimer;
-import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Player;
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
-import javafx.scene.Node;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class GlobalController implements Initializable {
-
     private Player player;
     private Inventory inventory;
 
@@ -52,23 +45,7 @@ public class GlobalController implements Initializable {
             }
         });
 
-    }
-
-    /*@FXML
-    void openInventory(KeyEvent event) {
-        System.out.println("event");
-        if (Objects.equals(event.getCharacter(), "e") || Objects.equals(event.getCharacter(), "E")) {
-            inventoryGridPane.setVisible(!inventoryGridPane.isVisible());
-        }
-    }*/
-
-    private void manageInventory() {
         inventory = new Inventory();
-        InventoryView inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory);
-        for (Node cell : hotbarInventory.getChildren()) {
-            int colIndex = GridPane.getColumnIndex(cell);
-            int rowIndex = GridPane.getRowIndex(cell);
-            ((ImageView) cell).imageProperty().bind();
-        }
+        InventoryView iv = new InventoryView(inventory, hotbarInventory, expandedInventory);
     }
 }

@@ -33,5 +33,4 @@ public enum Items {
 
     public String getName() {return this.name;}
     public ItemTypes getItemType() {return this.itemType;}
-
 }
