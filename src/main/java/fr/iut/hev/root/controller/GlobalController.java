@@ -121,6 +121,7 @@ public class GlobalController implements Initializable {
             double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
 
             playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
+            playerLightCircle.setCursorVisible(false);
         });
     }
 

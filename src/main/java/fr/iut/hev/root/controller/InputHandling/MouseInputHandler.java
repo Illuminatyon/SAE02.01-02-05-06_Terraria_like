@@ -69,7 +69,8 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
         if (false) { //condition lorsqu'on aura l'inventaire pour vérifier l'objet dans la main
 
         }
-        else if (checkTileNotEmpty() /*&& ()*/) {
+        else if (checkInReach() && checkTileNotEmpty() /*&& () ici condition pout vérif s'il y a un block entre le joueur et le block visé*/) {
+            System.out.println("in reach");
             player.updateBreaksBlock(x,y,tileMap);
             worldView.updateTile(x,y,tileMap.getTile(x,y));
         }
@@ -98,6 +99,15 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     public boolean getMouseClickIsPressed() {return this.mouseClickIsPressed;}
 
     public boolean getMouseClickIsReleased() {return this.mouseClickIsReleased;}
+
+    public boolean checkInReach() {
+        System.out.println((int)mouseEvent.getX());
+        System.out.println((player.getPosX() + (tileMap.getWidth() * TileMap.format) / 2 + player.getWidth() / 2));
+        System.out.println((int)mouseEvent.getY());
+        System.out.println(player.getPosY() + (tileMap.getHeight() * TileMap.format) / 2 + player.getHeight() / 2);
+        System.out.println(((int)mouseEvent.getX() - (player.getPosX() + (tileMap.getWidth() * TileMap.format) / 2 + player.getWidth() / 2))*2 + ((int)mouseEvent.getY() - (player.getPosY() + (tileMap.getHeight() * TileMap.format) / 2 + player.getHeight() / 2))*2);
+        return (((int)mouseEvent.getX() - player.getPosX())*2 + ((int)mouseEvent.getY() - player.getPosY())*2) <= player.getReach()*32;
+    }
 
     /*public boolean checkIfBlockOnTheWay() {
         int xB = x - (x/32)*32 + 16,yB = y - (y/32)*32 + 16;
