@@ -9,8 +9,8 @@ public class Player extends Actor {
 
     private final Set<PlayerActions> activeActions;
 
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce) {
-        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce);
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce,int reach) {
+        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach);
         this.activeActions = new HashSet<>();
     }
 

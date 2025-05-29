@@ -1,11 +1,11 @@
-package fr.iut.hev.root.testing;
+package fr.iut.hev.root.view;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class MouseCursorCircle {
+public class MouseCursorCircleView {
     private final Circle boundary;
     private final Circle cursor;
 
@@ -14,7 +14,7 @@ public class MouseCursorCircle {
     private final double boundaryRadius;
     private final double cursorRadius;
 
-    public MouseCursorCircle(Pane parent, double centerX, double centerY, double boundaryRadius, double cursorRadius) {
+    public MouseCursorCircleView(Pane parent, double centerX, double centerY, double boundaryRadius, double cursorRadius) {
         this.centerX = centerX;
         this.centerY = centerY;
         this.boundaryRadius = boundaryRadius;

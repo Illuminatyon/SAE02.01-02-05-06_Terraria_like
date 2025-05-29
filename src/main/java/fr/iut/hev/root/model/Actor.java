@@ -12,6 +12,7 @@ public abstract class Actor extends Entity {
     private int jumpForce;
     private boolean isJumping;
     private int jumpingTestDecay;
+    private int reach;
 
     private IntegerProperty lookDirectionProperty;
     public enum LookDirections {
@@ -25,7 +26,7 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach) {
         super(posX, posY, width, height, tileMap);
         this.isAliveProperty = new SimpleBooleanProperty(true);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
@@ -34,6 +35,7 @@ public abstract class Actor extends Entity {
         this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value);
         this.isJumping = false;
         this.jumpingTestDecay = 0;
+        this.reach = reach;
     }
 
     @Override
@@ -62,6 +64,8 @@ public abstract class Actor extends Entity {
     public void updateVerticalMovement() {
         
     }
+
+    public int getReach() {return this.reach;}
 
     public int getMoveSpeed() {
         return this.moveSpeed;

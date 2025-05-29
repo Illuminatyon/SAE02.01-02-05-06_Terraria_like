@@ -6,7 +6,7 @@ import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.HUDView;
-import fr.iut.hev.root.testing.MouseCursorCircle;
+import fr.iut.hev.root.view.MouseCursorCircleView;
 import fr.iut.hev.root.view.PlayerView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,7 +32,7 @@ public class GlobalController implements Initializable {
     private PlayerView playerView;
     private TileMap tileMap;
     private ArrayList<Actor> aliveActors;
-    private MouseCursorCircle playerLightCircle;
+    private MouseCursorCircleView playerLightCircle;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -89,7 +89,7 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayer() {
-        player = new Player(0, -25, 32, 64, tileMap, 2, 10);
+        player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
         hudView = new HUDView(player, heartsHbox);
         playerView = new PlayerView(player, player_imageview, tileMap);
@@ -106,7 +106,7 @@ public class GlobalController implements Initializable {
             double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
             double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
 
-            playerLightCircle = new MouseCursorCircle(globalPane, playerCenterX, playerCenterY, 250, 10);
+            playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         });
     }
 
