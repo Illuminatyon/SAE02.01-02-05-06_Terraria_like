@@ -7,6 +7,7 @@ import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.HUDView;
+import fr.iut.hev.root.view.MouseCursorCircleView;
 import fr.iut.hev.root.view.PlayerView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -34,6 +35,7 @@ public class GlobalController implements Initializable {
     private TileMap tileMap;
     private MouseInputHandler mouseClicksPressedHandler;
     private ArrayList<Actor> aliveActors;
+    private MouseCursorCircleView playerLightCircle;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -77,6 +79,13 @@ public class GlobalController implements Initializable {
                     if (mouseClicksPressedHandler.getMouseClickIsReleased()) {
                         mouseClicksPressedHandler.clickReleasedHandler();
                     }
+
+                    // Mise à jour de la position de la lumière autour du joueur
+                    if (playerLightCircle != null) {
+                        double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
+                        double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+                        playerLightCircle.updateCenter(playerCenterX, playerCenterY);
+                    }
                 })
         );
         gameLoop.getKeyFrames().add(kf);
@@ -91,13 +100,15 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayer() {
-        player = new Player(0, -25, 32, 64, tileMap, 2, 10);
+        player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
         playerView.load();
+
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
+
         KeyInputHandler keyboardHandler = new KeyInputHandler(player);
         mouseClicksPressedHandler = new MouseInputHandler(tileMap,globalView,player);
         Platform.runLater(() -> {
@@ -105,12 +116,16 @@ public class GlobalController implements Initializable {
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseClicksPressedHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseClicksPressedHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseClicksPressedHandler);
+
+            double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
+            double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+
+            playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         });
     }
 
     private void initActors() {
         aliveActors = new ArrayList<>();
-
         initPlayer();
     }
 }
