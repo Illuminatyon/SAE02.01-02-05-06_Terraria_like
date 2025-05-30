@@ -15,11 +15,13 @@ public class InventoryView {
     private final Inventory inventory;
     private final GridPane hotbar;
     private final GridPane expandedInventory;
+    private boolean inventoryOpened;
 
     public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory) {
         this.inventory = inventory;
         this.hotbar = hotbar;
         this.expandedInventory = expandedInventory;
+        this.inventoryOpened = false;
         initInventory();
     }
 
@@ -31,6 +33,10 @@ public class InventoryView {
             slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
             slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
         });
+        hotbar.setMouseTransparent(true);
+        expandedInventory.setMouseTransparent(true);
+        expandedInventory.setVisible(false);
+
     }
 
     private void initGrid(GridPane grid, int columns, int rows) {
@@ -91,5 +97,14 @@ public class InventoryView {
         }
         int adjustedIndex = index - hotbar.getColumnCount();
         return expandedInventory.getChildren().get(adjustedIndex);
+    }
+
+    public boolean getInventoryOpened() {return this.inventoryOpened;}
+
+    public void setInventoryVisible() {
+        expandedInventory.setVisible(!inventoryOpened);
+        expandedInventory.setMouseTransparent(inventoryOpened);
+        hotbar.setMouseTransparent(inventoryOpened);
+        inventoryOpened = !inventoryOpened;
     }
 }

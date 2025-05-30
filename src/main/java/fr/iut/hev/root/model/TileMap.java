@@ -7,7 +7,6 @@ public class TileMap {
     private final int height;
     private final Tile[][] tileMap;
 
-    //public static final int format = 16;
     public static final int format = 32;
 
     public TileMap(int width, int height) {
@@ -35,22 +34,22 @@ public class TileMap {
 
     public void setTestMap() {
         /**
-         * crée une map en 1920p avec 120*67 tile de test
+         * crée une map en 1920p avec 60*33 tile de test
          */
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
-                //if (index < 5160) {
                 if (index < 1080) {
-                    this.addTile(new Tile(Tiles.AIR, 0, j, i));
+                    this.addTile(new Tile(Tiles.AIR,j, i));
                 }
-                //else if (index >= 5160 && index < 5280) {
                 else if (index >= 1080 && index < 1140) {
-                    this.addTile(new Tile(Tiles.GRASS,0,j,i));
+                    this.addTile(new Tile(Tiles.GRASS,j,i));
                 }
-                //else if (index >= 5280) {
-                else if (index >= 1140) {
-                    this.addTile(new Tile(Tiles.DIRT,0,j,i));
+                else if (index >= 1140 && index < 1320) {
+                    this.addTile(new Tile(Tiles.DIRT,j,i));
+                }
+                else if (index >= 1320) {
+                    this.addTile(new Tile(Tiles.STONE,j,i));
                 }
                 index++;
             }
@@ -118,6 +117,14 @@ public class TileMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public void tileGetsMined(int x, int y) {
+        Tile currentTile = this.getTile(x,y);
+        if (!(currentTile.getHealth() <= 0))
+            currentTile.takesDamage(1);
+        if (currentTile.getHealth() <= 0)
+            currentTile.breaks();
     }
 
     // Charger la TileMap d'un fichier

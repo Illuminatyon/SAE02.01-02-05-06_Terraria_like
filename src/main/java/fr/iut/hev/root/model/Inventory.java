@@ -56,4 +56,6 @@ public class Inventory {
         }
         return removedItem;
     }
+
+    public int getSlotsOccupied() {return this.slotsOccupied;}
 }
