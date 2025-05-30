@@ -74,7 +74,6 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
 
         }
         else if (checkTileNotEmpty() /*&& () ici condition pout vérif s'il y a un block entre le joueur et le block visé*/) {
-            System.out.println("in reach");
             player.updateBreaksBlock(x,y,tileMap);
             worldView.updateTile(x,y,tileMap.getTile(x,y));
         }

@@ -77,7 +77,7 @@ public class Player extends Actor {
                 super.setVelocityY(-super.getJumpForce() + super.getJumpingTestDecay());
                 super.setJumpingTestDecay(super.getJumpingTestDecay() + 1);
             } else {
-               super.setIsJumping(false);
+                super.setIsJumping(false);
             }
         }
     }
