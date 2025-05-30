@@ -28,14 +28,16 @@ import java.util.ResourceBundle;
 public class GlobalController implements Initializable {
     private Timeline gameLoop;
     private Player player;
-    private GlobalView globalView;
-    private HUDView hudView;
-    private PlayerView playerView;
     private TileMap tileMap;
     private MouseInputHandler mouseClicksPressedHandler;
     private ArrayList<Actor> aliveActors;
-    private MouseCursorCircleView playerLightCircle;
     private Inventory inventory;
+
+    private GlobalView globalView;
+    private HUDView hudView;
+    private PlayerView playerView;
+    private MouseCursorCircleView playerLightCircle;
+    private InventoryView inventoryView;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -109,11 +111,12 @@ public class GlobalController implements Initializable {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
         inventory = new Inventory();
-        inventory.add(5,new Item(Items.DIRT),51);
+        inventory.add(5,new Item(Items.DIRT),64);
+        System.out.println(inventory.getSlotsOccupied());
 
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
-        InventoryView iv = new InventoryView(inventory, hotbarInventory, expandedInventory);
+        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory);
         playerView.load();
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
