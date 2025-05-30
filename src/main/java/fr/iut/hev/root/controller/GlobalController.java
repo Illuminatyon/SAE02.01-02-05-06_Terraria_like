@@ -1,7 +1,8 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
+import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
+import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.view.*;
@@ -14,11 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -29,7 +26,8 @@ public class GlobalController implements Initializable {
     private Timeline gameLoop;
     private Player player;
     private TileMap tileMap;
-    private MouseInputHandler mouseClicksPressedHandler;
+    private MouseGameInputHandler mouseGameClicksHandler;
+    private MouseInventoryInputHandler mouseInventoryHandler;
     private ArrayList<Actor> aliveActors;
     private Inventory inventory;
 
@@ -60,6 +58,9 @@ public class GlobalController implements Initializable {
     @FXML
     private GridPane expandedInventory;
 
+    @FXML
+    private VBox inventoryVbox;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameLoop = new Timeline();
@@ -81,11 +82,11 @@ public class GlobalController implements Initializable {
                             aliveActors.remove(currentActor);
                         }
                     }
-                    if (mouseClicksPressedHandler.getMouseClickIsPressed()) {
-                        mouseClicksPressedHandler.clickPressedHandler();
+                    if (mouseGameClicksHandler.getMouseClickIsPressed()) {
+                        mouseGameClicksHandler.clickPressedHandler();
                     }
-                    if (mouseClicksPressedHandler.getMouseClickIsReleased()) {
-                        mouseClicksPressedHandler.clickReleasedHandler();
+                    if (mouseGameClicksHandler.getMouseClickIsReleased()) {
+                        mouseGameClicksHandler.clickReleasedHandler();
                     }
 
                     // Mise à jour de la position de la lumière autour du joueur
@@ -118,7 +119,13 @@ public class GlobalController implements Initializable {
         playerView.load();
 
         inventory.add(5,new Item(Items.DIRT),64);
-        inventory.add(39,new Item(Items.DIRT),45);
+        inventory.add(24,new Item(Items.DIRT),45);
+        inventory.add(39,new Item(Items.DIRT),93);
+        inventory.add(16,new Item(Items.DIRT),12);
+        inventory.add(31,new Item(Items.DIRT),30);
+        inventory.add(8,new Item(Items.DIRT),80);
+        inventory.add(48,new Item(Items.DIRT),76);
+
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
@@ -130,12 +137,15 @@ public class GlobalController implements Initializable {
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
-        mouseClicksPressedHandler = new MouseInputHandler(tileMap,globalView,player,playerLightCircle);
+        mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
+        mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
+
         Platform.runLater(() -> {
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseClicksPressedHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseClicksPressedHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseClicksPressedHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, mouseGameClicksHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED, mouseGameClicksHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
+            inventoryVbox.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
         });
     }
 

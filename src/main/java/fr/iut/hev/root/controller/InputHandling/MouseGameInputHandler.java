@@ -4,6 +4,7 @@ import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.TileTypes;
 import fr.iut.hev.root.view.GlobalView;
+import fr.iut.hev.root.view.InventoryView;
 import fr.iut.hev.root.view.MouseCursorCircleView;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
@@ -11,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 
 import static fr.iut.hev.root.model.TileMap.format;
 
-public class MouseInputHandler implements EventHandler<MouseEvent> {
+public class MouseGameInputHandler implements EventHandler<MouseEvent> {
 
     private TileMap tileMap;
     private GlobalView worldView;
@@ -22,32 +23,36 @@ public class MouseInputHandler implements EventHandler<MouseEvent> {
     private boolean mouseClickIsReleased;
     private MouseEvent mouseEvent;
     private MouseCursorCircleView mouseCursor;
+    private InventoryView inventoryView;
 
-    public MouseInputHandler(TileMap tileMap,GlobalView worldView,Player player,MouseCursorCircleView mouseCursor) {
+    public MouseGameInputHandler(TileMap tileMap, GlobalView worldView, Player player, MouseCursorCircleView mouseCursor,InventoryView inventoryView) {
         this.tileMap = tileMap;
         this.worldView = worldView;
         this.player = player;
         this.mouseClickIsPressed = false;
         this.mouseClickIsReleased = false;
         this.mouseCursor = mouseCursor;
+        this.inventoryView = inventoryView;
 
     }
 
     @Override
     public void handle(MouseEvent mouseEvent) {
-        mouseCursor.handleMouseMove(mouseEvent);
-        x = (int)mouseCursor.getCursorX() / format;
-        y = (int)mouseCursor.getCursorY() / format;
-        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-            this.mouseClickIsPressed = true;
-            this.mouseEvent = mouseEvent;
-        }
-        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
-            mouseClickIsPressed = false;
-            mouseClickIsReleased = true;
-        }
-        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
-            this.mouseEvent = mouseEvent;
+        if (!inventoryView.getInventoryOpened()) {
+            mouseCursor.handleMouseMove(mouseEvent);
+            x = (int) mouseCursor.getCursorX() / format;
+            y = (int) mouseCursor.getCursorY() / format;
+            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+                this.mouseClickIsPressed = true;
+                this.mouseEvent = mouseEvent;
+            }
+            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
+                mouseClickIsPressed = false;
+                mouseClickIsReleased = true;
+            }
+            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
+                this.mouseEvent = mouseEvent;
+            }
         }
     }
 

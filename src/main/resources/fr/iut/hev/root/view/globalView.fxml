@@ -58,7 +58,7 @@
                <padding>
                   <Insets left="40.0" top="30.0" />
                </padding></HBox>
-            <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <VBox fx:id="inventoryVbox" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <GridPane fx:id="expandedInventory" alignment="CENTER" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER">
                      <columnConstraints>

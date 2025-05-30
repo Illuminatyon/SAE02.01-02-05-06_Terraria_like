@@ -16,6 +16,7 @@ public class InventoryView {
     private final GridPane hotbar;
     private final GridPane expandedInventory;
     private boolean inventoryOpened;
+    private static int slotIndex = 0;
 
     public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory) {
         this.inventory = inventory;
@@ -44,6 +45,7 @@ public class InventoryView {
             for (int x = 0; x < columns; x++) {
                 Pane cell = createCell();
                 grid.add(cell, x, y);
+                slotIndex++;
             }
         }
     }
@@ -52,12 +54,14 @@ public class InventoryView {
         ImageView imageView = new ImageView();
         imageView.setFitHeight(50);
         imageView.setFitWidth(50);
+        imageView.setId(Integer.toString(slotIndex));
 
         Label label = new Label();
         label.setTextFill(Color.WHITE);
 
         Pane pane = new Pane(imageView, label);
         pane.setBackground(Background.fill(Color.rgb(0, 0, 0, 0.25)));
+        pane.setId(Integer.toString(slotIndex));
         return pane;
     }
 

@@ -65,4 +65,6 @@ public class InventorySlot {
     public int getIndex() {
         return this.index;
     }
+
+    public boolean isEmpty() {return quantityProperty.getValue() == 0;}
 }
