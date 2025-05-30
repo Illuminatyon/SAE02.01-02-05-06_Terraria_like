@@ -88,8 +88,6 @@ public class Player extends Actor {
     }
 
     public void updateBreaksBlock(int x,int y, TileMap tileMap) {
-        if (true) { //condition de la reach
-            tileMap.tileGetsMined(x,y);
-        }
+        tileMap.tileGetsMined(x,y);
     }
 }

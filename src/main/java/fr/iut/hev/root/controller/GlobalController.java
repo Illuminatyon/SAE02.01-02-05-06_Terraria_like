@@ -3,22 +3,23 @@ package fr.iut.hev.root.controller;
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
 import fr.iut.hev.root.model.Actor;
+import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.view.GlobalView;
-import fr.iut.hev.root.view.HUDView;
-import fr.iut.hev.root.view.MouseCursorCircleView;
-import fr.iut.hev.root.view.PlayerView;
+import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import fr.iut.hev.root.view.InventoryView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
@@ -36,6 +37,7 @@ public class GlobalController implements Initializable {
     private MouseInputHandler mouseClicksPressedHandler;
     private ArrayList<Actor> aliveActors;
     private MouseCursorCircleView playerLightCircle;
+    private Inventory inventory;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -51,6 +53,12 @@ public class GlobalController implements Initializable {
 
     @FXML
     private AnchorPane globalPane;
+
+    @FXML
+    private GridPane hotbarInventory;
+
+    @FXML
+    private GridPane expandedInventory;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -102,8 +110,11 @@ public class GlobalController implements Initializable {
     private void initPlayer() {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
+        inventory = new Inventory();
+
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
+        InventoryView iv = new InventoryView(inventory, hotbarInventory, expandedInventory);
         playerView.load();
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
