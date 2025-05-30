@@ -2,10 +2,8 @@ package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
-import fr.iut.hev.root.model.Actor;
-import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Player;
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.*;
+import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -111,6 +109,7 @@ public class GlobalController implements Initializable {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
         inventory = new Inventory();
+        inventory.add(5,new Item(Items.DIRT),51);
 
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
