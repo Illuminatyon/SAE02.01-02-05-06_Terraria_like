@@ -77,7 +77,7 @@ public class Player extends Actor {
                 super.setVelocityY(-super.getJumpForce() + super.getJumpingTestDecay());
                 super.setJumpingTestDecay(super.getJumpingTestDecay() + 1);
             } else {
-                super.setIsJumping(false);
+               super.setIsJumping(false);
             }
         }
     }
@@ -88,8 +88,6 @@ public class Player extends Actor {
     }
 
     public void updateBreaksBlock(int x,int y, TileMap tileMap) {
-        if (true) { //condition de la reach
-            tileMap.tileGetsMined(x,y);
-        }
+        tileMap.tileGetsMined(x,y);
     }
 }
