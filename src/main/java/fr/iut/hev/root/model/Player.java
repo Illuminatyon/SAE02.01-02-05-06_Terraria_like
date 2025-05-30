@@ -1,28 +1,28 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.enums.PlayerActions;
+import fr.iut.hev.root.model.enums.PlayerMouvements;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends Actor {
 
-    private final Set<PlayerActions> activeActions;
+    private final Set<PlayerMouvements> activeActions;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce,int reach) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach);
         this.activeActions = new HashSet<>();
     }
 
-    public void addActiveActions(PlayerActions playerActions) {
-        this.activeActions.add(playerActions);
+    public void addActiveActions(PlayerMouvements playerMouvements) {
+        this.activeActions.add(playerMouvements);
     }
 
-    public void removeActiveActions(PlayerActions playerActions) {
-        this.activeActions.remove(playerActions);
+    public void removeActiveActions(PlayerMouvements playerMouvements) {
+        this.activeActions.remove(playerMouvements);
     }
 
-    public Set<PlayerActions> getActiveActions() {return activeActions;}
+    public Set<PlayerMouvements> getActiveActions() {return activeActions;}
 
     @Override
     public void updatePosition() {
@@ -42,17 +42,17 @@ public class Player extends Actor {
     @Override
     public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
-        if (activeActions.contains(PlayerActions.MOVE_RIGHT)
-                && activeActions.contains(PlayerActions.MOVE_LEFT)) {
+        if (activeActions.contains(PlayerMouvements.MOVE_RIGHT)
+                && activeActions.contains(PlayerMouvements.MOVE_LEFT)) {
             super.setVelocityX(0);
-        } else if (activeActions.contains(PlayerActions.MOVE_RIGHT)) {
+        } else if (activeActions.contains(PlayerMouvements.MOVE_RIGHT)) {
             super.setLookDirection(LookDirections.RIGHT);
             if (!super.getCollider().hasCollisionRight()) {
                 super.setVelocityX(super.getMoveSpeed());
             } else {
                 super.setVelocityX(0);
             }
-        } else if (activeActions.contains(PlayerActions.MOVE_LEFT)) {
+        } else if (activeActions.contains(PlayerMouvements.MOVE_LEFT)) {
             super.setLookDirection(LookDirections.LEFT); // IL FAUT JUSTE FIX LE LEFT COLLIDER
             if (!super.getCollider().hasCollisionLeft()) {
                 super.setVelocityX(-super.getMoveSpeed());
@@ -66,7 +66,7 @@ public class Player extends Actor {
 
     @Override
     public void updateVerticalMovement() {
-        if (activeActions.contains(PlayerActions.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping()) {
+        if (activeActions.contains(PlayerMouvements.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping()) {
             super.setIsJumping(true);
             super.setJumpingTestDecay(0);
         } else if (super.getIsJumping()) {

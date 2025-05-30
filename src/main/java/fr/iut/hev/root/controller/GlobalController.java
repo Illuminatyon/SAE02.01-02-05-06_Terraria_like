@@ -111,18 +111,19 @@ public class GlobalController implements Initializable {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
         inventory = new Inventory();
-        inventory.add(5,new Item(Items.DIRT),64);
-        System.out.println(inventory.getSlotsOccupied());
 
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory);
         playerView.load();
 
+        inventory.add(5,new Item(Items.DIRT),64);
+        inventory.add(39,new Item(Items.DIRT),45);
+
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
 
-        KeyInputHandler keyboardHandler = new KeyInputHandler(player);
+        KeyInputHandler keyboardHandler = new KeyInputHandler(player,inventoryView);
 
         double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
         double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
