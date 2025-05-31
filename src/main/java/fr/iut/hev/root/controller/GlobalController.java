@@ -59,7 +59,7 @@ public class GlobalController implements Initializable {
     private GridPane expandedInventory;
 
     @FXML
-    private VBox inventoryVbox;
+    private AnchorPane hudAnchorPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -115,15 +115,15 @@ public class GlobalController implements Initializable {
 
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
-        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory);
+        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
         playerView.load();
 
         inventory.add(5,new Item(Items.DIRT),64);
-        inventory.add(24,new Item(Items.DIRT),45);
-        inventory.add(39,new Item(Items.DIRT),93);
-        inventory.add(16,new Item(Items.DIRT),12);
+        inventory.add(24,new Item(Items.STONE),45);
+        inventory.add(39,new Item(Items.DIRT),40);
+        inventory.add(16,new Item(Items.DIRT),120);
         inventory.add(31,new Item(Items.DIRT),30);
-        inventory.add(8,new Item(Items.DIRT),80);
+        inventory.add(8,new Item(Items.STONE),80);
         inventory.add(48,new Item(Items.DIRT),76);
 
 
@@ -140,12 +140,17 @@ public class GlobalController implements Initializable {
         mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
 
+        mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) -> {inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold());});
+        mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) -> {inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY());});
+        mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) -> {inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY());});
+
         Platform.runLater(() -> {
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, mouseGameClicksHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED, mouseGameClicksHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
-            inventoryVbox.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
+            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
+            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
         });
     }
 

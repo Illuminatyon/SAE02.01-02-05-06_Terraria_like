@@ -23,11 +23,29 @@ public class Inventory {
             slots.get(slotIndex).setQuantity(quantity);
             slotsOccupied++;
             return null;
-        } else {
+        }
+        else {
             HashMap<Item, Integer> replacedItem = new HashMap<>();
-            replacedItem.put(slots.get(slotIndex).getItem(), slots.get(slotIndex).getQuantity());
-            slots.get(slotIndex).setItem(item);
-            slots.get(slotIndex).setQuantity(quantity);
+
+            if (slots.get(slotIndex).getItem().getItem() != item.getItem()) {
+                replacedItem.put(slots.get(slotIndex).getItem(), slots.get(slotIndex).getQuantity());
+                slots.get(slotIndex).setItem(item);
+                slots.get(slotIndex).setQuantity(quantity);
+            }
+            else if (slots.get(slotIndex).getQuantity() < item.getItem().getLimitStacking()) {
+                if ((slots.get(slotIndex).getQuantity() + quantity) > item.getItem().getLimitStacking()) {
+                    replacedItem.put(item,quantity - (item.getItem().getLimitStacking() - slots.get(slotIndex).getQuantity()));
+                    slots.get(slotIndex).setQuantity(item.getItem().getLimitStacking());
+                }
+                else {
+                    slots.get(slotIndex).setQuantity(slots.get(slotIndex).getQuantity() + quantity);
+                    return null;
+                }
+            }
+            else {
+                replacedItem.put(item,quantity);
+            }
+
             return replacedItem;
         }
     }

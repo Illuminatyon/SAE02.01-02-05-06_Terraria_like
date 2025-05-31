@@ -3,6 +3,13 @@ package fr.iut.hev.root.controller.InputHandling;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Item;
 import fr.iut.hev.root.view.InventoryView;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -13,34 +20,46 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
 
     private Inventory inventory;
     private InventoryView inventoryView;
-    private HashMap<Item, Integer> onHold;
+    private ObjectProperty<HashMap<Item, Integer>> onHold;
     private MouseEvent mouseEvent;
+    private DoubleProperty x;
+    private DoubleProperty y;
 
     public MouseInventoryInputHandler(Inventory inventory,InventoryView inventoryView) {
         this.inventory = inventory;
         this.inventoryView = inventoryView;
-        this.onHold = null;
+        this.onHold = new SimpleObjectProperty<>(null);
+        this.x = new SimpleDoubleProperty(0);
+        this.y = new SimpleDoubleProperty(0);
     }
 
     @Override
     public void handle(MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
         if (inventoryView.getInventoryOpened()) {
-            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                onLeftClickPressed();
+            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    onLeftClickPressed();
+                }
+            }
+            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_MOVED)) {
+                setX(mouseEvent.getX());
+                setY(mouseEvent.getY());
             }
         }
     }
 
     public void onLeftClickPressed() {
         int slotIndex = fromTargetStringToInd(mouseEvent.getTarget().toString());
-        System.out.println(slotIndex);
         if (slotIndex != -1) {
-            if (onHold == null) {
-                onHold = inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity());
+            if (getOnHold() == null) {
+                setOnHold(inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity()));
             } else {
-                onHold = inventory.add(slotIndex, onHold.keySet().iterator().next(), onHold.get(onHold.keySet().iterator().next()));
+                setOnHold(inventory.add(slotIndex, getOnHold().keySet().iterator().next(), getOnHold().get(getOnHold().keySet().iterator().next())));
             }
+        }
+        else {
+            System.out.println("item droped");
         }
     }
 
@@ -48,7 +67,6 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         String slotString = "";
         int i,slotInd;
         char targetType = target.charAt(0),endingChar;
-        System.out.println(targetType);
         if (targetType != 'P' && targetType != 'I')
             slotInd = -1;
         else {
@@ -69,4 +87,14 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         }
         return slotInd;
     }
+
+    public void setX(double x) {this.x.set(x);}
+    public void setY(double y) {this.y.set(y);}
+    public Double getX() {return this.x.getValue();}
+    public Double getY() {return this.y.getValue();}
+    public DoubleProperty yProperty() {return this.y;}
+    public DoubleProperty xProperty() {return this.x;}
+    public void setOnHold(HashMap<Item, Integer> onHold) {this.onHold.set(onHold);}
+    public HashMap<Item, Integer> getOnHold() {return this.onHold.getValue();}
+    public ObjectProperty onHoldProperty() {return this.onHold;}
 }

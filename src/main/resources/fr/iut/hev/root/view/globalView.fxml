@@ -25,7 +25,7 @@
             <Image url="@../img/entities/actors/player/jhon_fallout.png" />
          </image>
       </ImageView>
-      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="hudAnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="heartsHbox" prefHeight="50.0" prefWidth="400.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -58,7 +58,7 @@
                <padding>
                   <Insets left="40.0" top="30.0" />
                </padding></HBox>
-            <VBox fx:id="inventoryVbox" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <GridPane fx:id="expandedInventory" alignment="CENTER" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER">
                      <columnConstraints>
