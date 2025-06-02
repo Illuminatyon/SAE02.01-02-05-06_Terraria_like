@@ -41,6 +41,9 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     onLeftClickPressed();
                 }
+                else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                    onRightClickPressed();
+                }
             }
             if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_MOVED)) {
                 setX(mouseEvent.getX());
@@ -60,6 +63,15 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         }
         else {
             System.out.println("item droped");
+        }
+    }
+
+    public void onRightClickPressed() {
+        int slotIndex = fromTargetStringToInd(mouseEvent.getTarget().toString());
+        if (slotIndex != -1) {
+            if (getOnHold() == null) {
+                setOnHold(inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity()/2));
+            }
         }
     }
 
@@ -96,5 +108,5 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
     public DoubleProperty xProperty() {return this.x;}
     public void setOnHold(HashMap<Item, Integer> onHold) {this.onHold.set(onHold);}
     public HashMap<Item, Integer> getOnHold() {return this.onHold.getValue();}
-    public ObjectProperty onHoldProperty() {return this.onHold;}
+    public ObjectProperty<HashMap<Item, Integer>> onHoldProperty() {return this.onHold;}
 }
