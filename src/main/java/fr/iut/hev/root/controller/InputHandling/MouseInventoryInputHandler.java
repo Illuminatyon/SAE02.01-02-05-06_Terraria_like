@@ -3,13 +3,10 @@ package fr.iut.hev.root.controller.InputHandling;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Item;
 import fr.iut.hev.root.view.InventoryView;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -20,17 +17,17 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
 
     private Inventory inventory;
     private InventoryView inventoryView;
-    private ObjectProperty<HashMap<Item, Integer>> onHold;
+    private ObjectProperty<HashMap<Item, Integer>> onHoldProperty;
     private MouseEvent mouseEvent;
-    private DoubleProperty x;
-    private DoubleProperty y;
+    private DoubleProperty xProperty;
+    private DoubleProperty yProperty;
 
     public MouseInventoryInputHandler(Inventory inventory,InventoryView inventoryView) {
         this.inventory = inventory;
         this.inventoryView = inventoryView;
-        this.onHold = new SimpleObjectProperty<>(null);
-        this.x = new SimpleDoubleProperty(0);
-        this.y = new SimpleDoubleProperty(0);
+        this.onHoldProperty = new SimpleObjectProperty<>(null);
+        this.xProperty = new SimpleDoubleProperty(0);
+        this.yProperty = new SimpleDoubleProperty(0);
     }
 
     @Override
@@ -100,13 +97,13 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         return slotInd;
     }
 
-    public void setX(double x) {this.x.set(x);}
-    public void setY(double y) {this.y.set(y);}
-    public Double getX() {return this.x.getValue();}
-    public Double getY() {return this.y.getValue();}
-    public DoubleProperty yProperty() {return this.y;}
-    public DoubleProperty xProperty() {return this.x;}
-    public void setOnHold(HashMap<Item, Integer> onHold) {this.onHold.set(onHold);}
-    public HashMap<Item, Integer> getOnHold() {return this.onHold.getValue();}
-    public ObjectProperty<HashMap<Item, Integer>> onHoldProperty() {return this.onHold;}
+    public void setX(double xProperty) {this.xProperty.set(xProperty);}
+    public void setY(double yProperty) {this.yProperty.set(yProperty);}
+    public Double getX() {return this.xProperty.getValue();}
+    public Double getY() {return this.yProperty.getValue();}
+    public DoubleProperty yProperty() {return this.yProperty;}
+    public DoubleProperty xProperty() {return this.xProperty;}
+    public void setOnHold(HashMap<Item, Integer> onHoldProperty) {this.onHoldProperty.set(onHoldProperty);}
+    public HashMap<Item, Integer> getOnHold() {return this.onHoldProperty.getValue();}
+    public ObjectProperty<HashMap<Item, Integer>> onHoldProperty() {return this.onHoldProperty;}
 }

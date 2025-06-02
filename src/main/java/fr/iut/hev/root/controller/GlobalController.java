@@ -3,6 +3,7 @@ package fr.iut.hev.root.controller;
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
+import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.view.*;
@@ -15,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
@@ -28,6 +30,7 @@ public class GlobalController implements Initializable {
     private TileMap tileMap;
     private MouseGameInputHandler mouseGameClicksHandler;
     private MouseInventoryInputHandler mouseInventoryHandler;
+    private ScrollInputHandler scrollHotbarHandler;
     private ArrayList<Actor> aliveActors;
     private Inventory inventory;
 
@@ -139,6 +142,7 @@ public class GlobalController implements Initializable {
 
         mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
+        scrollHotbarHandler = new ScrollInputHandler(inventoryView);
 
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) -> {inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold());});
         mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) -> {inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY());});
@@ -151,6 +155,7 @@ public class GlobalController implements Initializable {
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
+            landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
         });
     }
 

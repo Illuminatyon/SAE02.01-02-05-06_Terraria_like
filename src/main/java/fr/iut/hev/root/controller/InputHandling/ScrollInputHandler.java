@@ -1,25 +1,31 @@
 package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.view.InventoryView;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
 
 public class ScrollInputHandler implements EventHandler<ScrollEvent> {
 
     private InventoryView inventoryView;
-    private int direction;
+    private IntegerProperty directionProperty;
 
     public ScrollInputHandler(InventoryView inventoryView) {
         this.inventoryView = inventoryView;
-        this.direction = 0;
+        this.directionProperty = new SimpleIntegerProperty(0);
     }
 
     @Override
     public void handle(ScrollEvent scrollEvent) {
         if (!inventoryView.getInventoryOpened()) {
-            direction = (int)scrollEvent.getDeltaY();
+            setDirection((int)scrollEvent.getDeltaY());
+            System.out.println(getDirection());
+            System.out.println("One iteration");
         }
     }
 
-    public int getDirection() {return this.direction;}
+    public int getDirection() {return this.directionProperty.getValue();}
+    public void setDirection(int directionProperty) {this.directionProperty.setValue(directionProperty);}
+    public IntegerProperty directionProperty() {return this.directionProperty;}
 }
