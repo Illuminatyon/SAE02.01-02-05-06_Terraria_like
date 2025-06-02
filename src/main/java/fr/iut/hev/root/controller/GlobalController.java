@@ -115,7 +115,7 @@ public class GlobalController implements Initializable {
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
         InventoryView iv = new InventoryView(inventory, hotbarInventory, expandedInventory);
-        playerView.load();
+        playerView.load(tileMap.getWidth()/2, tileMap.getHeight()/2);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));

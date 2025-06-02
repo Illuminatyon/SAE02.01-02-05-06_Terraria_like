@@ -24,6 +24,7 @@ public abstract class Actor extends Entity {
         LookDirections(int value) {
             this.value = value;
         }
+
     };
 
     public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach) {
@@ -96,6 +97,8 @@ public abstract class Actor extends Entity {
     public final void setHealth(int halfHeart) {this.healthProperty.setValue(halfHeart);}
 
     public final IntegerProperty healthProperty() {return this.healthProperty;}
+
+    public int getLookDirection() {return this.lookDirectionProperty.getValue();}
 
     public void receiveDamage(int damage) {
         if (!(damage > this.getHealth()))
