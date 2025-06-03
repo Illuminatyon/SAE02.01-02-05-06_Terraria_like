@@ -46,7 +46,6 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
         indexHotbar = indexHotbarIncrementation(increment);
         updateOnHandItem();
         hotbarView.setHighlight(indexHotbar);
-        System.out.println(onHandItem);
     }
 
     public int getDirection() {return this.directionProperty.getValue();}
