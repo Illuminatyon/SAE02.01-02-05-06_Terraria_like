@@ -29,6 +29,7 @@ public class Player extends Actor {
 
     public Set<PlayerMouvements> getActiveActions() {return activeActions;}
 
+    @Override
     public void update() {
         updatePosition();
         for (Loot loot : Loot.lootOnMapProperty.get()) {
@@ -51,13 +52,6 @@ public class Player extends Actor {
         updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
-
-        // TMP
-        for (Loot loot : Loot.lootOnMapProperty.get()) {
-            if (getCollider().intersectsWith(loot.getCollider())) {
-                pickUp(loot);
-            }
-        }
     }
 
     @Override
@@ -104,7 +98,7 @@ public class Player extends Actor {
     }
 
     public void pickUp(Loot loot) {
-        this.inventory.add(0, loot.getItem(), loot.getQuantity());
+        this.inventory.add(loot.getItem(), loot.getQuantity());
         loot.removeSelf();
     }
 

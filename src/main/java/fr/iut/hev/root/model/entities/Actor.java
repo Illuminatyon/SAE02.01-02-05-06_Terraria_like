@@ -42,6 +42,11 @@ public abstract class Actor extends Entity {
     }
 
     @Override
+    public void update() {
+        updatePosition();
+    }
+
+    @Override
     public void updatePosition() {
         applyGravity();
         updateHorizontalMovement();

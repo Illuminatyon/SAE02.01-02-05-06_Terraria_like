@@ -22,9 +22,11 @@ public class Inventory {
             slots.get(slotIndex).setItem(item);
             slots.get(slotIndex).setQuantity(quantity);
             slotsOccupied++;
-            return null;
-        }
-        else {
+            //return null;
+        } else if (slots.get(slotIndex).getItem().getClass() == item.getClass()) {
+            slots.get(slotIndex).setQuantity(slots.get(slotIndex).getQuantity() + quantity);
+            //return null;
+        } else {
             HashMap<Item, Integer> replacedItem = new HashMap<>();
 
             if (slots.get(slotIndex).getItem().getItem() != item.getItem()) {
@@ -47,6 +49,33 @@ public class Inventory {
             }
 
             return replacedItem;
+        }
+        return null;
+    }
+
+    public void add(Item item, int quantity) {
+        // ATTENTION: faire en sorte que les stack de loot au sol soit egalement limité pour éviter de deregler l'inventaire lors d'un ramassage
+        if (slotsOccupied == size) return;
+
+        boolean slotAlreadyAvailable = false; // means that the current item already have an available slot to use
+        int slotIndex = 0;
+        int firstEmptySlotIndex = -1;
+
+        while (!slotAlreadyAvailable && slotIndex < size) {
+            if (slots.get(slotIndex).getItem() != null && slots.get(slotIndex).getItem().getClass() == item.getClass() /*&& slots.get(slotIndex).getQuantity < item.getItem().getMaxQuantity()*/) {
+                slotAlreadyAvailable = true;
+            } else {
+                if (firstEmptySlotIndex == -1 && slots.get(slotIndex).getItem() == null) {
+                    firstEmptySlotIndex = slotIndex;
+                }
+                slotIndex++;
+            }
+        }
+
+        if (slotAlreadyAvailable) {
+            add(slotIndex, item, quantity);
+        } else {
+            add(firstEmptySlotIndex, item, quantity);
         }
     }
 

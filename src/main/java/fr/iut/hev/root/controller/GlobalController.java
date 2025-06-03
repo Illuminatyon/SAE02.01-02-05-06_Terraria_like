@@ -95,7 +95,8 @@ public class GlobalController implements Initializable {
                         Actor currentActor = aliveActors.get(i);
                         currentActor.diesQuestionMark();
                         if (currentActor.getIsAliveProperty()) {
-                            currentActor.updatePosition();
+                            //currentActor.updatePosition();
+                            currentActor.update();
                         }
                         else {
                             aliveActors.remove(currentActor);
@@ -103,7 +104,8 @@ public class GlobalController implements Initializable {
                     }
 
                     for (Loot loot : Loot.lootOnMapProperty) {
-                        loot.updatePosition();
+                        //loot.updatePosition();
+                        loot.update();
                     }
 
                     /*if (mouseClicksPressedHandler.getMouseClickIsPressed()) {

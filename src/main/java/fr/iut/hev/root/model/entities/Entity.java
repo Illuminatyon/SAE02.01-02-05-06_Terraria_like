@@ -28,6 +28,10 @@ public class Entity {
         this.collider = new Collider(tileMap, this);
     }
 
+    public void update() {
+        updatePosition();
+    }
+
     public void updatePosition() {
         applyGravity();
         posXProperty.set(posXProperty.getValue() + velocityX);

@@ -27,6 +27,12 @@ public class Loot extends Entity {
         lootOnMapProperty.get().remove(this);
     }
 
+    @Override
+    public void update() {
+        updatePosition();
+    }
+
+    @Override
     public void updatePosition() {
         applyGravity();
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
