@@ -19,16 +19,24 @@ public enum Items {
 
     IRON_HELMET("iron_helmet",1,ItemTypes.ARMOR_PIECE),
     IRON_CHESTPLATE("iron_chestplate",1,ItemTypes.ARMOR_PIECE),
-    IRON_LEGGINGS("iron_leggings",1,ItemTypes.ARMOR_PIECE);
+    IRON_LEGGINGS("iron_leggings",1,ItemTypes.ARMOR_PIECE),
+
+    RAW_CHICKEN("raw_chicken",100,ItemTypes.CONSUMABLE);
 
     private String name;
     private int limitStacking;
     private ItemTypes itemType;
+    private Stats stats;
 
-    Items(String name,int limitStacking, ItemTypes itemType) {
+    Items(String name,int limitStacking,ItemTypes itemType,Stats stats) {
         this.name = name;
         this.limitStacking = limitStacking;
         this.itemType = itemType;
+        this.stats = stats;
+    }
+
+    Items(String name,int limitStacking,ItemTypes itemType) {
+        this(name,limitStacking,itemType,null);
     }
 
     public String getName() {return this.name;}
