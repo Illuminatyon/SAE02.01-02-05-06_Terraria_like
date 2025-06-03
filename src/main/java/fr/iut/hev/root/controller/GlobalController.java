@@ -147,13 +147,15 @@ public class GlobalController implements Initializable {
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
 
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
-            inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
+                inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
         mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
                 inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
         mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) ->
                 inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
-        scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) ->
-                scrollHotbarHandler.updateHotbar());
+        scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) -> {
+                if (scrollHotbarHandler.getDirection() != 0)
+                    scrollHotbarHandler.updateHotbar();
+        });
 
 
         Platform.runLater(() -> {
