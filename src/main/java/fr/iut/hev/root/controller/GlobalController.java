@@ -137,7 +137,7 @@ public class GlobalController implements Initializable {
     private void initPlayer() {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
-        inventory = new Inventory();
+        inventory = player.getInventory();
 
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
