@@ -40,12 +40,9 @@ public enum Items {
     public String getName() {return this.name;}
 
     public ItemTypes getItemType() {return this.itemType;}
-<<<<<<< HEAD
     public int getLimitStacking() {return this.limitStacking;}
-=======
 
     public Tiles getRelatedTile() {
         return this.relatedTile;
     }
->>>>>>> 5dc859b (Added loot system with gravity and collision - loot drops on breaking some blocks)
 }

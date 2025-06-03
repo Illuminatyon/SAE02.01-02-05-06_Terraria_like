@@ -5,7 +5,6 @@ import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.model.*;
-import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Item;
 import fr.iut.hev.root.model.TileMap;

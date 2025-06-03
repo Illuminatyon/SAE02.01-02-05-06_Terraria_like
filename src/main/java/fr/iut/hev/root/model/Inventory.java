@@ -23,9 +23,6 @@ public class Inventory {
             slots.get(slotIndex).setQuantity(quantity);
             slotsOccupied++;
             //return null;
-        } else if (slots.get(slotIndex).getItem().getClass() == item.getClass()) {
-            slots.get(slotIndex).setQuantity(slots.get(slotIndex).getQuantity() + quantity);
-            //return null;
         } else {
             HashMap<Item, Integer> replacedItem = new HashMap<>();
 
@@ -62,7 +59,7 @@ public class Inventory {
         int firstEmptySlotIndex = -1;
 
         while (!slotAlreadyAvailable && slotIndex < size) {
-            if (slots.get(slotIndex).getItem() != null && slots.get(slotIndex).getItem().getClass() == item.getClass() /*&& slots.get(slotIndex).getQuantity < item.getItem().getMaxQuantity()*/) {
+            if (slots.get(slotIndex).getItem() != null && slots.get(slotIndex).getItem().getItem() == item.getItem() && slots.get(slotIndex).getQuantity() < item.getItem().getLimitStacking()) {
                 slotAlreadyAvailable = true;
             } else {
                 if (firstEmptySlotIndex == -1 && slots.get(slotIndex).getItem() == null) {
