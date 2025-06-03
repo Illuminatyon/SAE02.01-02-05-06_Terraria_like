@@ -1,5 +1,7 @@
-package fr.iut.hev.root.model;
+package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.model.Gravity;
+import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.PlayerMouvements;
 
 import java.util.HashSet;
@@ -9,7 +11,7 @@ public class Player extends Actor {
 
     private final Set<PlayerMouvements> activeActions;
 
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce,int reach) {
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach);
         this.activeActions = new HashSet<>();
     }

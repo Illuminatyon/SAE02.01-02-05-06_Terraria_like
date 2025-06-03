@@ -1,5 +1,11 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.Entity;
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.enums.Tiles;
+
 public class Collider {
     private TileMap tileMap;
     private Entity entity;
@@ -10,9 +16,15 @@ public class Collider {
     public Collider(TileMap tileMap, Entity entity) {
         this.tileMap = tileMap;
         this.entity = entity;
-        this.offsetX = (tileMap.getWidth() * TileMap.format) / 2 + entity.getWidth() / 2;
-        this.offsetY = (tileMap.getHeight() * TileMap.format) / 2 + entity.getHeight() / 2;
         this.marge = 1;
+
+        if (this.entity instanceof Actor) {
+            this.offsetX = (tileMap.getWidth() * TileMap.format) / 2 + entity.getWidth() / 2;
+            this.offsetY = (tileMap.getHeight() * TileMap.format) / 2 + entity.getHeight() / 2;
+        } else if (this.entity instanceof Loot) {
+            this.offsetX = entity.getWidth() / 2;
+            this.offsetY = entity.getHeight() / 2;
+        }
     }
 
     private boolean hasCollision(double x, double y, boolean negativeCheckX, boolean negativeCheckY) {

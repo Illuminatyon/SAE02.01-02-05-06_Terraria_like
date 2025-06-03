@@ -1,5 +1,8 @@
-package fr.iut.hev.root.model;
+package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.model.Collider;
+import fr.iut.hev.root.model.Gravity;
+import fr.iut.hev.root.model.TileMap;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -26,7 +29,7 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce, int reach) {
         super(posX, posY, width, height, tileMap);
         this.isAliveProperty = new SimpleBooleanProperty(true);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
