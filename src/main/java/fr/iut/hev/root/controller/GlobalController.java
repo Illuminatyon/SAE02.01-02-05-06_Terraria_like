@@ -39,6 +39,7 @@ public class GlobalController implements Initializable {
     private PlayerView playerView;
     private MouseCursorCircleView playerLightCircle;
     private InventoryView inventoryView;
+    private HotbarView hotbarView;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -119,6 +120,7 @@ public class GlobalController implements Initializable {
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
+        hotbarView = new HotbarView(hotbarInventory);
         playerView.load();
 
         inventory.add(5,new Item(Items.DIRT),64);
@@ -142,11 +144,21 @@ public class GlobalController implements Initializable {
 
         mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
-        scrollHotbarHandler = new ScrollInputHandler(inventoryView);
+        scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
 
-        mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) -> {inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold());});
-        mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) -> {inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY());});
-        mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) -> {inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY());});
+        mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
+            inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
+        mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
+        mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
+        scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) -> {
+            if (scrollHotbarHandler.getDirection() != 0) {
+                System.out.println("direction = " + scrollHotbarHandler.getDirection());
+                scrollHotbarHandler.updateHotbar();
+            }
+        });
+
 
         Platform.runLater(() -> {
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
