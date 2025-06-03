@@ -5,6 +5,15 @@ import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.model.*;
+import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
+import fr.iut.hev.root.model.Inventory;
+import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.entities.Player;
+import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -16,6 +25,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
@@ -23,6 +36,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class GlobalController implements Initializable {
     private Timeline gameLoop;
@@ -69,6 +83,7 @@ public class GlobalController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
+        LootView lv = new LootView(globalPane);
 
         initMap();
         initActors();
@@ -86,6 +101,13 @@ public class GlobalController implements Initializable {
                             aliveActors.remove(currentActor);
                         }
                     }
+
+                    for (Loot loot : Loot.lootOnMapProperty) {
+                        loot.updatePosition();
+                    }
+
+                    /*if (mouseClicksPressedHandler.getMouseClickIsPressed()) {
+                        mouseClicksPressedHandler.clickPressedHandler();*/
                     if (mouseGameClicksHandler.getMouseClickIsPressed()) {
                         mouseGameClicksHandler.clickPressedHandler();
                     }

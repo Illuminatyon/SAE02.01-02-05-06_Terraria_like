@@ -1,11 +1,8 @@
 package fr.iut.hev.root.view;
 
-import fr.iut.hev.root.model.Player;
+import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.TileMap;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-
-import java.time.chrono.AbstractChronology;
 
 public class PlayerView {
     private Player player;
