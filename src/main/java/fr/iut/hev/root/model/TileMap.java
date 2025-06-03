@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.Tiles;
 
 public class TileMap {
@@ -130,7 +131,8 @@ public class TileMap {
             currentTile.takesDamage(1);
         if (currentTile.getHealth() <= 0) {
             currentTile.breaks();
-            Item item = new Item(currentTile.getTile().getRelatedItem());
+            //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
+            Item item = new Item(Items.DIRT);
             Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
         }
     }

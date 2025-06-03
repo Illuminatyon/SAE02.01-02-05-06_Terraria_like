@@ -23,7 +23,7 @@ public class Loot extends Entity {
         lootOnMapProperty.get().add(this);
     }
 
-    public void remove() {
+    public void removeSelf() {
         lootOnMapProperty.get().remove(this);
     }
 
@@ -44,5 +44,13 @@ public class Loot extends Entity {
 
     public static void remove(Loot loot) {
         lootOnMapProperty.get().remove(loot);
+    }
+
+    public Item getItem() {
+        return this.item;
+    }
+
+    public int getQuantity() {
+        return this.quantity;
     }
 }
