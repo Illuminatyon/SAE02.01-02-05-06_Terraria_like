@@ -32,6 +32,7 @@ public class GlobalController implements Initializable {
     private GlobalView globalView;
     private HUDView hudView;
     private PlayerView playerView;
+    private MobView mobView;
     private TileMap tileMap;
     private MouseInputHandler mouseClicksPressedHandler;
     private ArrayList<Actor> aliveActors;
@@ -71,7 +72,6 @@ public class GlobalController implements Initializable {
                 (ev -> {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
                         Actor currentActor = aliveActors.get(i);
-                        System.out.println(currentActor);
                         currentActor.diesQuestionMark();
                         if (currentActor.getIsAliveProperty()) {
                             currentActor.updatePosition();
@@ -135,8 +135,9 @@ public class GlobalController implements Initializable {
     }
 
     private void initmob(){
-        Mob mob = new Mob(0,0,32,32,tileMap,2,10,3,3,ActorEnum.POULET);
-        MobView mobview = new MobView(mob,tileMap,globalPane);
+        Mob mob = new Mob(0,-20,32,32,tileMap,2,10,3,3,ActorEnum.POULET);
+        this.mobView = new MobView(mob,tileMap,globalPane);
+
         aliveActors.add(mob);
     }
 
