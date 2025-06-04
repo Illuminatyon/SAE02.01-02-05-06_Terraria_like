@@ -5,6 +5,7 @@ import fr.iut.hev.root.model.InventorySlot;
 import fr.iut.hev.root.model.items.Item;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -12,10 +13,18 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import fr.iut.hev.root.model.CraftingManager;
+import fr.iut.hev.root.model.Recipe;
+import fr.iut.hev.root.model.enums.Items;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class InventoryView {
+    private VBox craftingPanel;
     private final Inventory inventory;
     private final GridPane hotbar;
     private final GridPane expandedInventory;
@@ -31,7 +40,35 @@ public class InventoryView {
         this.inventoryOpened = false;
         this.hudAnchorPane = hudAnchorPane;
         initInventory();
+        initCraftingPanel();
     }
+
+    private void initCraftingPanel() {
+        craftingPanel = new VBox(10);
+        craftingPanel.setLayoutX(600); // Ajuste la position selon ton UI
+        craftingPanel.setLayoutY(100);
+        craftingPanel.setStyle("-fx-background-color: rgba(30,30,30,0.8); -fx-padding: 10;");
+        craftingPanel.setVisible(false); // Masqué tant que l'inventaire est fermé
+
+        Label title = new Label("Crafting Recipes");
+        title.setTextFill(Color.WHITE);
+
+        // Conteneur pour les boutons de crafting (sera rempli dynamiquement)
+        VBox craftButtonsContainer = new VBox(5);
+
+        // ScrollPane contenant les boutons de craft
+        ScrollPane scrollPane = new ScrollPane(craftButtonsContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(200);
+        scrollPane.setStyle("-fx-background-color: transparent;");
+
+        // Ajout du titre et du scroll dans le panneau
+        craftingPanel.getChildren().addAll(title, scrollPane);
+
+        // Ajout du panneau au HUD principal
+        hudAnchorPane.getChildren().add(craftingPanel);
+    }
+
 
     private void initInventory() {
         initGrid(hotbar, hotbar.getColumnCount(), 1);
@@ -134,10 +171,52 @@ public class InventoryView {
     public boolean getInventoryOpened() {return this.inventoryOpened;}
 
     public void setInventoryVisible() {
-        expandedInventory.setVisible(!inventoryOpened);
-        expandedInventory.setMouseTransparent(inventoryOpened);
-        hotbar.setMouseTransparent(inventoryOpened);
         inventoryOpened = !inventoryOpened;
+
+        expandedInventory.setVisible(inventoryOpened);
+        expandedInventory.setMouseTransparent(!inventoryOpened);
+        hotbar.setMouseTransparent(!inventoryOpened);
+        craftingPanel.setVisible(inventoryOpened); // Affiche / cache le panneau de craft
+
+        if (inventoryOpened) {
+            updateCraftingPanel(); // Recharge dynamiquement les recettes craftables
+        }
+    }
+
+    private void updateCraftingPanel() {
+        craftingPanel.getChildren().clear();
+
+        Label title = new Label("Crafting Recipes");
+        title.setTextFill(Color.WHITE);
+
+        VBox craftButtonsContainer = new VBox(5);
+
+        for (Recipe recipe : CraftingManager.getAllRecipes()) {
+            if (CraftingManager.canCraft(recipe, inventory)) { // <-- Ici, passe inventory directement
+                Button craftButton = new Button("Craft: " + recipe.getResult().getName());
+                craftButton.setMaxWidth(Double.MAX_VALUE);
+                craftButton.setOnAction(e -> {
+                    if (CraftingManager.canCraft(recipe, inventory)) {
+                        CraftingManager.craft(recipe, inventory);
+                        updateCraftingPanel();
+                    }
+                });
+                craftButtonsContainer.getChildren().add(craftButton);
+            }
+        }
+
+        if (craftButtonsContainer.getChildren().isEmpty()) {
+            Label noCrafts = new Label("Aucun craft possible.");
+            noCrafts.setTextFill(Color.GRAY);
+            craftButtonsContainer.getChildren().add(noCrafts);
+        }
+
+        ScrollPane scrollPane = new ScrollPane(craftButtonsContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(200);
+        scrollPane.setStyle("-fx-background-color: transparent;");
+
+        craftingPanel.getChildren().addAll(title, scrollPane);
     }
 
     public void initHold() {

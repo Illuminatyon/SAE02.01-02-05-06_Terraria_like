@@ -1,10 +1,11 @@
 package fr.iut.hev.root.model.items;
 
+import fr.iut.hev.root.model.Recipe;
 import fr.iut.hev.root.model.enums.Items;
-
+import fr.iut.hev.root.model.CraftingManager;
 import java.util.Optional;
 
-public abstract class Item {
+public class Item {
 
     private Items item;
 
