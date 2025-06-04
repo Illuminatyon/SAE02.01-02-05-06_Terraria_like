@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.enums.ActorEnum;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,6 +14,7 @@ public abstract class Actor extends Entity {
     private boolean isJumping;
     private int jumpingTestDecay;
     private int reach;
+    private ActorEnum type;
 
     private IntegerProperty lookDirectionProperty;
     public enum LookDirections {
@@ -27,7 +29,7 @@ public abstract class Actor extends Entity {
 
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type) {
         super(posX, posY, width, height, tileMap);
         this.isAliveProperty = new SimpleBooleanProperty(true);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
@@ -37,7 +39,10 @@ public abstract class Actor extends Entity {
         this.isJumping = false;
         this.jumpingTestDecay = 0;
         this.reach = reach;
+        this.type = type;
     }
+
+
 
     @Override
     public void updatePosition() {
@@ -65,6 +70,7 @@ public abstract class Actor extends Entity {
     public void updateVerticalMovement() {
         
     }
+    public String getName(){return this.type.getName();}
 
     public int getReach() {return this.reach;}
 

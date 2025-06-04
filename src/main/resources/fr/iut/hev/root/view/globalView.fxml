@@ -21,9 +21,7 @@
       <TilePane fx:id="backgroundTileMap" prefHeight="1056.0" prefWidth="1920.0" />
       <TilePane fx:id="landTileMap" prefHeight="1056.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1920.0" />
       <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../img/entities/actors/player/jhon_fallout.png" />
-         </image>
+
       </ImageView>
       <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

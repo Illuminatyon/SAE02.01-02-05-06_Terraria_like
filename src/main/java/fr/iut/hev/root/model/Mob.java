@@ -1,11 +1,18 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.enums.ActorEnum;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import static fr.iut.hev.root.model.TileMap.format;
+
 public class Mob extends Actor {
 
 
 
-    public Mob(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce, int reach) {
-        super(posX, posY, width, height, tileMap, healthProperty, moveSpeed, jumpForce, reach);
+    public Mob(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
+        super(posX, posY, width, height, tileMap, healthProperty, moveSpeed, jumpForce, reach, actor);
+
     }
 
     @Override
@@ -18,17 +25,16 @@ public class Mob extends Actor {
 
     @Override
     public void updateHorizontalMovement() {
-        double i = Math.random();
-        double t;
-        t = Math.random();
-        if ((super.getLookDirection()==1)||(( i < 0.16) && t < (0.33))) {
+        double changeDirection = Math.random();
+        double direction = Math.random();
+        if ((super.getLookDirection()==1)||(( changeDirection < 0.16) && direction < (0.33))) {
             super.setLookDirection(LookDirections.RIGHT);
             if (!super.getCollider().hasCollisionRight()) {
                 super.setVelocityX(super.getMoveSpeed());
             } else {
                 this.updateVerticalMovement();
             }
-        } else if ((super.getLookDirection()==1)||( i<0.16 && ((t < 0.66) && (t > 0.33)))){
+        } else if ((super.getLookDirection()==1)||( changeDirection <0.16 && ((direction < 0.66) && (direction > 0.33)))){
             super.setLookDirection(LookDirections.LEFT);
             if (!super.getCollider().hasCollisionLeft()) {
                 super.setVelocityX(-super.getMoveSpeed());
