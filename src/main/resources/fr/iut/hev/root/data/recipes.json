@@ -1,0 +1,22 @@
+[
+  {
+    "result": "torch",
+    "ingredients": {
+      "wood": 1,
+      "stick": 1
+    }
+  },
+  {
+    "result": "stick",
+    "ingredients": {
+      "wood": 1
+    }
+  },
+  {
+    "result": "pickaxe",
+    "ingredients": {
+      "stick": 2,
+      "stone": 3
+    }
+  }
+]

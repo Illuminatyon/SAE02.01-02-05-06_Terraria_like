@@ -1,0 +1,27 @@
+[
+  {
+    "id": "wood",
+    "name": "Bois",
+    "type": "material"
+  },
+  {
+    "id": "stick",
+    "name": "Bâton",
+    "type": "material"
+  },
+  {
+    "id": "torch",
+    "name": "Torche",
+    "type": "tool"
+  },
+  {
+    "id": "stone",
+    "name": "Pierre",
+    "type": "material"
+  },
+  {
+    "id": "pickaxe",
+    "name": "Pioche",
+    "type": "tool"
+  }
+]

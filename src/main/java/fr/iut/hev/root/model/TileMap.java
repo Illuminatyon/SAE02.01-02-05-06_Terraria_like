@@ -7,6 +7,7 @@ public class TileMap {
     private final int height;
     private final Tile[][] tileMap;
 
+    //public static final int format = 16;
     public static final int format = 32;
 
     public TileMap(int width, int height) {
@@ -34,63 +35,34 @@ public class TileMap {
 
     public void setTestMap() {
         /**
-         * crée une map en 1920p avec 60*33 tile de test
+         * crée une map en 1920p avec 120*67 tile de test
          */
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
+                //if (index < 5160) {
                 if (index < 1080) {
-                    this.addTile(new Tile(Tiles.AIR,j, i));
+                    this.addTile(new Tile(Tiles.AIR, 0, j, i));
                 }
+                //else if (index >= 5160 && index < 5280) {
                 else if (index >= 1080 && index < 1140) {
-                    this.addTile(new Tile(Tiles.GRASS,j,i));
+                    this.addTile(new Tile(Tiles.GRASS,0,j,i));
                 }
-                else if (index >= 1140 && index < 1320) {
-                    this.addTile(new Tile(Tiles.DIRT,j,i));
-                }
-                else if (index >= 1320) {
-                    this.addTile(new Tile(Tiles.STONE,j,i));
+                //else if (index >= 5280) {
+                else if (index >= 1140) {
+                    this.addTile(new Tile(Tiles.DIRT,0,j,i));
                 }
                 index++;
             }
         }
-
-        for (int i = 0; i < 15; i++) {
-            this.getTile(i, 18).setTile(Tiles.DIRT);
-            if (i < 14) {
-                this.getTile(i, 17).setTile(Tiles.DIRT);
-            }
-            if (i < 13) {
-                this.getTile(i, 16).setTile(Tiles.DIRT);
-            }
-            if (i < 12) {
-                this.getTile(i, 15).setTile(Tiles.DIRT);
-            }
-        }
-
-        for (int i = 0; i < 3; i++) {
-            this.getTile(14 - i, 17 - i).setTile(Tiles.GRASS);
-        }
-
-        for (int i = 0; i < 11; i++) {
-            this.getTile(11 - i, 14).setTile(Tiles.GRASS);
-        }
-
-        for (int i = 0; i < 5; i++) {
-            this.getTile(0, 14 - i).setTile(Tiles.DIRT);
-        }
-
-        for (int i = 0; i < 3; i++) {
-            this.getTile(25 + i, 14).setTile(Tiles.GRASS);
-        }
-
-        this.getTile(27, 15).setTile(Tiles.DIRT);
-
-        for (int i = 0; i < 5; i++) {
-            this.getTile(35, 17 - i).setTile(Tiles.DIRT);
-        }
-
-        this.getTile(40, 15).setTile(Tiles.DIRT);
+        this.getTile(15, 17).setTile(Tiles.DIRT);
+        this.getTile(14, 17).setTile(Tiles.DIRT);
+        this.getTile(13, 17).setTile(Tiles.DIRT);
+        this.getTile(12, 17).setTile(Tiles.DIRT);
+        this.getTile(11, 17).setTile(Tiles.DIRT);
+        this.getTile(10, 17).setTile(Tiles.DIRT);
+        this.getTile(14, 16).setTile(Tiles.DIRT);
+        this.getTile(11, 16).setTile(Tiles.DIRT);
 
         /*for (int i = 16; i > 0; i--) {
             this.getTile(20, i).setTile(Tiles.DIRT);
@@ -117,14 +89,6 @@ public class TileMap {
 
     public int getHeight() {
         return height;
-    }
-
-    public void tileGetsMined(int x, int y) {
-        Tile currentTile = this.getTile(x,y);
-        if (!(currentTile.getHealth() <= 0))
-            currentTile.takesDamage(1);
-        if (currentTile.getHealth() <= 0)
-            currentTile.breaks();
     }
 
     // Charger la TileMap d'un fichier
