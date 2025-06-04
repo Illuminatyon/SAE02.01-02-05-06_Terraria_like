@@ -5,7 +5,10 @@ import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.model.*;
+import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.items.Consumable;
+import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -123,13 +126,14 @@ public class GlobalController implements Initializable {
         hotbarView = new HotbarView(hotbarInventory);
         playerView.load();
 
-        inventory.add(5,new Item(Items.DIRT),64);
+        /*inventory.add(5,new Item(Items.DIRT),64);
         inventory.add(24,new Item(Items.STONE),45);
         inventory.add(39,new Item(Items.DIRT),40);
         inventory.add(16,new Item(Items.DIRT),120);
         inventory.add(31,new Item(Items.DIRT),30);
         inventory.add(8,new Item(Items.STONE),80);
-        inventory.add(48,new Item(Items.DIRT),76);
+        inventory.add(48,new Item(Items.DIRT),76);*/
+        inventory.add(0,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),12);
 
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));

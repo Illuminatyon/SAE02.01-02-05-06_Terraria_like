@@ -1,7 +1,7 @@
 package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;

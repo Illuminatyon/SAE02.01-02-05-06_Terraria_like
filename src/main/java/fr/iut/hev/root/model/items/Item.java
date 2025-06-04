@@ -1,8 +1,8 @@
-package fr.iut.hev.root.model;
+package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.model.enums.Items;
 
-public class Item {
+public abstract class Item {
     private Items item;
 
     public Item(Items item) {

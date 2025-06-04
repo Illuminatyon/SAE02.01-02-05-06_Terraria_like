@@ -1,14 +1,13 @@
 package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.HotbarView;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
-import org.w3c.dom.ls.LSOutput;
 
 public class ScrollInputHandler implements EventHandler<ScrollEvent> {
 

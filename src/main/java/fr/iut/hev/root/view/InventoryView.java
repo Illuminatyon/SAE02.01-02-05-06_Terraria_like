@@ -2,7 +2,7 @@ package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.InventorySlot;
-import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.items.Item;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;

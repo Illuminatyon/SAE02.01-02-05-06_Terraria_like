@@ -26,17 +26,12 @@ public enum Items {
     private String name;
     private int limitStacking;
     private ItemTypes itemType;
-    private Stats stats;
+    private ToolStats stats;
 
-    Items(String name,int limitStacking,ItemTypes itemType,Stats stats) {
+    Items(String name,int limitStacking,ItemTypes itemType) {
         this.name = name;
         this.limitStacking = limitStacking;
         this.itemType = itemType;
-        this.stats = stats;
-    }
-
-    Items(String name,int limitStacking,ItemTypes itemType) {
-        this(name,limitStacking,itemType,null);
     }
 
     public String getName() {return this.name;}

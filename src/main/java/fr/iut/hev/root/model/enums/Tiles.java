@@ -11,18 +11,24 @@ public enum Tiles {
     //WATER("water", TileTypes.LIQUID),
     //LAVA("lava", TileTypes.LIQUID);
     CRAFTING_TABLE("crafting_table",TileTypes.UTILITIES,15),
-    TREE("tree",TileTypes.TREE,15),
+    TREE("tree",TileTypes.BACKGROUND,15),
     FURNACE("furnace",TileTypes.UTILITIES,20),
     IRON_ORE("iron_ore",TileTypes.BLOCK,20);
 
     private final String name;
     private final TileTypes type;
     private final int maxHealth;
+    private BlockType blockType;
 
-    Tiles(String name, TileTypes type,int maxHealth) {
+    Tiles(String name, TileTypes type,int maxHealth,BlockType blockType) {
         this.name = name;
         this.type = type;
         this.maxHealth = maxHealth;
+        this.blockType = blockType;
+    }
+
+    Tiles(String name,TileTypes type,int maxHealth) {
+        this(name,type,maxHealth,null);
     }
 
     public TileTypes getType() {
