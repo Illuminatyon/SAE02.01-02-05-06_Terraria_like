@@ -38,6 +38,7 @@ public class GlobalController implements Initializable {
     private ArrayList<Actor> aliveActors;
     private MouseCursorCircleView playerLightCircle;
     private Inventory inventory;
+    public static Mob mob ;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -71,6 +72,8 @@ public class GlobalController implements Initializable {
                 Duration.seconds(0.017),
                 (ev -> {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
+
+
                         Actor currentActor = aliveActors.get(i);
                         currentActor.diesQuestionMark();
                         if (currentActor.getIsAliveProperty()) {
@@ -135,10 +138,10 @@ public class GlobalController implements Initializable {
     }
 
     private void initmob(){
-        Mob mob = new Mob(0,-20,32,32,tileMap,2,10,3,3,ActorEnum.POULET);
+        this.mob = new Mob(0,0,32,32,tileMap,2,2,15,3,ActorEnum.POULET);
         this.mobView = new MobView(mob,tileMap,globalPane);
-
         aliveActors.add(mob);
+        mob.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> mobView.deletePlayerSprite()));
     }
 
     private void initActors() {

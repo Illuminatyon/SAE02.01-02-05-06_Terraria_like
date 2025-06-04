@@ -40,8 +40,8 @@ public class ActorView {
 
             String path = "/fr/iut/hev/root/img/entities/actors/".concat(/*"blackbox"*/this.actor.getName()).concat(".png");
             this.actorSprite = new ImageView(new Image(getClass().getResource(path).toExternalForm()));
-            actorSprite.setFitHeight(TileMap.format*2);
-            actorSprite.setFitWidth(TileMap.format);
+            actorSprite.setFitHeight( actor.getHeight());
+            actorSprite.setFitWidth( actor.getWidth());
             actorSprite.setLayoutX((tileMap.getWidth() * TileMap.format) / 2);
             actorSprite.setLayoutY((tileMap.getHeight() * TileMap.format) / 2);
             actorSprite.translateXProperty().bind(actor.posXProperty());
