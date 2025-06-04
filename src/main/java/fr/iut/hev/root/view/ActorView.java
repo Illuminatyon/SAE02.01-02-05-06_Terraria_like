@@ -13,6 +13,7 @@ public class ActorView {
         private Actor actor;
         private ImageView actorSprite;
         private TileMap tileMap;
+        private AnchorPane anchorPane;
 
 
         public ActorView(Actor actor,TileMap tileMap,AnchorPane anchorPane) {

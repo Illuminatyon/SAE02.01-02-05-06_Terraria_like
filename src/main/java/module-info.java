@@ -3,6 +3,7 @@ module fr.iut.hev.root {
     requires javafx.fxml;
     requires jdk.xml.dom;
     requires jdk.javadoc;
+    requires java.desktop;
 
 
     opens fr.iut.hev.root.controller to javafx.fxml;

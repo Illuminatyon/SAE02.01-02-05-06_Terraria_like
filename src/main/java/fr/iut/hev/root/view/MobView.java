@@ -3,6 +3,7 @@ package fr.iut.hev.root.view;
 import fr.iut.hev.root.model.Mob;
 import fr.iut.hev.root.model.TileMap;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import static fr.iut.hev.root.model.TileMap.format;
 

@@ -6,6 +6,7 @@ import fr.iut.hev.root.model.TileMap;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.time.chrono.AbstractChronology;
 
 public class PlayerView extends ActorView{
@@ -20,5 +21,5 @@ public class PlayerView extends ActorView{
 
     public void deletePlayerSprite() {
         playerSprite.setVisible(false);
-    }
+    }*/
 }
