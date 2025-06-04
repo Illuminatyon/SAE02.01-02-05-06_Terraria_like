@@ -78,7 +78,7 @@ public class MouseGameInputHandler implements EventHandler<MouseEvent> {
         if (false) { //condition lorsqu'on aura l'inventaire pour vérifier l'objet dans la main
 
         }
-        else if (checkTileNotEmpty() /*&& () ici condition pout vérif s'il y a un block entre le joueur et le block visé*/) {
+        else if (checkTileNotEmpty()) {
             player.updateBreaksBlock(x,y,tileMap);
             worldView.updateTile(x,y,tileMap.getTile(x,y));
         }

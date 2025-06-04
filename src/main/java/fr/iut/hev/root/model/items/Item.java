@@ -20,11 +20,13 @@ public abstract class Item {
         this.item = item;
     }
 
-    public boolean isCraftable() {
+    public abstract void isUsed();
+
+    /*public boolean isCraftable() {
         return CraftingManager.getRecipeFor(item).isPresent();
     }
 
     public Optional<Recipe> getCraftingRecipe() {
         return CraftingManager.getRecipeFor(item);
-    }
+    }*/
 }

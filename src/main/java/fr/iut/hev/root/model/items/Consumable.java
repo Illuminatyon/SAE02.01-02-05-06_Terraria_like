@@ -12,5 +12,7 @@ public class Consumable extends Item{
         this.stats = stats;
     }
 
-    //public isUsed()
+    public void isUsed(){
+
+    }
 }
