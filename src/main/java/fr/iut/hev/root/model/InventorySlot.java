@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.exception.InsufficientQuantityException;
+import fr.iut.hev.root.model.items.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;

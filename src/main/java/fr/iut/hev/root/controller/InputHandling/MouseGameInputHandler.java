@@ -75,10 +75,10 @@ public class MouseGameInputHandler implements EventHandler<MouseEvent> {
     }
 
     public void onLeftClickPressed() {
-        if (false) { //condition lorsqu'on aura l'inventaire pour vérifier l'objet dans la main
+        if (false) {
 
         }
-        else if (checkTileNotEmpty() /*&& () ici condition pout vérif s'il y a un block entre le joueur et le block visé*/) {
+        else if (checkTileNotEmpty()) {
             player.updateBreaksBlock(x,y,tileMap);
             worldView.updateTile(x,y,tileMap.getTile(x,y));
         }
@@ -107,11 +107,4 @@ public class MouseGameInputHandler implements EventHandler<MouseEvent> {
     public boolean getMouseClickIsPressed() {return this.mouseClickIsPressed;}
 
     public boolean getMouseClickIsReleased() {return this.mouseClickIsReleased;}
-
-    /*public boolean checkIfBlockOnTheWay() {
-        int xB = x - (x/32)*32 + 16,yB = y - (y/32)*32 + 16;
-
-        while ()
-    }*/
-    //début de truc pour checker si il y a un block entre le joueur et le bloc qu'il veut casser
 }

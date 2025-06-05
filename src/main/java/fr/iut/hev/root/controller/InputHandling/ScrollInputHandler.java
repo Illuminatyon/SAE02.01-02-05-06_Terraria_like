@@ -1,14 +1,17 @@
 package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.HotbarView;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
-import org.w3c.dom.ls.LSOutput;
+
+import java.util.HashMap;
 
 public class ScrollInputHandler implements EventHandler<ScrollEvent> {
 
@@ -16,7 +19,8 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
     private HotbarView hotbarView;
     private Inventory inventory;
     private IntegerProperty directionProperty;
-    private Item onHandItem;
+    private ObjectProperty<Item> onHandItemProperty;
+    private IntegerProperty quantityProperty;
     private int indexHotbar;
 
     public ScrollInputHandler(Inventory inventory,HotbarView hotbarView,InventoryView inventoryView) {
@@ -25,7 +29,8 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
         this.inventoryView = inventoryView;
         this.directionProperty = new SimpleIntegerProperty(0);
         this.indexHotbar = 0;
-        updateOnHandItem();
+        this.onHandItemProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(indexHotbar).getItem());
+        this.quantityProperty = new SimpleIntegerProperty(inventory.getInventorySlot(indexHotbar).getQuantity());
     }
 
     @Override
@@ -45,6 +50,7 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
         hotbarView.resetHighlight(indexHotbar);
         indexHotbar = indexHotbarIncrementation(increment);
         updateOnHandItem();
+        updateQuantity();
         hotbarView.setHighlight(indexHotbar);
     }
 
@@ -70,7 +76,23 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
         return indexValue;
     }
 
-    private void updateOnHandItem() {
-        this.onHandItem = inventory.getInventorySlot(indexHotbar).getItem();
+    public void updateOnHandItem() {
+        setOnHandItem(inventory.getInventorySlot(indexHotbar).getItem());
     }
+
+    public void updateQuantity() {
+        setQuantity(inventory.getInventorySlot(indexHotbar).getQuantity());
+    }
+
+    public void removeInventoryQuantity(int quantity) {
+        inventory.remove(indexHotbar,quantity);
+    }
+
+    public Item getOnHandItem() {return this.onHandItemProperty.getValue();}
+    public void setOnHandItem(Item item) {this.onHandItemProperty.setValue(item);}
+    public ObjectProperty<Item> onHandItemProperty() {return this.onHandItemProperty;}
+
+    public int getQuantity() {return this.quantityProperty.getValue();}
+    public void setQuantity(int quantity) {this.quantityProperty.setValue(quantity);}
+    public IntegerProperty quantityProperty() {return this.quantityProperty;}
 }

@@ -1,8 +1,11 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.Tiles;
+import fr.iut.hev.root.model.items.Consumable;
+import fr.iut.hev.root.model.items.Item;
 
 public class TileMap {
     private final int width;
@@ -132,7 +135,7 @@ public class TileMap {
         if (currentTile.getHealth() <= 0) {
             currentTile.breaks();
             //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
-            Item item = new Item(Items.DIRT);
+            Item item = new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN);
             Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
         }
     }

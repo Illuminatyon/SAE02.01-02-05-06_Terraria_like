@@ -5,12 +5,14 @@ import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Item;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
+import fr.iut.hev.root.controller.InputHandling.*;
+import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.items.Consumable;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -37,6 +39,8 @@ public class GlobalController implements Initializable {
     private MouseGameInputHandler mouseGameClicksHandler;
     private MouseInventoryInputHandler mouseInventoryHandler;
     private ScrollInputHandler scrollHotbarHandler;
+    private KeyInputHandler keyboardHandler;
+    private MouseItemActionInputHandler mouseItemActionHandler;
     private ArrayList<Actor> aliveActors;
     private Inventory inventory;
     public static Mob mob ;
@@ -132,13 +136,13 @@ public class GlobalController implements Initializable {
         playerView = new PlayerView(player,tileMap,globalPane);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
-        inventory.add(5,new Item(Items.DIRT),64);
-        inventory.add(39,new Item(Items.DIRT),45);
+
+        inventory.add(0,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),12);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
 
-        KeyInputHandler keyboardHandler = new KeyInputHandler(player,inventoryView);
+        keyboardHandler = new KeyInputHandler(player,inventoryView);
 
         double playerCenterX = 0/*playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2*/;
         double playerCenterY = 0/*playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2*/;
@@ -148,7 +152,14 @@ public class GlobalController implements Initializable {
         mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
+        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,inventory);
 
+        mouseItemActionHandler.onHandItemProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
+        mouseItemActionHandler.quantityProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
+        mouseItemActionHandler.modifiedQuantityProperty().addListener((observableValue, itemIntegerHashMap, t1) -> {
+            scrollHotbarHandler.removeInventoryQuantity(1);
+            scrollHotbarHandler.updateOnHandItem();
+        });
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
             inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
         mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
@@ -156,9 +167,8 @@ public class GlobalController implements Initializable {
         mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) ->
                 inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
         scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) -> {
-            if (scrollHotbarHandler.getDirection() != 0) {
+            if (scrollHotbarHandler.getDirection() != 0)
                 scrollHotbarHandler.updateHotbar();
-            }
         });
 
 
@@ -167,6 +177,7 @@ public class GlobalController implements Initializable {
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, mouseGameClicksHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED, mouseGameClicksHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
             landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);

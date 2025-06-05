@@ -2,7 +2,7 @@ package fr.iut.hev.root.model.entities;
 
 import fr.iut.hev.root.model.Collider;
 import fr.iut.hev.root.model.Gravity;
-import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.TileMap;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;

@@ -3,8 +3,7 @@ package fr.iut.hev.root.model.enums;
 public enum TileTypes {
     AIR("AIR", false, false), // _ A la fin pour les vrais trucs
     LIQUID("LIQUID", false, false),
-    TREE("TREE", false, true),
-    BACKGROUND  ("BACKGROUND",false,false),
+    BACKGROUND("BACKGROUND",false,true),
     UTILITIES("UTILITIES",true,true),
     BLOCK("BLOCK", true, true);
 

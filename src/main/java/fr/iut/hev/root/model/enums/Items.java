@@ -19,7 +19,9 @@ public enum Items {
 
     IRON_HELMET("iron_helmet",1,ItemTypes.ARMOR_PIECE),
     IRON_CHESTPLATE("iron_chestplate",1,ItemTypes.ARMOR_PIECE),
-    IRON_LEGGINGS("iron_leggings",1,ItemTypes.ARMOR_PIECE);
+    IRON_LEGGINGS("iron_leggings",1,ItemTypes.ARMOR_PIECE),
+
+    RAW_CHICKEN("raw_chicken",100,ItemTypes.CONSUMABLE);
 
     private String name;
     private int limitStacking;
@@ -38,7 +40,6 @@ public enum Items {
     }
 
     public String getName() {return this.name;}
-
     public ItemTypes getItemType() {return this.itemType;}
     public int getLimitStacking() {return this.limitStacking;}
     public Tiles getRelatedTile() {

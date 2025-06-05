@@ -1,5 +1,7 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.items.Item;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

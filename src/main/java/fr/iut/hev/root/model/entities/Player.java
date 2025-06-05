@@ -3,7 +3,6 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Item;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.PlayerMouvements;
 
