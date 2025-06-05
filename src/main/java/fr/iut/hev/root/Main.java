@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
 
@@ -12,7 +13,8 @@ public class Main extends Application {
     public Scene scene;
     @Override
     public void start(Stage stage) throws IOException {
-        Pane root = FXMLLoader.load(Main.class.getResource("view/globalView.fxml"));
+        Pane root = FXMLLoader.load(Main.class.getResource("view/main_menu.fxml"));
+        //Pane root = FXMLLoader.load(Main.class.getResource("view/globalView.fxml"));
         scene = new Scene(root, 1920, 1056);
         stage.setTitle("ROOT");
         stage.setScene(scene);
