@@ -52,6 +52,32 @@ public class Inventory {
         }
     }
 
+    public void add(Item item, int quantity) {
+        // ATTENTION: faire en sorte que les stack de loot au sol soit egalement limité pour éviter de deregler l'inventaire lors d'un ramassage
+        if (slotsOccupied == size) return;
+
+        boolean slotAlreadyAvailable = false; // means that the current item already have an available slot to use
+        int slotIndex = 0;
+        int firstEmptySlotIndex = -1;
+
+        while (!slotAlreadyAvailable && slotIndex < size) {
+            if (slots.get(slotIndex).getItem() != null && slots.get(slotIndex).getItem().getItem() == item.getItem() && slots.get(slotIndex).getQuantity() < item.getItem().getLimitStacking()) {
+                slotAlreadyAvailable = true;
+            } else {
+                if (firstEmptySlotIndex == -1 && slots.get(slotIndex).getItem() == null) {
+                    firstEmptySlotIndex = slotIndex;
+                }
+                slotIndex++;
+            }
+        }
+
+        if (slotAlreadyAvailable) {
+            add(slotIndex, item, quantity);
+        } else {
+            add(firstEmptySlotIndex, item, quantity);
+        }
+    }
+
     public ArrayList<InventorySlot> getSlots() {
         return this.slots;
     }

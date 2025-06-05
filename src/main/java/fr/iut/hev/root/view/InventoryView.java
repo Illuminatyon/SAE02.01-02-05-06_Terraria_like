@@ -40,7 +40,7 @@ public class InventoryView {
 
         inventory.getSlots().forEach(slot -> {
             slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
-            slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
+            slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot)); // TODO: utiliser un bind ici
         });
         hotbar.setMouseTransparent(true);
         expandedInventory.setMouseTransparent(true);

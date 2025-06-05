@@ -128,7 +128,7 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayer() {
-        player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
+        player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
         aliveActors.add(player);
         inventory = player.getInventory();
 
@@ -137,7 +137,9 @@ public class GlobalController implements Initializable {
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
 
-        inventory.add(0,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),12);
+        inventory.add(0,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),100);
+        inventory.add(1,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),45);
+        inventory.add(2,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),20);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));

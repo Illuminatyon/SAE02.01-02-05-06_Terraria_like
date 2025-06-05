@@ -104,7 +104,7 @@ public class Player extends Actor {
     }
 
     public void pickUp(Loot loot) {
-        this.inventory.add(0, loot.getItem(), loot.getQuantity());
+        this.inventory.add(loot.getItem(), loot.getQuantity());
         loot.removeSelf();
     }
 
