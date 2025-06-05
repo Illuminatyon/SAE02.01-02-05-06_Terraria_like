@@ -9,4 +9,6 @@ public enum ConsumableStats {
     ConsumableStats(int healthRestored) {
         this.healthRestored = healthRestored;
     }
+
+    public int getHealthRestored() {return this.healthRestored;}
 }

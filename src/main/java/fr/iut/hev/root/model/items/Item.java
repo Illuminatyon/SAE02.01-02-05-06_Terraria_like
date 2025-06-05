@@ -1,6 +1,10 @@
 package fr.iut.hev.root.model.items;
 
+import fr.iut.hev.root.model.Inventory;
+import fr.iut.hev.root.model.Player;
 import fr.iut.hev.root.model.enums.Items;
+import javafx.beans.property.IntegerProperty;
+import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
 
@@ -20,13 +24,5 @@ public abstract class Item {
         this.item = item;
     }
 
-    public abstract void isUsed();
-
-    /*public boolean isCraftable() {
-        return CraftingManager.getRecipeFor(item).isPresent();
-    }
-
-    public Optional<Recipe> getCraftingRecipe() {
-        return CraftingManager.getRecipeFor(item);
-    }*/
+    public abstract boolean isUsed(Player player, Inventory inventory);
 }

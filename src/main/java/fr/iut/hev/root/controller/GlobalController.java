@@ -1,9 +1,6 @@
 package fr.iut.hev.root.controller;
 
-import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
-import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
+import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.Items;
@@ -22,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import org.w3c.dom.css.CSSCharsetRule;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +32,8 @@ public class GlobalController implements Initializable {
     private MouseGameInputHandler mouseGameClicksHandler;
     private MouseInventoryInputHandler mouseInventoryHandler;
     private ScrollInputHandler scrollHotbarHandler;
+    private KeyInputHandler keyboardHandler;
+    private MouseItemActionInputHandler mouseItemActionHandler;
     private ArrayList<Actor> aliveActors;
     private Inventory inventory;
 
@@ -139,17 +139,24 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
 
-        KeyInputHandler keyboardHandler = new KeyInputHandler(player,inventoryView);
+        keyboardHandler = new KeyInputHandler(player,inventoryView);
 
         double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
         double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
-        mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
+        mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView,inventory);
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
+        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,inventory);
 
+        mouseItemActionHandler.onHandItemProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
+        mouseItemActionHandler.quantityProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
+        mouseItemActionHandler.modifiedQuantityProperty().addListener((observableValue, itemIntegerHashMap, t1) -> {
+            scrollHotbarHandler.removeInventoryQuantity(1);
+            scrollHotbarHandler.updateOnHandItem();
+        });
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
                 inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
         mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
@@ -167,6 +174,7 @@ public class GlobalController implements Initializable {
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, mouseGameClicksHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED, mouseGameClicksHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
             landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);

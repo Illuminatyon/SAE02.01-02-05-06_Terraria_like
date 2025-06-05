@@ -31,8 +31,7 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                     System.out.println("pv = " + player.getHealth());
                 }
             }
-        }
-        else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+        } else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {
             switch (keyEvent.getCode()) {
                 case KeyCode.Q -> player.removeActiveActions(PlayerMouvements.MOVE_LEFT);
                 case KeyCode.D -> player.removeActiveActions(PlayerMouvements.MOVE_RIGHT);
