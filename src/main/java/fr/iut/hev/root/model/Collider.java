@@ -17,14 +17,6 @@ public class Collider {
         this.tileMap = tileMap;
         this.entity = entity;
         this.marge = 1;
-
-        /*if (this.entity instanceof Actor) {
-            this.offsetX = (tileMap.getWidth() * TileMap.format) / 2 + entity.getWidth() / 2;
-            this.offsetY = (tileMap.getHeight() * TileMap.format) / 2 + entity.getHeight() / 2;
-        } else if (this.entity instanceof Loot) {
-            this.offsetX = entity.getWidth() / 2;
-            this.offsetY = entity.getHeight() / 2;
-        }*/
         this.offsetX = entity.getWidth() / 2;
         this.offsetY = entity.getHeight() / 2;
     }

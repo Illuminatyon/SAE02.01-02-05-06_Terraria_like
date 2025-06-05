@@ -42,8 +42,8 @@ public class ActorView {
             this.actorSprite = new ImageView(new Image(getClass().getResource(path).toExternalForm()));
             actorSprite.setFitHeight( actor.getHeight());
             actorSprite.setFitWidth( actor.getWidth());
-            actorSprite.setLayoutX((tileMap.getWidth() * TileMap.format) / 2);
-            actorSprite.setLayoutY((tileMap.getHeight() * TileMap.format) / 2);
+            //actorSprite.setLayoutX((tileMap.getWidth() * TileMap.format) / 2);
+            //actorSprite.setLayoutY((tileMap.getHeight() * TileMap.format) / 2);
             actorSprite.translateXProperty().bind(actor.posXProperty());
             actorSprite.translateYProperty().bind(actor.posYProperty());
             actorSprite.scaleXProperty().bind(actor.lookDirectionProperty());
