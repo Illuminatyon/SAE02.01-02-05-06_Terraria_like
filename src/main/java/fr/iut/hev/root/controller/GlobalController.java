@@ -4,20 +4,27 @@ import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
-import fr.iut.hev.root.model.*;
+import fr.iut.hev.root.model.Inventory;
+import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import fr.iut.hev.root.view.InventoryView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -69,6 +76,7 @@ public class GlobalController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
+        LootView lv = new LootView(globalPane);
 
         initMap();
         initActors();
@@ -85,6 +93,9 @@ public class GlobalController implements Initializable {
                         else {
                             aliveActors.remove(currentActor);
                         }
+                    }
+                    for (Loot loot : Loot.lootOnMapProperty) {
+                        loot.updatePosition();
                     }
                     if (mouseGameClicksHandler.getMouseClickIsPressed()) {
                         mouseGameClicksHandler.clickPressedHandler();
@@ -115,7 +126,7 @@ public class GlobalController implements Initializable {
     private void initPlayer() {
         player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
         aliveActors.add(player);
-        inventory = new Inventory();
+        inventory = player.getInventory();
 
         hudView = new HUDView(player,heartsHbox);
         playerView = new PlayerView(player,player_imageview,tileMap);
@@ -124,13 +135,7 @@ public class GlobalController implements Initializable {
         playerView.load();
 
         inventory.add(5,new Item(Items.DIRT),64);
-        inventory.add(24,new Item(Items.STONE),45);
-        inventory.add(39,new Item(Items.DIRT),40);
-        inventory.add(16,new Item(Items.DIRT),120);
-        inventory.add(31,new Item(Items.DIRT),30);
-        inventory.add(8,new Item(Items.STONE),80);
-        inventory.add(48,new Item(Items.DIRT),76);
-
+        inventory.add(39,new Item(Items.DIRT),45);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));

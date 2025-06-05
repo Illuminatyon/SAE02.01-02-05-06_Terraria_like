@@ -1,5 +1,7 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.Tiles;
 
 public class TileMap {
@@ -92,6 +94,10 @@ public class TileMap {
 
         this.getTile(40, 15).setTile(Tiles.DIRT);
 
+        this.getTile(57, 31).setTile(Tiles.STONE);
+
+        //this.getTile(57, 31).setTile(Tiles.DIRT);
+
         /*for (int i = 16; i > 0; i--) {
             this.getTile(20, i).setTile(Tiles.DIRT);
         }
@@ -123,8 +129,12 @@ public class TileMap {
         Tile currentTile = this.getTile(x,y);
         if (!(currentTile.getHealth() <= 0))
             currentTile.takesDamage(1);
-        if (currentTile.getHealth() <= 0)
+        if (currentTile.getHealth() <= 0) {
             currentTile.breaks();
+            //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
+            Item item = new Item(Items.DIRT);
+            Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
+        }
     }
 
     // Charger la TileMap d'un fichier

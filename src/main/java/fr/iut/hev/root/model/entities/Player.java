@@ -1,16 +1,21 @@
-package fr.iut.hev.root.model;
+package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.model.Gravity;
+import fr.iut.hev.root.model.Inventory;
+import fr.iut.hev.root.model.Item;
+import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.PlayerMouvements;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends Actor {
-
+    private Inventory inventory;
     private final Set<PlayerMouvements> activeActions;
 
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce,int reach) {
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach);
+        this.inventory = new Inventory();
         this.activeActions = new HashSet<>();
     }
 
@@ -23,6 +28,15 @@ public class Player extends Actor {
     }
 
     public Set<PlayerMouvements> getActiveActions() {return activeActions;}
+
+    public void update() {
+        updatePosition();
+        for (Loot loot : Loot.lootOnMapProperty.get()) {
+            if (getCollider().intersectsWith(loot.getCollider())) {
+                pickUp(loot);
+            }
+        }
+    }
 
     @Override
     public void updatePosition() {
@@ -37,6 +51,13 @@ public class Player extends Actor {
         updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
+
+        // TMP
+        for (Loot loot : Loot.lootOnMapProperty.get()) {
+            if (getCollider().intersectsWith(loot.getCollider())) {
+                pickUp(loot);
+            }
+        }
     }
 
     @Override
@@ -82,6 +103,11 @@ public class Player extends Actor {
         }
     }
 
+    public void pickUp(Loot loot) {
+        this.inventory.add(0, loot.getItem(), loot.getQuantity());
+        loot.removeSelf();
+    }
+
     public void diesQuestionMark() {
         if (this.getHealth() == 0)
             this.setIsAliveProperty(false);
@@ -89,5 +115,9 @@ public class Player extends Actor {
 
     public void updateBreaksBlock(int x,int y, TileMap tileMap) {
         tileMap.tileGetsMined(x,y);
+    }
+
+    public Inventory getInventory() {
+        return this.inventory;
     }
 }

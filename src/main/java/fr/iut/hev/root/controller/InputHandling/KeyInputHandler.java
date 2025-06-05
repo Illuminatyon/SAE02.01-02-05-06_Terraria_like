@@ -1,6 +1,6 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import fr.iut.hev.root.model.Player;
+import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.PlayerMouvements;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.event.EventHandler;
