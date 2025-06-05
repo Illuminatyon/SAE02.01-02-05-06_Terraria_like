@@ -95,6 +95,8 @@ public class Entity {
         return this.collider;
     }
 
+    public TileMap getTileMap() {return this.tileMap;}
+
     public int getEffectivePosX() {
         return this.getPosX() + (tileMap.getWidth() * TileMap.format) / 2;
     }

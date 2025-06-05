@@ -3,6 +3,14 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.enums.ConsumableStats;
+import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.items.Consumable;
+import fr.iut.hev.root.model.items.Item;
+
+import java.sql.SQLOutput;
+
+import static fr.iut.hev.root.model.TileMap.format;
 
 public class Mob extends Actor {
     private long lastDirectionChangeTime = 0;
@@ -19,6 +27,10 @@ public class Mob extends Actor {
     public void diesQuestionMark() {
         if (getHealth()==0){
             setIsAliveProperty(false);
+            Item item = new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN);
+            Loot droppedLoot = new Loot(item, 1, getPosX() + format*getTileMap().getWidth()/2, getPosY() + format*getTileMap().getHeight()/2, 32, 32, getTileMap());
+            System.out.println("x = " + getPosX() + " y = " + getPosY());
+            System.out.println("x = " + droppedLoot.getPosX() + " y = " + droppedLoot.getPosY());
         }
 
     }
