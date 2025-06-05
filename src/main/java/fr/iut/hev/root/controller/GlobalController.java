@@ -7,17 +7,16 @@ import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Item;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.entities.Actor;
-import fr.iut.hev.root.model.entities.Loot;
-import fr.iut.hev.root.model.entities.Player;
+import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -40,6 +39,7 @@ public class GlobalController implements Initializable {
     private ScrollInputHandler scrollHotbarHandler;
     private ArrayList<Actor> aliveActors;
     private Inventory inventory;
+    public static Mob mob ;
 
     private GlobalView globalView;
     private HUDView hudView;
@@ -47,6 +47,7 @@ public class GlobalController implements Initializable {
     private MouseCursorCircleView playerLightCircle;
     private InventoryView inventoryView;
     private HotbarView hotbarView;
+    private MobView mobView;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -54,8 +55,7 @@ public class GlobalController implements Initializable {
     @FXML
     private TilePane landTileMap;
 
-    @FXML
-    private ImageView player_imageview;
+
 
     @FXML
     private HBox heartsHbox;
@@ -106,8 +106,8 @@ public class GlobalController implements Initializable {
 
                     // Mise à jour de la position de la lumière autour du joueur
                     if (playerLightCircle != null) {
-                        double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
-                        double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+                        double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
+                        double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
                 })
@@ -124,16 +124,14 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayer() {
-        player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
+        player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
         aliveActors.add(player);
         inventory = player.getInventory();
 
         hudView = new HUDView(player,heartsHbox);
-        playerView = new PlayerView(player,player_imageview,tileMap);
+        playerView = new PlayerView(player,tileMap,globalPane);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
-        playerView.load();
-
         inventory.add(5,new Item(Items.DIRT),64);
         inventory.add(39,new Item(Items.DIRT),45);
 
@@ -142,8 +140,8 @@ public class GlobalController implements Initializable {
 
         KeyInputHandler keyboardHandler = new KeyInputHandler(player,inventoryView);
 
-        double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
-        double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+        double playerCenterX = 0/*playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2*/;
+        double playerCenterY = 0/*playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2*/;
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
@@ -175,8 +173,18 @@ public class GlobalController implements Initializable {
         });
     }
 
+    private void initmob(){
+        this.mob = new Mob(0,0,32,32,tileMap,2,2,15,3,ActorEnum.POULET);
+        this.mobView = new MobView(mob,tileMap,globalPane);
+        aliveActors.add(mob);
+        mob.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> mobView.deletePlayerSprite()));
+    }
+
     private void initActors() {
         aliveActors = new ArrayList<>();
         initPlayer();
+        initmob();
+
+
     }
 }

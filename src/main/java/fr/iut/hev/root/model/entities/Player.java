@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Item;
@@ -13,8 +14,8 @@ public class Player extends Actor {
     private Inventory inventory;
     private final Set<PlayerMouvements> activeActions;
 
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach) {
-        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach);
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
+        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor);
         this.inventory = new Inventory();
         this.activeActions = new HashSet<>();
     }

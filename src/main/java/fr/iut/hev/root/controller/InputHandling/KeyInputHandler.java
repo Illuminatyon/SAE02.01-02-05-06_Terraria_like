@@ -7,6 +7,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import static fr.iut.hev.root.controller.GlobalController.mob;
+
 public class KeyInputHandler implements EventHandler<KeyEvent> {
 
     private Player player;
@@ -29,6 +31,10 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                 case KeyCode.Z -> {
                     player.receiveDamage(1);
                     System.out.println("pv = " + player.getHealth());
+                }
+                case KeyCode.Y -> {
+                    mob.receiveDamage(1);
+                    System.out.println("pv = " + mob.getHealth());
                 }
             }
         }

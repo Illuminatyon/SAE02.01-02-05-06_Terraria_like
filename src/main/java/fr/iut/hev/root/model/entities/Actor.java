@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model.entities;
 
-import fr.iut.hev.root.model.Collider;
+import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import javafx.beans.property.BooleanProperty;
@@ -16,6 +16,7 @@ public abstract class Actor extends Entity {
     private boolean isJumping;
     private int jumpingTestDecay;
     private int reach;
+    private ActorEnum type;
 
     private IntegerProperty lookDirectionProperty;
     public enum LookDirections {
@@ -29,7 +30,7 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce, int reach) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type) {
         super(posX, posY, width, height, tileMap);
         this.isAliveProperty = new SimpleBooleanProperty(true);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
@@ -39,6 +40,7 @@ public abstract class Actor extends Entity {
         this.isJumping = false;
         this.jumpingTestDecay = 0;
         this.reach = reach;
+        this.type = type;
     }
 
     @Override
@@ -67,6 +69,7 @@ public abstract class Actor extends Entity {
     public void updateVerticalMovement() {
         
     }
+    public String getName(){return this.type.getName();}
 
     public int getReach() {return this.reach;}
 
@@ -99,6 +102,8 @@ public abstract class Actor extends Entity {
     public final void setHealth(int halfHeart) {this.healthProperty.setValue(halfHeart);}
 
     public final IntegerProperty healthProperty() {return this.healthProperty;}
+
+    public int getLookDirection() {return this.lookDirectionProperty.getValue();}
 
     public void receiveDamage(int damage) {
         if (!(damage > this.getHealth()))
