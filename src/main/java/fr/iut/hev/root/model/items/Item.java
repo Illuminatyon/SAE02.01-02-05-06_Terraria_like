@@ -1,14 +1,16 @@
 package fr.iut.hev.root.model.items;
 
+import fr.iut.hev.root.model.Recipe;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.CraftingManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
 
-public abstract class Item {
+public class Item {
 
     private Items item;
 
@@ -24,5 +26,16 @@ public abstract class Item {
         this.item = item;
     }
 
-    public abstract boolean isUsed(Player player, Inventory inventory);
+    public boolean isUsed(Player player, Inventory inventory) {
+        System.out.println("is used");
+        return true;
+    }
+
+    public boolean isCraftable() {
+        return CraftingManager.getRecipeFor(item).isPresent();
+    }
+
+    public Optional<Recipe> getCraftingRecipe() {
+        return CraftingManager.getRecipeFor(item);
+    }
 }
