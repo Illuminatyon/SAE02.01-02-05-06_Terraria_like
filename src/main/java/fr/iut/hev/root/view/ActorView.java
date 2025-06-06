@@ -1,9 +1,7 @@
 package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.entities.Actor;
-import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -50,7 +48,7 @@ public class ActorView {
             anchorPane.getChildren().add(actorSprite);
         }
 
-        public void deletePlayerSprite() {
+        public void deleteActorSprite() {
             actorSprite.setVisible(false);
         }
 

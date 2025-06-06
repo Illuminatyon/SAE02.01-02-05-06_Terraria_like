@@ -24,18 +24,6 @@ public class Mob extends Actor {
     }
 
     @Override
-    public void diesQuestionMark() {
-        if (getHealth()==0){
-            setIsAliveProperty(false);
-            Item item = new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN);
-            Loot droppedLoot = new Loot(item, 1, getPosX() + format*getTileMap().getWidth()/2, getPosY() + format*getTileMap().getHeight()/2, 32, 32, getTileMap());
-            System.out.println("x = " + getPosX() + " y = " + getPosY());
-            System.out.println("x = " + droppedLoot.getPosX() + " y = " + droppedLoot.getPosY());
-        }
-
-    }
-
-    @Override
    /* public void updateHorizontalMovement() {
         double changeDirection = Math.random();
         double direction = Math.random();

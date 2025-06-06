@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
-    private BooleanProperty isAliveProperty;
     private IntegerProperty healthProperty;
     private int moveSpeed;
     private int jumpForce;
@@ -32,7 +31,6 @@ public abstract class Actor extends Entity {
 
     public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type) {
         super(posX, posY, width, height, tileMap);
-        this.isAliveProperty = new SimpleBooleanProperty(true);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
@@ -110,12 +108,6 @@ public abstract class Actor extends Entity {
             this.setHealth(getHealth() - damage);
     }
 
-    public boolean getIsAliveProperty() {return this.isAliveProperty.getValue();}
-
-    public void setIsAliveProperty(boolean isAliveProperty) {this.isAliveProperty.setValue(isAliveProperty);}
-
-    public BooleanProperty isAliveProperty() {return this.isAliveProperty;}
-
     /*public LookDirections getLookDirection() { // TODO: fix
         return this.lookDirectionProperty;
     }*/
@@ -127,6 +119,4 @@ public abstract class Actor extends Entity {
     public IntegerProperty lookDirectionProperty() {
         return this.lookDirectionProperty;
     }
-
-    public abstract void diesQuestionMark();
 }

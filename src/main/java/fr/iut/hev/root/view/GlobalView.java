@@ -19,6 +19,7 @@ public class GlobalView {
         this.tileMap = tileMap;
         this.tileMapLand = tileMapLand;
         this.tileMapBackground = tileMapBackground;
+        loadWorld();
     }
 
     public void loadWorld() {

@@ -10,7 +10,6 @@ import javafx.scene.layout.AnchorPane;
 public class PlayerView extends ActorView{
 
     public PlayerView(Player player, TileMap tileMap,AnchorPane anchorPane) {
-        System.out.println(player);
         super(player,tileMap,anchorPane);
     }
 

@@ -4,6 +4,7 @@ import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
+import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
@@ -90,13 +91,7 @@ public class GlobalController implements Initializable {
                 (ev -> {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
                         Actor currentActor = aliveActors.get(i);
-                        currentActor.diesQuestionMark();
-                        if (currentActor.getIsAliveProperty()) {
-                            currentActor.updatePosition();
-                        }
-                        else {
-                            aliveActors.remove(currentActor);
-                        }
+                        currentActor.updatePosition();
                     }
                     for (Loot loot : Loot.lootOnMapProperty) {
                         loot.updatePosition();
@@ -124,7 +119,6 @@ public class GlobalController implements Initializable {
     private void initMap() {
         tileMap = new TileMap(1920,1056);
         globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
-        globalView.loadWorld();
     }
 
     private void initPlayer() {
@@ -132,7 +126,7 @@ public class GlobalController implements Initializable {
         aliveActors.add(player);
         inventory = player.getInventory();
 
-        hudView = new HUDView(player,heartsHbox);
+        hudView = new HUDView(player.getHealth(),heartsHbox);
         playerView = new PlayerView(player,tileMap,globalPane);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
@@ -141,8 +135,8 @@ public class GlobalController implements Initializable {
         inventory.add(1,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),45);
         inventory.add(2,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),20);
 
-        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
-        player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
+        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
+        player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
 
         keyboardHandler = new KeyInputHandler(player,inventoryView);
 
@@ -189,8 +183,8 @@ public class GlobalController implements Initializable {
     private void initmob(){
         this.mob = new Mob(0,0,32,32,tileMap,2,2,15,3,ActorEnum.POULET);
         this.mobView = new MobView(mob,tileMap,globalPane);
+        mob.healthProperty().addListener(new DeathListener(mob,mobView,aliveActors));
         aliveActors.add(mob);
-        mob.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> mobView.deletePlayerSprite()));
     }
 
     private void initActors() {

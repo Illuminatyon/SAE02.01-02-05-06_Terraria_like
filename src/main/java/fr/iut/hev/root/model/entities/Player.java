@@ -108,11 +108,6 @@ public class Player extends Actor {
         loot.removeSelf();
     }
 
-    public void diesQuestionMark() {
-        if (this.getHealth() == 0)
-            this.setIsAliveProperty(false);
-    }
-
     public void updateBreaksBlock(int x,int y, TileMap tileMap) {
         tileMap.tileGetsMined(x,y);
     }
