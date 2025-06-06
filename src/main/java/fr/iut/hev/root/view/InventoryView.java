@@ -95,10 +95,6 @@ public class InventoryView {
         }
     }
 
-    private void initHotbarHighlight() {
-
-    }
-
     private Pane createCell() {
         ImageView imageView = new ImageView();
         imageView.setFitHeight(50);

@@ -11,32 +11,32 @@ import java.util.Set;
 
 public class Player extends Actor {
     private Inventory inventory;
-    private final Set<PlayerMouvements> activeActions;
+    private final Set<PlayerMouvements> playerMouvements;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor);
         this.inventory = new Inventory();
-        this.activeActions = new HashSet<>();
+        this.playerMouvements = new HashSet<>();
     }
 
-    public void addActiveActions(PlayerMouvements playerMouvements) {
-        this.activeActions.add(playerMouvements);
+    public void addPlayerMouvements(PlayerMouvements playerMouvements) {
+        this.playerMouvements.add(playerMouvements);
     }
 
-    public void removeActiveActions(PlayerMouvements playerMouvements) {
-        this.activeActions.remove(playerMouvements);
+    public void removePlayerMouvements(PlayerMouvements playerMouvements) {
+        this.playerMouvements.remove(playerMouvements);
     }
 
-    public Set<PlayerMouvements> getActiveActions() {return activeActions;}
+    public Set<PlayerMouvements> getPlayerMouvements() {return playerMouvements;}
 
     public void update() {
         updatePosition();
         for (Loot loot : Loot.lootOnMapProperty.get()) {
-            if (getCollider().intersectsWith(loot.getCollider())) {
-                pickUp(loot);
-            }
+        if (getCollider().intersectsWith(loot.getCollider())) {
+            pickUp(loot);
         }
     }
+}
 
     @Override
     public void updatePosition() {
@@ -63,17 +63,17 @@ public class Player extends Actor {
     @Override
     public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
-        if (activeActions.contains(PlayerMouvements.MOVE_RIGHT)
-                && activeActions.contains(PlayerMouvements.MOVE_LEFT)) {
+        if (playerMouvements.contains(PlayerMouvements.MOVE_RIGHT)
+                && playerMouvements.contains(PlayerMouvements.MOVE_LEFT)) {
             super.setVelocityX(0);
-        } else if (activeActions.contains(PlayerMouvements.MOVE_RIGHT)) {
+        } else if (playerMouvements.contains(PlayerMouvements.MOVE_RIGHT)) {
             super.setLookDirection(LookDirections.RIGHT);
             if (!super.getCollider().hasCollisionRight()) {
                 super.setVelocityX(super.getMoveSpeed());
             } else {
                 super.setVelocityX(0);
             }
-        } else if (activeActions.contains(PlayerMouvements.MOVE_LEFT)) {
+        } else if (playerMouvements.contains(PlayerMouvements.MOVE_LEFT)) {
             super.setLookDirection(LookDirections.LEFT); // IL FAUT JUSTE FIX LE LEFT COLLIDER
             if (!super.getCollider().hasCollisionLeft()) {
                 super.setVelocityX(-super.getMoveSpeed());
@@ -87,7 +87,7 @@ public class Player extends Actor {
 
     @Override
     public void updateVerticalMovement() {
-        if (activeActions.contains(PlayerMouvements.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping()) {
+        if (playerMouvements.contains(PlayerMouvements.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping()) {
             super.setIsJumping(true);
             super.setJumpingTestDecay(0);
         } else if (super.getIsJumping()) {

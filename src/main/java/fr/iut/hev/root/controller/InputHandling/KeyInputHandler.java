@@ -23,10 +23,10 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
     public void handle(KeyEvent keyEvent) {
         if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
             switch (keyEvent.getCode()) {
-                case KeyCode.Q -> player.addActiveActions(PlayerMouvements.MOVE_LEFT);
-                case KeyCode.D -> player.addActiveActions(PlayerMouvements.MOVE_RIGHT);
+                case KeyCode.Q -> player.addPlayerMouvements(PlayerMouvements.MOVE_LEFT);
+                case KeyCode.D -> player.addPlayerMouvements(PlayerMouvements.MOVE_RIGHT);
                 case KeyCode.E -> inventoryView.setInventoryVisible();
-                case KeyCode.SPACE -> player.addActiveActions(PlayerMouvements.JUMP);
+                case KeyCode.SPACE -> player.addPlayerMouvements(PlayerMouvements.JUMP);
                 case KeyCode.TAB -> System.out.println("map opened");
                 case KeyCode.Z -> {
                     player.receiveDamage(1);
@@ -39,9 +39,9 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
             }
         } else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {
             switch (keyEvent.getCode()) {
-                case KeyCode.Q -> player.removeActiveActions(PlayerMouvements.MOVE_LEFT);
-                case KeyCode.D -> player.removeActiveActions(PlayerMouvements.MOVE_RIGHT);
-                case KeyCode.SPACE -> player.removeActiveActions(PlayerMouvements.JUMP);
+                case KeyCode.Q -> player.removePlayerMouvements(PlayerMouvements.MOVE_LEFT);
+                case KeyCode.D -> player.removePlayerMouvements(PlayerMouvements.MOVE_RIGHT);
+                case KeyCode.SPACE -> player.removePlayerMouvements(PlayerMouvements.JUMP);
             }
         }
     }

@@ -57,13 +57,13 @@ public class GlobalView {
         }
     }
 
-    public Image getTexture(Tile tile, int tileHealth) {
+    public Image getTexture(Tile tile, int textureNumber) {
         /**
          * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
          */
         if (tile.getTile().getType() == TileTypes.AIR)
             return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_").concat(Integer.toString(tileHealth)).concat(".png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_").concat(Integer.toString(textureNumber)).concat(".png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 
