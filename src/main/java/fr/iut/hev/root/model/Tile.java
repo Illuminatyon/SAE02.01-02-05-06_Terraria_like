@@ -9,22 +9,20 @@ import java.net.URL;
 public class Tile {
     private Tiles tile;
     private int health;
-    private int maxHealth;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
     private int tileX;
     private int tileY;
 
-    public Tile(Tiles tile, int maxHealth, int x, int y) {
+    public Tile(Tiles tile, int x, int y) {
         this.tile = tile;
-        this.health = maxHealth;
-        this.maxHealth = maxHealth;
+        this.health = tile.getMaxHealth()*10;
         this.tileX = x;
         this.tileY = y;
 
     }
 
-    public void damage(int amount) {
+    public void takesDamage(int amount) {
         this.health = Math.max(0, this.health - amount); // Retourne le plus grand
     }
 
@@ -36,26 +34,6 @@ public class Tile {
         this.tile = tile;
     }
 
-    public Image getTexture(/*int damageAmount*/) {
-        /**
-         * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
-         */
-        if (this.tile.getType() == TileTypes.AIR)
-            return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(this.tile.getName())./*concat(Integer.toString(damageAmount)).*/concat(".png");
-        return new Image(getClass().getResource(path).toExternalForm());
-    }
-
-    public Image getTexture_background() {
-        /**
-         * Retourne le sprite background de la Tile
-         */
-        if (this.tile.getType() == TileTypes.AIR)
-            return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(this.tile.getName()).concat("_background.png");
-        return new Image(getClass().getResource(path).toExternalForm());
-    }
-
     public int getX() {
         return this.tileX;
     }
@@ -63,6 +41,10 @@ public class Tile {
     public int getY() {
         return this.tileY;
     }
+
+    public int getHealth() {return this.health;}
+
+    public void resetHealth() {this.health = this.tile.getMaxHealth()*10;}
 
     /*public String toString() {
         return "{"
@@ -79,5 +61,9 @@ public class Tile {
     @Override
     public String toString() {
         return this.getTile().toString();
+    }
+
+    public void breaks() {
+        this.tile = Tiles.AIR;
     }
 }
