@@ -6,6 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.InputStream;
+import java.util.Objects;
+
 public class ActorView {
 
         private Actor actor;
@@ -35,20 +38,41 @@ public class ActorView {
 
         }*/
         public void load() {
+            String path = "/fr/iut/hev/root/img/entities/actors/" + actor.getName() + ".png";
+            System.out.println("Trying to load image from path: " + path);
 
-            String path = "/fr/iut/hev/root/img/entities/actors/".concat(/*"blackbox"*/this.actor.getName()).concat(".png");
-            this.actorSprite = new ImageView(new Image(getClass().getResource(path).toExternalForm()));
-            actorSprite.setFitHeight( actor.getHeight());
-            actorSprite.setFitWidth( actor.getWidth());
-            //actorSprite.setLayoutX((tileMap.getWidth() * TileMap.format) / 2);
-            //actorSprite.setLayoutY((tileMap.getHeight() * TileMap.format) / 2);
-            actorSprite.translateXProperty().bind(actor.posXProperty());
-            actorSprite.translateYProperty().bind(actor.posYProperty());
-            actorSprite.scaleXProperty().bind(actor.lookDirectionProperty());
-            anchorPane.getChildren().add(actorSprite);
+            try (InputStream stream = getClass().getResourceAsStream(path)) {
+                if (stream == null) {
+                    System.err.println("ERROR: Image not found at path: " + path);
+                    // Optionnel : charger une image "placeholder" ou rien faire
+                    return;
+                }
+
+                Image image = new Image(stream);
+                this.actorSprite = new ImageView(image);
+
+                // Adapter la taille de l’image à l’acteur
+                actorSprite.setFitWidth(actor.getWidth());
+                actorSprite.setFitHeight(actor.getHeight());
+
+                // Bind des positions et de la direction
+                actorSprite.translateXProperty().bind(actor.posXProperty());
+                actorSprite.translateYProperty().bind(actor.posYProperty());
+                actorSprite.scaleXProperty().bind(actor.lookDirectionProperty());
+
+                // Ajouter à l'AnchorPane
+                anchorPane.getChildren().add(actorSprite);
+
+                System.out.println("Image loaded successfully for actor: " + actor.getName());
+            } catch (Exception e) {
+                System.err.println("Exception while loading image for actor " + actor.getName());
+                e.printStackTrace();
+            }
         }
 
-        public void deleteActorSprite() {
+
+
+    public void deleteActorSprite() {
             actorSprite.setVisible(false);
         }
 

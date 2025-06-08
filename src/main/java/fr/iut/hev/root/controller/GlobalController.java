@@ -4,11 +4,11 @@ import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
+import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
-import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.ActorEnum;
@@ -23,10 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -44,7 +41,7 @@ public class GlobalController implements Initializable {
     private MouseItemActionInputHandler mouseItemActionHandler;
     private ArrayList<Actor> aliveActors;
     private Inventory inventory;
-    public static Mob mob ;
+    public static Mob mob;
 
     private GlobalView globalView;
     private HUDView hudView;
@@ -59,8 +56,6 @@ public class GlobalController implements Initializable {
 
     @FXML
     private TilePane landTileMap;
-
-
 
     @FXML
     private HBox heartsHbox;
@@ -79,9 +74,9 @@ public class GlobalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        aliveActors = new ArrayList<>();
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
-        LootView lv = new LootView(globalPane);
 
         initMap();
         initActors();
@@ -117,38 +112,45 @@ public class GlobalController implements Initializable {
     }
 
     private void initMap() {
-        tileMap = new TileMap(1920,1056);
-        globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
+        tileMap = new TileMap(1920, 1056);
+        globalView = new GlobalView(tileMap, landTileMap, backgroundTileMap);
     }
 
     private void initPlayer() {
-        player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
+        player = new Player(0, 0, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER);
         aliveActors.add(player);
         inventory = player.getInventory();
 
-        hudView = new HUDView(player.getHealth(),heartsHbox);
-        playerView = new PlayerView(player,tileMap,globalPane);
-        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
+        hudView = new HUDView(player.getHealth(), heartsHbox);
+        playerView = new PlayerView(player, tileMap, globalPane);
+        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory, hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
 
-        inventory.add(0,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),100);
-        inventory.add(1,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),45);
-        inventory.add(2,new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN),20);
-
-        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
-
-        keyboardHandler = new KeyInputHandler(player,inventoryView);
-
-        double playerCenterX = 0/*playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2*/;
-        double playerCenterY = 0/*playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2*/;
-        playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
+        // Crée playerLightCircle AVANT mouseGameClicksHandler
+        double playerCenterX = playerView.getActorSprite().getLayoutX()
+                + playerView.getActorSprite().getTranslateX()
+                + playerView.getActorSprite().getFitWidth() / 2;
+        double playerCenterY = playerView.getActorSprite().getLayoutY()
+                + playerView.getActorSprite().getTranslateY()
+                + playerView.getActorSprite().getFitHeight() / 2;
+        playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach() * 32, 10);
         playerLightCircle.setCursorVisible(false);
 
-        mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
-        mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
-        scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
-        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,inventory);
+        // Initialise mouseGameClicksHandler avec playerLightCircle disponible
+        mouseGameClicksHandler = new MouseGameInputHandler(tileMap, globalView, player, playerLightCircle, inventoryView);
+
+        mouseInventoryHandler = new MouseInventoryInputHandler(inventory, inventoryView);
+        scrollHotbarHandler = new ScrollInputHandler(inventory, hotbarView, inventoryView);
+        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView, player, inventory);
+
+        inventory.add(0, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 100);
+        inventory.add(1, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 45);
+        inventory.add(2, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 20);
+
+        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
+        player.healthProperty().addListener(new DeathListener(player, playerView, aliveActors));
+
+        keyboardHandler = new KeyInputHandler(player, inventoryView);
 
         mouseItemActionHandler.onHandItemProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         mouseItemActionHandler.quantityProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
@@ -157,7 +159,7 @@ public class GlobalController implements Initializable {
             scrollHotbarHandler.updateOnHandItem();
         });
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
-            inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
+                inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
         mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
                 inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
         mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) ->
@@ -167,23 +169,24 @@ public class GlobalController implements Initializable {
                 scrollHotbarHandler.updateHotbar();
         });
 
-
-        Platform.runLater(() -> {
-            landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, mouseGameClicksHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED, mouseGameClicksHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
-            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
-            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
-            landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
+        landTileMap.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventHandler(KeyEvent.ANY, keyboardHandler);
+                newScene.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseGameClicksHandler);
+                newScene.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseGameClicksHandler);
+                newScene.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
+                newScene.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseItemActionHandler);
+                newScene.addEventHandler(ScrollEvent.SCROLL, scrollHotbarHandler);
+                hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseInventoryHandler);
+                hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED, mouseInventoryHandler);
+            }
         });
     }
 
-    private void initmob(){
-        this.mob = new Mob(0,0,32,32,tileMap,2,2,15,3,ActorEnum.POULET);
-        this.mobView = new MobView(mob,tileMap,globalPane);
-        mob.healthProperty().addListener(new DeathListener(mob,mobView,aliveActors));
+    private void initmob() {
+        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET);
+        this.mobView = new MobView(mob, tileMap, globalPane);
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
         aliveActors.add(mob);
     }
 
@@ -191,7 +194,15 @@ public class GlobalController implements Initializable {
         aliveActors = new ArrayList<>();
         initPlayer();
         initmob();
+        initAggressiveMob(player);
+    }
 
-
+    private void initAggressiveMob(Player player) {
+        AggressiveMob aggressiveMob = new AggressiveMob(
+                0, 0, 32, 32, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
+        );
+        MobView mobView = new MobView(aggressiveMob, tileMap, globalPane);
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, mobView, aliveActors));
+        aliveActors.add(aggressiveMob);
     }
 }
