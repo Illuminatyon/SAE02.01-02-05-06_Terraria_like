@@ -11,6 +11,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import static fr.iut.hev.root.model.TileMap.format;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class MouseGameInputHandler implements EventHandler<MouseEvent> {
 
@@ -40,19 +42,28 @@ public class MouseGameInputHandler implements EventHandler<MouseEvent> {
     public void handle(MouseEvent mouseEvent) {
         if (!inventoryView.getInventoryOpened()) {
             mouseCursor.handleMouseMove(mouseEvent);
-            x = (int) mouseCursor.getCursorX() / format;
-            y = (int) mouseCursor.getCursorY() / format;
-            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-                this.mouseClickIsPressed = true;
-                this.mouseEvent = mouseEvent;
-            }
-            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
-                mouseClickIsPressed = false;
-                mouseClickIsReleased = true;
-            }
-            if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
-                this.mouseEvent = mouseEvent;
-            }
+            x = (int) mouseEvent.getX()/format;
+            y = (int) mouseEvent.getY()/format;
+            /*double distanceFromMouseToPlayer= sqrt(pow((x - (player.getPosX()) + (double) format / 2),2) + pow((y - (player.getPosY()) + format),2));
+            System.out.println("coo j " + player.getPosX() + " " + player.getPosY());
+            System.out.println("coo M " + x + " " + y);
+            System.out.println(distanceFromMouseToPlayer);
+            if (distanceFromMouseToPlayer <= player.getReach() * format && distanceFromMouseToPlayer >= - player.getReach() * format) {
+                System.out.println("in reach "/* + distanceFromMouseToPlayer + " " + player.getReach() * format);
+                x = x / format;
+                y = y / format;*/
+                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+                    this.mouseClickIsPressed = true;
+                    this.mouseEvent = mouseEvent;
+                }
+                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
+                    mouseClickIsPressed = false;
+                    mouseClickIsReleased = true;
+                }
+                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
+                    this.mouseEvent = mouseEvent;
+                }
+            //}
         }
     }
 
