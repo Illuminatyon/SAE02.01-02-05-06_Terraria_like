@@ -40,8 +40,8 @@ public class MouseGameInputHandler implements EventHandler<MouseEvent> {
     public void handle(MouseEvent mouseEvent) {
         if (!inventoryView.getInventoryOpened()) {
             mouseCursor.handleMouseMove(mouseEvent);
-            x = (int) mouseEvent.getX();
-            y = (int) mouseEvent.getY();
+            x = (int) mouseEvent.getX() / format;
+            y = (int) mouseEvent.getY() / format;
 
 
             if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
@@ -104,10 +104,6 @@ public class MouseGameInputHandler implements EventHandler<MouseEvent> {
 
     public boolean checkTileNotEmpty() {
         return tileMap.getTile(x,y).getTile().getType() != TileTypes.AIR;
-    }
-
-    public void checkInReach() {
-
     }
 
     public boolean getMouseClickIsPressed() {return this.mouseClickIsPressed;}
