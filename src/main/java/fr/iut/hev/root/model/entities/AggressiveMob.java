@@ -50,24 +50,27 @@ public class AggressiveMob extends Mob {
     }
 
     private void followPlayer() {
-
-        if (target.getPosX() < getPosX()) {
-            setLookDirection(LookDirections.LEFT);
-            if (!getCollider().hasCollisionLeft()) {
-                setVelocityX(-getMoveSpeed());
+        int deadZone = 5; // Tolérance horizontale en pixels
+        int deltaX = target.getPosX() - getPosX();
+        if (Math.abs(deltaX) > deadZone) {
+            if (deltaX < 0) {
+                setLookDirection(LookDirections.LEFT);
+                if (!getCollider().hasCollisionLeft()) {
+                    setVelocityX(-getMoveSpeed());
+                }
+            } else {
+                setLookDirection(LookDirections.RIGHT);
+                if (!getCollider().hasCollisionRight()) {
+                    setVelocityX(getMoveSpeed());
+                }
             }
-        } else if (target.getPosX() > getPosX()) {
-            setLookDirection(LookDirections.RIGHT);
-            if (!getCollider().hasCollisionRight()) {
-                setVelocityX(getMoveSpeed());
-            }
+        } else {
+            // Si on est dans la dead zone, on s'arrête
+            setVelocityX(0);
         }
-
-        if (super.getCollider().hasCollisionLeft() || super.getCollider().hasCollisionRight()    ) {
-
+        if (getCollider().hasCollisionLeft() || getCollider().hasCollisionRight()) {
             updateVerticalMovement(); // saute si bloqué
         }
-
         checkAttackRange();
     }
 

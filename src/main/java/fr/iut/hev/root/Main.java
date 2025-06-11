@@ -14,7 +14,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Pane root = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("view/globalView.fxml")));
-        scene = new Scene(root, 1920, 1056);
+        scene = new Scene(root, 1400, 700);
         stage.setTitle("ROOT");
         stage.setScene(scene);
         stage.show();
