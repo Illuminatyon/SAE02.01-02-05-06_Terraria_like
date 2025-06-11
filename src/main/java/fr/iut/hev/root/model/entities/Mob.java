@@ -59,7 +59,7 @@ public class Mob extends Actor {
             }
             remainingY -= 1;
         }
-
+        updateVerticalMovement();
         // Jump automatique si bloqué
 
     }
