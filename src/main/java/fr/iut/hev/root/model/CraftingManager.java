@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.Item;
 
 import java.util.*;
@@ -9,14 +9,14 @@ public class CraftingManager {
     private static final List<Recipe> recipes = new ArrayList<>();
 
     static {
-        recipes.add(new Recipe(Items.RAW_CHICKEN, 30, Map.of(Items.RAW_CHICKEN, 10)));
+        recipes.add(new Recipe(ItemsEnum.RAW_CHICKEN, 30, Map.of(ItemsEnum.RAW_CHICKEN, 10)));
     }
 
     public static List<Recipe> getRecipes() {
         return Collections.unmodifiableList(recipes);
     }
 
-    public static Optional<Recipe> getRecipeFor(Items targetItem) {
+    public static Optional<Recipe> getRecipeFor(ItemsEnum targetItem) {
         return recipes.stream()
                 .filter(r -> r.getResult() == targetItem)
                 .findFirst();
@@ -80,11 +80,11 @@ public class CraftingManager {
     public static boolean craft(Recipe recipe, Inventory inventory) {
         // mettre le code dans Inventory pour que l'inventaire puisse faire le craft
         if (!canCraft(recipe, inventory)) return false;
-        for (Map.Entry<Items, Integer> ingredient : recipe.getIngredients().entrySet()) {
+        for (Map.Entry<ItemsEnum, Integer> ingredient : recipe.getIngredients().entrySet()) {
             int remaining = ingredient.getValue();
 
             for (InventorySlot slot : inventory.getSlots()) {
-                if (slot.getItem() != null && slot.getItem().getItem() == ingredient.getKey()) {
+                if (slot.getItem() != null && slot.getItem().getItemEnum() == ingredient.getKey()) {
                     int qty = slot.getQuantity();
                     if (qty >= remaining) {
                         slot.setQuantity(qty - remaining);
@@ -105,7 +105,7 @@ public class CraftingManager {
         int i = 0;
         while (i < inventory.getSize() && !added) {
             InventorySlot slot = inventory.getInventorySlot(i);
-            if (slot.getItem() != null && slot.getItem().getItem() == recipe.getResult()) {
+            if (slot.getItem() != null && slot.getItem().getItemEnum() == recipe.getResult()) {
                 HashMap<Item, Integer> replaced = inventory.add(i, new Item(recipe.getResult()), amountToAdd);
                 if (replaced == null || replaced.isEmpty()) {
                     added = true;
@@ -138,18 +138,18 @@ public class CraftingManager {
     }
 
     public static boolean canCraft(Recipe recipe, Inventory inventory) {
-        Map<Items, Integer> counts = new HashMap<>();
+        Map<ItemsEnum, Integer> counts = new HashMap<>();
         for (InventorySlot slot : inventory.getSlots()) {
             if (slot.getItem() != null) {
-                counts.put(slot.getItem().getItem(), counts.getOrDefault(slot.getItem().getItem(), 0) + slot.getQuantity());
+                counts.put(slot.getItem().getItemEnum(), counts.getOrDefault(slot.getItem().getItemEnum(), 0) + slot.getQuantity());
             }
         }
         return canCraft(recipe, counts);
     }
 
-    public static boolean canCraft(Recipe recipe, Map<Items, Integer> counts) {
-        for (Map.Entry<Items, Integer> ingredient : recipe.getIngredients().entrySet()) {
-            Items item = ingredient.getKey();
+    public static boolean canCraft(Recipe recipe, Map<ItemsEnum, Integer> counts) {
+        for (Map.Entry<ItemsEnum, Integer> ingredient : recipe.getIngredients().entrySet()) {
+            ItemsEnum item = ingredient.getKey();
             int requiredAmount = ingredient.getValue();
             int availableAmount = counts.getOrDefault(item, 0);
             if (availableAmount < requiredAmount) {

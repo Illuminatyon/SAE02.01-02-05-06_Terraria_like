@@ -24,7 +24,7 @@ public class InventorySlot {
             sb.append("Cannot remove ");
             sb.append(Integer.toString(quantity));
             sb.append(" from ");
-            sb.append(this.itemProperty.get().getItem());
+            sb.append(this.itemProperty.get().getItemEnum());
             sb.append(" at slot ");
             sb.append(this.index);
             sb.append(": only ");

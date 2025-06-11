@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model.enums;
 
-public enum ItemTypes {
+public enum ItemTypesEnum {
     TOOL("tool",false),
     WEAPON("weapon",false),
     CONSUMABLE("consumable",true),
@@ -11,7 +11,7 @@ public enum ItemTypes {
     private final String name;
     private final boolean isConsumable;
 
-    ItemTypes(String name, boolean isConsumable) {
+    ItemTypesEnum(String name, boolean isConsumable) {
         this.name = name;
         this.isConsumable = isConsumable;
     }

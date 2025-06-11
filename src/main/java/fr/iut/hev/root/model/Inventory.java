@@ -29,15 +29,15 @@ public class Inventory {
         else {
             HashMap<Item, Integer> replacedItem = new HashMap<>();
 
-            if (slots.get(slotIndex).getItem().getItem() != item.getItem()) {
+            if (slots.get(slotIndex).getItem().getItemEnum() != item.getItemEnum()) {
                 replacedItem.put(slots.get(slotIndex).getItem(), slots.get(slotIndex).getQuantity());
                 slots.get(slotIndex).setItem(item);
                 slots.get(slotIndex).setQuantity(quantity);
             }
-            else if (slots.get(slotIndex).getQuantity() < item.getItem().getLimitStacking()) {
-                if ((slots.get(slotIndex).getQuantity() + quantity) > item.getItem().getLimitStacking()) {
-                    replacedItem.put(item,quantity - (item.getItem().getLimitStacking() - slots.get(slotIndex).getQuantity()));
-                    slots.get(slotIndex).setQuantity(item.getItem().getLimitStacking());
+            else if (slots.get(slotIndex).getQuantity() < item.getItemEnum().getLimitStacking()) {
+                if ((slots.get(slotIndex).getQuantity() + quantity) > item.getItemEnum().getLimitStacking()) {
+                    replacedItem.put(item,quantity - (item.getItemEnum().getLimitStacking() - slots.get(slotIndex).getQuantity()));
+                    slots.get(slotIndex).setQuantity(item.getItemEnum().getLimitStacking());
                 }
                 else {
                     slots.get(slotIndex).setQuantity(slots.get(slotIndex).getQuantity() + quantity);
@@ -61,7 +61,7 @@ public class Inventory {
         int firstEmptySlotIndex = -1;
 
         while (!slotAlreadyAvailable && slotIndex < size) {
-            if (slots.get(slotIndex).getItem() != null && slots.get(slotIndex).getItem().getItem() == item.getItem() && slots.get(slotIndex).getQuantity() < item.getItem().getLimitStacking()) {
+            if (slots.get(slotIndex).getItem() != null && slots.get(slotIndex).getItem().getItemEnum() == item.getItemEnum() && slots.get(slotIndex).getQuantity() < item.getItemEnum().getLimitStacking()) {
                 slotAlreadyAvailable = true;
             } else {
                 if (firstEmptySlotIndex == -1 && slots.get(slotIndex).getItem() == null) {

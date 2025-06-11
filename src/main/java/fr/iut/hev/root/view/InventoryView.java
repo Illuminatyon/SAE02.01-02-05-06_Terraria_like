@@ -15,13 +15,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import fr.iut.hev.root.model.CraftingManager;
 import fr.iut.hev.root.model.Recipe;
-import fr.iut.hev.root.model.enums.Items;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class InventoryView {
     private VBox craftingPanel;
@@ -125,7 +123,7 @@ public class InventoryView {
 
     private Image getImageFromSlot(InventorySlot slot) {
         if (slot.getItem() == null) return null;
-        String name = slot.getItem().getItem().getName();
+        String name = slot.getItem().getItemEnum().getName();
         String path = "/fr/iut/hev/root/img/items/" + name + ".png";
         return new Image(getClass().getResource(path).toExternalForm());
     }
@@ -133,7 +131,7 @@ public class InventoryView {
     private Image getImageFromHold(HashMap<Item,Integer> onHold) {
         if (onHold == null)
             return null;
-        String path = "/fr/iut/hev/root/img/items/" + onHold.keySet().iterator().next().getItem().getName() + ".png";
+        String path = "/fr/iut/hev/root/img/items/" + onHold.keySet().iterator().next().getItemEnum().getName() + ".png";
         return new Image(getClass().getResource(path).toExternalForm());
     }
 

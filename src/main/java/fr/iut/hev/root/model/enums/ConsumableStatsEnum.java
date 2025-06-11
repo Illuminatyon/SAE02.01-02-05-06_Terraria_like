@@ -1,12 +1,12 @@
 package fr.iut.hev.root.model.enums;
 
-public enum ConsumableStats {
+public enum ConsumableStatsEnum {
 
     RAW_CHICKEN(3);
 
     private int healthRestored;
 
-    ConsumableStats(int healthRestored) {
+    ConsumableStatsEnum(int healthRestored) {
         this.healthRestored = healthRestored;
     }
 

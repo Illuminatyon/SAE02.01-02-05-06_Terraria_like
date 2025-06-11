@@ -2,7 +2,7 @@ package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.TileTypes;
+import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.InventoryView;
 import fr.iut.hev.root.view.MouseCursorCircleView;
@@ -11,8 +11,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import static fr.iut.hev.root.model.TileMap.format;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 public class MouseGameInputHandler implements EventHandler<MouseEvent> {
 
@@ -112,7 +110,7 @@ public class MouseGameInputHandler implements EventHandler<MouseEvent> {
     }
 
     public boolean checkTileNotEmpty() {
-        return tileMap.getTile(x,y).getTile().getType() != TileTypes.AIR;
+        return tileMap.getTile(x,y).getTile().getType() != TileTypesEnum.AIR;
     }
 
     public boolean getMouseClickIsPressed() {return this.mouseClickIsPressed;}

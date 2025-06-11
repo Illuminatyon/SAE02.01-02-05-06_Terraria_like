@@ -1,20 +1,20 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.enums.ItemsEnum;
 import java.util.Map;
 
 public class Recipe {
-    private final Items result;
+    private final ItemsEnum result;
     private final int amount;
-    private final Map<Items, Integer> ingredients;
+    private final Map<ItemsEnum, Integer> ingredients;
 
-    public Recipe(Items result, int amount, Map<Items, Integer> ingredients) {
+    public Recipe(ItemsEnum result, int amount, Map<ItemsEnum, Integer> ingredients) {
         this.result = result;
         this.amount = amount;
         this.ingredients = ingredients;
     }
 
-    public Items getResult() {
+    public ItemsEnum getResult() {
         return result;
     }
 
@@ -22,7 +22,7 @@ public class Recipe {
         return amount;
     }
 
-    public Map<Items, Integer> getIngredients() {
+    public Map<ItemsEnum, Integer> getIngredients() {
         return ingredients;
     }
 

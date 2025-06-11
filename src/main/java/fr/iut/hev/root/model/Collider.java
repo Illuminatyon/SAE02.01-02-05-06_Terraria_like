@@ -1,10 +1,6 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Entity;
-import fr.iut.hev.root.model.entities.Loot;
-import fr.iut.hev.root.model.enums.Items;
-import fr.iut.hev.root.model.enums.Tiles;
 
 public class Collider {
     private TileMap tileMap;

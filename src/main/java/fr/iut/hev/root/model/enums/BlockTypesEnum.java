@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model.enums;
 
-public enum BlockType {
+public enum BlockTypesEnum {
 
     GROUND_TYPE,
     ROCK_TYPE,
