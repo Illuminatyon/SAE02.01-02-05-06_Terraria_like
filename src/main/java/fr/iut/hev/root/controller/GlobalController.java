@@ -126,6 +126,10 @@ public class GlobalController implements Initializable {
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory, hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
 
+        inventory.add(0, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 100);
+        inventory.add(1, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 45);
+        inventory.add(2, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 20);
+
         // Crée playerLightCircle AVANT mouseGameClicksHandler
         double playerCenterX = playerView.getActorSprite().getLayoutX()
                 + playerView.getActorSprite().getTranslateX()
@@ -143,9 +147,6 @@ public class GlobalController implements Initializable {
         scrollHotbarHandler = new ScrollInputHandler(inventory, hotbarView, inventoryView);
         mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView, player, inventory);
 
-        inventory.add(0, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 100);
-        inventory.add(1, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 45);
-        inventory.add(2, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 20);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player, playerView, aliveActors));
@@ -158,6 +159,7 @@ public class GlobalController implements Initializable {
             scrollHotbarHandler.removeInventoryQuantity(1);
             scrollHotbarHandler.updateOnHandItem();
         });
+
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
                 inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
         mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
