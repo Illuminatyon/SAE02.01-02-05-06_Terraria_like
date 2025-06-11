@@ -4,15 +4,18 @@ import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Recipe;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.CraftingManager;
+import fr.iut.hev.root.model.enums.StatEnum;
 
 import java.util.Optional;
 
 public class Item {
 
     private ItemsEnum item;
+    private StatEnum stats;
 
     public Item(ItemsEnum item) {
         this.item = item;
+        this.stats = item.getStats();
     }
 
     public ItemsEnum getItemEnum() {
@@ -34,4 +37,5 @@ public class Item {
     public Optional<Recipe> getCraftingRecipe() {
         return CraftingManager.getRecipeFor(item);
     }
+    public StatEnum getStats() {return this.stats;}
 }

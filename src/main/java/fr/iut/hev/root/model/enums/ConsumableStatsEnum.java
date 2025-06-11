@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model.enums;
 
-public enum ConsumableStatsEnum {
+public enum ConsumableStatsEnum implements StatEnum{
 
     RAW_CHICKEN(3);
 

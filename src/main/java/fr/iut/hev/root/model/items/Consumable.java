@@ -8,17 +8,14 @@ import fr.iut.hev.root.model.enums.ItemsEnum;
 
 public class Consumable extends Item{
 
-    private ConsumableStatsEnum stats;
-
-    public Consumable(ItemsEnum itemsEnum, ConsumableStatsEnum stats) {
+    public Consumable(ItemsEnum itemsEnum) {
         super(itemsEnum);
-        this.stats = stats;
     }
 
     public boolean isUsed(MouseItemActionInputHandler eventHandler){
         Player player = eventHandler.getPlayer();
         if (player.getHealth() < 10) {
-            if (player.getHealth() + stats.getHealthRestored() >= 10)
+            if (player.getHealth() + getStats().getHealthRestored() >= 10)
                 player.setHealth(10);
             else
                 player.setHealth(player.getHealth() + stats.getHealthRestored());

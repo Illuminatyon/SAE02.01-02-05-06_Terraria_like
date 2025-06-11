@@ -21,24 +21,34 @@ public enum ItemsEnum {
     IRON_CHESTPLATE("iron_chestplate",1,0, ItemTypesEnum.ARMOR_PIECE),
     IRON_LEGGINGS("iron_leggings",1,0, ItemTypesEnum.ARMOR_PIECE),
 
-    RAW_CHICKEN("raw_chicken",100,1, ItemTypesEnum.CONSUMABLE);
+    RAW_CHICKEN("raw_chicken",100,1, ItemTypesEnum.CONSUMABLE,ConsumableStatsEnum.RAW_CHICKEN);
 
     private String name;
     private int limitStacking;
     private final ItemTypesEnum itemType;
     private final TilesEnum relatedTile;
     private double cooldown;
+    private StatEnum stats;
 
-    ItemsEnum(String name, int limitStacking, double cooldown, ItemTypesEnum itemType, TilesEnum relatedTile) {
+    ItemsEnum(String name, int limitStacking, double cooldown, ItemTypesEnum itemType, TilesEnum relatedTile,StatEnum stats) {
         this.name = name;
         this.limitStacking = limitStacking;
         this.cooldown = cooldown;
         this.itemType = itemType;
         this.relatedTile = relatedTile;
+        this.stats = stats;
+    }
+
+    ItemsEnum(String name, int limitStacking, double cooldown, ItemTypesEnum itemType,StatEnum stats) {
+        this(name, limitStacking, cooldown, itemType, null,stats);
     }
 
     ItemsEnum(String name, int limitStacking, double cooldown, ItemTypesEnum itemType) {
-        this(name, limitStacking, cooldown, itemType, null);
+        this(name, limitStacking, cooldown, itemType, null,null);
+    }
+
+    ItemsEnum(String name, int limitStacking, double cooldown, ItemTypesEnum itemType, TilesEnum relatedTile) {
+        this(name, limitStacking, cooldown, itemType, relatedTile,null);
     }
 
     public String getName() {return this.name;}
@@ -50,4 +60,5 @@ public enum ItemsEnum {
     public double getCooldown() {
         return cooldown;
     }
+    public StatEnum getStats() {return stats;}
 }
