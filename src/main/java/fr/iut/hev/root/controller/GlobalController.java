@@ -184,7 +184,7 @@ public class GlobalController implements Initializable {
     }
 
     private void initmob() {
-        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET);
+        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 10, 3, ActorEnum.POULET);
         this.mobView = new MobView(mob, tileMap, globalPane);
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
         aliveActors.add(mob);
@@ -199,7 +199,7 @@ public class GlobalController implements Initializable {
 
     private void initAggressiveMob(Player player) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 32, 32, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
+                0, 0, 32, 32, tileMap, 5, 1, 10, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
         );
         MobView mobView = new MobView(aggressiveMob, tileMap, globalPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, mobView, aliveActors));

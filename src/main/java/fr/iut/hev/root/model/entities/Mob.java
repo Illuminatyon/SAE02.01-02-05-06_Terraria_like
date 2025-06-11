@@ -6,8 +6,9 @@ import fr.iut.hev.root.model.enums.ActorEnum;
 
 public class Mob extends Actor {
     private long lastDirectionChangeTime = 0;
-    private static final long DIRECTION_CHANGE_INTERVAL = 2000;
     private int currentDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour stationnaire
+    private int jumpCooldown= 1000;
+    private long lastJumpTime = 0;
 
     public Mob(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor);
@@ -60,15 +61,15 @@ public class Mob extends Actor {
         }
 
         // Jump automatique si bloqué
-        updateVerticalMovement();
+
     }
 
     @Override
     public void updateHorizontalMovement() {
         long currentTime = System.currentTimeMillis();
-
+        int DIRECTION_CHANGE_INTERVAL = 2000;
         // Changement aléatoire de direction
-        if (currentTime - lastDirectionChangeTime > DIRECTION_CHANGE_INTERVAL && !getIsJumping()) {
+                if (currentTime - lastDirectionChangeTime > DIRECTION_CHANGE_INTERVAL && !getIsJumping()) {
             double direction = Math.random();
             if (direction < 0.33) {
                 currentDirection = -1;
@@ -100,13 +101,20 @@ public class Mob extends Actor {
         }
     }
 
+
+
     @Override
     public void updateVerticalMovement() {
-        if (super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce())
-                && !super.getIsJumping()
-                && (!super.getCollider().hasCollisionLeft() || !super.getCollider().hasCollisionRight())) {
-            super.setIsJumping(true);
-            super.setJumpingTestDecay(0);
+        long currentTime = System.currentTimeMillis();
+
+        if (super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping() && (!super.getCollider().hasCollisionLeft() || !super.getCollider().hasCollisionRight())) {
+
+            // Vérifiez si le temps de recharge est écoulé
+            if (currentTime - lastJumpTime >= jumpCooldown) {
+                super.setIsJumping(true);
+                super.setJumpingTestDecay(0);
+                lastJumpTime = currentTime; // Mettre à jour le dernier temps de saut
+            }
         } else if (super.getIsJumping()) {
             if (super.getJumpingTestDecay() == super.getJumpForce()) {
                 super.setVelocityY(0);
@@ -119,4 +127,5 @@ public class Mob extends Actor {
             }
         }
     }
+
 }
