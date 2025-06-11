@@ -62,7 +62,6 @@ public abstract class Actor extends Entity {
     }
 
     public void updateHorizontalMovement() {
-
     }
 
     public void updateVerticalMovement() {

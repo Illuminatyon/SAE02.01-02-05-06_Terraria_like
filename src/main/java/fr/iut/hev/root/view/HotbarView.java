@@ -27,7 +27,12 @@ public class HotbarView {
     }
 
     public void initHotbar() {
-        Pane currentPane = (Pane) hotbar.getChildren().getFirst();
-        currentPane.setBackground(Background.fill(Color.rgb(255, 255, 255, 0.25)));
+        if (!hotbar.getChildren().isEmpty()) { // <-- Ajout de cette vérification
+            Pane currentPane = (Pane) hotbar.getChildren().getFirst();
+            currentPane.setBackground(Background.fill(Color.rgb(255, 255, 255, 0.25)));
+        } else {
+            System.err.println("WARNING: hotbar.getChildren() est vide. Impossible de mettre en surbrillance le premier slot.");
+            // Tu pourrais vouloir initialiser la hotbar avec des slots ici si ce n'est pas fait via FXML.
+        }
     }
 }

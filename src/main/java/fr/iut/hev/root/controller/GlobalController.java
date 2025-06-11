@@ -122,8 +122,18 @@ public class GlobalController implements Initializable {
         inventory = player.getInventory();
 
         hudView = new HUDView(player.getHealth(), heartsHbox);
-        playerView = new PlayerView(player, tileMap, globalPane);
-        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory, hudAnchorPane);
+        playerView = new PlayerView(player, tileMap, globalPane); // <-- Ici, tu crées la vue
+
+        // --- DÉBUT DE LA MODIFICATION CRUCIALE ---
+        // Écouteur pour le mouvement du joueur :
+        player.isMovingProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("GlobalController Listener: Player isMoving changed to " + newVal);
+            if (newVal) { // Si le joueur commence à bouger
+                playerView.setMovingGif();
+            } else { // Si le joueur s'arrête de bouger
+                playerView.setStaticImage();
+            }
+        });
         hotbarView = new HotbarView(hotbarInventory);
 
         inventory.add(0, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 100);
