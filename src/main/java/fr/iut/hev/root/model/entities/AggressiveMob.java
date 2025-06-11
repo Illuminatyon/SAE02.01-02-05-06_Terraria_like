@@ -51,7 +51,7 @@ public class AggressiveMob extends Mob {
 
     private void followPlayer() {
 
-        if (target.getPosX() < getPosX()) {
+        if ((target.getPosX() < getPosX())) {
             setLookDirection(LookDirections.LEFT);
             if (!getCollider().hasCollisionLeft()) {
                 setVelocityX(-getMoveSpeed());
