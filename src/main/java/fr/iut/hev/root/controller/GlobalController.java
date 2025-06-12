@@ -14,6 +14,7 @@ import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.items.Consumable;
 import fr.iut.hev.root.model.items.Item;
+import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -46,6 +47,7 @@ public class GlobalController implements Initializable {
     private ArrayList<Actor> aliveActors;
     private Inventory inventory;
     private CooldownManager cooldownManager;
+    private ItemFactory itemFactory;
     public static Mob mob ;
 
     private GlobalView globalView;
@@ -85,6 +87,7 @@ public class GlobalController implements Initializable {
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         LootView lv = new LootView(globalPane);
         cooldownManager = new CooldownManager();
+        itemFactory = new ItemFactory();
 
         initMap();
         initActors();
@@ -135,8 +138,8 @@ public class GlobalController implements Initializable {
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
 
-        inventory.add(0,new Consumable(ItemsEnum.RAW_CHICKEN),100);
-        inventory.add(1,new Item(ItemsEnum.RAW_CHICKEN),45);
+        inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
+        inventory.add(1,new Consumable(ItemsEnum.RAW_CHICKEN),45);
         inventory.add(2,new Item(ItemsEnum.RAW_CHICKEN),20);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));

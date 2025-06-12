@@ -25,7 +25,6 @@ public class Item {
     }
 
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         return false;
     }
 

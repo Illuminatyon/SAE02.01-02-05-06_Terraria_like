@@ -38,7 +38,6 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
                 }
             }
             else if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.ARMOR_PIECE) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.CONSUMABLE) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.RESOURCES)) {
-                System.out.println("consumable, ressource or armor");
                 if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
                     if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                         onLeftClickReleased();
@@ -60,7 +59,6 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickReleased() {
         player.usesItemInHand(this);
-        System.out.println("released");
         itemUseCooldown.start();
     }
     public void onRightClickReleased() {

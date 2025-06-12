@@ -7,25 +7,31 @@ import fr.iut.hev.root.model.enums.ItemsEnum;
 
 public class Consumable extends Item{
 
+    private int restoredHealth;
+    private int cooldown;
+
     public Consumable(ItemsEnum itemsEnum) {
         super(itemsEnum);
+        this.restoredHealth = itemsEnum.getStats().getItemMainStat();
+        this.cooldown = itemsEnum.getStats().getCoolDownStat();
     }
 
+    @Override
     public boolean isUsed(MouseItemActionInputHandler eventHandler){
         Player player = eventHandler.getPlayer();
-        System.out.println("is used");
         if (player.getHealth() < 10) {
-            if (player.getHealth() + getStats().getItemMainStat() >= 10)
+            if (player.getHealth() + getRestoredHealth() >= 10)
                 player.setHealth(10);
             else
-                player.setHealth(player.getHealth() + getStats().getItemMainStat());
+                player.setHealth(player.getHealth() + getRestoredHealth());
             player.getInventory().remove(player.getIndexItemInHand(),1);
-            System.out.println(player.getHealth());
             return true;
         }
         else {
-            System.out.println("false");
             return false;
         }
     }
+
+    public int getRestoredHealth() {return this.restoredHealth;}
+    public int getCooldown() {return this.cooldown;}
 }
