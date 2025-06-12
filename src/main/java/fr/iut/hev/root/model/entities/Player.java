@@ -129,6 +129,8 @@ public class Player extends Actor {
     }
 
     public boolean usesItemInHand(MouseItemActionInputHandler eventHandler) {
+        System.out.println("player uses");
+        System.out.println(getItemInHand());
         return getItemInHand().isUsed(eventHandler);
     }
 

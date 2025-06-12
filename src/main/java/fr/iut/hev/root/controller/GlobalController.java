@@ -9,11 +9,11 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.controller.InputHandling.*;
-import fr.iut.hev.root.model.enums.ConsumableStatsEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.items.Consumable;
+import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -135,9 +135,9 @@ public class GlobalController implements Initializable {
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
         hotbarView = new HotbarView(hotbarInventory);
 
-        inventory.add(0,new Consumable(ItemsEnum.RAW_CHICKEN, ConsumableStatsEnum.RAW_CHICKEN),100);
-        inventory.add(1,new Consumable(ItemsEnum.RAW_CHICKEN, ConsumableStatsEnum.RAW_CHICKEN),45);
-        inventory.add(2,new Consumable(ItemsEnum.RAW_CHICKEN, ConsumableStatsEnum.RAW_CHICKEN),20);
+        inventory.add(0,new Consumable(ItemsEnum.RAW_CHICKEN),100);
+        inventory.add(1,new Item(ItemsEnum.RAW_CHICKEN),45);
+        inventory.add(2,new Item(ItemsEnum.RAW_CHICKEN),20);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));

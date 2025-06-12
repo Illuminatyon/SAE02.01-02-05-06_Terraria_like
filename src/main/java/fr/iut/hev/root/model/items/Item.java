@@ -2,20 +2,18 @@ package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Recipe;
+import fr.iut.hev.root.model.enums.ItemStatsEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.CraftingManager;
-import fr.iut.hev.root.model.enums.StatEnum;
 
 import java.util.Optional;
 
 public class Item {
 
     private ItemsEnum item;
-    private StatEnum stats;
 
     public Item(ItemsEnum item) {
         this.item = item;
-        this.stats = item.getStats();
     }
 
     public ItemsEnum getItemEnum() {
@@ -27,6 +25,7 @@ public class Item {
     }
 
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         return false;
     }
 
@@ -37,5 +36,8 @@ public class Item {
     public Optional<Recipe> getCraftingRecipe() {
         return CraftingManager.getRecipeFor(item);
     }
-    public StatEnum getStats() {return this.stats;}
+
+    public ItemStatsEnum getStats() {
+        return item.getStats();
+    }
 }

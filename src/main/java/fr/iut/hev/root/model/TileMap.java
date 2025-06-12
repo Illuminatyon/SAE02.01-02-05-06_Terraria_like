@@ -1,7 +1,6 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Loot;
-import fr.iut.hev.root.model.enums.ConsumableStatsEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Consumable;
@@ -135,7 +134,7 @@ public class TileMap {
         if (currentTile.getHealth() <= 0) {
             currentTile.breaks();
             //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
-            Item item = new Consumable(ItemsEnum.RAW_CHICKEN, ConsumableStatsEnum.RAW_CHICKEN);
+            Item item = new Item(ItemsEnum.RAW_CHICKEN);
             Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
         }
     }
