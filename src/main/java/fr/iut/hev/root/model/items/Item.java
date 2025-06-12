@@ -4,7 +4,7 @@ import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Recipe;
 import fr.iut.hev.root.model.enums.ItemStatsEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.CraftingManager;
+import fr.iut.hev.root.model.CraftManager;
 
 import java.util.Optional;
 
@@ -29,11 +29,11 @@ public class Item {
     }
 
     public boolean isCraftable() {
-        return CraftingManager.getRecipeFor(item).isPresent();
+        return CraftManager.getRecipeFor(item).isPresent();
     }
 
     public Optional<Recipe> getCraftingRecipe() {
-        return CraftingManager.getRecipeFor(item);
+        return CraftManager.getRecipeFor(item);
     }
 
     public ItemStatsEnum getStats() {

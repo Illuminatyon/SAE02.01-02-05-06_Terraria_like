@@ -13,7 +13,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import fr.iut.hev.root.model.CraftingManager;
+import fr.iut.hev.root.model.CraftManager;
 import fr.iut.hev.root.model.Recipe;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -185,13 +185,13 @@ public class InventoryView {
 
         VBox craftButtonsContainer = new VBox(5);
 
-        for (Recipe recipe : CraftingManager.getAllRecipes()) {
-            if (CraftingManager.canCraft(recipe, inventory)) { // <-- Ici, passe inventory directement
+        for (Recipe recipe : CraftManager.getAllRecipes()) {
+            if (CraftManager.canCraft(recipe, inventory)) { // <-- Ici, passe inventory directement
                 Button craftButton = new Button("Craft: " + recipe.getResult().getName());
                 craftButton.setMaxWidth(Double.MAX_VALUE);
                 craftButton.setOnAction(e -> {
-                    if (CraftingManager.canCraft(recipe, inventory)) {
-                        CraftingManager.craft(recipe, inventory);
+                    if (CraftManager.canCraft(recipe, inventory)) {
+                        CraftManager.craft(recipe, inventory);
                         updateCraftingPanel();
                     }
                 });
