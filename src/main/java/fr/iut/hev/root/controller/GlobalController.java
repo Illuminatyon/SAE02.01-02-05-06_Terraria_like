@@ -5,6 +5,7 @@ import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
+import fr.iut.hev.root.model.CraftingManager;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
@@ -22,6 +23,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -48,6 +50,7 @@ public class GlobalController implements Initializable {
     private Inventory inventory;
     private CooldownManager cooldownManager;
     private ItemFactory itemFactory;
+    private CraftingManager craftingManager;
     public static Mob mob ;
 
     private GlobalView globalView;
@@ -57,6 +60,7 @@ public class GlobalController implements Initializable {
     private InventoryView inventoryView;
     private HotbarView hotbarView;
     private MobView mobView;
+    private CraftView craftView;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -80,6 +84,9 @@ public class GlobalController implements Initializable {
 
     @FXML
     private AnchorPane hudAnchorPane;
+
+    @FXML
+    private ListView craftListView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -132,11 +139,15 @@ public class GlobalController implements Initializable {
         player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
         aliveActors.add(player);
         inventory = player.getInventory();
+        craftingManager = new CraftingManager(inventory);
+
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
         playerView = new PlayerView(player,tileMap,globalPane);
-        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane);
+        craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable());
+        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
+
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
         inventory.add(1,new Consumable(ItemsEnum.RAW_CHICKEN),45);
@@ -145,7 +156,7 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
 
-        keyboardHandler = new KeyInputHandler(player,inventoryView);
+        keyboardHandler = new KeyInputHandler(player,inventoryView,craftView);
 
         double playerCenterX = 0/*playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2*/;
         double playerCenterY = 0/*playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2*/;

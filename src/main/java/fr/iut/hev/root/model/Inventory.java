@@ -1,9 +1,12 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.Item;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Inventory {
     private ArrayList<InventorySlot> slots;
@@ -101,6 +104,16 @@ public class Inventory {
             slotsOccupied--;
         }
         return removedItem;
+    }
+
+    public HashMap<ItemsEnum, Integer> getItemIteration(ItemsEnum itemsEnum) {
+        HashMap<ItemsEnum, Integer> itemIteration = new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(itemsEnum,0)));
+
+        for (InventorySlot slots : slots) {
+            if (slots.getItem().getItemEnum() == itemsEnum)
+                itemIteration.replace(itemsEnum,itemIteration.get(itemsEnum) + slots.getQuantity());
+        }
+        return itemIteration;
     }
 
     public int getSlotsOccupied() {return this.slotsOccupied;}

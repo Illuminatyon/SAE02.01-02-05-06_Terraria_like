@@ -8,12 +8,10 @@ import fr.iut.hev.root.model.enums.ItemsEnum;
 public class Consumable extends Item{
 
     private int restoredHealth;
-    private int cooldown;
 
     public Consumable(ItemsEnum itemsEnum) {
         super(itemsEnum);
         this.restoredHealth = itemsEnum.getStats().getItemMainStat();
-        this.cooldown = itemsEnum.getStats().getCoolDownStat();
     }
 
     @Override
@@ -33,5 +31,4 @@ public class Consumable extends Item{
     }
 
     public int getRestoredHealth() {return this.restoredHealth;}
-    public int getCooldown() {return this.cooldown;}
 }

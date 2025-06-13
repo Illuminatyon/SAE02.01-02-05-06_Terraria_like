@@ -6,7 +6,9 @@ import java.util.Map;
 
 public enum RecipesEnum {
 
-    RAW_CHICKEN(ItemsEnum.RAW_CHICKEN,3,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.RAW_CHICKEN,1))),RecipeAvailability.INVENTORY);
+    RAW_CHICKEN(ItemsEnum.RAW_CHICKEN,3,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.RAW_CHICKEN,1))),RecipeAvailability.INVENTORY),
+    CACA(ItemsEnum.CACA,3,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.DIRT,2))),RecipeAvailability.INVENTORY);
+
 
     private ItemsEnum craftResult;
     private int itemCraftedQuantity;
@@ -21,6 +23,6 @@ public enum RecipesEnum {
     }
 
     public ItemsEnum getCraftResult() {return craftResult;}
-    public RecipeAvailability getRawChicken() {return recipeAvailability;}
+    public RecipeAvailability getRecipeAvailability() {return recipeAvailability;}
     public HashMap<ItemsEnum, Integer> getIngredients() {return ingredients;}
 }

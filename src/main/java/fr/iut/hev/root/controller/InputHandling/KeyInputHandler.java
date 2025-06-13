@@ -2,6 +2,7 @@ package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
+import fr.iut.hev.root.view.CraftView;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
@@ -13,10 +14,12 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
 
     private Player player;
     private InventoryView inventoryView;
+    private CraftView craftView;
 
-    public KeyInputHandler(Player player,InventoryView inventoryView) {
+    public KeyInputHandler(Player player,InventoryView inventoryView,CraftView craftView) {
         this.player = player;
         this.inventoryView = inventoryView;
+        this.craftView = craftView;
     }
 
     @Override
@@ -26,6 +29,10 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                 case KeyCode.Q -> player.addPlayerMouvements(PlayerMouvementsEnum.MOVE_LEFT);
                 case KeyCode.D -> player.addPlayerMouvements(PlayerMouvementsEnum.MOVE_RIGHT);
                 case KeyCode.E -> inventoryView.setInventoryVisible();
+                case KeyCode.R -> {
+                    if (inventoryView.getInventoryOpened())
+                        craftView.setCraftGUIVisible();
+                }
                 case KeyCode.SPACE -> player.addPlayerMouvements(PlayerMouvementsEnum.JUMP);
                 case KeyCode.TAB -> System.out.println("map opened");
                 case KeyCode.Z -> {

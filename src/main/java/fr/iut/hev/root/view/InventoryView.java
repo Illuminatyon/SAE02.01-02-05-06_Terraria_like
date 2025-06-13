@@ -30,15 +30,17 @@ public class InventoryView {
     private AnchorPane hudAnchorPane;
     private static int slotIndex = 0;
     private Pane backgroundMousePane;
+    private CraftView craftView;
 
-    public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory,AnchorPane hudAnchorPane) {
+    public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory,AnchorPane hudAnchorPane,CraftView craftView) {
         this.inventory = inventory;
         this.hotbar = hotbar;
         this.expandedInventory = expandedInventory;
         this.inventoryOpened = false;
         this.hudAnchorPane = hudAnchorPane;
+        this.craftView = craftView;
         initInventory();
-        initCraftingPanel();
+        //initCraftingPanel();
     }
 
     private void initCraftingPanel() {
@@ -166,15 +168,16 @@ public class InventoryView {
 
     public void setInventoryVisible() {
         inventoryOpened = !inventoryOpened;
-
+        if (inventoryOpened == false)
+            craftView.setCraftGUIVisible(inventoryOpened);
         expandedInventory.setVisible(inventoryOpened);
         expandedInventory.setMouseTransparent(!inventoryOpened);
         hotbar.setMouseTransparent(!inventoryOpened);
-        craftingPanel.setVisible(inventoryOpened); // Affiche / cache le panneau de craft
+        /*craftingPanel.setVisible(inventoryOpened); // Affiche / cache le panneau de craft
 
         if (inventoryOpened) {
             updateCraftingPanel(); // Recharge dynamiquement les recettes craftables
-        }
+        }*/
     }
 
     private void updateCraftingPanel() {

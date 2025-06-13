@@ -11,9 +11,11 @@ import java.util.Optional;
 public class Item {
 
     private ItemsEnum item;
+    private double cooldown;
 
     public Item(ItemsEnum item) {
         this.item = item;
+        this.cooldown = item.getCooldown();
     }
 
     public ItemsEnum getItemEnum() {
@@ -39,4 +41,6 @@ public class Item {
     public ItemStatsEnum getStats() {
         return item.getStats();
     }
+
+    public double getCooldown() {return this.cooldown;}
 }

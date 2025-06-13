@@ -67,7 +67,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void updateCooldown() {
         if (player.getItemInHand() != null)
-            itemUseCooldown.setLimit(player.getItemInHand().getItemEnum().getCooldown());
+            itemUseCooldown.setLimit(player.getItemInHand().getCooldown());
         else
             itemUseCooldown.setLimit(0);
     }

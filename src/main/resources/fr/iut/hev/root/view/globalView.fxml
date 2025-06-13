@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -100,6 +101,7 @@
                   <Insets bottom="5.0" />
                </padding>
             </VBox>
+            <ListView fx:id="craftListView" orientation="HORIZONTAL" prefHeight="85.0" prefWidth="656.0" style="-fx-background-color: NONE;" AnchorPane.leftAnchor="632.0" AnchorPane.rightAnchor="632.0" AnchorPane.topAnchor="400.0" />
          </children>
       </AnchorPane>
    </children>

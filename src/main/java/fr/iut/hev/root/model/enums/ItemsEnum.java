@@ -21,19 +21,18 @@ public enum ItemsEnum {
     IRON_CHESTPLATE("iron_chestplate",1,0, ItemTypesEnum.ARMOR_PIECE),
     IRON_LEGGINGS("iron_leggings",1,0, ItemTypesEnum.ARMOR_PIECE),
 
-    RAW_CHICKEN("raw_chicken",100,1, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN);
+    RAW_CHICKEN("raw_chicken",100,1, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
+    CACA("caca",100,1,ItemTypesEnum.RESOURCES);
 
     private String name;
     private int limitStacking;
     private final ItemTypesEnum itemType;
     private final TilesEnum relatedTile;
-    private double cooldown;
     private ItemStatsEnum stats;
 
     ItemsEnum(String name, int limitStacking, double cooldown, ItemTypesEnum itemType, TilesEnum relatedTile,ItemStatsEnum stats) {
         this.name = name;
         this.limitStacking = limitStacking;
-        this.cooldown = cooldown;
         this.itemType = itemType;
         this.relatedTile = relatedTile;
         this.stats = stats;
@@ -58,7 +57,7 @@ public enum ItemsEnum {
         return this.relatedTile;
     }
     public double getCooldown() {
-        return cooldown;
+        return stats.getCoolDownStat();
     }
     public ItemStatsEnum getStats() {return stats;}
 }

@@ -26,6 +26,9 @@ public enum ItemStatsEnum {
      *         <li>
      *             <b>Resources</b> -> only its cooldown [id = 5]
      *         </li>
+     *         <li>
+     *             <b>Blocks</b> -> its cooldown as well [id = 6]
+     *         </li>
      *     </ul>
      *     <br>
      *     Regarding tools, its main stat code is represented as :

@@ -5,7 +5,12 @@ import fr.iut.hev.root.model.enums.ItemsEnum;
 
 public class Weapon extends Item {
 
-    public Weapon(ItemsEnum itemsEnum) {super(itemsEnum);}
+    private int damage;
+
+    public Weapon(ItemsEnum itemsEnum) {
+        super(itemsEnum);
+        this.damage = getStats().getItemMainStat();
+    }
 
     @Override
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
