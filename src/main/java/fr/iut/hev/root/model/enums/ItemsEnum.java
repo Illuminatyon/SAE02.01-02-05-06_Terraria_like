@@ -5,7 +5,7 @@ public enum ItemsEnum {
     STONE("stone",100,0.2, ItemTypesEnum.BLOCK, TilesEnum.STONE),
     IRON_INGOT("iron_ingot",100,0, ItemTypesEnum.RESOURCES),
     IRON_BLOCK("iron_block",100,0.2, ItemTypesEnum.BLOCK),
-    DIRT("dirt",100,0.2, ItemTypesEnum.BLOCK, TilesEnum.DIRT),
+    DIRT("dirt",100,0.2, ItemTypesEnum.BLOCK, TilesEnum.DIRT,ItemStatsEnum.DIRT),
     STICK("stick",100,0, ItemTypesEnum.RESOURCES),
     FEATHER("feather",100,0, ItemTypesEnum.RESOURCES),
 
@@ -22,7 +22,7 @@ public enum ItemsEnum {
     IRON_LEGGINGS("iron_leggings",1,0, ItemTypesEnum.ARMOR_PIECE),
 
     RAW_CHICKEN("raw_chicken",100,1, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
-    CACA("caca",100,1,ItemTypesEnum.RESOURCES);
+    CACA("caca",100,1,ItemTypesEnum.RESOURCES,ItemStatsEnum.CACA);
 
     private String name;
     private int limitStacking;

@@ -25,4 +25,5 @@ public enum RecipesEnum {
     public ItemsEnum getCraftResult() {return craftResult;}
     public RecipeAvailability getRecipeAvailability() {return recipeAvailability;}
     public HashMap<ItemsEnum, Integer> getIngredients() {return ingredients;}
+    public int getItemCraftedQuantity() {return this.itemCraftedQuantity;}
 }

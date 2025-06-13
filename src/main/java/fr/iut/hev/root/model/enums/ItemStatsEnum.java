@@ -83,7 +83,9 @@ public enum ItemStatsEnum {
      */
 
     RAW_CHICKEN(40031),
-    WOODEN_PICKAXE(10211);
+    WOODEN_PICKAXE(10211),
+    DIRT(61),
+    CACA(51);
 
     private int statCode;
 

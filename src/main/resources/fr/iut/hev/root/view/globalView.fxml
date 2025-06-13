@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="globalPane" prefHeight="1056.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.GlobalController">
+<AnchorPane fx:id="globalPane" prefHeight="1056.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.GlobalController">
    <children>
       <ImageView fitHeight="1056.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
@@ -102,6 +103,7 @@
                </padding>
             </VBox>
             <ListView fx:id="craftListView" orientation="HORIZONTAL" prefHeight="85.0" prefWidth="656.0" style="-fx-background-color: NONE;" AnchorPane.leftAnchor="632.0" AnchorPane.rightAnchor="632.0" AnchorPane.topAnchor="400.0" />
+            <Button fx:id="craftButton" alignment="CENTER" mnemonicParsing="false" text="Button" textAlignment="CENTER" AnchorPane.leftAnchor="930.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="485.0" />
          </children>
       </AnchorPane>
    </children>

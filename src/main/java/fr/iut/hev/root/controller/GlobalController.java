@@ -13,6 +13,7 @@ import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.RecipesEnum;
 import fr.iut.hev.root.model.items.Consumable;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
@@ -23,6 +24,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -86,7 +88,10 @@ public class GlobalController implements Initializable {
     private AnchorPane hudAnchorPane;
 
     @FXML
-    private ListView craftListView;
+    private ListView<RecipesEnum> craftListView;
+
+    @FXML
+    private Button craftButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -144,17 +149,22 @@ public class GlobalController implements Initializable {
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
         playerView = new PlayerView(player,tileMap,globalPane);
-        craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable());
+        craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
 
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
-        inventory.add(1,new Consumable(ItemsEnum.RAW_CHICKEN),45);
-        inventory.add(2,new Item(ItemsEnum.RAW_CHICKEN),20);
+        inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),45);
+        inventory.add(2,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),20);
+        inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
+        craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
+        craftButton.setOnAction(actionEvent -> {
+            craftingManager.crafts();
+        });
 
         keyboardHandler = new KeyInputHandler(player,inventoryView,craftView);
 

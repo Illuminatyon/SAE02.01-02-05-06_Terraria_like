@@ -81,6 +81,48 @@ public class Inventory {
         }
     }
 
+    public void addFromCraft(Item item,int quantity) {
+        int i = 0;
+        InventorySlot slot;
+        if (getAvailableRoomForItem(item) >= quantity) {
+            while (quantity > 0 && i < slots.size()) {
+                slot = getInventorySlot(i);
+                if (slot.getItem() != null && slot.getItem().getItemEnum() == item.getItemEnum() && slot.getQuantity() < item.getItemEnum().getLimitStacking()) {
+                    if (item.getItemEnum().getLimitStacking() - slot.getQuantity() >= quantity) {
+                        slot.setQuantity(slot.getQuantity() + quantity);
+                        quantity = 0;
+                    }
+                    else {
+                        quantity -= item.getItemEnum().getLimitStacking() - slot.getQuantity();
+                        slot.setQuantity(item.getItemEnum().getLimitStacking());
+                    }
+                }
+                i++;
+            }
+        }
+        else if (slotsOccupied < slots.size() && quantity != 0) {
+            while (quantity > 0 && i < slots.size()) {
+                slot = getInventorySlot(i);
+                if (slot.isEmpty()) {
+                    slot.setItem(item);
+                    slot.setQuantity(quantity);
+                    quantity = 0;
+                }
+                i++;
+            }
+        }
+    }
+
+    public int getAvailableRoomForItem(Item item) {
+        int quantityAvailableForItem = 0;
+
+        for (InventorySlot slot : slots) {
+            if (slot.getItem() != null && slot.getItem().getItemEnum() == item.getItemEnum())
+                quantityAvailableForItem += item.getItemEnum().getLimitStacking() - slot.getQuantity();
+        }
+        return quantityAvailableForItem;
+    }
+
     public ArrayList<InventorySlot> getSlots() {
         return this.slots;
     }
@@ -106,14 +148,34 @@ public class Inventory {
         return removedItem;
     }
 
-    public HashMap<ItemsEnum, Integer> getItemIteration(ItemsEnum itemsEnum) {
-        HashMap<ItemsEnum, Integer> itemIteration = new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(itemsEnum,0)));
-
-        for (InventorySlot slots : slots) {
-            if (slots.getItem().getItemEnum() == itemsEnum)
-                itemIteration.replace(itemsEnum,itemIteration.get(itemsEnum) + slots.getQuantity());
+    public void remove(ItemsEnum removedItem,int removedQuantity) {
+        int i = 0;
+        while (removedQuantity > 0 && i < slots.size()) {
+            InventorySlot currentSlot = getInventorySlot(i);
+            if (currentSlot.getItem().getItemEnum() == removedItem) {
+                if (removedQuantity >= currentSlot.getQuantity()) {
+                    removedQuantity = removedQuantity - currentSlot.getQuantity();
+                    currentSlot.remove(currentSlot.getQuantity());
+                }
+                else {
+                    currentSlot.remove(removedQuantity);
+                    removedQuantity = 0;
+                }
+            }
+            i++;
         }
-        return itemIteration;
+    }
+
+    public int getItemIteration(ItemsEnum itemsEnum) {
+        int itemQuantity = 0;
+        //HashMap<ItemsEnum, Integer> itemIteration = new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(itemsEnum,0)));
+
+        for (InventorySlot slot : slots) {
+            if (slot.getItem() != null && slot.getItem().getItemEnum() == itemsEnum)
+                //itemIteration.replace(itemsEnum,itemIteration.get(itemsEnum) + slot.getQuantity());
+                itemQuantity += slot.getQuantity();
+        }
+        return itemQuantity;
     }
 
     public int getSlotsOccupied() {return this.slotsOccupied;}
