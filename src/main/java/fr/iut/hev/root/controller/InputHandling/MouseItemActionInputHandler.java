@@ -27,22 +27,25 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         if (!inventoryView.getInventoryOpened() && !itemUseCooldown.getOnGoing()) {
             if (player.getItemInHand() == null)
                 System.out.println("prout");
-            else if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK)) {
-                System.out.println("weapon, tool or block");
-                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        onLeftClickPressed();
-                    } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                        onRightClickPressed();
+            else  {
+                if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK)) {
+                    System.out.println("weapon, tool or block");
+
+                    if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+                        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                            onLeftClickPressed();
+                        } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                            onRightClickPressed();
+                        }
                     }
                 }
-            }
-            else if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.ARMOR_PIECE) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.CONSUMABLE) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.RESOURCES)) {
-                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
-                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        onLeftClickReleased();
-                    } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                        onRightClickReleased();
+                else if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.ARMOR_PIECE) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.CONSUMABLE) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.RESOURCES)) {
+                    if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
+                        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                            onLeftClickReleased();
+                        } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                            onRightClickReleased();
+                        }
                     }
                 }
             }
