@@ -10,6 +10,7 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.enums.ConsumableStats;
+import fr.iut.hev.root.model.enums.DialogueEnum;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
@@ -29,6 +30,8 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import static fr.iut.hev.root.model.enums.DialogueEnum.INTRO;
 
 public class GlobalController implements Initializable {
     private Timeline gameLoop;
@@ -87,6 +90,7 @@ public class GlobalController implements Initializable {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
                         Actor currentActor = aliveActors.get(i);
                         currentActor.updatePosition();
+
                     }
                     for (Loot loot : Loot.lootOnMapProperty) {
                         loot.updatePosition();
@@ -197,14 +201,24 @@ public class GlobalController implements Initializable {
         initPlayer();
         initmob();
         initAggressiveMob(player);
+        initPnj();
     }
 
     private void initAggressiveMob(Player player) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 32, 32, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
         );
         MobView mobView = new MobView(aggressiveMob, tileMap, globalPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, mobView, aliveActors));
         aliveActors.add(aggressiveMob);
+    }
+    private void initPnj() {
+        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS);
+        PnjView pnjView = new PnjView(homps, tileMap, globalPane);
+        homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
+        aliveActors.add(homps);
+        pnjView.speak( INTRO );
+      
+
     }
 }

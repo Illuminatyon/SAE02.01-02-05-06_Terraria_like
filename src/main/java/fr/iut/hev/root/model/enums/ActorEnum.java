@@ -2,7 +2,7 @@ package fr.iut.hev.root.model.enums;
 
 public enum ActorEnum {
     PLAYER("jhon_fallout","Player",10),
-    ZOMBIE("poulet","mob",5),
+    ZOMBIE("evil and intimidating codsworth","mob",5),
     POULET("poulet","mob",4),
     HOMPS("homps","pnj",10);
 

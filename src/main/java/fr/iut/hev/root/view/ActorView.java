@@ -24,6 +24,13 @@ public class ActorView {
             this.load();
         }
 
+        public Actor getActor() {
+            return this.actor;
+        }
+        public AnchorPane getAnchorPane() {
+            return this.anchorPane;
+        }
+
         /*public void load() {
             String path = "src/main/resources/fr/iut/hev/root/img/entities/actors/".concat(actor.getName()).concat(".png");
             new Image(getClass().getResource(path).toExternalForm());

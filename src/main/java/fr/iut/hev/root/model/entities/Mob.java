@@ -64,12 +64,11 @@ public class Mob extends Actor {
 
     }
 
-    @Override
-    public void updateHorizontalMovement() {
+    public int Changement(){
         long currentTime = System.currentTimeMillis();
         int DIRECTION_CHANGE_INTERVAL = 2000;
         // Changement aléatoire de direction
-                if (currentTime - lastDirectionChangeTime > DIRECTION_CHANGE_INTERVAL && !getIsJumping()) {
+        if (currentTime - lastDirectionChangeTime > DIRECTION_CHANGE_INTERVAL && !getIsJumping()) {
             double direction = Math.random();
             if (direction < 0.33) {
                 currentDirection = -1;
@@ -80,7 +79,12 @@ public class Mob extends Actor {
             }
             lastDirectionChangeTime = currentTime;
         }
+        return currentDirection;
+    }
+    @Override
+    public void updateHorizontalMovement() {
 
+        currentDirection=Changement();
         // Appliquer la direction actuelle
         if (currentDirection == -1) {
             super.setLookDirection(LookDirections.LEFT);
