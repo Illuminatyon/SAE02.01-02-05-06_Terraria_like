@@ -9,12 +9,11 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.controller.InputHandling.*;
+import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
-import fr.iut.hev.root.model.items.Consumable;
-import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
@@ -99,6 +98,7 @@ public class GlobalController implements Initializable {
         cooldownManager = new CooldownManager();
         itemFactory = new ItemFactory();
 
+        initItemEnums();
         initMap();
         initActors();
 
@@ -218,5 +218,13 @@ public class GlobalController implements Initializable {
         initmob();
 
 
+    }
+
+    private void initItemEnums() {
+        for (ItemsEnum itemsEnum : ItemsEnum.values()) {
+            if (itemsEnum.getItemType().equals(ItemTypesEnum.BLOCK) || itemsEnum.getItemType().equals(ItemTypesEnum.UTILITY)) {
+                itemsEnum.itemEnumInit();
+            }
+        }
     }
 }

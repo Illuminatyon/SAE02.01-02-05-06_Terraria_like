@@ -47,7 +47,7 @@ public class GlobalView {
 
     public void updateTile(int x, int y,Tile tile) {
         int textureNumber;
-        int tileHealthStep = ((tile.getTile().getMaxHealth()*10) / 4);
+        int tileHealthStep = ((tile.getTileEnum().getMaxHealth()*10) / 4);
         if (tile.getHealth() > 0 && tile.getHealth()%tileHealthStep == 0) {
             textureNumber = tile.getHealth() / tileHealthStep;
             tileMapLand.getChildren().set(y * 60 + x, new ImageView(getTexture(tile, textureNumber)));
@@ -61,9 +61,9 @@ public class GlobalView {
         /**
          * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
          */
-        if (tile.getTile().getType() == TileTypesEnum.AIR)
+        if (tile.getTileEnum().getType() == TileTypesEnum.AIR)
             return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_").concat(Integer.toString(textureNumber)).concat(".png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTileEnum().getName()).concat("_").concat(Integer.toString(textureNumber)).concat(".png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 
@@ -71,9 +71,9 @@ public class GlobalView {
         /**
          * Retourne le sprite background de la Tile
          */
-        if (tile.getTile().getType() == TileTypesEnum.AIR)
+        if (tile.getTileEnum().getType() == TileTypesEnum.AIR)
             return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_background.png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTileEnum().getName()).concat("_background.png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 }

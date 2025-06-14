@@ -22,8 +22,6 @@ public class Tool extends Item {
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
         int x = (int)eventHandler.getX() / format;
         int y = (int)eventHandler.getY() / format;
-        System.out.println(x);
-        System.out.println(y);
         TileMap tileMap = eventHandler.getTileMap();
         if (eventHandler.getMouseClickIsPressed()) {
             if (!(tileMap.isTileEmpty(x,y))) {

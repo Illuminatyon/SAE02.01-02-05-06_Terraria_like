@@ -91,6 +91,7 @@ public enum ItemStatsEnum {
     ItemStatsEnum(int statCode) {
         this.statCode = statCode;
     }
+
     public int getItemMainStat() {
         if (statCode / 10000 != 1)
             return statCode % 10000 / 10;

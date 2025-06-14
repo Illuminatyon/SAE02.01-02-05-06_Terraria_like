@@ -7,6 +7,7 @@ public enum TilesEnum {
     DIRT("dirt", TileTypesEnum.BLOCK,8, ItemsEnum.DIRT, BlockTypesEnum.GROUND_TYPE),
     STONE("stone", TileTypesEnum.BLOCK,12, ItemsEnum.STONE, BlockTypesEnum.ROCK_TYPE),
     IRON_ORE("iron_ore",TileTypesEnum.BLOCK,14,ItemsEnum.IRON_ORE,BlockTypesEnum.ROCK_TYPE),
+    IRON_BLOCK("iron_block",TileTypesEnum.BLOCK,15,ItemsEnum.IRON_BLOCK,BlockTypesEnum.ROCK_TYPE),
     //WATER("water", TileTypes.LIQUID),
     //LAVA("lava", TileTypes.LIQUID);
     CRAFTING_TABLE("crafting_table", TileTypesEnum.UTILITIES,15, ItemsEnum.CRAFTING_TABLE, BlockTypesEnum.WOOD_TYPE),

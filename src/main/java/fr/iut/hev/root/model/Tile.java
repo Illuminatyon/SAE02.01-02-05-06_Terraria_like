@@ -3,16 +3,16 @@ package fr.iut.hev.root.model;
 import fr.iut.hev.root.model.enums.TilesEnum;
 
 public class Tile {
-    private TilesEnum tile;
+    private TilesEnum tileEnum;
     private int health;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
     private int tileX;
     private int tileY;
 
-    public Tile(TilesEnum tile, int x, int y) {
-        this.tile = tile;
-        this.health = tile.getMaxHealth()*10;
+    public Tile(TilesEnum tileEnum, int x, int y) {
+        this.tileEnum = tileEnum;
+        this.health = tileEnum.getMaxHealth()*10;
         this.tileX = x;
         this.tileY = y;
 
@@ -22,12 +22,12 @@ public class Tile {
         this.health = Math.max(0, this.health - amount); // Retourne le plus grand
     }
 
-    public TilesEnum getTile() {
-        return this.tile;
+    public TilesEnum getTileEnum() {
+        return this.tileEnum;
     }
 
-    public void setTile(TilesEnum tile) {
-        this.tile = tile;
+    public void setTileEnum(TilesEnum tileEnum) {
+        this.tileEnum = tileEnum;
     }
 
     public int getX() {
@@ -40,7 +40,7 @@ public class Tile {
 
     public int getHealth() {return this.health;}
 
-    public void resetHealth() {this.health = this.tile.getMaxHealth()*10;}
+    public void resetHealth() {this.health = this.tileEnum.getMaxHealth()*10;}
 
     /*public String toString() {
         return "{"
@@ -56,10 +56,10 @@ public class Tile {
 
     @Override
     public String toString() {
-        return this.getTile().toString();
+        return this.getTileEnum().toString();
     }
 
     public void breaks() {
-        this.tile = TilesEnum.AIR;
+        this.tileEnum = TilesEnum.AIR;
     }
 }

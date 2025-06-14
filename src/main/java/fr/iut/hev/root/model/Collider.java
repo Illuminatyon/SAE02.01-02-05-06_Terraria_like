@@ -36,7 +36,7 @@ public class Collider {
             return true; // mettre des murs invisibles (colliders) au bords de la map
         }
 
-        return tileMap.getTile(tileX, tileY).getTile().getType().getHasCollision();
+        return tileMap.getTile(tileX, tileY).getTileEnum().getType().getHasCollision();
     }
 
     public boolean hasCollisionTop(int n) {

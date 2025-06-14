@@ -1,7 +1,6 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Loot;
-import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Item;
@@ -63,43 +62,43 @@ public class TileMap {
         }
 
         for (int i = 0; i < 15; i++) {
-            this.getTile(i, 18).setTile(TilesEnum.DIRT);
+            this.getTile(i, 18).setTileEnum(TilesEnum.DIRT);
             if (i < 14) {
-                this.getTile(i, 17).setTile(TilesEnum.DIRT);
+                this.getTile(i, 17).setTileEnum(TilesEnum.DIRT);
             }
             if (i < 13) {
-                this.getTile(i, 16).setTile(TilesEnum.DIRT);
+                this.getTile(i, 16).setTileEnum(TilesEnum.DIRT);
             }
             if (i < 12) {
-                this.getTile(i, 15).setTile(TilesEnum.DIRT);
+                this.getTile(i, 15).setTileEnum(TilesEnum.DIRT);
             }
         }
 
         for (int i = 0; i < 3; i++) {
-            this.getTile(14 - i, 17 - i).setTile(TilesEnum.GRASS);
+            this.getTile(14 - i, 17 - i).setTileEnum(TilesEnum.GRASS);
         }
 
         for (int i = 0; i < 11; i++) {
-            this.getTile(11 - i, 14).setTile(TilesEnum.GRASS);
+            this.getTile(11 - i, 14).setTileEnum(TilesEnum.GRASS);
         }
 
         for (int i = 0; i < 5; i++) {
-            this.getTile(0, 14 - i).setTile(TilesEnum.DIRT);
+            this.getTile(0, 14 - i).setTileEnum(TilesEnum.DIRT);
         }
 
         for (int i = 0; i < 3; i++) {
-            this.getTile(25 + i, 14).setTile(TilesEnum.GRASS);
+            this.getTile(25 + i, 14).setTileEnum(TilesEnum.GRASS);
         }
 
-        this.getTile(27, 15).setTile(TilesEnum.DIRT);
+        this.getTile(27, 15).setTileEnum(TilesEnum.DIRT);
 
         for (int i = 0; i < 5; i++) {
-            this.getTile(35, 17 - i).setTile(TilesEnum.DIRT);
+            this.getTile(35, 17 - i).setTileEnum(TilesEnum.DIRT);
         }
 
-        this.getTile(40, 15).setTile(TilesEnum.DIRT);
+        this.getTile(40, 15).setTileEnum(TilesEnum.DIRT);
 
-        this.getTile(57, 31).setTile(TilesEnum.STONE);
+        this.getTile(57, 31).setTileEnum(TilesEnum.STONE);
 
         //this.getTile(57, 31).setTile(Tiles.DIRT);
 
@@ -118,7 +117,7 @@ public class TileMap {
          */
         int x = tile.getX();
         int y = tile.getY();
-        if (getTile(x,y) == null)
+        if (getTile(x,y) == null || getTile(x,y).getTileEnum().getType() == TileTypesEnum.AIR)
             this.tileMap[y][x] = tile;
     }
 
@@ -135,7 +134,7 @@ public class TileMap {
         if (!(currentTile.getHealth() <= 0))
             currentTile.takesDamage(1);
         if (currentTile.getHealth() <= 0) {
-            Item item = itemFactory.createItem(currentTile.getTile().getRelatedItem());
+            Item item = itemFactory.createItem(currentTile.getTileEnum().getRelatedItem());
             currentTile.breaks();
             //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
             Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
@@ -143,7 +142,7 @@ public class TileMap {
     }
 
     public boolean isTileEmpty(int x,int y) {
-        return this.getTile(x,y).getTile().getType() == TileTypesEnum.AIR;
+        return this.getTile(x,y).getTileEnum().getType() == TileTypesEnum.AIR;
     }
 
     // Charger la TileMap d'un fichier
