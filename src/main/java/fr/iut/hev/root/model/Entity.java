@@ -1,5 +1,8 @@
-package fr.iut.hev.root.model;
+package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.model.Collider;
+import fr.iut.hev.root.model.Gravity;
+import fr.iut.hev.root.model.TileMap;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -90,5 +93,15 @@ public class Entity {
 
     public Collider getCollider() {
         return this.collider;
+    }
+
+    public TileMap getTileMap() {return this.tileMap;}
+
+    public int getEffectivePosX() {
+        return this.getPosX() + (tileMap.getWidth() * TileMap.format) / 2;
+    }
+
+    public int getEffectivePosY() {
+        return this.getPosY() + (tileMap.getHeight() * TileMap.format) / 2;
     }
 }

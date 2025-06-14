@@ -1,5 +1,11 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.Entity;
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.enums.Tiles;
+
 public class Collider {
     private TileMap tileMap;
     private Entity entity;
@@ -10,9 +16,9 @@ public class Collider {
     public Collider(TileMap tileMap, Entity entity) {
         this.tileMap = tileMap;
         this.entity = entity;
-        this.offsetX = (tileMap.getWidth() * TileMap.format) / 2 + entity.getWidth() / 2;
-        this.offsetY = (tileMap.getHeight() * TileMap.format) / 2 + entity.getHeight() / 2;
         this.marge = 1;
+        this.offsetX = entity.getWidth() / 2;
+        this.offsetY = entity.getHeight() / 2;
     }
 
     private boolean hasCollision(double x, double y, boolean negativeCheckX, boolean negativeCheckY) {
@@ -108,5 +114,29 @@ public class Collider {
 
         return hasCollision(x - w / 2, y + h / 2 - marge, true, false)
                 || hasCollision(x - w / 2, y - h / 2 + marge, true, false);
+    }
+
+    /*public boolean intersectsWith(Collider other) {
+        return entity.getPosX() < other.entity.getPosX() + other.entity.getWidth() &&
+                entity.getPosX() + entity.getWidth() > other.entity.getPosX() &&
+                entity.getPosY() < other.entity.getPosY() + other.entity.getHeight() &&
+                entity.getPosY() + entity.getHeight() > other.entity.getPosY();
+    }*/
+
+    public boolean intersectsWith(Collider other) {
+        double thisLeft = entity.getPosX() + this.offsetX - entity.getWidth() / 2.0;
+        double thisRight = entity.getPosX() + this.offsetX + entity.getWidth() / 2.0;
+        double thisTop = entity.getPosY() + this.offsetY - entity.getHeight() / 2.0;
+        double thisBottom = entity.getPosY() + this.offsetY + entity.getHeight() / 2.0;
+
+        double otherLeft = other.entity.getPosX() + other.offsetX - other.entity.getWidth() / 2.0;
+        double otherRight = other.entity.getPosX() + other.offsetX + other.entity.getWidth() / 2.0;
+        double otherTop = other.entity.getPosY() + other.offsetY - other.entity.getHeight() / 2.0;
+        double otherBottom = other.entity.getPosY() + other.offsetY + other.entity.getHeight() / 2.0;
+
+        return thisRight > otherLeft &&
+                thisLeft < otherRight &&
+                thisBottom > otherTop &&
+                thisTop < otherBottom;
     }
 }

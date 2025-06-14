@@ -1,17 +1,22 @@
-package fr.iut.hev.root.model;
+package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.Gravity;
+import fr.iut.hev.root.model.TileMap;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public abstract class Actor extends Entity {
-    private BooleanProperty isAliveProperty;
+public abstract class Actor extends fr.iut.hev.root.model.entities.Entity {
     private IntegerProperty healthProperty;
     private int moveSpeed;
     private int jumpForce;
     private boolean isJumping;
     private int jumpingTestDecay;
+    private int reach;
+    private ActorEnum type;
+    protected int damage;
 
     private IntegerProperty lookDirectionProperty;
     public enum LookDirections {
@@ -25,15 +30,16 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type) {
         super(posX, posY, width, height, tileMap);
-        this.isAliveProperty = new SimpleBooleanProperty(true);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
         this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value);
         this.isJumping = false;
         this.jumpingTestDecay = 0;
+        this.reach = reach;
+        this.type = type;
     }
 
     @Override
@@ -56,12 +62,14 @@ public abstract class Actor extends Entity {
     }
 
     public void updateHorizontalMovement() {
-
     }
 
     public void updateVerticalMovement() {
         
     }
+    public String getName(){return this.type.getName();}
+
+    public int getReach() {return this.reach;}
 
     public int getMoveSpeed() {
         return this.moveSpeed;
@@ -93,16 +101,12 @@ public abstract class Actor extends Entity {
 
     public final IntegerProperty healthProperty() {return this.healthProperty;}
 
+    public int getLookDirection() {return this.lookDirectionProperty.getValue();}
+
     public void receiveDamage(int damage) {
         if (!(damage > this.getHealth()))
             this.setHealth(getHealth() - damage);
     }
-
-    public boolean getIsAliveProperty() {return this.isAliveProperty.getValue();}
-
-    public void setIsAliveProperty(boolean isAliveProperty) {this.isAliveProperty.setValue(isAliveProperty);}
-
-    public BooleanProperty isAliveProperty() {return this.isAliveProperty;}
 
     /*public LookDirections getLookDirection() { // TODO: fix
         return this.lookDirectionProperty;
@@ -115,6 +119,4 @@ public abstract class Actor extends Entity {
     public IntegerProperty lookDirectionProperty() {
         return this.lookDirectionProperty;
     }
-
-    public abstract void diesQuestionMark();
 }

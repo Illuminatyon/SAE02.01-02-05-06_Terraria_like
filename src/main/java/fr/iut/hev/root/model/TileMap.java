@@ -1,13 +1,17 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.ConsumableStats;
+import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.Tiles;
+import fr.iut.hev.root.model.items.Consumable;
+import fr.iut.hev.root.model.items.Item;
 
 public class TileMap {
     private final int width;
     private final int height;
     private final Tile[][] tileMap;
 
-    //public static final int format = 16;
     public static final int format = 32;
 
     public TileMap(int width, int height) {
@@ -35,22 +39,22 @@ public class TileMap {
 
     public void setTestMap() {
         /**
-         * crée une map en 1920p avec 120*67 tile de test
+         * crée une map en 1920p avec 60*33 tile de test
          */
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
-                //if (index < 5160) {
                 if (index < 1080) {
                     this.addTile(new Tile(Tiles.AIR,j, i));
                 }
-                //else if (index >= 5160 && index < 5280) {
                 else if (index >= 1080 && index < 1140) {
                     this.addTile(new Tile(Tiles.GRASS,j,i));
                 }
-                //else if (index >= 5280) {
-                else if (index >= 1140) {
+                else if (index >= 1140 && index < 1320) {
                     this.addTile(new Tile(Tiles.DIRT,j,i));
+                }
+                else if (index >= 1320) {
+                    this.addTile(new Tile(Tiles.STONE,j,i));
                 }
                 index++;
             }
@@ -93,6 +97,10 @@ public class TileMap {
 
         this.getTile(40, 15).setTile(Tiles.DIRT);
 
+        this.getTile(57, 31).setTile(Tiles.STONE);
+
+        //this.getTile(57, 31).setTile(Tiles.DIRT);
+
         /*for (int i = 16; i > 0; i--) {
             this.getTile(20, i).setTile(Tiles.DIRT);
         }
@@ -118,6 +126,18 @@ public class TileMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public void tileGetsMined(int x, int y) {
+        Tile currentTile = this.getTile(x,y);
+        if (!(currentTile.getHealth() <= 0))
+            currentTile.takesDamage(1);
+        if (currentTile.getHealth() <= 0) {
+            currentTile.breaks();
+            //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
+            Item item = new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN);
+            Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
+        }
     }
 
     // Charger la TileMap d'un fichier
