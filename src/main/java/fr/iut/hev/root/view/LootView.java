@@ -17,7 +17,7 @@ public class LootView {
         Loot.lootOnMapProperty.get().addListener((SetChangeListener<Loot>) change -> {
             if (change.wasAdded()) {
                 System.out.println("Loot ajouté sur la map");
-                String path = "/fr/iut/hev/root/img/items/dirt.png";
+                String path = "/fr/iut/hev/root/img/items/" + change.getElementAdded().getItem().getItemEnum().getName() + ".png";
                 Image img = new Image(getClass().getResource(path).toExternalForm());
                 ImageView imgv = new ImageView(img);
                 imgv.translateXProperty().bind(change.getElementAdded().posXProperty());

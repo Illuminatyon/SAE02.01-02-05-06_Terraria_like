@@ -3,13 +3,14 @@ package fr.iut.hev.root.model;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
-import fr.iut.hev.root.model.items.Consumable;
 import fr.iut.hev.root.model.items.Item;
+import fr.iut.hev.root.model.items.ItemFactory;
 
 public class TileMap {
     private final int width;
     private final int height;
     private final Tile[][] tileMap;
+    private ItemFactory itemFactory;
 
     public static final int format = 32;
 
@@ -17,6 +18,7 @@ public class TileMap {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
+        this.itemFactory = new ItemFactory();
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
@@ -132,9 +134,9 @@ public class TileMap {
         if (!(currentTile.getHealth() <= 0))
             currentTile.takesDamage(1);
         if (currentTile.getHealth() <= 0) {
+            Item item = itemFactory.createItem(currentTile.getTile().getRelatedItem());
             currentTile.breaks();
             //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
-            Item item = new Item(ItemsEnum.RAW_CHICKEN);
             Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
         }
     }
