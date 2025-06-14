@@ -2,7 +2,7 @@ package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.TileTypes;
+import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.InventoryView;
 import fr.iut.hev.root.view.MouseCursorCircleView;
