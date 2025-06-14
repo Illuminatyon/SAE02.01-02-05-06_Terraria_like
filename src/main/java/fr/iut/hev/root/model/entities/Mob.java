@@ -3,14 +3,6 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.enums.ConsumableStats;
-import fr.iut.hev.root.model.enums.Items;
-import fr.iut.hev.root.model.items.Consumable;
-import fr.iut.hev.root.model.items.Item;
-
-import java.sql.SQLOutput;
-
-import static fr.iut.hev.root.model.TileMap.format;
 
 public class Mob extends Actor {
     private long lastDirectionChangeTime = 0;

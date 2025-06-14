@@ -1,41 +1,36 @@
 package fr.iut.hev.root.model.items;
 
-import fr.iut.hev.root.model.Recipe;
-import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.Items;
-import fr.iut.hev.root.model.CraftingManager;
-import javafx.beans.property.IntegerProperty;
-import javafx.scene.input.MouseEvent;
+import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
+import fr.iut.hev.root.model.enums.ItemStatsEnum;
+import fr.iut.hev.root.model.enums.ItemsEnum;
 
 import java.util.Optional;
 
 public class Item {
 
-    private Items item;
+    private ItemsEnum item;
+    private double cooldown;
 
-    public Item(Items item) {
+    public Item(ItemsEnum item) {
         this.item = item;
+        this.cooldown = item.getCooldown();
     }
 
-    public Items getItem() {
+    public ItemsEnum getItemEnum() {
         return this.item;
     }
 
-    public void setItem(Items item) {
+    public void setItemEnum(ItemsEnum item) {
         this.item = item;
     }
 
-    public boolean isUsed(Player player, Inventory inventory) {
-        System.out.println("is used");
-        return true;
+    public boolean isUsed(MouseItemActionInputHandler eventHandler) {
+        return false;
     }
 
-    public boolean isCraftable() {
-        return CraftingManager.getRecipeFor(item).isPresent();
+    public ItemStatsEnum getStats() {
+        return item.getStats();
     }
 
-    public Optional<Recipe> getCraftingRecipe() {
-        return CraftingManager.getRecipeFor(item);
-    }
+    public double getCooldown() {return this.cooldown;}
 }

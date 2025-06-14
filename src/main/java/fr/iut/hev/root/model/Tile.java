@@ -1,20 +1,16 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.enums.TileTypes;
-import fr.iut.hev.root.model.enums.Tiles;
-import javafx.scene.image.Image;
-
-import java.net.URL;
+import fr.iut.hev.root.model.enums.TilesEnum;
 
 public class Tile {
-    private Tiles tile;
+    private TilesEnum tile;
     private int health;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
     private int tileX;
     private int tileY;
 
-    public Tile(Tiles tile, int x, int y) {
+    public Tile(TilesEnum tile, int x, int y) {
         this.tile = tile;
         this.health = tile.getMaxHealth()*10;
         this.tileX = x;
@@ -26,11 +22,11 @@ public class Tile {
         this.health = Math.max(0, this.health - amount); // Retourne le plus grand
     }
 
-    public Tiles getTile() {
+    public TilesEnum getTile() {
         return this.tile;
     }
 
-    public void setTile(Tiles tile) {
+    public void setTile(TilesEnum tile) {
         this.tile = tile;
     }
 
@@ -64,6 +60,6 @@ public class Tile {
     }
 
     public void breaks() {
-        this.tile = Tiles.AIR;
+        this.tile = TilesEnum.AIR;
     }
 }

@@ -1,29 +1,34 @@
 package fr.iut.hev.root.model.items;
 
+import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ConsumableStats;
-import fr.iut.hev.root.model.enums.Items;
-import javafx.beans.property.IntegerProperty;
+import fr.iut.hev.root.model.enums.ItemsEnum;
 
 public class Consumable extends Item{
 
-    private ConsumableStats stats;
+    private int restoredHealth;
 
-    public Consumable(Items items,ConsumableStats stats) {
-        super(items);
-        this.stats = stats;
+    public Consumable(ItemsEnum itemsEnum) {
+        super(itemsEnum);
+        this.restoredHealth = itemsEnum.getStats().getItemMainStat();
     }
 
-    public boolean isUsed(Player player, Inventory inventory){
+    @Override
+    public boolean isUsed(MouseItemActionInputHandler eventHandler){
+        Player player = eventHandler.getPlayer();
         if (player.getHealth() < 10) {
-            if (player.getHealth() + stats.getHealthRestored() >= 10)
+            if (player.getHealth() + getRestoredHealth() >= 10)
                 player.setHealth(10);
             else
-                player.setHealth(player.getHealth() + stats.getHealthRestored());
+                player.setHealth(player.getHealth() + getRestoredHealth());
+            player.getInventory().remove(player.getIndexItemInHand(),1);
             return true;
         }
-        else
+        else {
             return false;
+        }
     }
+
+    public int getRestoredHealth() {return this.restoredHealth;}
 }

@@ -1,33 +1,45 @@
 package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.PlayerMouvements;
+import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
+import fr.iut.hev.root.model.items.Item;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends Actor {
     private Inventory inventory;
-    private final Set<PlayerMouvements> playerMouvements;
+    private final Set<PlayerMouvementsEnum> playerMouvementEnums;
+    private ObjectProperty<Item> itemInHandProperty;
+    private IntegerProperty quantityOfItemInHandProperty;
+    private IntegerProperty indexItemInHand;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor);
         this.inventory = new Inventory();
-        this.playerMouvements = new HashSet<>();
+        this.playerMouvementEnums = new HashSet<>();
+        this.indexItemInHand = new SimpleIntegerProperty(0);
+        this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
+        this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
     }
 
-    public void addPlayerMouvements(PlayerMouvements playerMouvements) {
-        this.playerMouvements.add(playerMouvements);
+    public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
+        this.playerMouvementEnums.add(playerMouvementsEnum);
     }
 
-    public void removePlayerMouvements(PlayerMouvements playerMouvements) {
-        this.playerMouvements.remove(playerMouvements);
+    public void removePlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
+        this.playerMouvementEnums.remove(playerMouvementsEnum);
     }
 
-    public Set<PlayerMouvements> getPlayerMouvements() {return playerMouvements;}
+    public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;}
 
     public void update() {
         updatePosition();
@@ -63,17 +75,17 @@ public class Player extends Actor {
     @Override
     public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
-        if (playerMouvements.contains(PlayerMouvements.MOVE_RIGHT)
-                && playerMouvements.contains(PlayerMouvements.MOVE_LEFT)) {
+        if (playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_RIGHT)
+                && playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_LEFT)) {
             super.setVelocityX(0);
-        } else if (playerMouvements.contains(PlayerMouvements.MOVE_RIGHT)) {
+        } else if (playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_RIGHT)) {
             super.setLookDirection(LookDirections.RIGHT);
             if (!super.getCollider().hasCollisionRight()) {
                 super.setVelocityX(super.getMoveSpeed());
             } else {
                 super.setVelocityX(0);
             }
-        } else if (playerMouvements.contains(PlayerMouvements.MOVE_LEFT)) {
+        } else if (playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_LEFT)) {
             super.setLookDirection(LookDirections.LEFT); // IL FAUT JUSTE FIX LE LEFT COLLIDER
             if (!super.getCollider().hasCollisionLeft()) {
                 super.setVelocityX(-super.getMoveSpeed());
@@ -87,7 +99,7 @@ public class Player extends Actor {
 
     @Override
     public void updateVerticalMovement() {
-        if (playerMouvements.contains(PlayerMouvements.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping()) {
+        if (playerMouvementEnums.contains(PlayerMouvementsEnum.JUMP) && super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping()) {
             super.setIsJumping(true);
             super.setJumpingTestDecay(0);
         } else if (super.getIsJumping()) {
@@ -115,4 +127,17 @@ public class Player extends Actor {
     public Inventory getInventory() {
         return this.inventory;
     }
+
+    public boolean usesItemInHand(MouseItemActionInputHandler eventHandler) {
+        return getItemInHand().isUsed(eventHandler);
+    }
+
+    public Item getItemInHand() {return this.itemInHandProperty.getValue();}
+    public void setItemInHandProperty(Item itemInHandProperty) {this.itemInHandProperty.setValue(itemInHandProperty);}
+    public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
+    public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}
+    public void setQuantityOfItemInHand(int quantity) {this.quantityOfItemInHandProperty.setValue(quantity);}
+    public IntegerProperty quantityOfItemInHand() {return this.quantityOfItemInHandProperty;}
+    public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
+    public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
 }

@@ -1,16 +1,16 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Loot;
-import fr.iut.hev.root.model.enums.ConsumableStats;
-import fr.iut.hev.root.model.enums.Items;
-import fr.iut.hev.root.model.enums.Tiles;
-import fr.iut.hev.root.model.items.Consumable;
+import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Item;
+import fr.iut.hev.root.model.items.ItemFactory;
 
 public class TileMap {
     private final int width;
     private final int height;
     private final Tile[][] tileMap;
+    private ItemFactory itemFactory;
 
     public static final int format = 32;
 
@@ -18,6 +18,7 @@ public class TileMap {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
+        this.itemFactory = new ItemFactory();
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
@@ -45,59 +46,59 @@ public class TileMap {
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
                 if (index < 1080) {
-                    this.addTile(new Tile(Tiles.AIR,j, i));
+                    this.addTile(new Tile(TilesEnum.AIR,j, i));
                 }
                 else if (index >= 1080 && index < 1140) {
-                    this.addTile(new Tile(Tiles.GRASS,j,i));
+                    this.addTile(new Tile(TilesEnum.GRASS,j,i));
                 }
                 else if (index >= 1140 && index < 1320) {
-                    this.addTile(new Tile(Tiles.DIRT,j,i));
+                    this.addTile(new Tile(TilesEnum.DIRT,j,i));
                 }
                 else if (index >= 1320) {
-                    this.addTile(new Tile(Tiles.STONE,j,i));
+                    this.addTile(new Tile(TilesEnum.STONE,j,i));
                 }
                 index++;
             }
         }
 
         for (int i = 0; i < 15; i++) {
-            this.getTile(i, 18).setTile(Tiles.DIRT);
+            this.getTile(i, 18).setTile(TilesEnum.DIRT);
             if (i < 14) {
-                this.getTile(i, 17).setTile(Tiles.DIRT);
+                this.getTile(i, 17).setTile(TilesEnum.DIRT);
             }
             if (i < 13) {
-                this.getTile(i, 16).setTile(Tiles.DIRT);
+                this.getTile(i, 16).setTile(TilesEnum.DIRT);
             }
             if (i < 12) {
-                this.getTile(i, 15).setTile(Tiles.DIRT);
+                this.getTile(i, 15).setTile(TilesEnum.DIRT);
             }
         }
 
         for (int i = 0; i < 3; i++) {
-            this.getTile(14 - i, 17 - i).setTile(Tiles.GRASS);
+            this.getTile(14 - i, 17 - i).setTile(TilesEnum.GRASS);
         }
 
         for (int i = 0; i < 11; i++) {
-            this.getTile(11 - i, 14).setTile(Tiles.GRASS);
+            this.getTile(11 - i, 14).setTile(TilesEnum.GRASS);
         }
 
         for (int i = 0; i < 5; i++) {
-            this.getTile(0, 14 - i).setTile(Tiles.DIRT);
+            this.getTile(0, 14 - i).setTile(TilesEnum.DIRT);
         }
 
         for (int i = 0; i < 3; i++) {
-            this.getTile(25 + i, 14).setTile(Tiles.GRASS);
+            this.getTile(25 + i, 14).setTile(TilesEnum.GRASS);
         }
 
-        this.getTile(27, 15).setTile(Tiles.DIRT);
+        this.getTile(27, 15).setTile(TilesEnum.DIRT);
 
         for (int i = 0; i < 5; i++) {
-            this.getTile(35, 17 - i).setTile(Tiles.DIRT);
+            this.getTile(35, 17 - i).setTile(TilesEnum.DIRT);
         }
 
-        this.getTile(40, 15).setTile(Tiles.DIRT);
+        this.getTile(40, 15).setTile(TilesEnum.DIRT);
 
-        this.getTile(57, 31).setTile(Tiles.STONE);
+        this.getTile(57, 31).setTile(TilesEnum.STONE);
 
         //this.getTile(57, 31).setTile(Tiles.DIRT);
 
@@ -133,9 +134,9 @@ public class TileMap {
         if (!(currentTile.getHealth() <= 0))
             currentTile.takesDamage(1);
         if (currentTile.getHealth() <= 0) {
+            Item item = itemFactory.createItem(currentTile.getTile().getRelatedItem());
             currentTile.breaks();
             //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
-            Item item = new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN);
             Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
         }
     }

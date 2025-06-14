@@ -2,7 +2,7 @@ package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.TileTypes;
+import fr.iut.hev.root.model.enums.TileTypesEnum;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -61,7 +61,7 @@ public class GlobalView {
         /**
          * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
          */
-        if (tile.getTile().getType() == TileTypes.AIR)
+        if (tile.getTile().getType() == TileTypesEnum.AIR)
             return null;
         String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_").concat(Integer.toString(textureNumber)).concat(".png");
         return new Image(getClass().getResource(path).toExternalForm());
@@ -71,7 +71,7 @@ public class GlobalView {
         /**
          * Retourne le sprite background de la Tile
          */
-        if (tile.getTile().getType() == TileTypes.AIR)
+        if (tile.getTile().getType() == TileTypesEnum.AIR)
             return null;
         String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_background.png");
         return new Image(getClass().getResource(path).toExternalForm());
