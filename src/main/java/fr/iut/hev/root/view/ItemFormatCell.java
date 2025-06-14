@@ -19,17 +19,11 @@ public class ItemFormatCell extends ListCell<RecipesEnum> {
             setGraphic(null);
         }
         else {
-            System.out.println(recipesEnum.getCraftResult().getName());
             String path = "/fr/iut/hev/root/img/items/" + recipesEnum.getCraftResult().getName() + ".png";
-            System.out.println(path);
             ImageView itemImage= new ImageView(new Image(getClass().getResource(path).toExternalForm()));
             itemImage.setFitWidth(60);
             itemImage.setFitHeight(60);
-            Pane cellPane = new Pane(itemImage);
-            cellPane.setBackground(Background.fill(Color.rgb(0, 0, 0, 0.25)));
-            cellPane.setPrefHeight(60);
-            cellPane.setPrefWidth(60);
-            setGraphic(cellPane);
+            setGraphic(itemImage);
         }
     }
 }

@@ -28,13 +28,11 @@ public class CraftView {
         availableRecipesList.setCellFactory(param -> new ItemFormatCell());
         availableRecipesList.setVisible(false);
         availableRecipesList.setMouseTransparent(true);
-        availableRecipesList.setPadding(new Insets(5,5,5,5));
         craftButton.setVisible(false);
         craftButton.setMouseTransparent(true);
 
         availableRecipesList.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
             RecipesEnum selectedRecipe = availableRecipesList.getSelectionModel().getSelectedItem();
-            System.out.println(selectedRecipe);
             if (selectedRecipe != null)
                 setSelectedRecipe(selectedRecipe);
         });

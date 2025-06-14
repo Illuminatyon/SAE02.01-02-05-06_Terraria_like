@@ -34,12 +34,9 @@ public class CraftingManager {
     }
 
     private boolean craftPossible(RecipesEnum recipesEnum) {
-        int iteration = 0;
         for (Map.Entry<ItemsEnum, Integer> ingredient : recipesEnum.getIngredients().entrySet()) {
-            System.out.println(iteration);
             if (ingredient.getValue() > inventory.getItemIteration(ingredient.getKey()))
                 return false;
-            iteration++;
         }
         return true;
     }
@@ -48,7 +45,6 @@ public class CraftingManager {
         if (craftPossible(getSelectedRecipe())) {
             destroysIngredientsFromInventory();
             inventory.addFromCraft(itemFactory.createItem(getSelectedRecipe().getCraftResult()),getSelectedRecipe().getItemCraftedQuantity());
-            System.out.println("crafted");
         }
     }
 

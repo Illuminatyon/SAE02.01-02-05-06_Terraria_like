@@ -168,11 +168,9 @@ public class Inventory {
 
     public int getItemIteration(ItemsEnum itemsEnum) {
         int itemQuantity = 0;
-        //HashMap<ItemsEnum, Integer> itemIteration = new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(itemsEnum,0)));
 
         for (InventorySlot slot : slots) {
             if (slot.getItem() != null && slot.getItem().getItemEnum() == itemsEnum)
-                //itemIteration.replace(itemsEnum,itemIteration.get(itemsEnum) + slot.getQuantity());
                 itemQuantity += slot.getQuantity();
         }
         return itemQuantity;

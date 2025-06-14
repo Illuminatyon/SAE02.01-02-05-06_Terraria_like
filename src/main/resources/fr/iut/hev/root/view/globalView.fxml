@@ -25,7 +25,7 @@
       <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
 
       </ImageView>
-      <AnchorPane fx:id="hudAnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="hudAnchorPane" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="heartsHbox" prefHeight="50.0" prefWidth="400.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -102,8 +102,8 @@
                   <Insets bottom="5.0" />
                </padding>
             </VBox>
-            <ListView fx:id="craftListView" orientation="HORIZONTAL" prefHeight="90.0" prefWidth="656.0" style="-fx-background-color: NONE;" AnchorPane.leftAnchor="632.0" AnchorPane.rightAnchor="632.0" AnchorPane.topAnchor="400.0" />
-            <Button fx:id="craftButton" alignment="CENTER" mnemonicParsing="false" text="Button" textAlignment="CENTER" AnchorPane.leftAnchor="930.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="490.0" />
+            <ListView fx:id="craftListView" orientation="HORIZONTAL" prefHeight="90.0" prefWidth="656.0" AnchorPane.leftAnchor="632.0" AnchorPane.rightAnchor="632.0" AnchorPane.topAnchor="400.0" />
+            <Button fx:id="craftButton" alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="64.0" text="Craft" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="930.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="490.0" />
          </children>
       </AnchorPane>
    </children>

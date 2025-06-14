@@ -1,10 +1,8 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import fr.iut.hev.root.model.Recipe;
 import fr.iut.hev.root.model.enums.ItemStatsEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.CraftManager;
 
 import java.util.Optional;
 
@@ -28,14 +26,6 @@ public class Item {
 
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
         return false;
-    }
-
-    public boolean isCraftable() {
-        return CraftManager.getRecipeFor(item).isPresent();
-    }
-
-    public Optional<Recipe> getCraftingRecipe() {
-        return CraftManager.getRecipeFor(item);
     }
 
     public ItemStatsEnum getStats() {
