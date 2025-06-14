@@ -2,6 +2,7 @@ package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
@@ -139,6 +140,10 @@ public class TileMap {
             //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
             Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
         }
+    }
+
+    public boolean isTileEmpty(int x,int y) {
+        return this.getTile(x,y).getTile().getType() == TileTypesEnum.AIR;
     }
 
     // Charger la TileMap d'un fichier

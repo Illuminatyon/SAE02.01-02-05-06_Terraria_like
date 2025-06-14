@@ -1,7 +1,6 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
@@ -43,7 +42,6 @@ public class GlobalController implements Initializable {
     private Timeline gameLoop;
     private Player player;
     private TileMap tileMap;
-    private MouseGameInputHandler mouseGameClicksHandler;
     private MouseInventoryInputHandler mouseInventoryHandler;
     private ScrollInputHandler scrollHotbarHandler;
     private KeyInputHandler keyboardHandler;
@@ -115,11 +113,11 @@ public class GlobalController implements Initializable {
                     for (Loot loot : Loot.lootOnMapProperty) {
                         loot.updatePosition();
                     }
-                    if (mouseGameClicksHandler.getMouseClickIsPressed()) {
-                        mouseGameClicksHandler.clickPressedHandler();
+                    if (mouseItemActionHandler.getMouseClickIsPressed()) {
+                        mouseItemActionHandler.onClickPressedLoop();
                     }
-                    if (mouseGameClicksHandler.getMouseClickIsReleased()) {
-                        mouseGameClicksHandler.clickReleasedHandler();
+                    if (mouseItemActionHandler.getMouseClickIsReleased()) {
+                        mouseItemActionHandler.onClickReleasedLoop();
                     }
 
                     // Mise à jour de la position de la lumière autour du joueur
@@ -176,10 +174,9 @@ public class GlobalController implements Initializable {
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
-        mouseGameClicksHandler = new MouseGameInputHandler(tileMap,globalView,player,playerLightCircle,inventoryView);
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
-        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player);
+        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap);
 
         player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         player.quantityOfItemInHand().bindBidirectional(scrollHotbarHandler.quantityProperty());
@@ -199,11 +196,9 @@ public class GlobalController implements Initializable {
 
         Platform.runLater(() -> {
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, mouseGameClicksHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED, mouseGameClicksHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseGameClicksHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseItemActionHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseItemActionHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
             landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);

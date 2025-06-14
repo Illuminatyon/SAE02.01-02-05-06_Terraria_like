@@ -1,8 +1,11 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
+import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.BlockTypesEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+
+import static fr.iut.hev.root.model.TileMap.format;
 
 public class Tool extends Item {
 
@@ -17,6 +20,23 @@ public class Tool extends Item {
 
     @Override
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
-        return super.isUsed(eventHandler);
+        int x = (int)eventHandler.getX() / format;
+        int y = (int)eventHandler.getY() / format;
+        System.out.println(x);
+        System.out.println(y);
+        TileMap tileMap = eventHandler.getTileMap();
+        if (eventHandler.getMouseClickIsPressed()) {
+            if (!(tileMap.isTileEmpty(x,y))) {
+                tileMap.tileGetsMined(x,y);
+                return true;
+            }
+        }
+        else if (eventHandler.getMouseClickIsReleased()) {
+            if (!(tileMap.isTileEmpty(x,y))) {
+                tileMap.getTile(x,y).resetHealth();
+                return true;
+            }
+        }
+        return false;
     }
 }
