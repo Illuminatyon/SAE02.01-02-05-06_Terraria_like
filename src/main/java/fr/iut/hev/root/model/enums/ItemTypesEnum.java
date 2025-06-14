@@ -6,7 +6,8 @@ public enum ItemTypesEnum {
     CONSUMABLE("consumable",true),
     ARMOR_PIECE("armor_piece",false),
     RESOURCES("resources",false),
-    BLOCK("block",false);
+    BLOCK("block",false),
+    UTILITY("utility",false);
 
     private final String name;
     private final boolean isConsumable;

@@ -15,6 +15,9 @@ public class ItemFactory {
             case ItemTypesEnum.RESOURCES -> {
                 return createResource(itemsEnum);
             }
+            case ItemTypesEnum.UTILITY -> {
+                return createUtility(itemsEnum);
+            }
             case ItemTypesEnum.CONSUMABLE -> {
                 return createConsumable(itemsEnum);
             }
@@ -39,6 +42,10 @@ public class ItemFactory {
 
     public Resource createResource(ItemsEnum itemsEnum) {
         return new Resource(itemsEnum);
+    }
+
+    public Utility createUtility(ItemsEnum itemsEnum) {
+        return new Utility(itemsEnum);
     }
 
     public Consumable createConsumable(ItemsEnum itemsEnum) {

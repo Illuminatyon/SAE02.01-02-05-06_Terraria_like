@@ -7,9 +7,9 @@ public enum ItemStatsEnum {
      * <p>
      *     They are respresented as a code :
      *     <br>
-     *     [<b>item type</b> id (on one digit)][its <b>main stats</b> (on three digits)][its <b>cooldown</b> stat]
+     *     [<b>item type</b> id (on one digit)][its <b>main stats</b> (on three digits)]
      *     <br>
-     *     Each item type has only one main statistic except for tools :
+     *     Each item type (except for <b>Resources</b> and <b>Blocks</b>) has only one main statistic except for tools :
      *     <ul>
      *         <li>
      *             <b>Tools</b> -> mining speed and the block type this tool is efficient against [id = 1]
@@ -22,12 +22,6 @@ public enum ItemStatsEnum {
      *         </li>
      *         <li>
      *             <b>Consumable</b> -> restored health [id = 4]
-     *         </li>
-     *         <li>
-     *             <b>Resources</b> -> only its cooldown [id = 5]
-     *         </li>
-     *         <li>
-     *             <b>Blocks</b> -> its cooldown as well [id = 6]
      *         </li>
      *     </ul>
      *     <br>
@@ -46,12 +40,15 @@ public enum ItemStatsEnum {
      *         <li>
      *             {@link BlockTypesEnum#WOOD_TYPE}
      *         </li>
+     *         <li>
+     *             {@link BlockTypesEnum#BACKGROUND_CUSTOM}
+     *         </li>
      *     </ol>
      * </p>
      * <br>
      * <h3>Exemple</h3>
      * <p>
-     *     Stats code of {@link #RAW_CHICKEN} : 40031
+     *     Stats code of {@link #RAW_CHICKEN} : 4003
      *     <ul>
      *         <li>
      *             <b>4</b> -> Item type consumable
@@ -59,11 +56,8 @@ public enum ItemStatsEnum {
      *         <li>
      *             <b>003</b> -> 3hp of health restored at consumption
      *         </li>
-     *         <li>
-     *             <b>1</b> -> cooldown of its use
-     *         </li>
      *     </ul>
-     *     Stats code of {@link #WOODEN_PICKAXE} : 10211
+     *     Stats code of {@link #WOODEN_PICKAXE} : 1021
      *     <ul>
      *         <li>
      *             <b>1</b> -> Item type tool
@@ -74,18 +68,23 @@ public enum ItemStatsEnum {
      *         <li>
      *             <b>1</b> -> efficient block against ({@link BlockTypesEnum#ROCK_TYPE} here)
      *         </li>
-     *         <li>
-     *             <b>1</b> -> cooldown of its use
-     *         </li>
      *     </ul>
      * </p>
      *
      */
 
-    RAW_CHICKEN(40031),
-    WOODEN_PICKAXE(10211),
-    DIRT(61),
-    CACA(51);
+    WOODEN_PICKAXE(1021),
+    WOODEN_HAX(1023),
+
+    HAMMER(1044),
+
+    DAGGER(2003),
+
+    IRON_HELMET(3001),
+    IRON_CHESTPLATE(3001),
+    IRON_LEGGINGS(3001),
+
+    RAW_CHICKEN(4003);
 
     private int statCode;
 
@@ -97,10 +96,6 @@ public enum ItemStatsEnum {
             return statCode % 10000 / 10;
         else
             return 0;
-    }
-
-    public int getCoolDownStat() {
-        return statCode % 10;
     }
 
     public int getMiningSpeed() {
@@ -117,6 +112,7 @@ public enum ItemStatsEnum {
             case 1 -> returnedEnum = BlockTypesEnum.ROCK_TYPE;
             case 2 -> returnedEnum = BlockTypesEnum.GROUND_TYPE;
             case 3 -> returnedEnum = BlockTypesEnum.WOOD_TYPE;
+            case 4 -> returnedEnum = BlockTypesEnum.BACKGROUND_CUSTOM;
             default -> returnedEnum = null;
         }
         return returnedEnum;

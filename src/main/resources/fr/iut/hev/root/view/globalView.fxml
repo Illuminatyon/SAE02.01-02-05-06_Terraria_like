@@ -102,8 +102,8 @@
                   <Insets bottom="5.0" />
                </padding>
             </VBox>
-            <ListView fx:id="craftListView" orientation="HORIZONTAL" prefHeight="85.0" prefWidth="656.0" style="-fx-background-color: NONE;" AnchorPane.leftAnchor="632.0" AnchorPane.rightAnchor="632.0" AnchorPane.topAnchor="400.0" />
-            <Button fx:id="craftButton" alignment="CENTER" mnemonicParsing="false" text="Button" textAlignment="CENTER" AnchorPane.leftAnchor="930.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="485.0" />
+            <ListView fx:id="craftListView" orientation="HORIZONTAL" prefHeight="90.0" prefWidth="656.0" style="-fx-background-color: NONE;" AnchorPane.leftAnchor="632.0" AnchorPane.rightAnchor="632.0" AnchorPane.topAnchor="400.0" />
+            <Button fx:id="craftButton" alignment="CENTER" mnemonicParsing="false" text="Button" textAlignment="CENTER" AnchorPane.leftAnchor="930.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="490.0" />
          </children>
       </AnchorPane>
    </children>

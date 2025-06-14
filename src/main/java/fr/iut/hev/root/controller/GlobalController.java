@@ -158,6 +158,9 @@ public class GlobalController implements Initializable {
         inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),45);
         inventory.add(2,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),20);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
+        inventory.add(4,itemFactory.createItem(ItemsEnum.WOOD),100);
+        inventory.add(5,itemFactory.createItem(ItemsEnum.IRON_INGOT),100);
+        inventory.add(6,itemFactory.createItem(ItemsEnum.STONE),100);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
