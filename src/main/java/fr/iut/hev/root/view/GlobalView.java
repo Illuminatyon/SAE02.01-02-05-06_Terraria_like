@@ -45,16 +45,20 @@ public class GlobalView {
         }
     }
 
-    public void updateTile(int x, int y,Tile tile) {
-        int textureNumber;
-        int tileHealthStep = ((tile.getTileEnum().getMaxHealth()*10) / 4);
-        if (tile.getHealth() > 0 && tile.getHealth()%tileHealthStep == 0) {
-            textureNumber = tile.getHealth() / tileHealthStep;
-            tileMapLand.getChildren().set(y * 60 + x, new ImageView(getTexture(tile, textureNumber)));
+    public void updateTile(Tile tile) {
+        System.out.println(tile.getHealth());
+        int textureNumber = 4;
+        int tileHealth = tile.getHealth();
+        int tileHealthStep = ((tile.getTileEnum().getMaxHealth()*20) / 4);
+        if (tileHealth > 0) {
+            for (int i = 4 ; i > 0 ; i--) {
+                if (tileHealth < (tileHealthStep * i) && tileHealth >= (tileHealthStep * (i - 1)))
+                    textureNumber = i;
+            }
+            tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView(getTexture(tile,textureNumber)));
         }
-        else if (tile.getHealth() <= 0){
-            tileMapLand.getChildren().set(y * 60 + x, new ImageView());
-        }
+        else
+            tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView());
     }
 
     public Image getTexture(Tile tile, int textureNumber) {

@@ -94,22 +94,22 @@ public enum ItemStatsEnum {
     }
 
     public int getItemMainStat() {
-        if (statCode / 10000 != 1)
-            return statCode % 10000 / 10;
+        if (statCode / 1000 != 1)
+            return statCode % 1000 / 10;
         else
             return 0;
     }
 
     public int getMiningSpeed() {
-        if (statCode / 10000 == 1)
-            return statCode % 10000 / 100;
+        if (statCode / 1000 == 1)
+            return 2 * (statCode % 1000 / 10);
         else
             return 0;
     }
 
     public BlockTypesEnum getEfficientBlockAgainst() {
         BlockTypesEnum returnedEnum;
-        int enumIndex = statCode % 100 / 10;
+        int enumIndex = statCode % 10;
         switch (enumIndex) {
             case 1 -> returnedEnum = BlockTypesEnum.ROCK_TYPE;
             case 2 -> returnedEnum = BlockTypesEnum.GROUND_TYPE;

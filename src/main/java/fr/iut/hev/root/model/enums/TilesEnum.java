@@ -49,4 +49,5 @@ public enum TilesEnum {
     public ItemsEnum getRelatedItem() {
         return this.relatedItem;
     }
+    public BlockTypesEnum getBlockTypesEnum() {return this.blockTypesEnum;}
 }

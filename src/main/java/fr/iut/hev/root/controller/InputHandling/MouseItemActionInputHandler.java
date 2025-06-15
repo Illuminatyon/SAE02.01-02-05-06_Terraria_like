@@ -48,7 +48,6 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
                 System.out.println("prout");
             else  {
                 if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK)) {
-                    System.out.println("weapon, tool or block");
                     x = mouseEvent.getX();
                     y = mouseEvent.getY();
                     if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
@@ -60,7 +59,6 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
                         mouseClickIsReleased = true;
                     }
                     if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
-                        System.out.println("dragged");
                         this.mouseEvent = mouseEvent;
                     }
                 }
@@ -97,7 +95,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickPressedLoop() {
         if (player.usesItemInHand(this)) {
-            worldView.updateTile((int)x / format,(int)y / format,tileMap.getTile((int)x / format,(int)y / format));
+            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
+                worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
     }
 
@@ -107,7 +106,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickReleasedLoop() {
         if (player.usesItemInHand(this)) {
-            worldView.updateTile((int)x / format,(int)y / format,tileMap.getTile((int)x / format,(int)y / format));
+            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
+                worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
         this.mouseClickIsReleased = false;
     }

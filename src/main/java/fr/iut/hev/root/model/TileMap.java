@@ -129,10 +129,12 @@ public class TileMap {
         return height;
     }
 
-    public void tileGetsMined(int x, int y) {
+    public void tileGetsMined(int x, int y,int damage) {
         Tile currentTile = this.getTile(x,y);
-        if (!(currentTile.getHealth() <= 0))
-            currentTile.takesDamage(1);
+        if (!(currentTile.getHealth() <= 0)) {
+            System.out.println(currentTile.getHealth());
+            currentTile.takesDamage(damage);
+        }
         if (currentTile.getHealth() <= 0) {
             Item item = itemFactory.createItem(currentTile.getTileEnum().getRelatedItem());
             currentTile.breaks();

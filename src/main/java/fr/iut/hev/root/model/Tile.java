@@ -12,7 +12,7 @@ public class Tile {
 
     public Tile(TilesEnum tileEnum, int x, int y) {
         this.tileEnum = tileEnum;
-        this.health = tileEnum.getMaxHealth()*10;
+        this.health = tileEnum.getMaxHealth()*20;
         this.tileX = x;
         this.tileY = y;
 

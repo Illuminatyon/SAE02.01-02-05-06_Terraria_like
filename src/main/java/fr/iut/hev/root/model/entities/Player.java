@@ -120,17 +120,11 @@ public class Player extends Actor {
         loot.removeSelf();
     }
 
-    public void updateBreaksBlock(int x,int y, TileMap tileMap) {
-        tileMap.tileGetsMined(x,y);
-    }
-
     public Inventory getInventory() {
         return this.inventory;
     }
 
     public boolean usesItemInHand(MouseItemActionInputHandler eventHandler) {
-        System.out.println(getItemInHand());
-        System.out.println(getQuantityOfItemInHand());
         if (getQuantityOfItemInHand() > 0)
             return getItemInHand().isUsed(eventHandler);
         else

@@ -3,6 +3,7 @@ package fr.iut.hev.root.model.items;
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.BlockTypesEnum;
+import fr.iut.hev.root.model.enums.ItemStatsEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 
 import static fr.iut.hev.root.model.TileMap.format;
@@ -25,7 +26,17 @@ public class Tool extends Item {
         TileMap tileMap = eventHandler.getTileMap();
         if (eventHandler.getMouseClickIsPressed()) {
             if (!(tileMap.isTileEmpty(x,y))) {
-                tileMap.tileGetsMined(x,y);
+                ItemStatsEnum statsToolInHand = eventHandler.getPlayer().getItemInHand().getItemEnum().getStats();
+                System.out.println(statsToolInHand.getEfficientBlockAgainst());
+                System.out.println(tileMap.getTile(x,y).getTileEnum().getBlockTypesEnum());
+                if (statsToolInHand.getEfficientBlockAgainst().equals(tileMap.getTile(x,y).getTileEnum().getBlockTypesEnum())) {
+                    tileMap.tileGetsMined(x, y, statsToolInHand.getMiningSpeed());
+                    System.out.println("effective");
+                }
+                else {
+                    tileMap.tileGetsMined(x, y, 1);
+                    System.out.println("weak");
+                }
                 return true;
             }
         }
