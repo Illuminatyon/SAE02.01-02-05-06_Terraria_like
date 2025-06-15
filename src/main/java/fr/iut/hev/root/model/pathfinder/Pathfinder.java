@@ -307,66 +307,134 @@ public class Pathfinder {
     private boolean hasGroundBeneath(int x, int y) {
         // Vérifier si il y a un sol sous la position (x,y)
         // C'est-à-dire si la tuile en dessous est solide
-        return isSolid(x, y + 1);
+        boolean hasGround = isSolid(x, y + 1);
+        System.out.println("Checking ground at (" + x + "," + (y+1) + "): " + hasGround);
+        return hasGround;
     }
+
 
     private boolean canWalk(PathPoint from, int toX, int toY) {
-        if (!isValidPosition(toX, toY)) return false;
+        if (!isValidPosition(toX, toY)) {
+            System.out.println("Position cible invalide pour marcher");
+            return false;
+        }
 
-        // On ne peut marcher que sur le même niveau
-        if (toY != from.y) return false;
+        if (toY != from.y) {
+            System.out.println("Ne peut marcher que sur le même niveau");
+            return false;
+        }
 
-        // Doit avoir un sol sous les pieds
-        if (!hasGroundBeneath(toX, toY)) return false;
+        boolean hasGround = hasGroundBeneath(toX, toY);
+        if (!hasGround) {
+            System.out.println("Pas de sol sous les pieds à (" + toX + ", " + toY + ")");
+        }
 
-        // La case cible doit être libre
-        return !isSolid(toX, toY);
+        boolean isSolidTarget = isSolid(toX, toY);
+        if (isSolidTarget) {
+            System.out.println("La case cible est solide à (" + toX + ", " + toY + ")");
+        }
+
+        boolean result = hasGround && !isSolidTarget;
+        System.out.println("Can walk to (" + toX + "," + toY + "): " + result);
+        return result;
     }
 
-    private boolean canJump(PathPoint from, int toX, int toY) {
-        if (!isValidPosition(toX, toY)) return false;
 
-        // Doit avoir du sol sous les pieds pour sauter (sauf si déjà en train de sauter)
-        if (!from.isJumping && !hasGroundBeneath(from.x, from.y)) return false;
+    private boolean canJump(PathPoint from, int toX, int toY) {
+        if (!isValidPosition(toX, toY)) {
+            System.out.println("Position cible invalide");
+            return false;
+        }
+
+        // Vérifier si le joueur peut sauter depuis la position actuelle
+        boolean hasGroundUnderFrom = hasGroundBeneath(from.x, from.y);
+        boolean isInAir = from.isJumping || from.isFalling;
+
+        System.out.println("Checking jump from (" + from.x + ", " + from.y + ") to (" + toX + ", " + toY + ")");
+        System.out.println("  hasGroundUnderFrom: " + hasGroundUnderFrom);
+        System.out.println("  isInAir: " + isInAir);
+
+        // Commenté pour permettre le pathfinding même quand le joueur n'est pas en train de sauter
+        // if (!isInAir && !hasGroundUnderFrom) {
+        //     System.out.println("  Cannot jump: not on ground and not already in air");
+        //     return false;
+        // }
 
         // Limite de hauteur de saut
         int heightDifference = from.y - toY;
         if (from.isJumping) {
-            if (from.jumpHeight >= maxJumpHeight) return false;
-            if (heightDifference > 1) return false; // Ne peut sauter que d'une tuile à la fois
+            if (from.jumpHeight >= maxJumpHeight) {
+                System.out.println("  Cannot jump: max jump height reached");
+                return false;
+            }
+            if (heightDifference > 1) {
+                System.out.println("  Cannot jump: height difference too large");
+                return false;
+            }
         } else {
-            if (heightDifference > maxJumpHeight) return false;
+            if (heightDifference > maxJumpHeight) {
+                System.out.println("  Cannot jump: height difference exceeds max jump height");
+                return false;
+            }
         }
 
         // Vérifier qu'il n'y a pas d'obstacle sur le chemin du saut
         if (from.x != toX) { // Saut horizontal
             int stepX = toX > from.x ? 1 : -1;
             for (int x = from.x; x != toX; x += stepX) {
-                if (isSolid(x, toY)) return false;
+                if (isSolid(x, toY)) {
+                    System.out.println("  Cannot jump: obstacle at (" + x + ", " + toY + ")");
+                    return false;
+                }
             }
         }
 
         // La case cible doit être libre
-        return !isSolid(toX, toY);
+        if (isSolid(toX, toY)) {
+            System.out.println("  Cannot jump: target position is solid");
+            return false;
+        }
+
+        System.out.println("  Jump is possible");
+        return true;
     }
 
     private boolean canFall(PathPoint from, int toX, int toY) {
-        if (!isValidPosition(toX, toY)) return false;
+        if (!isValidPosition(toX, toY)) {
+            System.out.println("Position cible invalide");
+            return false;
+        }
+
+        System.out.println("Checking fall from (" + from.x + ", " + from.y + ") to (" + toX + ", " + toY + ")");
 
         // Doit tomber vers le bas (toY > from.y)
-        if (toY <= from.y) return false;
+        if (toY <= from.y) {
+            System.out.println("  Cannot fall: not falling downward");
+            return false;
+        }
 
         // Doit ne pas avoir de sol sous les pieds pour tomber
-        if (hasGroundBeneath(from.x, from.y)) return false;
+        if (hasGroundBeneath(from.x, from.y)) {
+            System.out.println("  Cannot fall: has ground beneath");
+            return false;
+        }
 
         // Vérifier que la chute ne passe pas à travers un sol
-        // On vérifie chaque case entre from.y et toY
         for (int y = from.y + 1; y <= toY; y++) {
-            if (isSolid(from.x, y)) return false;
+            if (isSolid(from.x, y)) {
+                System.out.println("  Cannot fall: obstacle at (" + from.x + ", " + y + ")");
+                return false;
+            }
         }
 
         // La case cible doit être libre
-        return !isSolid(toX, toY);
+        if (isSolid(toX, toY)) {
+            System.out.println("  Cannot fall: target position is solid");
+            return false;
+        }
+
+        System.out.println("  Fall is possible");
+        return true;
     }
 
     /**

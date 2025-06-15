@@ -31,7 +31,13 @@ public class MouseMinimapInputHandler implements EventHandler<MouseEvent> {
     public void handle(MouseEvent mouseEvent) {
         // Vérifier que c'est un clic (pressed et released)
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
-            handleMinimapClick(mouseEvent);
+            // Ne traiter le clic que si la minimap est agrandie (mode Tab)
+            if (minimapView.isEnlarged()) {
+                System.out.println("Clic sur la minimap en mode agrandi (Tab)");
+                handleMinimapClick(mouseEvent);
+            } else {
+                System.out.println("Clic sur la minimap ignoré - appuyez sur Tab pour activer le GPS");
+            }
         }
     }
 
@@ -40,36 +46,55 @@ public class MouseMinimapInputHandler implements EventHandler<MouseEvent> {
      * @param mouseEvent L'événement de clic de souris
      */
     private void handleMinimapClick(MouseEvent mouseEvent) {
-        // Obtenez la position du joueur en coordonnées de tuiles
-        int playerTileX = (int) (player.getPosX() / TileMap.format) + 30; // Ajoutez un décalage de 30 tuiles vers la droite
-        int playerTileY = (int) ((player.getPosY() + player.getHeight()) / TileMap.format) + 16; // Ajoutez un décalage vertical
+        // Obtenir la position du joueur en tuiles en utilisant la méthode de MinimapView
+        int[] playerTilePos = minimapView.getPlayerTilePosition();
+        int playerTileX = playerTilePos[0];
+        int playerTileY = playerTilePos[1];
 
-        // Calculez la taille des tuiles et les décalages
-        int visibleTilesX = 15;
-        int visibleTilesY = 15;
-        float tileSize = (float) MinimapView.MINIMAP_SIZE / (Math.max(visibleTilesX * 2, visibleTilesY * 2));
-        float offsetX = MinimapView.MINIMAP_SIZE / 2f - (playerTileX - visibleTilesX / 2) * tileSize;
-        float offsetY = MinimapView.MINIMAP_SIZE / 2f - (playerTileY - visibleTilesY / 2) * tileSize;
+        // Utiliser la méthode existante pour convertir les coordonnées
+        int[] targetCoords = minimapView.convertClickToWorldCoordinates(mouseEvent.getX(), mouseEvent.getY());
+        int targetTileX = targetCoords[0];
+        int targetTileY = targetCoords[1];
 
-        // Convertissez les coordonnées de la souris en coordonnées de tuiles
-        double mouseX = mouseEvent.getX();
-        double mouseY = mouseEvent.getY();
-        int targetTileX = (int) ((mouseX - offsetX) / tileSize);
-        int targetTileY = (int) ((mouseY - offsetY) / tileSize);
+        // Vérifier si la cible est dans les limites
+        if (minimapView.isValidPosition(targetTileX, targetTileY)) {
+            // Vérifier si la position cible est un obstacle
+            if (minimapView.isSolid(targetTileX, targetTileY)) {
+                // Trouver une position accessible à proximité
+                int[] adjustedTarget = findAccessiblePositionNear(targetTileX, targetTileY, playerTileX, playerTileY);
+                targetTileX = adjustedTarget[0];
+                targetTileY = adjustedTarget[1];
+            }
 
-        // Vérifiez si la cible est dans les limites
-        if (targetTileX >= 0 && targetTileX < tileMap.getWidth() &&
-                targetTileY >= 0 && targetTileY < tileMap.getHeight()) {
-            // Définissez le point cible et trouvez le chemin
+            // Trouver un chemin vers la position cible
             minimapView.findPath(playerTileX, playerTileY, targetTileX, targetTileY);
-
-            // Rendu de la minimap mise à jour avec le chemin
             minimapView.render();
 
-            // Ici, vous pourriez aussi envoyer un événement ou un signal pour que le joueur se déplace automatiquement
-            // suivant le chemin trouvé, si c'est ce que vous souhaitez
+            /*
+            // Mettre à jour le chemin du joueur
+            if (player instanceof Player) {
+                ((Player) player).setPath(minimapView.getCurrentPath());
+            }
+             */
         } else {
             System.out.println("Cible hors limites: (" + targetTileX + ", " + targetTileY + ")");
         }
+    }
+
+    private int[] findAccessiblePositionNear(int x, int y, int playerX, int playerY) {
+        // Rechercher une position accessible à proximité
+        int range = 3;
+        for (int dy = -range; dy <= range; dy++) {
+            for (int dx = -range; dx <= range; dx++) {
+                if (dx == 0 && dy == 0) continue;
+                int newX = x + dx;
+                int newY = y + dy;
+                if (minimapView.isValidPosition(newX, newY) && !minimapView.isSolid(newX, newY)) {
+                    return new int[]{newX, newY};
+                }
+            }
+        }
+        // Si aucune position accessible n'est trouvée, retourner la position originale
+        return new int[]{x, y};
     }
 }

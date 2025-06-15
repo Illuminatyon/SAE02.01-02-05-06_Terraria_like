@@ -1,19 +1,13 @@
 package fr.iut.hev.root.controller;
 
-import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseGameInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
-import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseMinimapInputHandler;
+import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
-import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.items.Consumable;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -53,6 +47,8 @@ public class GlobalController implements Initializable {
     private InventoryView inventoryView;
     private HotbarView hotbarView;
     private MobView mobView;
+    private int frameCount = 0; // Compteur de frames pour limiter les mises à jour
+    private boolean gamePaused = false; // Indique si le jeu est en pause
 
     // Ajoutez ces variables pour la minimap
     private MinimapView minimapView;
@@ -92,25 +88,42 @@ public class GlobalController implements Initializable {
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
                 (ev -> {
-                    for (int i = aliveActors.size() - 1; i >= 0; i--) {
-                        Actor currentActor = aliveActors.get(i);
-                        currentActor.updatePosition();
-                    }
-                    for (Loot loot : Loot.lootOnMapProperty) {
-                        loot.updatePosition();
-                    }
-                    if (mouseGameClicksHandler.getMouseClickIsPressed()) {
-                        mouseGameClicksHandler.clickPressedHandler();
-                    }
-                    if (mouseGameClicksHandler.getMouseClickIsReleased()) {
-                        mouseGameClicksHandler.clickReleasedHandler();
+                    // Ne mettre à jour les positions que si le jeu n'est pas en pause
+                    if (!gamePaused) {
+                        for (int i = aliveActors.size() - 1; i >= 0; i--) {
+                            Actor currentActor = aliveActors.get(i);
+                            currentActor.updatePosition();
+                        }
+                        for (Loot loot : Loot.lootOnMapProperty) {
+                            loot.updatePosition();
+                        }
+                        if (mouseGameClicksHandler.getMouseClickIsPressed()) {
+                            mouseGameClicksHandler.clickPressedHandler();
+                        }
+                        if (mouseGameClicksHandler.getMouseClickIsReleased()) {
+                            mouseGameClicksHandler.clickReleasedHandler();
+                        }
+
+                        // Mise à jour de la position de la lumière autour du joueur
+                        if (playerLightCircle != null) {
+                            double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
+                            double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
+                            playerLightCircle.updateCenter(playerCenterX, playerCenterY);
+                        }
                     }
 
-                    // Mise à jour de la position de la lumière autour du joueur
-                    if (playerLightCircle != null) {
-                        double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
-                        double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
-                        playerLightCircle.updateCenter(playerCenterX, playerCenterY);
+                    // Mise à jour constante de la minimap (toutes les 5 frames pour éviter les problèmes de performance)
+                    // La minimap est toujours mise à jour, même en pause
+                    if (minimapView != null) {
+                        // Incrémenter le compteur de frames
+                        frameCount++;
+
+                        // Utiliser un compteur pour limiter les mises à jour
+                        if (frameCount % 5 == 0) {
+                            minimapView.render();
+                        }
+                        // Toujours mettre à jour le chemin
+                        minimapView.updatePathBasedOnPlayerPosition();
                     }
                 })
         );
@@ -143,10 +156,6 @@ public class GlobalController implements Initializable {
         });
         hotbarView = new HotbarView(hotbarInventory);
 
-        inventory.add(0, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 100);
-        inventory.add(1, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 45);
-        inventory.add(2, new Consumable(Items.RAW_CHICKEN, ConsumableStats.RAW_CHICKEN), 20);
-
         // Crée playerLightCircle AVANT mouseGameClicksHandler
         double playerCenterX = playerView.getActorSprite().getLayoutX()
                 + playerView.getActorSprite().getTranslateX()
@@ -158,13 +167,16 @@ public class GlobalController implements Initializable {
         playerLightCircle.setCursorVisible(false);
 
         // Ajoutez la MinimapView
-        minimapView = new MinimapView(tileMap, player);
+        minimapView = new MinimapView(tileMap, player, aliveActors);
         globalPane.getChildren().add(minimapView);
 
-        // Positionnez la minimap dans le coin inférieur droit
+        // Set a higher z-index for the minimap
+        minimapView.setViewOrder(-1); // Lower values appear in front
+
+        // Positionnez la minimap dans le coin supérieur droit
         // Ajustez les ancres pour positionner correctement la minimap
         AnchorPane.setRightAnchor(minimapView, 10.0);
-        AnchorPane.setBottomAnchor(minimapView, 10.0);
+        AnchorPane.setTopAnchor(minimapView, 10.0);
 
         // Créez le gestionnaire pour la minimap
         mouseMinimapInputHandler = new MouseMinimapInputHandler(minimapView, player, tileMap);
@@ -181,7 +193,7 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player, playerView, aliveActors));
 
-        keyboardHandler = new KeyInputHandler(player, inventoryView);
+        keyboardHandler = new KeyInputHandler(player, inventoryView, minimapView, this);
 
         mouseItemActionHandler.onHandItemProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         mouseItemActionHandler.quantityProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
@@ -233,5 +245,37 @@ public class GlobalController implements Initializable {
         MobView mobView = new MobView(aggressiveMob, tileMap, globalPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, mobView, aliveActors));
         aliveActors.add(aggressiveMob);
+    }
+
+    /**
+     * Met le jeu en pause
+     */
+    public void pauseGame() {
+        gamePaused = true;
+        System.out.println("Jeu mis en pause");
+    }
+
+    /**
+     * Reprend le jeu après une pause
+     */
+    public void resumeGame() {
+        gamePaused = false;
+        System.out.println("Jeu repris");
+    }
+
+    /**
+     * Bascule entre pause et reprise du jeu
+     */
+    public void togglePause() {
+        gamePaused = !gamePaused;
+        System.out.println("État de pause basculé: " + (gamePaused ? "En pause" : "En cours"));
+    }
+
+    /**
+     * Vérifie si le jeu est en pause
+     * @return true si le jeu est en pause, false sinon
+     */
+    public boolean isGamePaused() {
+        return gamePaused;
     }
 }

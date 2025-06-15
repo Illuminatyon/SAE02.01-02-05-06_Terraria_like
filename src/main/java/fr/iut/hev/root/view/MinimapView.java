@@ -1,8 +1,10 @@
 package fr.iut.hev.root.view;
 
+import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.Tiles;
 import fr.iut.hev.root.model.pathfinder.Pathfinder;
 import javafx.scene.canvas.Canvas;
@@ -10,6 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MinimapView extends StackPane {
@@ -20,19 +23,25 @@ public class MinimapView extends StackPane {
     private final Pathfinder pathfinder;
     private List<Pathfinder.PathPoint> currentPath = new ArrayList<>();
     private int playerReach;
+    private ArrayList<Actor> actors;
+    private boolean isEnlarged = false;
+    private static final int ENLARGED_SIZE = 300; // Twice the normal size
 
     public static final int MINIMAP_SIZE = 150;
-    private static final Color PLAYER_COLOR = Color.RED;
+    private static final Color PLAYER_COLOR = Color.BLUE;
     private static final Color DEFAULT_COLOR = Color.BLACK;
     private static final Color PATH_COLOR = Color.BLUE;
     private static final Color JUMP_PATH_COLOR = Color.CYAN;
     private static final Color FALL_PATH_COLOR = Color.ORANGE;
+    private static final Color PASSIVE_MOB_COLOR = Color.GREEN;
+    private static final Color AGGRESSIVE_MOB_COLOR = Color.RED;
     private static final int MAX_JUMP_HEIGHT = 5;
     private static final int MAX_HORIZONTAL_MOVE = 1;
 
-    public MinimapView(TileMap tileMap, Player player) {
+    public MinimapView(TileMap tileMap, Player player, ArrayList<Actor> actors) {
         this.tileMap = tileMap;
         this.player = player;
+        this.actors = actors;
         this.playerReach = player.getReach();
         this.pathfinder = new Pathfinder(tileMap, MAX_JUMP_HEIGHT, MAX_HORIZONTAL_MOVE);
 
@@ -52,51 +61,51 @@ public class MinimapView extends StackPane {
         // Add listeners to update minimap when player moves
         player.posXProperty().addListener((obs, oldVal, newVal) -> render());
         player.posYProperty().addListener((obs, oldVal, newVal) -> render());
-
         // Setup mouse click handler
         setupMouseHandlers();
+        System.out.println("Initialisation de MinimapView");
     }
 
     private void setupMouseHandlers() {
-        this.canvas.setOnMouseClicked(event -> {
-            int[] targetCoords = convertClickToWorldCoordinates(event.getX(), event.getY());
-            int targetTileX = targetCoords[0];
-            int targetTileY = targetCoords[1];
-
-            int playerTileX = (int)(player.getPosX() / TileMap.format);
-            int playerTileY = (int)((player.getPosY() + player.getHeight()) / TileMap.format);
-
-            System.out.println("Position du joueur : (" + playerTileX + ", " + playerTileY + ")");
-            System.out.println("Position cible : (" + targetTileX + ", " + targetTileY + ")");
-
-            // Vérifier que les positions sont valides
-            if (!isValidPosition(playerTileX, playerTileY)) {
-                System.out.println("Position du joueur invalide !");
-                return;
-            }
-            if (!isValidPosition(targetTileX, targetTileY)) {
-                System.out.println("Position cible invalide !");
-                return;
-            }
-
-            // Limiter la distance en fonction de la portée du joueur
-            double distance = Math.sqrt(Math.pow(targetTileX - playerTileX, 2) +
-                    Math.pow(targetTileY - playerTileY, 2));
-
-            if (distance > playerReach) {
-                double angle = Math.atan2(targetTileY - playerTileY, targetTileX - playerTileX);
-                targetTileX = playerTileX + (int)(playerReach * Math.cos(angle));
-                targetTileY = playerTileY + (int)(playerReach * Math.sin(angle));
-
-                // Vérifier que la position ajustée est valide
-                targetTileX = Math.max(0, Math.min(tileMap.getWidth() - 1, targetTileX));
-                targetTileY = Math.max(0, Math.min(tileMap.getHeight() - 1, targetTileY));
-            }
-
-            // Trouver un chemin vers la position cible
-            findPath(playerTileX, playerTileY, targetTileX, targetTileY);
-        });
+        // Remove the internal handler - this will be handled by MouseMinimapInputHandler
+        // this.canvas.setOnMouseClicked(event -> { ... });
     }
+
+    public void startPlayerMovementAlongPath() {
+        if (!currentPath.isEmpty() && player instanceof Player) {
+            ((Player) player).setPath(currentPath);
+        }
+    }
+
+    public void toggleEnlargedView() {
+        isEnlarged = !isEnlarged;
+
+        if (isEnlarged) {
+            // Enlarge the minimap
+            this.setMaxSize(ENLARGED_SIZE, ENLARGED_SIZE);
+            this.setMinSize(ENLARGED_SIZE, ENLARGED_SIZE);
+            canvas.setWidth(ENLARGED_SIZE);
+            canvas.setHeight(ENLARGED_SIZE);
+        } else {
+            // Return to normal size
+            this.setMaxSize(MINIMAP_SIZE, MINIMAP_SIZE);
+            this.setMinSize(MINIMAP_SIZE, MINIMAP_SIZE);
+            canvas.setWidth(MINIMAP_SIZE);
+            canvas.setHeight(MINIMAP_SIZE);
+        }
+
+        // Re-render with new size
+        render();
+    }
+
+    /**
+     * Vérifie si la minimap est actuellement en mode agrandi
+     * @return true si la minimap est agrandie, false sinon
+     */
+    public boolean isEnlarged() {
+        return isEnlarged;
+    }
+
 
     /**
      * Méthode pour vérifier et corriger les positions si nécessaire
@@ -159,59 +168,38 @@ public class MinimapView extends StackPane {
         return new int[]{targetX, targetY};
     }
 
-    /**
-     * Méthode de gestion des clics sur la minimap, version corrigée
-     */
-    private void handleMinimapClick(double mouseX, double mouseY) {
-        try {
-            // Obtenir la position du joueur en tuiles
-            int[] playerTilePos = getValidPlayerTilePosition();
-            int playerTileX = playerTilePos[0];
-            int playerTileY = playerTilePos[1];
+    // Méthode corrigée pour obtenir la position du joueur en tuiles
+    public int[] getPlayerTilePosition() {
+        double playerX = player.getPosX();
+        double playerY = player.getPosY();
 
-            // Convertir le clic en coordonnées de tuiles
-            int[] clickedCoords = convertClickToWorldCoordinates(mouseX, mouseY);
-            int[] targetPos = getValidTargetPosition(clickedCoords);
+        // Calculer la position en tuiles
+        int playerTileX = (int) Math.floor(playerX / TileMap.format);
+        int playerTileY = (int) Math.floor((playerY + player.getHeight()) / TileMap.format);
 
-            System.out.println("\n=== NOUVELLE DESTINATION ===");
-            System.out.println("Position joueur (tuiles): (" + playerTileX + ", " + playerTileY + ")");
-            System.out.println("Position cible (tuiles): (" + targetPos[0] + ", " + targetPos[1] + ")");
-
-            // Calculer la distance
-            double distance = Math.sqrt(Math.pow(targetPos[0] - playerTileX, 2) +
-                    Math.pow(targetPos[1] - playerTileY, 2));
-
-            // Appliquer la portée si nécessaire
-            if (distance > playerReach) {
-                double angle = Math.atan2(targetPos[1] - playerTileY, targetPos[0] - playerTileX);
-                targetPos[0] = playerTileX + (int)(playerReach * Math.cos(angle));
-                targetPos[1] = playerTileY + (int)(playerReach * Math.sin(angle));
-
-                // S'assurer que la position est toujours valide
-                targetPos = getValidTargetPosition(targetPos);
-            }
-
-            // Trouver le chemin
-            System.out.println("Recherche de chemin...");
-            findPath(playerTileX, playerTileY, targetPos[0], targetPos[1]);
-
-        } catch (Exception e) {
-            System.err.println("Erreur dans handleMinimapClick: " + e.getMessage());
-            e.printStackTrace();
+        // Vérifier les limites
+        if (!isValidPosition(playerTileX, playerTileY)) {
+            System.out.println("Position du joueur hors limites, ajustement nécessaire");
+            playerTileX = Math.max(0, Math.min(tileMap.getWidth() - 1, playerTileX));
+            playerTileY = Math.max(0, Math.min(tileMap.getHeight() - 1, playerTileY));
         }
+
+        System.out.println("Position du joueur en tuiles: (" + playerTileX + ", " + playerTileY + ")");
+        return new int[]{playerTileX, playerTileY};
     }
 
-    /**
-     * Méthode corrigée pour convertir les clics en coordonnées monde
-     */
-    private int[] convertClickToWorldCoordinates(double mouseX, double mouseY) {
+
+    public int[] convertClickToWorldCoordinates(double mouseX, double mouseY) {
         // Obtenir la position du joueur en tuiles
-        int[] playerTilePos = getValidPlayerTilePosition();
+        int[] playerTilePos = getPlayerTilePosition();
         int playerTileX = playerTilePos[0];
         int playerTileY = playerTilePos[1];
 
+        // Utiliser la taille actuelle en fonction de l'état agrandi ou non
+        double currentSize = isEnlarged ? ENLARGED_SIZE : MINIMAP_SIZE;
+
         // Calculer la zone visible
-        int visibleTiles = 10;
+        int visibleTiles = isEnlarged ? 20 : 10; // Plus de tuiles visibles en mode agrandi
         int startX = Math.max(0, playerTileX - visibleTiles);
         int endX = Math.min(tileMap.getWidth(), playerTileX + visibleTiles + 1);
         int startY = Math.max(0, playerTileY - visibleTiles);
@@ -224,6 +212,143 @@ public class MinimapView extends StackPane {
         if (visibleWidth == 0) visibleWidth = 1;
         if (visibleHeight == 0) visibleHeight = 1;
 
+        float tileSizeX = (float)currentSize / visibleWidth;
+        float tileSizeY = (float)currentSize / visibleHeight;
+        float tileSize = Math.min(tileSizeX, tileSizeY);
+
+        // Calculer les offsets
+        float offsetX = (float)(currentSize / 2.0 - (playerTileX - startX) * tileSize);
+        float offsetY = (float)(currentSize / 2.0 - (playerTileY - startY) * tileSize);
+
+        // Calculer la position cliquée en coordonnées de tuiles
+        int clickedTileX = startX + (int)((mouseX - offsetX) / tileSize);
+        int clickedTileY = startY + (int)((mouseY - offsetY) / tileSize);
+
+        // Limiter aux dimensions de la carte
+        clickedTileX = Math.max(0, Math.min(tileMap.getWidth() - 1, clickedTileX));
+        clickedTileY = Math.max(0, Math.min(tileMap.getHeight() - 1, clickedTileY));
+
+        System.out.println("Conversion du clic (" + mouseX + ", " + mouseY + ") en tuile (" +
+                clickedTileX + ", " + clickedTileY + ")");
+        System.out.println("Zone visible: (" + startX + ", " + startY + ") à (" +
+                (endX-1) + ", " + (endY-1) + ")");
+        System.out.println("Taille des tuiles dans la minimap: " + tileSize);
+        System.out.println("Offsets: (" + offsetX + ", " + offsetY + ")");
+
+        return new int[]{clickedTileX, clickedTileY};
+    }
+
+
+
+    /**
+     * Méthode de gestion des clics sur la minimap, version corrigée
+     */
+    private void handleMinimapClick(double mouseX, double mouseY) {
+        System.out.println("\n=== GESTION DU CLIQUE ===");
+
+        // Obtenir et afficher la position du joueur
+        int[] playerTilePos = getPlayerTilePosition();
+        int playerTileX = playerTilePos[0];
+        int playerTileY = playerTilePos[1];
+        System.out.println("Position du joueur: (" + playerTileX + ", " + playerTileY + ")");
+
+        // Convertir le clic en coordonnées de tuiles
+        int[] targetCoords = convertClickToWorldCoordinates(mouseX, mouseY);
+        int targetTileX = targetCoords[0];
+        int targetTileY = targetCoords[1];
+        System.out.println("Position cible initiale: (" + targetTileX + ", " + targetTileY + ")");
+
+        // Vérifier et corriger la position cible si nécessaire
+        if (!isValidPosition(targetTileX, targetTileY)) {
+            System.out.println("Position cible hors limites, corrigeons...");
+            targetTileX = Math.max(0, Math.min(tileMap.getWidth() - 1, targetTileX));
+            targetTileY = Math.max(0, Math.min(tileMap.getHeight() - 1, targetTileY));
+            System.out.println("Position cible corrigée: (" + targetTileX + ", " + targetTileY + ")");
+        }
+
+        // Vérifier si la position cible est un obstacle
+        if (isSolid(targetTileX, targetTileY)) {
+            System.out.println("La position cible est un obstacle, recherchons une alternative...");
+
+            // Trouver une position accessible à proximité
+            boolean foundAlternative = false;
+            for (int r = 1; r <= 5; r++) {
+                for (int dy = -r; dy <= r; dy++) {
+                    for (int dx = -r; dx <= r; dx++) {
+                        if (dx == 0 && dy == 0) continue;
+
+                        int newX = targetTileX + dx;
+                        int newY = targetTileY + dy;
+
+                        if (isValidPosition(newX, newY) && !isSolid(newX, newY)) {
+                            System.out.println("Position alternative trouvée à (" + newX + ", " + newY + ")");
+                            targetTileX = newX;
+                            targetTileY = newY;
+                            foundAlternative = true;
+                            break;
+                        }
+                    }
+                    if (foundAlternative) break;
+                }
+                if (foundAlternative) break;
+            }
+
+            if (!foundAlternative) {
+                System.out.println("Aucune position accessible à proximité de la cible trouvée");
+            }
+        }
+
+        // Calculer la distance
+        double distance = Math.sqrt(Math.pow(targetTileX - playerTileX, 2) +
+                Math.pow(targetTileY - playerTileY, 2));
+        System.out.println("Distance: " + distance);
+        System.out.println("Portée du joueur: " + playerReach);
+
+        // Appliquer la portée si nécessaire
+        if (distance > playerReach) {
+            System.out.println("La cible est hors de portée (" + distance + " > " + playerReach + ")");
+            double angle = Math.atan2(targetTileY - playerTileY, targetTileX - playerTileX);
+            targetTileX = playerTileX + (int)(playerReach * Math.cos(angle));
+            targetTileY = playerTileY + (int)(playerReach * Math.sin(angle));
+
+            // Vérifier que la position ajustée est valide
+            targetTileX = Math.max(0, Math.min(tileMap.getWidth() - 1, targetTileX));
+            targetTileY = Math.max(0, Math.min(tileMap.getHeight() - 1, targetTileY));
+            System.out.println("Position cible ajustée pour la portée: (" + targetTileX + ", " + targetTileY + ")");
+        }
+
+        // Vérifier à nouveau la position cible
+        if (isSolid(targetTileX, targetTileY)) {
+            System.out.println("La position cible ajustée est toujours un obstacle!");
+            // Dans ce cas, on pourrait abandonner ou essayer de trouver un autre point
+        }
+
+        // Trouver un chemin vers la position cible
+        System.out.println("Recherche de chemin de (" + playerTileX + ", " + playerTileY +
+                ") à (" + targetTileX + ", " + targetTileY + ")");
+        findPath(playerTileX, playerTileY, targetTileX, targetTileY);
+    }
+
+
+
+    /**
+     * Méthode corrigée pour convertir les clics en coordonnées monde
+    private int[] convertClickToWorldCoordinates(double mouseX, double mouseY) {
+        // Obtenir la position du joueur en tuiles
+        int[] playerTilePos = getPlayerTilePosition();
+        int playerTileX = playerTilePos[0];
+        int playerTileY = playerTilePos[1];
+
+        // Calculer la zone visible
+        int visibleTiles = 10;
+        int startX = Math.max(0, playerTileX - visibleTiles);
+        int endX = Math.min(tileMap.getWidth(), playerTileX + visibleTiles + 1);
+        int startY = Math.max(0, playerTileY - visibleTiles);
+        int endY = Math.min(tileMap.getHeight(), playerTileY + visibleTiles + 1);
+
+        // Calculer la taille des tuiles dans la minimap
+        int visibleWidth = Math.max(1, endX - startX);
+        int visibleHeight = Math.max(1, endY - startY);
         float tileSizeX = (float)MINIMAP_SIZE / visibleWidth;
         float tileSizeY = (float)MINIMAP_SIZE / visibleHeight;
         float tileSize = Math.min(tileSizeX, tileSizeY);
@@ -236,15 +361,14 @@ public class MinimapView extends StackPane {
         int clickedTileX = startX + (int)((mouseX - offsetX) / tileSize);
         int clickedTileY = startY + (int)((mouseY - offsetY) / tileSize);
 
-        // S'assurer que les coordonnées sont dans les limites
+        // Assurer que les coordonnées sont dans les limites
         clickedTileX = Math.max(0, Math.min(tileMap.getWidth() - 1, clickedTileX));
         clickedTileY = Math.max(0, Math.min(tileMap.getHeight() - 1, clickedTileY));
 
-        System.out.println("Converti clic (" + mouseX + "," + mouseY + ") en tuile (" +
-                clickedTileX + "," + clickedTileY + ")");
-
+        System.out.println("Click converti en tuile: (" + clickedTileX + ", " + clickedTileY + ")");
         return new int[]{clickedTileX, clickedTileY};
     }
+     */
     public Canvas getCanvas() {
         return canvas;
     }
@@ -324,23 +448,25 @@ public class MinimapView extends StackPane {
         System.out.println("=== END FULL MAP ===\n");
     }
 
-    private boolean isValidPosition(int x, int y) {
+    public boolean isValidPosition(int x, int y) {
         boolean valid = x >= 0 && x < tileMap.getWidth() && y >= 0 && y < tileMap.getHeight();
         if (!valid) {
-            System.out.println("Position invalide : (" + x + ", " + y +
-                    ") hors limites de la carte (" +
-                    tileMap.getWidth() + "x" + tileMap.getHeight() + ")");
+            System.out.println("Position invalide: (" + x + ", " + y + ")");
+            System.out.println("Dimensions de la carte: " + tileMap.getWidth() + "x" + tileMap.getHeight());
         }
         return valid;
     }
 
-    private boolean isSolid(int x, int y) {
+
+    public boolean isSolid(int x, int y) {
         if (!isValidPosition(x, y)) {
-            return true; // Hors limites considéré comme solide
+            return true; // Hors limites est considéré comme solide
         }
 
         Tile tile = tileMap.getTile(x, y);
-        if (tile == null) return false;
+        if (tile == null) {
+            return false; // Considérer les tuiles null comme non solides (peut-être de l'air)
+        }
 
         try {
             Object tileObj = tile.getTile();
@@ -351,27 +477,79 @@ public class MinimapView extends StackPane {
         } catch (Exception e) {
             System.err.println("Erreur lors de la vérification de la tuile à (" + x + ", " + y + "): " + e.getMessage());
         }
-        return true;
+        return true; // Par défaut, considérer comme solide
     }
 
+
+    public void debugCoordinateConversion() {
+        System.out.println("\n=== DEBUG CONVERSION COORDONNEES ===");
+
+        // Position du joueur en pixels
+        double playerX = player.getPosX();
+        double playerY = player.getPosY();
+        System.out.println("Position du joueur en pixels: (" + playerX + ", " + playerY + ")");
+
+        // Taille du joueur
+        double playerWidth = player.getWidth();
+        double playerHeight = player.getHeight();
+        System.out.println("Taille du joueur: " + playerWidth + "x" + playerHeight);
+
+        // Format de la tuile
+        System.out.println("Format de la tuile (TileMap.format): " + TileMap.format);
+
+        // Position du joueur en tuiles
+        int playerTileX = (int) Math.floor(playerX / TileMap.format);
+        int playerTileY = (int) Math.floor((playerY + playerHeight) / TileMap.format);
+        System.out.println("Position du joueur en tuiles: (" + playerTileX + ", " + playerTileY + ")");
+
+        // Vérifier que cette position est valide
+        System.out.println("Position valide: " + isValidPosition(playerTileX, playerTileY));
+        System.out.println("Tuile sous le joueur est solide: " + isSolid(playerTileX, playerTileY));
+
+        // Vérifier les tuiles autour
+        System.out.println("\nTuiles autour du joueur:");
+        for (int dy = -2; dy <= 2; dy++) {
+            for (int dx = -2; dx <= 2; dx++) {
+                int checkX = playerTileX + dx;
+                int checkY = playerTileY + dy;
+                System.out.printf("(%d,%d): %s, solide: %b%n",
+                        checkX, checkY,
+                        isValidPosition(checkX, checkY) ? "valide" : "invalide",
+                        isValidPosition(checkX, checkY) ? isSolid(checkX, checkY) : false);
+            }
+        }
+
+        System.out.println("=== FIN DEBUG CONVERSION ===\n");
+    }
+
+
     public void findPath(int startX, int startY, int goalX, int goalY) {
-        int width = tileMap.getWidth();
-        int height = tileMap.getHeight();
-
-        if (!isValidPosition(startX, startY)) {
-            System.err.println("ERREUR: Position de départ invalide!");
-            return;
-        }
-
-        if (!isValidPosition(goalX, goalY)) {
-            System.err.println("ERREUR: Position d'arrivée invalide!");
-            return;
-        }
-
         System.out.println("\n=== DEBUT RECHERCHE CHEMIN ===");
         System.out.println("Recherche de chemin de (" + startX + "," + startY + ") à (" + goalX + "," + goalY + ")");
 
-        if (isSolid(goalX, goalY)) {
+        // Vérification des positions
+        if (!isValidPosition(startX, startY)) {
+            System.out.println("Position de départ invalide: (" + startX + "," + startY + ")");
+            return;
+        }
+        if (!isValidPosition(goalX, goalY)) {
+            System.out.println("Position d'arrivée invalide: (" + goalX + "," + goalY + ")");
+            return;
+        }
+
+        // Vérifier si les positions sont des obstacles
+        boolean startIsSolid = isSolid(startX, startY);
+        boolean goalIsSolid = isSolid(goalX, goalY);
+
+        System.out.println("Position de départ solide: " + startIsSolid);
+        System.out.println("Position d'arrivée solide: " + goalIsSolid);
+
+        if (startIsSolid) {
+            System.out.println("Position de départ est un obstacle!");
+            findNearestAccessiblePosition(startX, startY, goalX, goalY);
+            return;
+        }
+        if (goalIsSolid) {
             System.out.println("Position d'arrivée est un obstacle!");
             findNearestAccessiblePosition(startX, startY, goalX, goalY);
             return;
@@ -382,11 +560,13 @@ public class MinimapView extends StackPane {
 
         if (!path.isEmpty()) {
             currentPath = path;
-            if (player instanceof Player) {
-                ((Player) player).setPath(path);
-            }
+            // Comment out or remove the following lines to prevent player movement on minimap click
+            // if (player instanceof Player) {
+            //     ((Player) player).setPath(path);
+            // }
             System.out.println("Chemin trouvé avec " + path.size() + " points");
-            for (Pathfinder.PathPoint p : path) {
+            for (int i = 0; i < Math.min(10, path.size()); i++) {
+                Pathfinder.PathPoint p = path.get(i);
                 System.out.println("  -> (" + p.x + ", " + p.y +
                         (p.isJumping ? " [saut]" : "") +
                         (p.isFalling ? " [chute]" : ""));
@@ -398,6 +578,7 @@ public class MinimapView extends StackPane {
 
         render();
     }
+
 
     private void findNearestAccessiblePosition(int startX, int startY, int goalX, int goalY) {
         System.out.println("Recherche d'une position accessible près de (" + goalX + ", " + goalY + ")");
@@ -412,9 +593,10 @@ public class MinimapView extends StackPane {
                     List<Pathfinder.PathPoint> path = pathfinder.findPath(startX, startY, newX, newY);
                     if (!path.isEmpty()) {
                         currentPath = path;
-                        if (player instanceof Player) {
-                            ((Player) player).setPath(path);
-                        }
+                        // Comment out or remove the following lines to prevent player movement on minimap click
+                        // if (player instanceof Player) {
+                        //     ((Player) player).setPath(path);
+                        // }
                         System.out.println("Chemin alternatif trouvé vers (" + newX + ", " + newY + ")");
                         System.out.println("Distance à l'objectif original: " +
                                 Math.sqrt(Math.pow(newX - goalX, 2) + Math.pow(newY - goalY, 2)));
@@ -429,19 +611,23 @@ public class MinimapView extends StackPane {
 
 
     public void render() {
+        int[] playerTilePos = getPlayerTilePosition();
+        System.out.println("Rendu de la minimap - Position du joueur: (" +
+                playerTilePos[0] + ", " + playerTilePos[1] + ")");
         // Clear with transparent background
-        gc.clearRect(0, 0, MINIMAP_SIZE, MINIMAP_SIZE);
+        double currentSize = isEnlarged ? ENLARGED_SIZE : MINIMAP_SIZE;
+        gc.clearRect(0, 0, currentSize, currentSize);
 
         // Draw background
         gc.setFill(Color.rgb(20, 20, 20, 0.8));
-        gc.fillRect(0, 0, MINIMAP_SIZE, MINIMAP_SIZE);
+        gc.fillRect(0, 0, currentSize, currentSize);
 
         // Get player position in tile coordinates
         int playerTileX = (int)(player.getPosX() / TileMap.format);
         int playerTileY = (int)((player.getPosY() + player.getHeight()) / TileMap.format);
 
         // Define visible area
-        int visibleTiles = 10;
+        int visibleTiles = isEnlarged ? 20 : 10; // Show more tiles when enlarged
         int startX = Math.max(0, playerTileX - visibleTiles);
         int endX = Math.min(tileMap.getWidth(), playerTileX + visibleTiles + 1);
         int startY = Math.max(0, playerTileY - visibleTiles);
@@ -450,13 +636,13 @@ public class MinimapView extends StackPane {
         // Calculate tile size
         int visibleWidth = Math.max(1, endX - startX);
         int visibleHeight = Math.max(1, endY - startY);
-        float tileSizeX = (float)MINIMAP_SIZE / visibleWidth;
-        float tileSizeY = (float)MINIMAP_SIZE / visibleHeight;
+        float tileSizeX = (float)currentSize / visibleWidth;
+        float tileSizeY = (float)currentSize / visibleHeight;
         float tileSize = Math.min(tileSizeX, tileSizeY);
 
         // Calculate offsets
-        float offsetX = MINIMAP_SIZE / 2f - (playerTileX - startX) * tileSize;
-        float offsetY = MINIMAP_SIZE / 2f - (playerTileY - startY) * tileSize;
+        float offsetX = (float)(currentSize / 2.0 - (playerTileX - startX) * tileSize);
+        float offsetY = (float)(currentSize / 2.0 - (playerTileY - startY) * tileSize);
 
         // Draw visible area background
         gc.setFill(Color.rgb(30, 30, 30));
@@ -495,6 +681,39 @@ public class MinimapView extends StackPane {
             }
         }
 
+        // Draw other entities
+        if (actors != null) {
+            for (Actor actor : actors) {
+                if (actor == player) continue; // Skip player, we'll draw it separately
+
+                // Get actor position in tile coordinates
+                int actorTileX = (int)(actor.getPosX() / TileMap.format);
+                int actorTileY = (int)((actor.getPosY() + actor.getHeight()) / TileMap.format);
+
+                // Check if actor is in visible area
+                if (actorTileX >= startX && actorTileX < endX && actorTileY >= startY && actorTileY < endY) {
+                    // Determine color based on actor type
+                    Color actorColor;
+                    if (actor instanceof fr.iut.hev.root.model.entities.AggressiveMob) {
+                        actorColor = AGGRESSIVE_MOB_COLOR;
+                    } else {
+                        actorColor = PASSIVE_MOB_COLOR;
+                    }
+
+                    // Draw actor
+                    double actorSize = Math.max(6, tileSize / 3);
+                    double actorMiniX = (actorTileX - startX) * tileSize + offsetX - actorSize/2;
+                    double actorMiniY = (actorTileY - startY) * tileSize + offsetY - actorSize/2;
+
+                    // Slight adjustment to position (move up a bit)
+                    actorMiniY -= 2;
+
+                    gc.setFill(actorColor);
+                    gc.fillOval(actorMiniX, actorMiniY, actorSize, actorSize);
+                }
+            }
+        }
+
         // Draw path if exists
         if (!currentPath.isEmpty()) {
             double pathPointSize = Math.max(2, tileSize / 2);
@@ -521,12 +740,16 @@ public class MinimapView extends StackPane {
         double playerSize = Math.max(8, tileSize / 2);
         double playerMiniX = (playerTileX - startX) * tileSize + offsetX - playerSize/2;
         double playerMiniY = (playerTileY - startY) * tileSize + offsetY - playerSize/2;
+
+        // Slight adjustment to position (move up a bit)
+        playerMiniY -= 3;
+
         gc.fillOval(playerMiniX, playerMiniY, playerSize, playerSize);
 
         // Draw border
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(1);
-        gc.strokeRect(0, 0, MINIMAP_SIZE, MINIMAP_SIZE);
+        gc.strokeRect(0, 0, currentSize, currentSize);
 
         // Debug info
         System.out.println("Minimap rendered:");
@@ -596,5 +819,60 @@ public class MinimapView extends StackPane {
             System.out.println();
         }
         System.out.println("=== END MAP VIEW ===\n");
+    }
+
+    public List<Pathfinder.PathPoint> getCurrentPath() {
+        if (currentPath == null) {
+            System.out.println("Aucun chemin trouvé.");
+            return Collections.emptyList();
+        }
+        System.out.println("Chemin actuel: " + currentPath.size() + " points");
+        for (int i = 0; i < Math.min(10, currentPath.size()); i++) {
+            Pathfinder.PathPoint p = currentPath.get(i);
+            System.out.println("  -> (" + p.x + ", " + p.y +
+                    (p.isJumping ? " [saut]" : "") +
+                    (p.isFalling ? " [chute]" : ""));
+        }
+        return currentPath;
+    }
+
+    /**
+     * Met à jour le chemin en fonction de la position du joueur
+     * Supprime les points du chemin que le joueur a déjà traversés
+     */
+    public void updatePathBasedOnPlayerPosition() {
+        if (currentPath.isEmpty()) {
+            return;
+        }
+
+        // Obtenir la position du joueur en tuiles
+        int playerTileX = (int)(player.getPosX() / TileMap.format);
+        int playerTileY = (int)((player.getPosY() + player.getHeight()) / TileMap.format);
+
+        // Vérifier si le joueur est sur un point du chemin
+        List<Pathfinder.PathPoint> pointsToRemove = new ArrayList<>();
+        for (Pathfinder.PathPoint point : currentPath) {
+            // Si le joueur est sur ce point ou l'a dépassé, le marquer pour suppression
+            if (point.x == playerTileX && point.y == playerTileY) {
+                pointsToRemove.add(point);
+                System.out.println("Joueur sur le point de chemin: (" + point.x + ", " + point.y + ")");
+            }
+        }
+
+        // Supprimer tous les points jusqu'au point actuel (inclus)
+        if (!pointsToRemove.isEmpty()) {
+            Pathfinder.PathPoint lastPoint = pointsToRemove.get(pointsToRemove.size() - 1);
+            int lastIndex = currentPath.indexOf(lastPoint);
+
+            if (lastIndex >= 0) {
+                // Supprimer tous les points jusqu'à lastIndex (inclus)
+                for (int i = 0; i <= lastIndex; i++) {
+                    if (!currentPath.isEmpty()) {
+                        currentPath.remove(0);
+                    }
+                }
+                System.out.println("Points de chemin supprimés. Reste: " + currentPath.size());
+            }
+        }
     }
 }
