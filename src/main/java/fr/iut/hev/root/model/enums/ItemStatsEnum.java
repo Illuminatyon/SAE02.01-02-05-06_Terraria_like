@@ -75,6 +75,7 @@ public enum ItemStatsEnum {
 
     WOODEN_PICKAXE(1021),
     WOODEN_HAX(1023),
+    WOODEN_SHOVEL(1022),
 
     HAMMER(1044),
 

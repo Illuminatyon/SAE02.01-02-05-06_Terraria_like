@@ -18,11 +18,11 @@ public class CraftingManager {
     private ObjectProperty<RecipesEnum> selectedRecipeProperty;
     private ItemFactory itemFactory;
 
-    public CraftingManager(Inventory inventory) {
+    public CraftingManager(Inventory inventory,ItemFactory itemFactory) {
         this.inventory = inventory;
         this.recipesAvailable = FXCollections.observableArrayList();
         this.selectedRecipeProperty = new SimpleObjectProperty<>(null);
-        this.itemFactory = new ItemFactory();
+        this.itemFactory = itemFactory;
         initCraftingManager();
     }
 

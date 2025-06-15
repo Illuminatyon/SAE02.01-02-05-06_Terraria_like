@@ -14,11 +14,11 @@ public class TileMap {
 
     public static final int format = 32;
 
-    public TileMap(int width, int height) {
+    public TileMap(int width, int height,ItemFactory itemFactory) {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
-        this.itemFactory = new ItemFactory();
+        this.itemFactory = itemFactory;
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];

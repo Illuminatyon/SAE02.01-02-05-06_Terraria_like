@@ -23,7 +23,8 @@ public class Block extends Item {
             TilesEnum currentItem = player.getItemInHand().getItemEnum().getRelatedTile();
             System.out.println(currentItem);
             tileMap.addTile(new Tile(currentItem,x,y));
-            player.getInventory().remove(player.getItemInHand().getItemEnum(),1);
+            player.getInventory().remove(player.getIndexItemInHand(),1);
+            player.consumeOneItem();
             return true;
         }
         return false;

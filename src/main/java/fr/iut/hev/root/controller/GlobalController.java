@@ -134,7 +134,7 @@ public class GlobalController implements Initializable {
     }
 
     private void initMap() {
-        tileMap = new TileMap(1920,1056);
+        tileMap = new TileMap(1920,1056,itemFactory);
         globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
     }
 
@@ -142,7 +142,7 @@ public class GlobalController implements Initializable {
         player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
         aliveActors.add(player);
         inventory = player.getInventory();
-        craftingManager = new CraftingManager(inventory);
+        craftingManager = new CraftingManager(inventory,itemFactory);
 
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
@@ -179,7 +179,7 @@ public class GlobalController implements Initializable {
         mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap);
 
         player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
-        player.quantityOfItemInHand().bindBidirectional(scrollHotbarHandler.quantityProperty());
+        player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
         player.indexItemInHandProperty().bind(scrollHotbarHandler.IndexHotbarProperty());
         player.itemInHandProperty().addListener((observableValue, item, t1) -> mouseItemActionHandler.updateCooldown());
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->

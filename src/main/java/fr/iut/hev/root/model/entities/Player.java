@@ -129,7 +129,16 @@ public class Player extends Actor {
     }
 
     public boolean usesItemInHand(MouseItemActionInputHandler eventHandler) {
-        return getItemInHand().isUsed(eventHandler);
+        System.out.println(getItemInHand());
+        System.out.println(getQuantityOfItemInHand());
+        if (getQuantityOfItemInHand() > 0)
+            return getItemInHand().isUsed(eventHandler);
+        else
+            return false;
+    }
+
+    public void consumeOneItem() {
+        this.quantityOfItemInHandProperty.setValue(quantityOfItemInHandProperty.getValue() - 1);
     }
 
     public Item getItemInHand() {return this.itemInHandProperty.getValue();}
@@ -137,7 +146,7 @@ public class Player extends Actor {
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}
     public void setQuantityOfItemInHand(int quantity) {this.quantityOfItemInHandProperty.setValue(quantity);}
-    public IntegerProperty quantityOfItemInHand() {return this.quantityOfItemInHandProperty;}
+    public IntegerProperty quantityOfItemInHandProperty() {return this.quantityOfItemInHandProperty;}
     public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
     public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
 }

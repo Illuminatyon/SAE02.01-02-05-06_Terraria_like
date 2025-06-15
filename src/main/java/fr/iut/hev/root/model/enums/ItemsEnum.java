@@ -12,6 +12,7 @@ public enum ItemsEnum {
 
     WOODEN_PICKAXE("wooden_pickaxe",1,0, ItemTypesEnum.TOOL,ItemStatsEnum.WOODEN_PICKAXE),
     WOODEN_HAX("wooden_hax",1,0, ItemTypesEnum.TOOL,ItemStatsEnum.WOODEN_HAX),
+    WOODEN_SHOVEL("wooden_shovel",1,0,ItemTypesEnum.TOOL,ItemStatsEnum.WOODEN_SHOVEL),
     HAMMER("hammer",1,0, ItemTypesEnum.TOOL,ItemStatsEnum.HAMMER),
     CRAFTING_TABLE("crafting_table",1,0, ItemTypesEnum.UTILITY),
     FURNACE("furnace",100,0, ItemTypesEnum.UTILITY),

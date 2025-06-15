@@ -15,7 +15,7 @@ public class Consumable extends Item{
     }
 
     @Override
-    public boolean isUsed(MouseItemActionInputHandler eventHandler){
+    public boolean isUsed(MouseItemActionInputHandler eventHandler) {
         Player player = eventHandler.getPlayer();
         if (player.getHealth() < 10) {
             if (player.getHealth() + getRestoredHealth() >= 10)
@@ -23,6 +23,7 @@ public class Consumable extends Item{
             else
                 player.setHealth(player.getHealth() + getRestoredHealth());
             player.getInventory().remove(player.getIndexItemInHand(),1);
+            player.consumeOneItem();
             return true;
         }
         else {
