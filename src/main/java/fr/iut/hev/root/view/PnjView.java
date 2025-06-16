@@ -13,6 +13,7 @@ import javafx.util.Duration;
 
 public class PnjView extends ActorView{
     private Label phrase = new Label();
+    private int count = 0;
 
     public PnjView(Pnj actor, TileMap tileMap, AnchorPane anchorPane) {
         super(actor, tileMap, anchorPane);
@@ -20,19 +21,25 @@ public class PnjView extends ActorView{
         this.phrase.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5;");
         this.phrase.setVisible(false);
         this.getAnchorPane().getChildren().add(phrase);
+        phrase.translateXProperty().bind(this.getActor().posXProperty().add(30));
+        phrase.translateYProperty().bind(this.getActor().posYProperty().subtract(30));
     }
 
-    public void speak(DialogueEnum dialogue) {
-        // Update text and make the label visible.
-        this.phrase.setText(dialogue.toString());
-        this.phrase.setLayoutX(super.getActor().posXProperty().getValue() + super.getActor().getWidth() + 10);
-        this.phrase.setLayoutY(super.getActor().posYProperty().getValue() - 20);
-        this.phrase.setVisible(true);
+    public void speak() {
+        DialogueEnum[] text = DialogueEnum.values();
 
-        // Hide the speech bubble after 3 seconds.
-        PauseTransition pause = new PauseTransition(Duration.seconds(10));
-        pause.setOnFinished(event -> this.phrase.setVisible(false));
-        pause.play();
+            this.phrase.setText(text[count].getTexte());
+
+
+            this.phrase.setVisible(true);
+            System.out.println(this.phrase);
+
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(10));
+            pause.setOnFinished(event -> this.phrase.setVisible(false));
+            pause.play();
+            count++;
+
     }
 }
 

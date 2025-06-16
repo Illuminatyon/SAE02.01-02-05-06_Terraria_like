@@ -53,6 +53,7 @@ public class GlobalController implements Initializable {
     private InventoryView inventoryView;
     private HotbarView hotbarView;
     private MobView mobView;
+    private PnjView pnjView;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -107,6 +108,9 @@ public class GlobalController implements Initializable {
                         double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
+                    }
+                    if (this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft()) {
+                        pnjView.speak();
                     }
                 })
         );
@@ -214,10 +218,10 @@ public class GlobalController implements Initializable {
     }
     private void initPnj() {
         Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS);
-        PnjView pnjView = new PnjView(homps, tileMap, globalPane);
+        this.pnjView = new PnjView(homps, tileMap, globalPane);
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
         aliveActors.add(homps);
-        pnjView.speak( INTRO );
+
       
 
     }
