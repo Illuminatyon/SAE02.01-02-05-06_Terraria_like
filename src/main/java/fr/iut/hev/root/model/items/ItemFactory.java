@@ -8,30 +8,25 @@ public class ItemFactory {
     public ItemFactory() {}
 
     public Item createItem(ItemsEnum itemsEnum) {
-        switch (itemsEnum.getItemType()) {
-            case ItemTypesEnum.BLOCK -> {
-                return createBlock(itemsEnum);
-            }
-            case ItemTypesEnum.RESOURCES -> {
-                return createResource(itemsEnum);
-            }
-            case ItemTypesEnum.UTILITY -> {
-                return createUtility(itemsEnum);
-            }
-            case ItemTypesEnum.CONSUMABLE -> {
-                return createConsumable(itemsEnum);
-            }
-            case ItemTypesEnum.TOOL -> {
-                return createTool(itemsEnum);
-            }
-            case ItemTypesEnum.WEAPON -> {
-                return createWeapon(itemsEnum);
-            }
-            case ItemTypesEnum.ARMOR_PIECE -> {
-                return createArmorPiece(itemsEnum);
-            }
-            default -> {
-                return null;
+        if (itemsEnum.getStats() != null && itemsEnum.getStats().isEquipment())
+            return createEquipment(itemsEnum);
+        else {
+            switch (itemsEnum.getItemType()) {
+                case ItemTypesEnum.BLOCK -> {
+                    return createBlock(itemsEnum);
+                }
+                case ItemTypesEnum.RESOURCES -> {
+                    return createResource(itemsEnum);
+                }
+                case ItemTypesEnum.UTILITY -> {
+                    return createUtility(itemsEnum);
+                }
+                case ItemTypesEnum.CONSUMABLE -> {
+                    return createConsumable(itemsEnum);
+                }
+                default -> {
+                    return null;
+                }
             }
         }
     }
@@ -50,6 +45,23 @@ public class ItemFactory {
 
     public Consumable createConsumable(ItemsEnum itemsEnum) {
         return new Consumable(itemsEnum);
+    }
+
+    public Equipment createEquipment(ItemsEnum itemsEnum) {
+        switch (itemsEnum.getStats().getItemTypeFromStat()) {
+            case 1 -> {
+                return createTool(itemsEnum);
+            }
+            case 2 -> {
+                return createWeapon(itemsEnum);
+            }
+            case 3 -> {
+                return createArmorPiece(itemsEnum);
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     public Tool createTool(ItemsEnum itemsEnum) {

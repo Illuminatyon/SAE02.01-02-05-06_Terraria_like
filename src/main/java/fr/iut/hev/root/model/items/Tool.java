@@ -8,7 +8,7 @@ import fr.iut.hev.root.model.enums.ItemsEnum;
 
 import static fr.iut.hev.root.model.TileMap.format;
 
-public class Tool extends Item {
+public class Tool extends Equipment {
 
     private int miningSpeed;
     private BlockTypesEnum efficientBlockAgainst;
@@ -17,6 +17,7 @@ public class Tool extends Item {
         super(itemsEnum);
         this.miningSpeed = getStats().getMiningSpeed();
         this.efficientBlockAgainst = getStats().getEfficientBlockAgainst();
+        System.out.println(miningSpeed);
     }
 
     @Override
