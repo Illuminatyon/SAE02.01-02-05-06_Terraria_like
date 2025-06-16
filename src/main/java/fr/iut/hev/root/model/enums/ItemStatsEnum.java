@@ -94,10 +94,11 @@ public enum ItemStatsEnum {
     }
 
     public int getItemMainStat() {
-        if (statCode / 1000 != 1)
-            return statCode % 1000 / 10;
-        else
+        if (statCode / 1000 != 1) {
+            return statCode % 1000;
+        }else {
             return 0;
+        }
     }
 
     public int getMiningSpeed() {
