@@ -70,6 +70,10 @@ public enum ItemStatsEnum {
      *         </li>
      *     </ul>
      * </p>
+     * <br>
+     * <p>
+     *     You shall use the {@link #getMiningSpeed()} and {@link #getEfficientBlockAgainst()} methods to get stats from a tool since they're encoded differently.
+     * </p>
      *
      */
 
@@ -120,4 +124,6 @@ public enum ItemStatsEnum {
         }
         return returnedEnum;
     }
+
+
 }
