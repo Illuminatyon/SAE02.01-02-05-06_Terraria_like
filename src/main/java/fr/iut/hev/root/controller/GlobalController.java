@@ -14,7 +14,9 @@ import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
+import fr.iut.hev.root.model.items.Weapon;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -50,6 +52,7 @@ public class GlobalController implements Initializable {
     private CooldownManager cooldownManager;
     private ItemFactory itemFactory;
     private CraftingManager craftingManager;
+    private HitboxManager hitboxManager;
     public static Mob mob ;
 
     private GlobalView globalView;
@@ -97,6 +100,10 @@ public class GlobalController implements Initializable {
         LootView lv = new LootView(globalPane);
         cooldownManager = new CooldownManager();
         itemFactory = new ItemFactory();
+        hitboxManager = new HitboxManager();
+
+        // Set the hitbox manager for all weapons
+        Weapon.setHitboxManager(hitboxManager);
 
         initItemEnums();
         initMap();
@@ -108,6 +115,9 @@ public class GlobalController implements Initializable {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
                         Actor currentActor = aliveActors.get(i);
                         currentActor.updatePosition();
+
+                        // Update hitbox positions for the actor
+                        hitboxManager.updateHitboxPositions(currentActor);
                     }
                     for (Loot loot : Loot.lootOnMapProperty) {
                         loot.updatePosition();
@@ -143,6 +153,9 @@ public class GlobalController implements Initializable {
         aliveActors.add(player);
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
+
+        // Create a vulnerable hitbox for the player
+        hitboxManager.createDefaultVulnerableHitbox(player);
 
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
@@ -210,6 +223,9 @@ public class GlobalController implements Initializable {
         this.mobView = new MobView(mob,tileMap,globalPane);
         mob.healthProperty().addListener(new DeathListener(mob,mobView,aliveActors));
         aliveActors.add(mob);
+
+        // Create a vulnerable hitbox for the mob
+        hitboxManager.createDefaultVulnerableHitbox(mob);
     }
 
     private void initActors() {
