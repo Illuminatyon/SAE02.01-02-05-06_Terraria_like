@@ -16,6 +16,7 @@ public abstract class Actor extends Entity {
     private int jumpingTestDecay;
     private int reach;
     private ActorEnum type;
+    protected int damage;
 
     private IntegerProperty lookDirectionProperty;
     public enum LookDirections {

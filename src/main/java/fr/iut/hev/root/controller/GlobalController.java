@@ -3,6 +3,7 @@ package fr.iut.hev.root.controller;
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
+import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.CraftingManager;
 import fr.iut.hev.root.model.Inventory;
@@ -11,6 +12,9 @@ import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.enums.ConsumableStats;
+import fr.iut.hev.root.model.enums.DialogueEnum;
+import fr.iut.hev.root.model.enums.Items;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
@@ -27,15 +31,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import static fr.iut.hev.root.model.enums.DialogueEnum.INTRO;
 
 public class GlobalController implements Initializable {
     private Timeline gameLoop;
@@ -59,6 +62,7 @@ public class GlobalController implements Initializable {
     private InventoryView inventoryView;
     private HotbarView hotbarView;
     private MobView mobView;
+    private PnjView pnjView;
     private CraftView craftView;
 
     @FXML
@@ -92,6 +96,7 @@ public class GlobalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        aliveActors = new ArrayList<>();
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         LootView lv = new LootView(globalPane);
@@ -124,6 +129,9 @@ public class GlobalController implements Initializable {
                         double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
+                    }
+                    if (this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft()) {
+                        pnjView.speak();
                     }
                     cooldownManager.allCooldownsTick();
                 })
@@ -205,10 +213,10 @@ public class GlobalController implements Initializable {
         });
     }
 
-    private void initmob(){
-        this.mob = new Mob(0,0,32,32,tileMap,2,2,15,3,ActorEnum.POULET);
-        this.mobView = new MobView(mob,tileMap,globalPane);
-        mob.healthProperty().addListener(new DeathListener(mob,mobView,aliveActors));
+    private void initmob() {
+        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET);
+        this.mobView = new MobView(mob, tileMap, globalPane);
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
         aliveActors.add(mob);
     }
 
@@ -216,7 +224,23 @@ public class GlobalController implements Initializable {
         aliveActors = new ArrayList<>();
         initPlayer();
         initmob();
+        initAggressiveMob(player);
+        initPnj();
+    }
 
+    private void initAggressiveMob(Player player) {
+        AggressiveMob aggressiveMob = new AggressiveMob(
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
+        );
+        MobView mobView = new MobView(aggressiveMob, tileMap, globalPane);
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, mobView, aliveActors));
+        aliveActors.add(aggressiveMob);
+    }
+    private void initPnj() {
+        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS);
+        this.pnjView = new PnjView(homps, tileMap, globalPane);
+        homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
+        aliveActors.add(homps);
 
     }
 
