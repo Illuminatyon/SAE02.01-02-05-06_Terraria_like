@@ -23,7 +23,7 @@ public enum ItemsEnum {
     IRON_CHESTPLATE("iron_chestplate",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_CHESTPLATE),
     IRON_LEGGINGS("iron_leggings",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_LEGGINGS),
 
-    RAW_CHICKEN("raw_chicken",100,1, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
+    RAW_CHICKEN("raw_chicken",100,1.5, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
     CACA("caca",100,1,ItemTypesEnum.RESOURCES);
 
     private String name;

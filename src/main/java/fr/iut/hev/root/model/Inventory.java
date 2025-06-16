@@ -152,7 +152,7 @@ public class Inventory {
         int i = 0;
         while (removedQuantity > 0 && i < slots.size()) {
             InventorySlot currentSlot = getInventorySlot(i);
-            if (currentSlot.getItem().getItemEnum() == removedItem) {
+            if (currentSlot.getItem() != null && currentSlot.getItem().getItemEnum() == removedItem) {
                 if (removedQuantity >= currentSlot.getQuantity()) {
                     removedQuantity = removedQuantity - currentSlot.getQuantity();
                     currentSlot.remove(currentSlot.getQuantity());

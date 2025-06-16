@@ -105,7 +105,6 @@ public class GlobalController implements Initializable {
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
                 (ev -> {
-                    cooldownManager.allCooldownsTick();
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
                         Actor currentActor = aliveActors.get(i);
                         currentActor.updatePosition();
@@ -126,6 +125,7 @@ public class GlobalController implements Initializable {
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
+                    cooldownManager.allCooldownsTick();
                 })
         );
         gameLoop.getKeyFrames().add(kf);

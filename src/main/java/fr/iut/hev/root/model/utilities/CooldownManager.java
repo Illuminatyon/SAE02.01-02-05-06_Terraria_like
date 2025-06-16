@@ -10,8 +10,9 @@ public class CooldownManager {
     }
 
     public void allCooldownsTick() {
-        for (Cooldown cooldowns : cooldowns) {
-            cooldowns.ticks();
+        cooldowns.removeIf(cooldown1 -> !cooldown1.getOnGoing());
+        for (Cooldown cooldown : cooldowns) {
+            cooldown.ticks();
         }
     }
 }
