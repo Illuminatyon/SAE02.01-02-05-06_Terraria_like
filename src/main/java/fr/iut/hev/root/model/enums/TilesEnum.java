@@ -11,7 +11,6 @@ public enum TilesEnum {
     //WATER("water", TileTypes.LIQUID),
     //LAVA("lava", TileTypes.LIQUID);
     CRAFTING_TABLE("crafting_table", TileTypesEnum.UTILITIES,15, ItemsEnum.CRAFTING_TABLE, BlockTypesEnum.WOOD_TYPE),
-    TREE("tree", TileTypesEnum.BACKGROUND,15, ItemsEnum.WOOD, BlockTypesEnum.WOOD_TYPE),
     FURNACE("furnace", TileTypesEnum.UTILITIES,20, ItemsEnum.FURNACE);
 
     private final String name;
