@@ -11,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+import java.sql.SQLOutput;
+
 public class PnjView extends ActorView{
     private Label phrase = new Label();
     private int count = 0;
@@ -27,8 +29,11 @@ public class PnjView extends ActorView{
 
     public void speak() {
         DialogueEnum[] text = DialogueEnum.values();
-
+        if (count >= text.length) {
+            count = 0; // Reset if exceeding bounds
+        }
             this.phrase.setText(text[count].getTexte());
+        System.out.println(text[count].getTexte());
 
 
             this.phrase.setVisible(true);
@@ -40,6 +45,10 @@ public class PnjView extends ActorView{
             pause.play();
             count++;
 
+    }
+
+    public Label getPhrase() {
+        return phrase;
     }
 }
 

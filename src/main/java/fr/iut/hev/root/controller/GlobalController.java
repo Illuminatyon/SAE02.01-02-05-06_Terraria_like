@@ -12,13 +12,14 @@ import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.enums.ConsumableStats;
+//import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.DialogueEnum;
-import fr.iut.hev.root.model.enums.Items;
+import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
 import fr.iut.hev.root.model.items.ItemFactory;
+import fr.iut.hev.root.model.utilities.Cooldown;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -64,6 +65,7 @@ public class GlobalController implements Initializable {
     private MobView mobView;
     private PnjView pnjView;
     private CraftView craftView;
+    private Cooldown dialogueCD;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -133,9 +135,7 @@ public class GlobalController implements Initializable {
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
-                    if (this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft()) {
-                        pnjView.speak();
-                    }
+
                     cooldownManager.allCooldownsTick();
                 })
         );
@@ -244,6 +244,13 @@ public class GlobalController implements Initializable {
         this.pnjView = new PnjView(homps, tileMap, globalPane);
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
         aliveActors.add(homps);
+        dialogueCD = new Cooldown(0);
+        if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
+            pnjView.speak();
+            this.dialogueCD.setLimit(2);
+            this.dialogueCD.start();
+            System.out.println(pnjView.getPhrase());
+        }
 
     }
 
