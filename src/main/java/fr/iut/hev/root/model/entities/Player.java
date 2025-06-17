@@ -131,6 +131,38 @@ public class Player extends Actor {
             return false;
     }
 
+    /**
+     * Checks if a target position is within the player's reach
+     * @param targetX the x coordinate of the target
+     * @param targetY the y coordinate of the target
+     * @param reachDistance the reach distance to check against (in tiles)
+     * @return true if the target is within reach, false otherwise
+     */
+    public boolean isWithinReach(double targetX, double targetY, double reachDistance) {
+        // Calculate the center position of the player
+        double playerCenterX = getPosX() + getWidth() / 2;
+        double playerCenterY = getPosY() + getHeight() / 2;
+
+        // Calculate the distance between the player and the target
+        double distance = Math.sqrt(
+            Math.pow((targetX * TileMap.format) - playerCenterX, 2) + 
+            Math.pow((targetY * TileMap.format) - playerCenterY, 2)
+        );
+
+        // Convert the distance to tiles and check if it's within reach
+        return distance <= reachDistance * TileMap.format;
+    }
+
+    /**
+     * Checks if a target position is within the player's default reach
+     * @param targetX the x coordinate of the target
+     * @param targetY the y coordinate of the target
+     * @return true if the target is within reach, false otherwise
+     */
+    public boolean isWithinReach(double targetX, double targetY) {
+        return isWithinReach(targetX, targetY, getReach());
+    }
+
     public void consumeOneItem() {
         this.quantityOfItemInHandProperty.setValue(quantityOfItemInHandProperty.getValue() - 1);
     }

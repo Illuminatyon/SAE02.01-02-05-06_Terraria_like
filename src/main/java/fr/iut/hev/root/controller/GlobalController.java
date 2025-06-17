@@ -71,6 +71,7 @@ public class GlobalController implements Initializable {
     private PnjView pnjView;
     private CraftView craftView;
     private Cooldown dialogueCD;
+    private LootView lootView;
 
     // AnchorPane for actors that will move with the camera
     private AnchorPane actorsPane;
@@ -117,7 +118,7 @@ public class GlobalController implements Initializable {
         actorsPane = new AnchorPane();
         globalPane.getChildren().add(actorsPane);
 
-        LootView lv = new LootView(actorsPane); // Use actorsPane instead of globalPane
+        lootView = new LootView(actorsPane); // Use actorsPane instead of globalPane
         cooldownManager = new CooldownManager();
         itemFactory = new ItemFactory();
 
@@ -328,6 +329,11 @@ public class GlobalController implements Initializable {
                     pnjView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
                 }
             }
+        }
+
+        // Update loot positions with camera offset
+        if (lootView != null) {
+            lootView.updateLootPositions(cameraOffsetX, cameraOffsetY);
         }
     }
 

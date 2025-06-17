@@ -19,6 +19,12 @@ public class Block extends Item {
         int y  = (int)eventHandler.getY() / format;
         TileMap tileMap = eventHandler.getTileMap();
         Player player = eventHandler.getPlayer();
+
+        // Check if the target position is within reach (3 tiles)
+        if (!player.isWithinReach(x, y, 3)) {
+            return false;
+        }
+
         if (tileMap.isTileEmpty(x,y)) {
             TilesEnum currentItem = player.getItemInHand().getItemEnum().getRelatedTile();
             System.out.println(currentItem);

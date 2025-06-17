@@ -40,7 +40,7 @@ public class Tile {
 
     public int getHealth() {return this.health;}
 
-    public void resetHealth() {this.health = this.tileEnum.getMaxHealth()*10;}
+    public void resetHealth() {this.health = this.tileEnum.getMaxHealth()*20;}
 
     /*public String toString() {
         return "{"

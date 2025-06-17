@@ -49,12 +49,22 @@ public class GlobalView {
         System.out.println(tile.getHealth());
         int textureNumber = 4;
         int tileHealth = tile.getHealth();
-        int tileHealthStep = ((tile.getTileEnum().getMaxHealth()*20) / 4);
-        if (tileHealth > 0) {
+        int maxHealth = tile.getTileEnum().getMaxHealth()*20;
+
+        // If health is at maximum, use texture 4 (initial state)
+        if (tileHealth == maxHealth) {
+            textureNumber = 4;
+        } 
+        // Otherwise calculate the appropriate texture based on health
+        else if (tileHealth > 0) {
+            int tileHealthStep = (maxHealth / 4);
             for (int i = 4 ; i > 0 ; i--) {
                 if (tileHealth < (tileHealthStep * i) && tileHealth >= (tileHealthStep * (i - 1)))
                     textureNumber = i;
             }
+        }
+
+        if (tileHealth > 0) {
             tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView(getTexture(tile,textureNumber)));
         }
         else
