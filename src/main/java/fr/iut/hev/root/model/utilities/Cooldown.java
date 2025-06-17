@@ -43,7 +43,7 @@ public class Cooldown {
         setOnGoing(false);
     }
 
-    public void setOnGoing(boolean onGoing) {this.onGoing = onGoing;}
+    private void setOnGoing(boolean onGoing) {this.onGoing = onGoing;}
     public boolean getOnGoing() {return this.onGoing;}
     public void setLimit(double secondes) {this.limit = (int)(secondes*60);}
     public int getTicks() {return this.ticks;}
