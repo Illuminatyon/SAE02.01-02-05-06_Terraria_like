@@ -4,7 +4,7 @@ package fr.iut.hev.root.model.enums;
 public enum TilesEnum {
     AIR("air", TileTypesEnum.AIR,0),
     GRASS("grass", TileTypesEnum.BLOCK,8, ItemsEnum.DIRT, BlockTypesEnum.GROUND_TYPE),
-    DIRT("dirt", TileTypesEnum.BLOCK,16, ItemsEnum.DIRT, BlockTypesEnum.HARDGROUND_TYPE),
+    DIRT("dirt", TileTypesEnum.BLOCK,16, ItemsEnum.DIRT, BlockTypesEnum.GROUND_TYPE),
     STONE("stone", TileTypesEnum.BLOCK,12, ItemsEnum.STONE, BlockTypesEnum.ROCK_TYPE),
     IRON_ORE("iron_ore",TileTypesEnum.BLOCK,14,ItemsEnum.IRON_ORE,BlockTypesEnum.ROCK_TYPE),
     IRON_BLOCK("iron_block",TileTypesEnum.BLOCK,15,ItemsEnum.IRON_BLOCK,BlockTypesEnum.ROCK_TYPE),
@@ -13,12 +13,12 @@ public enum TilesEnum {
     CRAFTING_TABLE("crafting_table", TileTypesEnum.UTILITIES,15, ItemsEnum.CRAFTING_TABLE, BlockTypesEnum.WOOD_TYPE),
     TREE("tree", TileTypesEnum.BACKGROUND,15, ItemsEnum.WOOD, BlockTypesEnum.WOOD_TYPE),
     FURNACE("furnace", TileTypesEnum.UTILITIES,20, ItemsEnum.FURNACE),
-    DARKSTONE("darkstone",TileTypesEnum.BLOCK,12,ItemsEnum.HARD_STONE, BlockTypesEnum.HARDROCK_TYPE),
-    PIERRE("pierre",TileTypesEnum.BLOCK,24,ItemsEnum.HARD_STONE, BlockTypesEnum.HARDROCK_TYPE),
+    DARKSTONE("darkstone",TileTypesEnum.BLOCK,12,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
+    PIERRE("pierre",TileTypesEnum.BLOCK,24,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
     MUR("mur",TileTypesEnum.BLOCK,10,ItemsEnum.MUR,BlockTypesEnum.INDESTRUCTIBLE_TYPE),
     PIERREFOND("darkstone_background",TileTypesEnum.AIR,0),
     MURFOND("mur_background",TileTypesEnum.AIR,0),
-    COPIUM("copium",TileTypesEnum.BLOCK,30,ItemsEnum.COPIUM_BLOCK,BlockTypesEnum.HARDROCK_TYPE);
+    COPIUM("copium",TileTypesEnum.BLOCK,30,ItemsEnum.COPIUM_BLOCK,BlockTypesEnum.ROCK_TYPE);
 
 
 
