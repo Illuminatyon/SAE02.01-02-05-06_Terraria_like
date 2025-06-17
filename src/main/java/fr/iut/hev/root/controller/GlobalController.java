@@ -19,7 +19,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
@@ -30,14 +29,14 @@ import java.util.ResourceBundle;
 public class GlobalController implements Initializable {
     private Timeline gameLoop;
     private Player player;
-    private GlobalView globalView;
+    private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
     private HUDView hudView;
     private PlayerView playerView;
     private TileMap tileMap;
     private MouseInputHandler mouseClicksPressedHandler;
     private ArrayList<Actor> aliveActors;
     private MouseCursorCircleView playerLightCircle;
-    private Inventory inventory;
+    private Inventory inventory; // TODO: Put in the player
 
     @FXML
     private TilePane backgroundTileMap;

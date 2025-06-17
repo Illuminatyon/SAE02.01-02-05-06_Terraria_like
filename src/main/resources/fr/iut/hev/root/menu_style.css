@@ -1,3 +1,6 @@
+:root {
+}
+
 .button {
     -fx-font-size: 20px;
     -fx-padding: 12;
@@ -29,4 +32,12 @@
     -fx-background-color:transparent;
     -fx-border-color: white;
     -fx-border-width: 3;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
+    -fx-border-color: white;
+    -fx-text-fill: white;
 }

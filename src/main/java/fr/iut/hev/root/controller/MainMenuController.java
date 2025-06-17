@@ -1,141 +1,182 @@
 package fr.iut.hev.root.controller;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import fr.iut.hev.root.model.World;
+import fr.iut.hev.root.view.MainMenuUIComponents;
+import fr.iut.hev.root.view.MainMenuView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.util.Duration;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainMenuController implements Initializable {
-    @FXML private AnchorPane root;
-    @FXML private VBox mainMenuContainer, worldsMenuContainer, settingsMenuContainer;
-    @FXML private Button mainBtnPlay, mainBtnSettings, mainBtnQuit;
-    @FXML private Button worldsBtnBack;
-    @FXML private Button settingsBtnBack;
+    private Set<World> worlds = new HashSet<>();
+    private MainMenuView mainMenuView;
+    private World currentEditingWorld;
 
-    private List<Button> buttons;
-    private int selectedIndex = -1;
-    private boolean navigationClavier = false;
-    private boolean sourisDejaBougee = false;
-    private boolean repriseNavigationClavier = false;
+    // Global
+    @FXML private AnchorPane root;
+
+    // Into global
+    @FXML private VBox mainMenuContainer, settingsMenuContainer;
+    @FXML private StackPane worldsMenuContainer;
+
+    // Into main menu
+    @FXML private Button mainBtnPlay, mainBtnSettings, mainBtnQuit;
+
+    // Into worlds menu
+    @FXML private VBox worldsMenuContainerSelection, worldsMenuContainerCreate, worldsMenuContainerEdit;
+
+    // Into worlds menu selection
+    @FXML private VBox worldsContainer;
+    @FXML private Button worldsBtnBack, worldsBtnNewWorld;
+
+    // Into worlds menu creation
+    @FXML private TextField worldsCreateTextField;
+    @FXML private Button worldsCreateBtnBack, worldsCreateBtn;
+
+    // Into worlds menu edition
+    @FXML private TextField worldsEditTextField;
+    @FXML private Button worldsEditBtnBack, worldsEditBtn;
+
+    // Into settings menu
+    @FXML private Button settingsBtnBack, settingsBtnResetDefault;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mainMenuContainer.setVisible(true);
-        worldsMenuContainer.setVisible(false);
-        settingsMenuContainer.setVisible(false);
+        MainMenuUIComponents uiComponents = new MainMenuUIComponents();
+        uiComponents.root = root;
+        uiComponents.mainMenuContainer = mainMenuContainer;
+        uiComponents.settingsMenuContainer = settingsMenuContainer;
+        uiComponents.worldsMenuContainer = worldsMenuContainer;
+        uiComponents.mainBtnPlay = mainBtnPlay;
+        uiComponents.mainBtnSettings = mainBtnSettings;
+        uiComponents.mainBtnQuit = mainBtnQuit;
+        uiComponents.worldsMenuContainerSelection = worldsMenuContainerSelection;
+        uiComponents.worldsMenuContainerCreate = worldsMenuContainerCreate;
+        uiComponents.worldsMenuContainerEdit = worldsMenuContainerEdit;
+        uiComponents.worldsContainer = worldsContainer;
+        uiComponents.worldsBtnBack = worldsBtnBack;
+        uiComponents.worldsBtnNewWorld = worldsBtnNewWorld;
+        uiComponents.worldsCreateTextField = worldsCreateTextField;
+        uiComponents.worldsCreateBtnBack = worldsCreateBtnBack;
+        uiComponents.worldsCreateBtn = worldsCreateBtn;
+        uiComponents.worldsEditTextField = worldsEditTextField;
+        uiComponents.worldsEditBtnBack = worldsEditBtnBack;
+        uiComponents.worldsEditBtn = worldsEditBtn;
+        uiComponents.settingsBtnBack = settingsBtnBack;
+        uiComponents.settingsBtnResetDefault = settingsBtnResetDefault;
 
-        buttons = List.of(mainBtnPlay, mainBtnSettings, mainBtnQuit);
+        mainMenuView = new MainMenuView(uiComponents);
 
-        buttons.forEach(b -> b.setFocusTraversable(false)); // A quoi ca sert ca ?
+        // Load all things OR load everything needed in each respective class instead of here
+        //mainMenuView.loadWorlds();
 
-        mainBtnPlay.setOnAction(e -> openWorldsMenu());
-        mainBtnSettings.setOnAction(e -> openSettingsMenu());
+        mainBtnPlay.setOnAction(e -> mainMenuView.openWorldsMenu());
+        mainBtnSettings.setOnAction(e -> mainMenuView.openSettingsMenu());
         mainBtnQuit.setOnAction(e -> quitGame());
 
-        worldsBtnBack.setOnAction(e -> openMainMenu());
-        settingsBtnBack.setOnAction(e -> openMainMenu());
-        //btnQuit.setOnAction(e -> openQuitPrompt());
+        worldsMenuContainer.alignmentProperty().addListener((obs, oldV, newV) -> {
 
-        // Détection de mouvement souris — reset navigation clavier
-        mainMenuContainer.setOnMouseMoved(e -> { // Replace with root maybe
-            if (navigationClavier) {
-                sourisDejaBougee = true;
-                navigationClavier = false;
-                clearButtonStyles(); // on efface juste l'effet visuel
-                // ✅ on garde selectedIndex tel quel
-            }
         });
 
-        // Navigation clavier
-        mainMenuContainer.setOnKeyPressed(e -> {
-            if (e.getCode().isArrowKey() || e.getCode() == KeyCode.TAB) {
-                if (!navigationClavier) {
-                    navigationClavier = true;
-                    sourisDejaBougee = false;
-                    repriseNavigationClavier = true;
+        worldsBtnBack.setOnAction(e -> mainMenuView.openMainMenu());
+        worldsBtnNewWorld.setOnAction(e -> mainMenuView.openWorldCreator());
+        worldsCreateBtnBack.setOnAction(e -> mainMenuView.openWorldsMenu());
+        worldsCreateBtn.setOnAction(e -> createWorld(worldsCreateTextField.getText()));
+        worldsEditBtnBack.setOnAction(e -> mainMenuView.openWorldsMenu());
+        worldsEditBtn.setOnAction(e -> editWorld(worldsEditTextField.getText()));
 
-                    // ✅ Forcer une sélection si aucune précédente
-                    if (selectedIndex == -1) {
-                        selectedIndex = 0;
-                    }
-                }
-
-                if (repriseNavigationClavier) {
-                    updateSelection(); // ✅ Affiche immédiatement le bouton
-                    repriseNavigationClavier = false;
-                } else {
-                    if (e.getCode() == KeyCode.UP || (e.getCode() == KeyCode.TAB && e.isShiftDown())) {
-                        selectedIndex = (selectedIndex - 1 + buttons.size()) % buttons.size();
-                    } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.TAB) {
-                        selectedIndex = (selectedIndex + 1) % buttons.size();
-                    }
-                    updateSelection();
-                }
-
-                e.consume();
-            }
-
-            if (e.getCode() == KeyCode.ENTER && navigationClavier && selectedIndex != -1) {
-                switch (selectedIndex) {
-                    case 0 -> openWorldsMenu();
-                    case 1 -> openSettingsMenu();
-                    case 2 -> quitGame();
-                }
-            }
-        });
-
-        // Focus initial sur VBox pour capter les touches
-        Platform.runLater(() -> mainMenuContainer.requestFocus());
+        settingsBtnBack.setOnAction(e -> mainMenuView.openMainMenu());
     }
 
-    private void updateSelection() {
-        clearButtonStyles();
-        if (selectedIndex >= 0 && selectedIndex < buttons.size()) {
-            Button selectedButton = buttons.get(selectedIndex);
-            selectedButton.getStyleClass().add("selected");
+    private boolean worldNameExists(String worldName, boolean ignoreCase) {
+        if (ignoreCase) {
+            return worlds.stream().anyMatch(w -> w.getName().equalsIgnoreCase(worldName));
+        } else {
+            return worlds.stream().anyMatch(w -> w.getName().equals(worldName));
         }
-    }
-
-    private void clearButtonStyles() {
-        for (Button b : buttons) {
-            b.getStyleClass().remove("selected");
-        }
-    }
-
-    private void openWorldsMenu() {
-        System.out.println("worlds");
-        mainMenuContainer.setVisible(false);
-        worldsMenuContainer.setVisible(true);
-    }
-
-    private void openSettingsMenu() {
-        System.out.println("settings");
-        mainMenuContainer.setVisible(false);
-        settingsMenuContainer.setVisible(true);
     }
 
     private void quitGame() {
         Platform.exit();
     }
 
-    private void openQuitPrompt() {
-
+    private void playOnWorld(World world) {
+        // TODO: Show the loading screen
+        // TODO: Load the world using the JSON save
+        System.out.println("Playing on world: " + world.getName());
     }
 
-    private void openMainMenu() {
-        worldsMenuContainer.setVisible(false);
-        settingsMenuContainer.setVisible(false);
-        mainMenuContainer.setVisible(true);
+    private String removeStartingAndTrailingSpaces(String input) {
+        return input.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
+    }
+
+    private void createWorld(String worldName) {
+        // Create a JSON World
+        if (worldName == null || worldName.isBlank()) {
+            worldName = generateUniqueWorldName("My world");
+        } else {
+            worldName = removeStartingAndTrailingSpaces(worldName);
+            if (worldNameExists(worldName, true)) {
+                worldName = generateUniqueWorldName(worldName);
+            }
+        }
+
+        World newWorld = new World(worldName);
+        worlds.add(newWorld);
+        Set<Button> worldManagementButtons = mainMenuView.createWorldHBox(newWorld);
+
+        for (Button btn : worldManagementButtons) {
+            if (btn.getId().startsWith("worldBtnPlay")) {
+                btn.setOnAction(e -> playOnWorld(newWorld));
+            } else if (btn.getId().startsWith("worldBtnEdit")) {
+                btn.setOnAction(e -> {
+                    currentEditingWorld = newWorld;
+                    mainMenuView.openWorldEditor(newWorld);
+                });
+            } else if (btn.getId().startsWith("worldBtnDelete")) {
+                btn.setOnAction(e -> deleteWorld(newWorld));
+            }
+        }
+
+        mainMenuView.openWorldsMenu();
+    }
+
+    private void editWorld(String newWorldName) {
+        newWorldName = removeStartingAndTrailingSpaces(newWorldName);
+        if (newWorldName.isBlank() || currentEditingWorld.getName().equals(newWorldName)) { // Keep the name before editing
+            newWorldName = currentEditingWorld.getName();
+        } else if (currentEditingWorld.getName().equalsIgnoreCase(newWorldName)) { // Use the name typed with changing case only
+            newWorldName = newWorldName;
+        } else if (worldNameExists(newWorldName, true)) { // If the name already exists, generate a new one
+            newWorldName = generateUniqueWorldName(newWorldName);
+        }
+
+        currentEditingWorld.setName(newWorldName);
+        mainMenuView.openWorldsMenu();
+        System.out.println(currentEditingWorld.getName());
+        currentEditingWorld = null;
+    }
+
+    private void deleteWorld(World world) {
+        worlds.remove(world);
+        mainMenuView.deleteWorldHBox(world);
+    }
+
+    private String generateUniqueWorldName(String baseName) {
+        int i = 1;
+        String proposedName = baseName;
+
+        while (worldNameExists(proposedName, true)) {
+            proposedName = baseName + " " + i;
+            i++;
+        }
+
+        return proposedName;
     }
 }
