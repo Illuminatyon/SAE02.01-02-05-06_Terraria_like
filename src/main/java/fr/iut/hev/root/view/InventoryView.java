@@ -70,8 +70,8 @@ public class InventoryView {
         Label label = new Label();
 
         Pane pane = new Pane(imageView, label);
-        pane.setBackground(Background.fill(Color.rgb(0, 0, 0, 0.25)));
         pane.setId(Integer.toString(slotIndex));
+        pane.getStyleClass().add("pane");
         return pane;
     }
 
@@ -142,7 +142,6 @@ public class InventoryView {
 
     public void initHold() {
         Label label = new Label();
-        label.setTextFill(Color.WHITE);
 
         ImageView imageView = new ImageView();
         imageView.setFitWidth(50);
@@ -155,7 +154,7 @@ public class InventoryView {
     }
 
     public void updateOnHoldPane(HashMap<Item,Integer> onHold) {
-        Pane pane = (Pane) hudAnchorPane.getChildren().get(4);
+        Pane pane = (Pane) hudAnchorPane.getChildren().get(5);
         for (Node child : pane.getChildren()) {
             if (child instanceof Label)
                 ((Label) child).setText(getQuantityTextFromHold(onHold));
@@ -165,7 +164,7 @@ public class InventoryView {
     }
 
     public void updateOnHoldPosition(double x,double y) {
-        Pane pane = (Pane) hudAnchorPane.getChildren().get(4);
+        Pane pane = (Pane) hudAnchorPane.getChildren().get(5);
         pane.setTranslateX(x+1);
         pane.setTranslateY(y+1);
     }

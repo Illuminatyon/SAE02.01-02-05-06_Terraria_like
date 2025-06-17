@@ -42,6 +42,8 @@ public class CraftView {
         availableRecipesList.setMouseTransparent(true);
         craftButton.setVisible(false);
         craftButton.setMouseTransparent(true);
+        recipeDisplay.setVisible(false);
+        recipeDisplay.setMouseTransparent(true);
 
         availableRecipesList.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
             RecipesEnum selectedRecipe = availableRecipesList.getSelectionModel().getSelectedItem();
@@ -58,6 +60,8 @@ public class CraftView {
         availableRecipesList.setMouseTransparent(!opened);
         craftButton.setVisible(opened);
         craftButton.setMouseTransparent(!opened);
+        recipeDisplay.setVisible(opened);
+        recipeDisplay.setMouseTransparent(!opened);
     }
 
     public void setCraftGUIVisible(boolean opened) {
@@ -66,6 +70,8 @@ public class CraftView {
         availableRecipesList.setMouseTransparent(!opened);
         craftButton.setVisible(opened);
         craftButton.setMouseTransparent(!opened);
+        recipeDisplay.setVisible(opened);
+        recipeDisplay.setMouseTransparent(!opened);
     }
 
     public void displayRecipe() {
