@@ -18,10 +18,13 @@ public class Tree {
     }
 
     public void takesDamage(int damage) {
-        if (!(health - damage <= 0))
+        if (!(health - damage < 0))
             this.health -= damage;
-        else if (health <= 0) {
-            Loot droppedLoot = new Loot()
-        }
+        else
+            this.health = 0;
     }
+
+    public int getX() {return this.x;}
+    public int getY() {return this.y;}
+    public int getHealth() {return this.health;}
 }

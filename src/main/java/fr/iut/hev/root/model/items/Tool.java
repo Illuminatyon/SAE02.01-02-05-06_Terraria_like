@@ -27,11 +27,8 @@ public class Tool extends Item {
         if (eventHandler.getMouseClickIsPressed()) {
             if (!(tileMap.isTileEmpty(x,y))) {
                 ItemStatsEnum statsToolInHand = eventHandler.getPlayer().getItemInHand().getItemEnum().getStats();
-                System.out.println(statsToolInHand.getEfficientBlockAgainst());
-                System.out.println(tileMap.getTile(x,y).getTileEnum().getBlockTypesEnum());
                 if (statsToolInHand.getEfficientBlockAgainst().equals(tileMap.getTile(x,y).getTileEnum().getBlockTypesEnum())) {
                     tileMap.tileGetsMined(x, y, statsToolInHand.getMiningSpeed());
-                    System.out.println("effective");
                 }
                 else {
                     tileMap.tileGetsMined(x, y, 1);

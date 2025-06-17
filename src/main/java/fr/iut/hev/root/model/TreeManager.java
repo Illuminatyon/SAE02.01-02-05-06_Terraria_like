@@ -13,4 +13,16 @@ public class TreeManager {
         this.itemFactory = itemFactory;
         this.trees = new ArrayList<>();
     }
+
+    public void initTreeManager() {
+        trees.add(new Tree(2,15,15));
+    }
+
+    public void treeTakesDamage(int x,int y,int damage) {
+        for (Tree tree : trees) {
+            if (tree.getX() == x && tree.getY() == y) {
+                if (tree.getHealth()tree.takesDamage(damage);
+            }
+        }
+    }
 }
