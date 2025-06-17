@@ -56,6 +56,10 @@ public class GlobalController implements Initializable {
     private CraftingManager craftingManager;
     public static Mob mob ;
 
+    // Variables for the scrolling camera
+    private double cameraOffsetX = 0;
+    private double cameraOffsetY = 0;
+
     private GlobalView globalView;
     private HUDView hudView;
     private PlayerView playerView;
@@ -63,9 +67,13 @@ public class GlobalController implements Initializable {
     private InventoryView inventoryView;
     private HotbarView hotbarView;
     private MobView mobView;
+    private MobView aggressiveMobView;
     private PnjView pnjView;
     private CraftView craftView;
     private Cooldown dialogueCD;
+
+    // AnchorPane for actors that will move with the camera
+    private AnchorPane actorsPane;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -104,13 +112,21 @@ public class GlobalController implements Initializable {
         aliveActors = new ArrayList<>();
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
-        LootView lv = new LootView(globalPane);
+
+        // Initialize actorsPane
+        actorsPane = new AnchorPane();
+        globalPane.getChildren().add(actorsPane);
+
+        LootView lv = new LootView(actorsPane); // Use actorsPane instead of globalPane
         cooldownManager = new CooldownManager();
         itemFactory = new ItemFactory();
 
         initItemEnums();
         initMap();
         initActors();
+
+        // Initialize camera position
+        updateCameraPosition();
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
@@ -136,6 +152,9 @@ public class GlobalController implements Initializable {
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
 
+                    // Update camera position to follow the player
+                    updateCameraPosition();
+
                     cooldownManager.allCooldownsTick();
                 })
         );
@@ -157,7 +176,7 @@ public class GlobalController implements Initializable {
 
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
-        playerView = new PlayerView(player,tileMap,globalPane);
+        playerView = new PlayerView(player,tileMap,actorsPane); // Use actorsPane instead of globalPane
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
@@ -187,7 +206,7 @@ public class GlobalController implements Initializable {
 
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
-        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap);
+        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap,this);
 
         player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
@@ -218,7 +237,7 @@ public class GlobalController implements Initializable {
 
     private void initmob() {
         this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET);
-        this.mobView = new MobView(mob, tileMap, globalPane);
+        this.mobView = new MobView(mob, tileMap, actorsPane); // Use actorsPane instead of globalPane
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
         aliveActors.add(mob);
     }
@@ -233,15 +252,15 @@ public class GlobalController implements Initializable {
 
     private void initAggressiveMob(Player player) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, actorsPane, 1 // Use actorsPane instead of globalPane
         );
-        MobView mobView = new MobView(aggressiveMob, tileMap, globalPane);
-        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, mobView, aliveActors));
+        this.aggressiveMobView = new MobView(aggressiveMob, tileMap, actorsPane); // Use actorsPane instead of globalPane
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors));
         aliveActors.add(aggressiveMob);
     }
     private void initPnj() {
         Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS);
-        this.pnjView = new PnjView(homps, tileMap, globalPane);
+        this.pnjView = new PnjView(homps, tileMap, actorsPane); // Use actorsPane instead of globalPane
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
@@ -260,5 +279,71 @@ public class GlobalController implements Initializable {
                 itemsEnum.itemEnumInit();
             }
         }
+    }
+
+    /**
+     * Updates the camera position to center on the player
+     */
+    private void updateCameraPosition() {
+        if (player == null || landTileMap == null || backgroundTileMap == null) {
+            return;
+        }
+
+        // Calculate the center of the screen
+        double screenWidth = globalPane.getWidth();
+        double screenHeight = globalPane.getHeight();
+
+        // Calculate the player's center position
+        double playerCenterX = player.getPosX() + player.getWidth() / 2;
+        double playerCenterY = player.getPosY() + player.getHeight() / 2;
+
+        // Calculate the camera offset to center the player
+        cameraOffsetX = (screenWidth / 2) - playerCenterX;
+        cameraOffsetY = (screenHeight / 2) - playerCenterY;
+
+        // Apply the camera offset to the tile maps
+        landTileMap.setTranslateX(cameraOffsetX);
+        landTileMap.setTranslateY(cameraOffsetY);
+        backgroundTileMap.setTranslateX(cameraOffsetX);
+        backgroundTileMap.setTranslateY(cameraOffsetY);
+
+        // Update the positions of all actors based on the camera offset
+        for (Actor actor : aliveActors) {
+            if (actor.equals(player)) {
+                // Update player position
+                if (playerView != null && playerView.getActorSprite() != null) {
+                    playerView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    playerView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                }
+            } else {
+                // Update other actors' positions
+                if (actor == mob && mobView != null && mobView.getActorSprite() != null) {
+                    mobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    mobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                } else if (actor instanceof AggressiveMob && aggressiveMobView != null && aggressiveMobView.getActorSprite() != null) {
+                    aggressiveMobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    aggressiveMobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                } else if (pnjView != null && pnjView.getActorSprite() != null && actor.getName().equals("homps")) {
+                    pnjView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    pnjView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets the current camera offset X
+     * @return the camera offset X
+     */
+    public double getCameraOffsetX() {
+        return cameraOffsetX;
+    }
+
+    /**
+     * Gets the current camera offset Y
+     * @return the camera offset Y
+     */
+    public double getCameraOffsetY() {
+        return cameraOffsetY;
     }
 }

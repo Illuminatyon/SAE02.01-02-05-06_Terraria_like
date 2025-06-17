@@ -62,9 +62,11 @@ public class ActorView {
                 actorSprite.setFitWidth(actor.getWidth());
                 actorSprite.setFitHeight(actor.getHeight());
 
-                // Bind des positions et de la direction
-                actorSprite.translateXProperty().bind(actor.posXProperty());
-                actorSprite.translateYProperty().bind(actor.posYProperty());
+                // Set initial position (will be updated by the camera)
+                actorSprite.setLayoutX(0);
+                actorSprite.setLayoutY(0);
+
+                // Bind only the direction
                 actorSprite.scaleXProperty().bind(actor.lookDirectionProperty());
 
                 // Ajouter à l'AnchorPane

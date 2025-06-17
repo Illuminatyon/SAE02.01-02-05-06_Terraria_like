@@ -1,5 +1,6 @@
 package fr.iut.hev.root.controller.InputHandling;
 
+import fr.iut.hev.root.controller.GlobalController;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.Player;
@@ -25,12 +26,14 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private MouseEvent mouseEvent;
     private GlobalView worldView;
     private TileMap tileMap;
+    private GlobalController globalController;
 
-    public MouseItemActionInputHandler(InventoryView inventoryView, Player player, GlobalView worldView,TileMap tileMap) {
+    public MouseItemActionInputHandler(InventoryView inventoryView, Player player, GlobalView worldView, TileMap tileMap, GlobalController globalController) {
         this.inventoryView = inventoryView;
         this.player = player;
         this.worldView = worldView;
         this.tileMap = tileMap;
+        this.globalController = globalController;
         this.x = 0;
         this.y = 0;
         this.mouseClickIsPressed = false;
@@ -48,8 +51,9 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
                 System.out.println("prout");
             else  {
                 if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK)) {
-                    x = mouseEvent.getX();
-                    y = mouseEvent.getY();
+                    // Adjust mouse coordinates by camera offset
+                    x = mouseEvent.getX() - globalController.getCameraOffsetX();
+                    y = mouseEvent.getY() - globalController.getCameraOffsetY();
                     if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
                         this.mouseClickIsPressed = true;
                         this.mouseEvent = mouseEvent;
