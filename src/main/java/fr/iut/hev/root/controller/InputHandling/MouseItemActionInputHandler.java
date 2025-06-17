@@ -52,7 +52,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
             y = mouseEvent.getY() - globalController.getCameraOffsetY();
 
             if (player.getItemInHand() == null) {
-                // Handle empty hand - allow breaking blocks
+                // Handle empty hand - no longer allows breaking blocks
+                // Still track mouse events for consistency
                 if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
                     this.mouseClickIsPressed = true;
                     this.mouseEvent = mouseEvent;
@@ -119,18 +120,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickPressedLoop() {
         if (player.getItemInHand() == null) {
-            // Handle empty hand - break blocks
-            int tileX = (int)x / format;
-            int tileY = (int)y / format;
-
-            // Check if the target position is within reach (3 tiles)
-            if (player.isWithinReach(tileX, tileY, 3)) {
-                if (!tileMap.isTileEmpty(tileX, tileY)) {
-                    // Mine the block with a slow mining speed (1)
-                    tileMap.tileGetsMined(tileX, tileY, 1);
-                    worldView.updateTile(tileMap.getTile(tileX, tileY));
-                }
-            }
+            // Empty hands can no longer break blocks
+            // Only tools can break blocks now
         } else if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
@@ -143,18 +134,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickReleasedLoop() {
         if (player.getItemInHand() == null) {
-            // Handle empty hand - reset block health when mouse is released
-            int tileX = (int)x / format;
-            int tileY = (int)y / format;
-
-            // Check if the target position is within reach (3 tiles)
-            if (player.isWithinReach(tileX, tileY, 3)) {
-                if (!tileMap.isTileEmpty(tileX, tileY)) {
-                    // Reset the block's health
-                    tileMap.getTile(tileX, tileY).resetHealth();
-                    worldView.updateTile(tileMap.getTile(tileX, tileY));
-                }
-            }
+            // Empty hands can no longer break blocks
+            // Only tools can break blocks now
         } else if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
@@ -168,8 +149,9 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickReleased() {
         if (player.getItemInHand() == null) {
-            // For empty hands, set a very small cooldown (0.1 seconds)
-            // This allows the player to continue breaking blocks almost immediately after stopping
+            // Empty hands can no longer break blocks
+            // Only tools can break blocks now
+            // Still set a small cooldown for consistency
             itemUseCooldown.setLimit(0.1);
             itemUseCooldown.start();
         } else {
