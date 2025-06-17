@@ -135,6 +135,12 @@ public class GlobalController implements Initializable {
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
+                    if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
+                        pnjView.speak();
+                        this.dialogueCD.setLimit(2);
+                        this.dialogueCD.start();
+                        System.out.println(pnjView.getPhrase());
+                    }
 
                     cooldownManager.allCooldownsTick();
                 })
@@ -245,13 +251,13 @@ public class GlobalController implements Initializable {
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
-        if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
+        // ajouter le listener sur les colision avec le joueur a la place du check de colison des mur de cons
+        /*if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
             pnjView.speak();
             this.dialogueCD.setLimit(2);
             this.dialogueCD.start();
             System.out.println(pnjView.getPhrase());
-        }
-
+        }*/
     }
 
     private void initItemEnums() {
