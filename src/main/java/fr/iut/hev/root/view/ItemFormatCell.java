@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 
 public class ItemFormatCell extends ListCell<RecipesEnum> {
 
+
+
     @Override
     protected void updateItem(RecipesEnum recipesEnum, boolean b) {
         super.updateItem(recipesEnum, b);
