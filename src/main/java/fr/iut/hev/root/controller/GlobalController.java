@@ -94,6 +94,9 @@ public class GlobalController implements Initializable {
     @FXML
     private Button craftButton;
 
+    @FXML
+    private HBox recipeDisplay;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         aliveActors = new ArrayList<>();
@@ -155,7 +158,7 @@ public class GlobalController implements Initializable {
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
         playerView = new PlayerView(player,tileMap,globalPane);
-        craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton);
+        craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
 

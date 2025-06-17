@@ -75,17 +75,15 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
     public int fromTargetStringToInd(String target) {
         String slotString = "";
         int i,slotInd;
-        char targetType = target.charAt(0),endingChar;
+        char targetType = target.charAt(0),endingChar = ',';
         if (targetType != 'P' && targetType != 'I')
             slotInd = -1;
         else {
             if (targetType == 'P') {
                 i = 8;
-                endingChar = ']';
             }
             else {
                 i = 13;
-                endingChar = ',';
             }
             while (target.charAt(i) != endingChar) {
                 slotString += String.valueOf(target.charAt(i));
