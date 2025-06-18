@@ -193,7 +193,7 @@ public class GlobalController implements Initializable {
         inventory.add(2,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),20);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.WOOD),100);
-        inventory.add(5,itemFactory.createItem(ItemsEnum.IRON_INGOT),100);
+        inventory.add(5, itemFactory.createItem(ItemsEnum.KATANA), 1);
         inventory.add(6,itemFactory.createItem(ItemsEnum.DAGGER), 1);
         inventory.add(7,itemFactory.createItem(ItemsEnum.BOW), 1);
         inventory.add(8,itemFactory.createItem(ItemsEnum.ARROW), 64);

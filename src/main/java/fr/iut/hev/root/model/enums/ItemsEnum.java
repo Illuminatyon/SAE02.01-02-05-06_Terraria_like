@@ -18,6 +18,7 @@ public enum ItemsEnum {
     FURNACE("furnace",100,0, ItemTypesEnum.UTILITY),
 
     DAGGER("dagger",1,0.5, ItemTypesEnum.WEAPON,ItemStatsEnum.DAGGER),
+    KATANA("katana",1,0.7, ItemTypesEnum.WEAPON,ItemStatsEnum.KATANA),
     BOW("bow",1,1.0, ItemTypesEnum.WEAPON,ItemStatsEnum.BOW),
     ARROW("arrow",64,0, ItemTypesEnum.RESOURCES),
 

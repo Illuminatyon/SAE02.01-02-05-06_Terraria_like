@@ -59,6 +59,8 @@ public class ItemFactory {
     public Weapon createWeapon(ItemsEnum itemsEnum) {
         if (itemsEnum == ItemsEnum.DAGGER) {
             return new Dagger(itemsEnum);
+        } else if (itemsEnum == ItemsEnum.KATANA) {
+            return new Katana(itemsEnum);
         } else if (itemsEnum == ItemsEnum.BOW) {
             return new Bow(itemsEnum);
         }
