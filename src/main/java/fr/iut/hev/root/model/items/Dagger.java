@@ -8,6 +8,7 @@ import fr.iut.hev.root.model.entities.Entity;
 import fr.iut.hev.root.model.entities.Mob;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.view.DaggerView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -21,8 +22,8 @@ public class Dagger extends Weapon {
     private boolean isAnimating = false;
     private DaggerView daggerView;
 
-    public Dagger(ItemsEnum itemsEnum) {
-        super(itemsEnum);
+    public Dagger(ItemsEnum itemsEnum, HitboxManager hitboxManager) {
+        super(itemsEnum,hitboxManager);
     }
 
     @Override

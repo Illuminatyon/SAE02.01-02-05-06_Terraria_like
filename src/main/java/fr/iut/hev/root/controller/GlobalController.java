@@ -112,10 +112,8 @@ public class GlobalController implements Initializable {
 
         lootView = new LootView(entitiesPane);
         cooldownManager = new CooldownManager();
-        itemFactory = new ItemFactory();
+        itemFactory = new ItemFactory(hitboxManager);
         hitboxManager = new HitboxManager();
-
-        Weapon.setHitboxManager(hitboxManager);
 
         initItemEnums();
         initMap();
@@ -199,7 +197,7 @@ public class GlobalController implements Initializable {
         inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
+        player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors,itemFactory));
         craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
         craftButton.setOnAction(actionEvent -> {
             craftingManager.crafts();
@@ -246,7 +244,7 @@ public class GlobalController implements Initializable {
     private void initmob() {
         this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET);
         this.mobView = new MobView(mob, tileMap, entitiesPane);
-        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors,itemFactory));
         aliveActors.add(mob);
         hitboxManager.createDefaultVulnerableHitbox(mob);
     }
@@ -264,13 +262,13 @@ public class GlobalController implements Initializable {
                 0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, entitiesPane, 1 // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
-        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors));
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,itemFactory));
         aliveActors.add(aggressiveMob);
     }
     private void initPnj() {
         Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS);
         this.pnjView = new PnjView(homps, tileMap, entitiesPane);
-        homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
+        homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors,itemFactory));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
     }

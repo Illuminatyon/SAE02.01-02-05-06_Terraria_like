@@ -4,6 +4,7 @@ import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.entities.Arrow;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.view.BowView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,9 +15,11 @@ public class Bow extends Weapon {
     private static final int ARROW_SPEED = 10;
     private boolean isAnimating = false;
     private BowView bowView;
+    private ItemFactory itemFactory;
 
-    public Bow(ItemsEnum itemsEnum) {
-        super(itemsEnum);
+    public Bow(ItemsEnum itemsEnum, HitboxManager hitboxManager,ItemFactory itemFactory) {
+        super(itemsEnum,hitboxManager);
+        this.itemFactory = itemFactory;
     }
 
     @Override
@@ -83,7 +86,8 @@ public class Bow extends Weapon {
                     normalizedDirY * ARROW_SPEED,
                     getDamage(),
                     eventHandler.getGlobalController().getEntitiesPane(),
-                    eventHandler.getGlobalController()
+                    eventHandler.getGlobalController(),
+                    itemFactory
                 );
 
                 // Add the arrow to the game

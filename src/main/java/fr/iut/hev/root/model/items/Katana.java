@@ -8,6 +8,7 @@ import fr.iut.hev.root.model.entities.Entity;
 import fr.iut.hev.root.model.entities.Mob;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.view.KatanaView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -27,8 +28,8 @@ public class Katana extends Weapon {
     // Custom reach for katana (significantly better than dagger)
     private static final double KATANA_REACH_MULTIPLIER = 2.0; // 100% more reach than default
 
-    public Katana(ItemsEnum itemsEnum) {
-        super(itemsEnum);
+    public Katana(ItemsEnum itemsEnum, HitboxManager hitboxManager) {
+        super(itemsEnum,hitboxManager);
     }
 
     @Override

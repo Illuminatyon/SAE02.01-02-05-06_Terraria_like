@@ -23,11 +23,11 @@ public class DeathListener implements ChangeListener<Number> {
     private ItemFactory itemFactory;
     private Random random;
 
-    public DeathListener(Actor actor, ActorView actorView, ArrayList<Actor> aliveActors) {
+    public DeathListener(Actor actor, ActorView actorView, ArrayList<Actor> aliveActors,ItemFactory itemFactory) {
         this.actor = actor;
         this.actorView = actorView;
         this.aliveActors = aliveActors;
-        this.itemFactory = new ItemFactory();
+        this.itemFactory = itemFactory;
         this.random = new Random();
     }
 
