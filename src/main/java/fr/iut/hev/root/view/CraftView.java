@@ -43,7 +43,7 @@ public class CraftView {
         availableRecipesList.setMouseTransparent(true);
 
         // Configure the selection model
-        availableRecipesList.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.SINGLE);
+        //availableRecipesList.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.SINGLE);
 
         // Configure the other UI elements
         craftButton.setVisible(false);
@@ -52,17 +52,17 @@ public class CraftView {
         recipeDisplay.setMouseTransparent(true);
 
         // Ensure the ListView has proper focus and selection behavior
-        availableRecipesList.setFocusTraversable(true);
+        //availableRecipesList.setFocusTraversable(true);
 
         // Add explicit click handler to ensure selection works
-        availableRecipesList.setOnMouseClicked(event -> {
+        /*availableRecipesList.setOnMouseClicked(event -> {
             RecipesEnum selectedRecipe = availableRecipesList.getSelectionModel().getSelectedItem();
             if (selectedRecipe != null) {
                 setSelectedRecipe(selectedRecipe);
                 displayRecipe();
                 System.out.println("Selected recipe: " + selectedRecipe.name());
             }
-        });
+        });*/
 
         // Add selection change listener
         availableRecipesList.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
@@ -95,7 +95,7 @@ public class CraftView {
         recipeDisplay.setMouseTransparent(!opened);
 
         // Ensure the ListView gets focus and is properly configured when shown
-        if (opened) {
+        /*if (opened) {
             // Reset the selection model to ensure it's properly initialized
             availableRecipesList.getSelectionModel().clearSelection();
 
@@ -109,7 +109,7 @@ public class CraftView {
             for (RecipesEnum recipe : availableRecipesList.getItems()) {
                 System.out.println(" - " + recipe.name());
             }
-        }
+        }*/
     }
 
     public void displayRecipe() {
