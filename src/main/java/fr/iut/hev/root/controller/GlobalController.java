@@ -379,6 +379,15 @@ public class GlobalController implements Initializable {
         if (lootView != null) {
             lootView.updateLootPositions(cameraOffsetX, cameraOffsetY);
         }
+
+        // Update dialogue text position for PNJ
+        if (pnjView != null && pnjView.getActorSprite() != null && pnjView.getPhrase() != null) {
+            // Position the dialogue text above the PNJ sprite
+            double pnjX = pnjView.getActorSprite().getLayoutX();
+            double pnjY = pnjView.getActorSprite().getLayoutY();
+            pnjView.getPhrase().setLayoutX(pnjX + 30); // Offset to the right of the PNJ
+            pnjView.getPhrase().setLayoutY(pnjY - 30); // Offset above the PNJ
+        }
     }
 
     /**
