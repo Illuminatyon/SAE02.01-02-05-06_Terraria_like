@@ -20,8 +20,10 @@ import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.Cooldown;
+import fr.iut.hev.root.model.items.Weapon;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -56,6 +58,7 @@ public class GlobalController implements Initializable {
     private CooldownManager cooldownManager;
     private ItemFactory itemFactory;
     private CraftingManager craftingManager;
+    private HitboxManager hitboxManager;
     public static Mob mob ;
 
     // Variables for the scrolling camera
@@ -83,6 +86,8 @@ public class GlobalController implements Initializable {
 
     @FXML
     private TilePane landTileMap;
+
+
 
     @FXML
     private HBox heartsHbox;
@@ -121,6 +126,10 @@ public class GlobalController implements Initializable {
         lootView = new LootView(actorsPane); // Use actorsPane instead of globalPane
         cooldownManager = new CooldownManager();
         itemFactory = new ItemFactory();
+        hitboxManager = new HitboxManager();
+
+        // Set the hitbox manager for all weapons
+        Weapon.setHitboxManager(hitboxManager);
 
         initItemEnums();
         initMap();
@@ -142,6 +151,11 @@ public class GlobalController implements Initializable {
                                 aliveActors.remove(i);
                             }
                         }
+                        Actor currentActor = aliveActors.get(i);
+                        currentActor.updatePosition();
+
+                        // Update hitbox positions for the actor
+                        hitboxManager.updateHitboxPositions(currentActor);
                     }
                     for (Loot loot : Loot.lootOnMapProperty) {
                         loot.updatePosition();
@@ -184,6 +198,9 @@ public class GlobalController implements Initializable {
         aliveActors.add(player);
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
+
+        // Create a vulnerable hitbox for the player
+        hitboxManager.createDefaultVulnerableHitbox(player);
 
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
@@ -255,6 +272,9 @@ public class GlobalController implements Initializable {
         this.mobView = new MobView(mob, tileMap, actorsPane); // Use actorsPane instead of globalPane
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
         aliveActors.add(mob);
+
+        // Create a vulnerable hitbox for the mob
+        hitboxManager.createDefaultVulnerableHitbox(mob);
     }
 
     private void initActors() {
@@ -442,8 +462,8 @@ public class GlobalController implements Initializable {
 
         // Debug output
         if (foundCraftingTable || foundFurnace) {
-            System.out.println("Player near: " + 
-                (foundCraftingTable ? "Crafting Table " : "") + 
+            System.out.println("Player near: " +
+                (foundCraftingTable ? "Crafting Table " : "") +
                 (foundFurnace ? "Furnace" : ""));
         }
     }
