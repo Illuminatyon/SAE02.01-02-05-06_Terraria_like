@@ -10,18 +10,16 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
-import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
-//import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.DialogueEnum;
-import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.Cooldown;
+import fr.iut.hev.root.model.items.Weapon;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -56,6 +54,7 @@ public class GlobalController implements Initializable {
     private CooldownManager cooldownManager;
     private ItemFactory itemFactory;
     private CraftingManager craftingManager;
+    private HitboxManager hitboxManager;
     public static Mob mob ;
 
     // Variables for the scrolling camera
@@ -83,6 +82,8 @@ public class GlobalController implements Initializable {
 
     @FXML
     private TilePane landTileMap;
+
+
 
     @FXML
     private HBox heartsHbox;
@@ -121,6 +122,10 @@ public class GlobalController implements Initializable {
         lootView = new LootView(actorsPane); // Use actorsPane instead of globalPane
         cooldownManager = new CooldownManager();
         itemFactory = new ItemFactory();
+        hitboxManager = new HitboxManager();
+
+        // Set the hitbox manager for all weapons
+        Weapon.setHitboxManager(hitboxManager);
 
         initItemEnums();
         initMap();
@@ -137,6 +142,8 @@ public class GlobalController implements Initializable {
                             Actor currentActor = aliveActors.get(i);
                             if (currentActor != null) { // Check if actor is not null
                                 currentActor.updatePosition();
+                                // Update hitbox positions for the actor
+                                hitboxManager.updateHitboxPositions(currentActor);
                             } else {
                                 // Remove null actors from the list
                                 aliveActors.remove(i);
@@ -166,6 +173,9 @@ public class GlobalController implements Initializable {
                     // Check if player is near crafting stations
                     checkCraftingStationProximity();
 
+                    // Check if player is near PNJ for dialogue
+                    checkPnjDialogue();
+
                     cooldownManager.allCooldownsTick();
                 })
         );
@@ -184,6 +194,9 @@ public class GlobalController implements Initializable {
         aliveActors.add(player);
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
+
+        // Create a vulnerable hitbox for the player
+        hitboxManager.createDefaultVulnerableHitbox(player);
 
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
@@ -214,8 +227,8 @@ public class GlobalController implements Initializable {
 
         keyboardHandler = new KeyInputHandler(player,inventoryView,craftView);
 
-        double playerCenterX = 0/*playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2*/;
-        double playerCenterY = 0/*playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2*/;
+        double playerCenterX = 0;
+        double playerCenterY = 0;
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
@@ -255,6 +268,9 @@ public class GlobalController implements Initializable {
         this.mobView = new MobView(mob, tileMap, actorsPane); // Use actorsPane instead of globalPane
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
         aliveActors.add(mob);
+
+        // Create a vulnerable hitbox for the mob
+        hitboxManager.createDefaultVulnerableHitbox(mob);
     }
 
     private void initActors() {
@@ -279,13 +295,21 @@ public class GlobalController implements Initializable {
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
-        if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
-            pnjView.speak();
-            this.dialogueCD.setLimit(2);
-            this.dialogueCD.start();
-            System.out.println(pnjView.getPhrase());
+    }
+
+    /**
+     * Checks if the player is near a PNJ and triggers dialogue if needed
+     */
+    private void checkPnjDialogue() {
+        if (player == null || pnjView == null || dialogueCD == null) {
+            return;
         }
 
+        if ((player.getCollider().hasCollisionRight() || player.getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
+            pnjView.speak();
+            dialogueCD.setLimit(2);
+            dialogueCD.start();
+        }
     }
 
     private void initItemEnums() {
@@ -354,6 +378,15 @@ public class GlobalController implements Initializable {
         // Update loot positions with camera offset
         if (lootView != null) {
             lootView.updateLootPositions(cameraOffsetX, cameraOffsetY);
+        }
+
+        // Update dialogue text position for PNJ
+        if (pnjView != null && pnjView.getActorSprite() != null && pnjView.getPhrase() != null) {
+            // Position the dialogue text above the PNJ sprite
+            double pnjX = pnjView.getActorSprite().getLayoutX();
+            double pnjY = pnjView.getActorSprite().getLayoutY();
+            pnjView.getPhrase().setLayoutX(pnjX + 30); // Offset to the right of the PNJ
+            pnjView.getPhrase().setLayoutY(pnjY - 30); // Offset above the PNJ
         }
     }
 
@@ -439,12 +472,5 @@ public class GlobalController implements Initializable {
         // Update the crafting manager
         craftingManager.setNearCraftingTable(foundCraftingTable);
         craftingManager.setNearFurnace(foundFurnace);
-
-        // Debug output
-        if (foundCraftingTable || foundFurnace) {
-            System.out.println("Player near: " + 
-                (foundCraftingTable ? "Crafting Table " : "") + 
-                (foundFurnace ? "Furnace" : ""));
-        }
     }
 }
