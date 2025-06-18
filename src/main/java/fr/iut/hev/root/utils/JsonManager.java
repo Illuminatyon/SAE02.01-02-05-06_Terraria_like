@@ -2,8 +2,6 @@ package fr.iut.hev.root.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import fr.iut.hev.root.model.Actor;
-import fr.iut.hev.root.model.Player;
 import org.hildan.fxgson.FxGsonBuilder;
 
 import java.io.FileReader;

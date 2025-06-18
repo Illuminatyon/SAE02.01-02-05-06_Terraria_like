@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
@@ -15,17 +17,15 @@
    <children>
       <ImageView fitHeight="1056.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="@../img/background.png" />
+            <Image url="@../img/background/background.png" />
          </image>
       </ImageView>
       <TilePane fx:id="backgroundTileMap" prefHeight="1056.0" prefWidth="1920.0" />
       <TilePane fx:id="landTileMap" prefHeight="1056.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1920.0" />
       <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../img/entities/actors/player/jhon_fallout.png" />
-         </image>
+
       </ImageView>
-      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="hudAnchorPane" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="heartsHbox" prefHeight="50.0" prefWidth="400.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -60,23 +60,6 @@
                </padding></HBox>
             <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <GridPane fx:id="hotbarInventory" alignment="CENTER" hgap="5.0" VBox.vgrow="NEVER">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints prefHeight="50.0" vgrow="NEVER" />
-                     </rowConstraints>
-                  </GridPane>
                   <GridPane fx:id="expandedInventory" alignment="CENTER" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER">
                      <columnConstraints>
                         <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
@@ -97,11 +80,31 @@
                         <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="NEVER" />
                      </rowConstraints>
                   </GridPane>
+                  <GridPane fx:id="hotbarInventory" alignment="CENTER" hgap="5.0" VBox.vgrow="NEVER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints prefHeight="50.0" vgrow="NEVER" />
+                     </rowConstraints>
+                  </GridPane>
                </children>
                <padding>
                   <Insets bottom="5.0" />
                </padding>
             </VBox>
+            <ListView fx:id="craftListView" fixedCellSize="70.0" minHeight="90.0" minWidth="656.0" orientation="HORIZONTAL" prefHeight="90.0" prefWidth="656.0" style="-fx-background-color: rgba(0, 0, 0, 0.7); -fx-padding: 0; -fx-cell-horizontal-margin: 0; -fx-border-color: #ffffff; -fx-border-width: 2; -fx-border-radius: 0; -fx-selection-bar: transparent; -fx-selection-bar-non-focused: transparent;" AnchorPane.leftAnchor="372.0" AnchorPane.rightAnchor="372.0" AnchorPane.topAnchor="75.0" />
+            <Button fx:id="craftButton" alignment="CENTER" minHeight="30.0" minWidth="64.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="64.0" text="Craft" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="668.0" AnchorPane.rightAnchor="668.0" AnchorPane.topAnchor="165.0" />
+            <HBox fx:id="recipeDisplay" alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" styleClass="hbox" AnchorPane.topAnchor="25.0" />
          </children>
       </AnchorPane>
    </children>

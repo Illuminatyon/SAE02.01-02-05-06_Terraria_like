@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.exception.InsufficientQuantityException;
+import fr.iut.hev.root.model.items.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -23,7 +24,7 @@ public class InventorySlot {
             sb.append("Cannot remove ");
             sb.append(Integer.toString(quantity));
             sb.append(" from ");
-            sb.append(this.itemProperty.get().getItem());
+            sb.append(this.itemProperty.get().getItemEnum());
             sb.append(" at slot ");
             sb.append(this.index);
             sb.append(": only ");
@@ -65,4 +66,6 @@ public class InventorySlot {
     public int getIndex() {
         return this.index;
     }
+
+    public boolean isEmpty() {return quantityProperty.getValue() == 0;}
 }

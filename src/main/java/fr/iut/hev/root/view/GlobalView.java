@@ -2,7 +2,7 @@ package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.TileTypes;
+import fr.iut.hev.root.model.enums.TileTypesEnum;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -19,6 +19,7 @@ public class GlobalView {
         this.tileMap = tileMap;
         this.tileMapLand = tileMapLand;
         this.tileMapBackground = tileMapBackground;
+        loadWorld();
     }
 
     public void loadWorld() {
@@ -44,25 +45,39 @@ public class GlobalView {
         }
     }
 
-    public void updateTile(int x, int y,Tile tile) {
-        int textureNumber;
-        int tileHealthStep = ((tile.getTile().getMaxHealth()*10) / 4);
-        if (tile.getHealth() > 0 && tile.getHealth()%tileHealthStep == 0) {
-            textureNumber = tile.getHealth() / tileHealthStep;
-            tileMapLand.getChildren().set(y * 60 + x, new ImageView(getTexture(tile, textureNumber)));
+    public void updateTile(Tile tile) {
+        System.out.println(tile.getHealth());
+        int textureNumber = 4;
+        int tileHealth = tile.getHealth();
+        int maxHealth = tile.getTileEnum().getMaxHealth()*20;
+
+        // If health is at maximum, use texture 4 (initial state)
+        if (tileHealth == maxHealth) {
+            textureNumber = 4;
+        } 
+        // Otherwise calculate the appropriate texture based on health
+        else if (tileHealth > 0) {
+            int tileHealthStep = (maxHealth / 4);
+            for (int i = 4 ; i > 0 ; i--) {
+                if (tileHealth < (tileHealthStep * i) && tileHealth >= (tileHealthStep * (i - 1)))
+                    textureNumber = i;
+            }
         }
-        else if (tile.getHealth() <= 0){
-            tileMapLand.getChildren().set(y * 60 + x, new ImageView());
+
+        if (tileHealth > 0) {
+            tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView(getTexture(tile,textureNumber)));
         }
+        else
+            tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView());
     }
 
-    public Image getTexture(Tile tile, int tileHealth) {
+    public Image getTexture(Tile tile, int textureNumber) {
         /**
          * Retourne le sprite de la Tile en fonction des dégâts qu'elle a subit.
          */
-        if (tile.getTile().getType() == TileTypes.AIR)
+        if (tile.getTileEnum().getType() == TileTypesEnum.AIR)
             return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_").concat(Integer.toString(tileHealth)).concat(".png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTileEnum().getName()).concat("_").concat(Integer.toString(textureNumber)).concat(".png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 
@@ -70,9 +85,9 @@ public class GlobalView {
         /**
          * Retourne le sprite background de la Tile
          */
-        if (tile.getTile().getType() == TileTypes.AIR)
+        if (tile.getTileEnum().getType() == TileTypesEnum.AIR)
             return null;
-        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTile().getName()).concat("_background.png");
+        String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTileEnum().getName()).concat("_background.png");
         return new Image(getClass().getResource(path).toExternalForm());
     }
 }

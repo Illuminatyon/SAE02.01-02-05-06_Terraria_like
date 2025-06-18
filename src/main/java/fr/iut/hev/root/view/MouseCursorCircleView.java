@@ -54,12 +54,6 @@ public class MouseCursorCircleView {
         cursor.setVisible(bool);
     }
 
-    public void registerClickHandler() {
-        boundary.setOnMouseClicked(event -> {
-            System.out.printf("Coordonnées du curseur : X = %.2f, Y = %.2f%n", cursor.getCenterX(), cursor.getCenterY());
-        });
-    }
-
     public void updateCenter(double x, double y) {
         this.centerX = x;
         this.centerY = y;

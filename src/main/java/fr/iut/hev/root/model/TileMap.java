@@ -1,29 +1,30 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.TileTypesEnum;
+import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.items.Item;
+import fr.iut.hev.root.model.items.ItemFactory;
 import com.google.gson.annotations.Expose;
-import fr.iut.hev.root.model.enums.Tiles;
 
 public class TileMap {
+    private ItemFactory itemFactory;
     @Expose private int width, height;
     @Expose private Tile[][] tileMap;
 
     public static final int format = 32;
 
-    public TileMap() {
-        // Peut rester vide ou initialiser avec des valeurs par défaut
-    }
-
-    public TileMap(int width, int height) {
+    public TileMap(int width, int height, ItemFactory itemFactory) {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
+        this.itemFactory = itemFactory;
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
 
         //génération de la map test
         this.setTestMap();
-
     }
 
     public Tile getTile(int tileX, int tileY) {
@@ -44,57 +45,61 @@ public class TileMap {
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
                 if (index < 1080) {
-                    this.addTile(new Tile(Tiles.AIR,j, i));
+                    this.addTile(new Tile(TilesEnum.AIR,j, i));
                 }
                 else if (index >= 1080 && index < 1140) {
-                    this.addTile(new Tile(Tiles.GRASS,j,i));
+                    this.addTile(new Tile(TilesEnum.GRASS,j,i));
                 }
                 else if (index >= 1140 && index < 1320) {
-                    this.addTile(new Tile(Tiles.DIRT,j,i));
+                    this.addTile(new Tile(TilesEnum.DIRT,j,i));
                 }
                 else if (index >= 1320) {
-                    this.addTile(new Tile(Tiles.STONE,j,i));
+                    this.addTile(new Tile(TilesEnum.STONE,j,i));
                 }
                 index++;
             }
         }
 
         for (int i = 0; i < 15; i++) {
-            this.getTile(i, 18).setTile(Tiles.DIRT);
+            this.getTile(i, 18).setTileEnum(TilesEnum.DIRT);
             if (i < 14) {
-                this.getTile(i, 17).setTile(Tiles.DIRT);
+                this.getTile(i, 17).setTileEnum(TilesEnum.DIRT);
             }
             if (i < 13) {
-                this.getTile(i, 16).setTile(Tiles.DIRT);
+                this.getTile(i, 16).setTileEnum(TilesEnum.DIRT);
             }
             if (i < 12) {
-                this.getTile(i, 15).setTile(Tiles.DIRT);
+                this.getTile(i, 15).setTileEnum(TilesEnum.DIRT);
             }
         }
 
         for (int i = 0; i < 3; i++) {
-            this.getTile(14 - i, 17 - i).setTile(Tiles.GRASS);
+            this.getTile(14 - i, 17 - i).setTileEnum(TilesEnum.GRASS);
         }
 
         for (int i = 0; i < 11; i++) {
-            this.getTile(11 - i, 14).setTile(Tiles.GRASS);
+            this.getTile(11 - i, 14).setTileEnum(TilesEnum.GRASS);
         }
 
         for (int i = 0; i < 5; i++) {
-            this.getTile(0, 14 - i).setTile(Tiles.DIRT);
+            this.getTile(0, 14 - i).setTileEnum(TilesEnum.DIRT);
         }
 
         for (int i = 0; i < 3; i++) {
-            this.getTile(25 + i, 14).setTile(Tiles.GRASS);
+            this.getTile(25 + i, 14).setTileEnum(TilesEnum.GRASS);
         }
 
-        this.getTile(27, 15).setTile(Tiles.DIRT);
+        this.getTile(27, 15).setTileEnum(TilesEnum.DIRT);
 
         for (int i = 0; i < 5; i++) {
-            this.getTile(35, 17 - i).setTile(Tiles.DIRT);
+            this.getTile(35, 17 - i).setTileEnum(TilesEnum.DIRT);
         }
 
-        this.getTile(40, 15).setTile(Tiles.DIRT);
+        this.getTile(40, 15).setTileEnum(TilesEnum.DIRT);
+
+        this.getTile(57, 31).setTileEnum(TilesEnum.STONE);
+
+        //this.getTile(57, 31).setTile(Tiles.DIRT);
 
         /*for (int i = 16; i > 0; i--) {
             this.getTile(20, i).setTile(Tiles.DIRT);
@@ -111,7 +116,7 @@ public class TileMap {
          */
         int x = tile.getX();
         int y = tile.getY();
-        if (getTile(x,y) == null)
+        if (getTile(x,y) == null || getTile(x,y).getTileEnum().getType() == TileTypesEnum.AIR)
             this.tileMap[y][x] = tile;
     }
 
@@ -123,12 +128,22 @@ public class TileMap {
         return height;
     }
 
-    public void tileGetsMined(int x, int y) {
+    public void tileGetsMined(int x, int y,int damage) {
         Tile currentTile = this.getTile(x,y);
-        if (!(currentTile.getHealth() <= 0))
-            currentTile.takesDamage(1);
-        if (currentTile.getHealth() <= 0)
+        if (!(currentTile.getHealth() <= 0)) {
+            System.out.println(currentTile.getHealth());
+            currentTile.takesDamage(damage);
+        }
+        if (currentTile.getHealth() <= 0) {
+            Item item = itemFactory.createItem(currentTile.getTileEnum().getRelatedItem());
             currentTile.breaks();
+            //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
+            Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
+        }
+    }
+
+    public boolean isTileEmpty(int x,int y) {
+        return this.getTile(x,y).getTileEnum().getType() == TileTypesEnum.AIR;
     }
 
     // Charger la TileMap d'un fichier

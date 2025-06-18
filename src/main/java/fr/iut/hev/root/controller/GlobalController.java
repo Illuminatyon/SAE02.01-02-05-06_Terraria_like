@@ -1,18 +1,39 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
+import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
+import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
+import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
+import fr.iut.hev.root.controller.Listeners.DeathListener;
+import fr.iut.hev.root.model.CraftingManager;
+import fr.iut.hev.root.model.Inventory;
+import fr.iut.hev.root.model.Tile;
+import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.entities.*;
+import fr.iut.hev.root.model.enums.ItemTypesEnum;
+import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.enums.DialogueEnum;
+import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.enums.RecipesEnum;
+import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.items.ItemFactory;
+import fr.iut.hev.root.model.utilities.Cooldown;
+import fr.iut.hev.root.model.items.Weapon;
+import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import fr.iut.hev.root.view.InventoryView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -23,18 +44,44 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import static fr.iut.hev.root.model.enums.DialogueEnum.INTRO;
+
 public class GlobalController implements Initializable {
     private World world;
     private Timeline gameLoop;
     private Player player;
+    private TileMap tileMap;
+    private MouseInventoryInputHandler mouseInventoryHandler;
+    private ScrollInputHandler scrollHotbarHandler;
+    private KeyInputHandler keyboardHandler;
+    private MouseItemActionInputHandler mouseItemActionHandler;
+    private ArrayList<Actor> aliveActors;
+    private Inventory inventory; // TODO: Put in the player
+    private CooldownManager cooldownManager;
+    private ItemFactory itemFactory;
+    private CraftingManager craftingManager;
+    private HitboxManager hitboxManager;
+    public static Mob mob ;
+
+    // Variables for the scrolling camera
+    private double cameraOffsetX = 0;
+    private double cameraOffsetY = 0;
+
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
     private HUDView hudView;
     private PlayerView playerView;
-    private TileMap tileMap;
-    private MouseInputHandler mouseClicksPressedHandler;
-    private ArrayList<Actor> aliveActors;
     private MouseCursorCircleView playerLightCircle;
-    private Inventory inventory; // TODO: Put in the player
+    private InventoryView inventoryView;
+    private HotbarView hotbarView;
+    private MobView mobView;
+    private MobView aggressiveMobView;
+    private PnjView pnjView;
+    private CraftView craftView;
+    private Cooldown dialogueCD;
+    private LootView lootView;
+
+    // AnchorPane for actors that will move with the camera
+    private AnchorPane actorsPane;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -42,8 +89,7 @@ public class GlobalController implements Initializable {
     @FXML
     private TilePane landTileMap;
 
-    @FXML
-    private ImageView player_imageview;
+
 
     @FXML
     private HBox heartsHbox;
@@ -57,6 +103,18 @@ public class GlobalController implements Initializable {
     @FXML
     private GridPane expandedInventory;
 
+    @FXML
+    private AnchorPane hudAnchorPane;
+
+    @FXML
+    private ListView<RecipesEnum> craftListView;
+
+    @FXML
+    private Button craftButton;
+
+    @FXML
+    private HBox recipeDisplay;
+
     public void setWorld(World world) {
         this.world = world;
     }
@@ -65,36 +123,69 @@ public class GlobalController implements Initializable {
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
+        // Initialize actorsPane
+        actorsPane = new AnchorPane();
+        globalPane.getChildren().add(actorsPane);
+
+        lootView = new LootView(actorsPane); // Use actorsPane instead of globalPane
+        cooldownManager = new CooldownManager();
+        itemFactory = new ItemFactory();
+        hitboxManager = new HitboxManager();
+
+        // Set the hitbox manager for all weapons
+        Weapon.setHitboxManager(hitboxManager);
+
+        initItemEnums();
         aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         initMap();
         initPlayer();
+
+        // Initialize camera position
+        updateCameraPosition();
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
                 (ev -> {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
-                        Actor currentActor = aliveActors.get(i);
-                        currentActor.diesQuestionMark();
-                        if (currentActor.getIsAliveProperty()) {
-                            currentActor.updatePosition();
-                        }
-                        else {
-                            aliveActors.remove(currentActor);
+                        if (i < aliveActors.size()) { // Check if index is still valid
+                            Actor currentActor = aliveActors.get(i);
+                            if (currentActor != null) { // Check if actor is not null
+                                currentActor.updatePosition();
+                                // Update hitbox positions for the actor
+                                hitboxManager.updateHitboxPositions(currentActor);
+                            } else {
+                                // Remove null actors from the list
+                                aliveActors.remove(i);
+                            }
                         }
                     }
-                    if (mouseClicksPressedHandler.getMouseClickIsPressed()) {
-                        mouseClicksPressedHandler.clickPressedHandler();
+                    for (Loot loot : Loot.lootOnMapProperty) {
+                        loot.updatePosition();
                     }
-                    if (mouseClicksPressedHandler.getMouseClickIsReleased()) {
-                        mouseClicksPressedHandler.clickReleasedHandler();
+                    if (mouseItemActionHandler.getMouseClickIsPressed()) {
+                        mouseItemActionHandler.onClickPressedLoop();
+                    }
+                    if (mouseItemActionHandler.getMouseClickIsReleased()) {
+                        mouseItemActionHandler.onClickReleasedLoop();
                     }
 
                     // Mise à jour de la position de la lumière autour du joueur
                     if (playerLightCircle != null) {
-                        double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
-                        double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+                        double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
+                        double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
+
+                    // Update camera position to follow the player
+                    updateCameraPosition();
+
+                    // Check if player is near crafting stations
+                    checkCraftingStationProximity();
+
+                    // Check if player is near PNJ for dialogue
+                    checkPnjDialogue();
+
+                    cooldownManager.allCooldownsTick();
                 })
         );
         gameLoop.getKeyFrames().add(kf);
@@ -104,49 +195,292 @@ public class GlobalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        aliveActors = new ArrayList<>();
     }
 
     private void initMap() {
+        tileMap = new TileMap(1920,1056,itemFactory);
         //tileMap = new TileMap(1920,1056);
         tileMap = world.getTileMap();
         globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
-        globalView.loadWorld();
     }
 
     private void initPlayer() {
-        //player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
+        //player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
         player = world.getPlayer();
         aliveActors.add(player);
-        inventory = new Inventory();
+        inventory = player.getInventory();
+        craftingManager = new CraftingManager(inventory,itemFactory);
 
-        hudView = new HUDView(player,heartsHbox);
-        playerView = new PlayerView(player,player_imageview,tileMap);
-        InventoryView iv = new InventoryView(inventory, hotbarInventory, expandedInventory);
-        playerView.load();
+        // Create a vulnerable hitbox for the player
+        hitboxManager.createDefaultVulnerableHitbox(player);
 
-        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
-        player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
 
+        hudView = new HUDView(player.getHealth(),heartsHbox);
+        playerView = new PlayerView(player,tileMap,actorsPane); // Use actorsPane instead of globalPane
+        craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
+        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
+        hotbarView = new HotbarView(hotbarInventory);
+
+
+        inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
+        inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),45);
+        inventory.add(2,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),20);
+        inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
+        inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
+        inventory.add(5, itemFactory.createItem(ItemsEnum.KATANA), 1);
+        inventory.add(6,itemFactory.createItem(ItemsEnum.DAGGER), 1);
+        inventory.add(7,itemFactory.createItem(ItemsEnum.BOW), 1);
+        inventory.add(8,itemFactory.createItem(ItemsEnum.ARROW), 64);
+        inventory.add(9,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
+        inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
+
+        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
+        player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
+        craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
+        craftButton.setOnAction(actionEvent -> {
+            craftingManager.crafts();
+        });
         //KeyInputHandler keyboardHandler = new KeyInputHandler(player);
-        KeyInputHandler keyboardHandler = new KeyInputHandler(world);
+        //KeyInputHandler keyboardHandler = new KeyInputHandler(world);
 
-        double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
-        double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;
+        keyboardHandler = new KeyInputHandler(world, inventoryView, craftView);
+
+        double playerCenterX = 0;
+        double playerCenterY = 0;
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
-        mouseClicksPressedHandler = new MouseInputHandler(tileMap,globalView,player,playerLightCircle);
+        mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
+        scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
+        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap,this);
+
+        player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
+        player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
+        player.indexItemInHandProperty().bind(scrollHotbarHandler.IndexHotbarProperty());
+        player.itemInHandProperty().addListener((observableValue, item, t1) -> mouseItemActionHandler.updateCooldown());
+        mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
+            inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
+        mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
+        mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
+        scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) -> {
+            if (scrollHotbarHandler.getDirection() != 0)
+                scrollHotbarHandler.updateHotbar();
+        });
+
+
         Platform.runLater(() -> {
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseClicksPressedHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseClicksPressedHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseClicksPressedHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseItemActionHandler);
+            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseItemActionHandler);
+            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
+            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
+            landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
         });
+    }
+
+    private void initmob() {
+        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET);
+        this.mobView = new MobView(mob, tileMap, actorsPane); // Use actorsPane instead of globalPane
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors));
+        aliveActors.add(mob);
+
+        // Create a vulnerable hitbox for the mob
+        hitboxManager.createDefaultVulnerableHitbox(mob);
     }
 
     private void initActors() {
         aliveActors = new ArrayList<>();
         initPlayer();
+        initmob();
+        initAggressiveMob(player);
+        initPnj();
+    }
+
+    private void initAggressiveMob(Player player) {
+        AggressiveMob aggressiveMob = new AggressiveMob(
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, actorsPane, 1 // Use actorsPane instead of globalPane
+        );
+        this.aggressiveMobView = new MobView(aggressiveMob, tileMap, actorsPane); // Use actorsPane instead of globalPane
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors));
+        aliveActors.add(aggressiveMob);
+    }
+    private void initPnj() {
+        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS);
+        this.pnjView = new PnjView(homps, tileMap, actorsPane); // Use actorsPane instead of globalPane
+        homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
+        aliveActors.add(homps);
+        dialogueCD = new Cooldown(0);
+    }
+
+    /**
+     * Checks if the player is near a PNJ and triggers dialogue if needed
+     */
+    private void checkPnjDialogue() {
+        if (player == null || pnjView == null || dialogueCD == null) {
+            return;
+        }
+
+        if ((player.getCollider().hasCollisionRight() || player.getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
+            pnjView.speak();
+            dialogueCD.setLimit(2);
+            dialogueCD.start();
+        }
+    }
+
+    private void initItemEnums() {
+        for (ItemsEnum itemsEnum : ItemsEnum.values()) {
+            if (itemsEnum.getItemType().equals(ItemTypesEnum.BLOCK) || itemsEnum.getItemType().equals(ItemTypesEnum.UTILITY)) {
+                itemsEnum.itemEnumInit();
+            }
+        }
+    }
+
+    /**
+     * Updates the camera position to center on the player
+     */
+    private void updateCameraPosition() {
+        if (player == null || landTileMap == null || backgroundTileMap == null) {
+            return;
+        }
+
+        // Calculate the center of the screen
+        double screenWidth = globalPane.getWidth();
+        double screenHeight = globalPane.getHeight();
+
+        // Calculate the player's center position
+        double playerCenterX = player.getPosX() + player.getWidth() / 2;
+        double playerCenterY = player.getPosY() + player.getHeight() / 2;
+
+        // Calculate the camera offset to center the player
+        cameraOffsetX = (screenWidth / 2) - playerCenterX;
+        cameraOffsetY = (screenHeight / 2) - playerCenterY;
+
+        // Apply the camera offset to the tile maps
+        landTileMap.setTranslateX(cameraOffsetX);
+        landTileMap.setTranslateY(cameraOffsetY);
+        backgroundTileMap.setTranslateX(cameraOffsetX);
+        backgroundTileMap.setTranslateY(cameraOffsetY);
+
+        // Update the positions of all actors based on the camera offset
+        for (Actor actor : aliveActors) {
+            if (actor == null) {
+                // Skip null actors
+                continue;
+            }
+
+            if (actor.equals(player)) {
+                // Update player position
+                if (playerView != null && playerView.getActorSprite() != null) {
+                    playerView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    playerView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                }
+            } else {
+                // Update other actors' positions
+                if (actor == mob && mobView != null && mobView.getActorSprite() != null) {
+                    mobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    mobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                } else if (actor instanceof AggressiveMob && aggressiveMobView != null && aggressiveMobView.getActorSprite() != null) {
+                    aggressiveMobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    aggressiveMobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                } else if (pnjView != null && pnjView.getActorSprite() != null && actor.getName().equals("homps")) {
+                    pnjView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                    pnjView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                }
+                // Note: Arrow actors are handled by their own view class and don't need special handling here
+            }
+        }
+
+        // Update loot positions with camera offset
+        if (lootView != null) {
+            lootView.updateLootPositions(cameraOffsetX, cameraOffsetY);
+        }
+    }
+
+    /**
+     * Gets the current camera offset X
+     * @return the camera offset X
+     */
+    public double getCameraOffsetX() {
+        return cameraOffsetX;
+    }
+
+    /**
+     * Gets the current camera offset Y
+     * @return the camera offset Y
+     */
+    public double getCameraOffsetY() {
+        return cameraOffsetY;
+    }
+
+    /**
+     * Gets the list of alive actors
+     * @return the list of alive actors
+     */
+    public ArrayList<Actor> getAliveActors() {
+        return aliveActors;
+    }
+
+    /**
+     * Gets the actors pane
+     * @return the actors pane
+     */
+    public AnchorPane getActorsPane() {
+        return actorsPane;
+    }
+
+    /**
+     * Gets the item factory
+     * @return the item factory
+     */
+    public ItemFactory getItemFactory() {
+        return itemFactory;
+    }
+
+    /**
+     * Checks if the player is near any crafting stations (furnace or crafting table)
+     * and updates the crafting manager accordingly
+     */
+    private void checkCraftingStationProximity() {
+        if (player == null || tileMap == null || craftingManager == null) {
+            return;
+        }
+
+        // Get player position in tile coordinates
+        int playerTileX = (int) (player.getPosX() / TileMap.format);
+        int playerTileY = (int) (player.getPosY() / TileMap.format);
+
+        // Check a 3x3 area around the player for crafting stations
+        boolean foundCraftingTable = false;
+        boolean foundFurnace = false;
+
+        for (int x = playerTileX - 3; x <= playerTileX + 3; x++) {
+            for (int y = playerTileY - 3; y <= playerTileY + 3; y++) {
+                // Skip if out of bounds
+                if (x < 0 || y < 0 || x >= tileMap.getWidth() || y >= tileMap.getHeight()) {
+                    continue;
+                }
+
+                // Get the tile at this position
+                Tile tile = tileMap.getTile(x, y);
+                if (tile != null && tile.getTileEnum() != null) {
+                    // Check if it's a crafting table
+                    if (tile.getTileEnum() == TilesEnum.CRAFTING_TABLE) {
+                        foundCraftingTable = true;
+                    }
+                    // Check if it's a furnace
+                    else if (tile.getTileEnum() == TilesEnum.FURNACE) {
+                        foundFurnace = true;
+                    }
+                }
+            }
+        }
+
+        // Update the crafting manager
+        craftingManager.setNearCraftingTable(foundCraftingTable);
+        craftingManager.setNearFurnace(foundFurnace);
     }
 }

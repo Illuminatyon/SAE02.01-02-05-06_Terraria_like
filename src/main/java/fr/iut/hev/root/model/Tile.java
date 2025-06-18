@@ -1,23 +1,19 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.enums.TilesEnum;
 import com.google.gson.annotations.Expose;
-import fr.iut.hev.root.model.enums.TileTypes;
-import fr.iut.hev.root.model.enums.Tiles;
-import javafx.scene.image.Image;
-
-import java.net.URL;
 
 public class Tile {
-    @Expose private Tiles tile;
+    @Expose private TilesEnum tileEnum;
     private int health;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
     @Expose private int tileX; // Pas sur d'avoir besoin de les exposer
     @Expose private int tileY;
 
-    public Tile(Tiles tile, int x, int y) {
-        this.tile = tile;
-        this.health = tile.getMaxHealth()*10;
+    public Tile(TilesEnum tileEnum, int x, int y) {
+        this.tileEnum = tileEnum;
+        this.health = tileEnum.getMaxHealth()*20;
         this.tileX = x;
         this.tileY = y;
 
@@ -27,12 +23,12 @@ public class Tile {
         this.health = Math.max(0, this.health - amount); // Retourne le plus grand
     }
 
-    public Tiles getTile() {
-        return this.tile;
+    public TilesEnum getTileEnum() {
+        return this.tileEnum;
     }
 
-    public void setTile(Tiles tile) {
-        this.tile = tile;
+    public void setTileEnum(TilesEnum tileEnum) {
+        this.tileEnum = tileEnum;
     }
 
     public int getX() {
@@ -45,7 +41,7 @@ public class Tile {
 
     public int getHealth() {return this.health;}
 
-    public void resetHealth() {this.health = this.tile.getMaxHealth()*10;}
+    public void resetHealth() {this.health = this.tileEnum.getMaxHealth()*20;}
 
     /*public String toString() {
         return "{"
@@ -61,10 +57,10 @@ public class Tile {
 
     @Override
     public String toString() {
-        return this.getTile().toString();
+        return this.getTileEnum().toString();
     }
 
     public void breaks() {
-        this.tile = Tiles.AIR;
+        this.tileEnum = TilesEnum.AIR;
     }
 }

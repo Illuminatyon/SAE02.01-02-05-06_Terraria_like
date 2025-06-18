@@ -1,6 +1,11 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.model.*;
+import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.Mob;
+import fr.iut.hev.root.model.entities.Player;
+import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.utils.JsonManager;
 import fr.iut.hev.root.utils.SaveManager;
 import fr.iut.hev.root.view.MainMenuUIComponents;
@@ -190,8 +195,9 @@ public class MainMenuController implements Initializable {
         }
 
         // Peut etre mettre ce code dans save manager ?
-        TileMap tileMap = new TileMap(1920, 1080);
-        Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
+        ItemFactory itemFactory = new ItemFactory();
+        TileMap tileMap = new TileMap(1920, 1080, itemFactory);
+        Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
         ArrayList<Actor> aliveActors = new ArrayList<>();
         World newWorld = new World(worldName, tileMap, player, aliveActors);
         // TODO: Create a JSON World

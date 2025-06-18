@@ -1,6 +1,9 @@
 package fr.iut.hev.root.model;
 
 import com.google.gson.annotations.Expose;
+import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.Mob;
+import fr.iut.hev.root.model.entities.Player;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -17,7 +20,7 @@ public class World {
     public World() {
     }
 
-    public World(String name, TileMap tileMap, Player player, ArrayList<Actor> aliveActors) throws IOException {
+    public World(String name, TileMap tileMap, Player player, ArrayList<Actor> aliveMobs) throws IOException {
         this.nameProperty = new SimpleStringProperty();
         this.nameProperty.set(name);
         this.lastPlayed = System.currentTimeMillis();
