@@ -68,7 +68,7 @@ public class Dagger extends Weapon {
         // Create or update the dagger view for animation
         if (daggerView == null) {
             // Get the actorsPane from the global controller
-            AnchorPane actorsPane = eventHandler.getGlobalController().getActorsPane();
+            AnchorPane actorsPane = eventHandler.getGlobalController().getEntitiesPane();
             daggerView = new DaggerView(actorsPane);
         }
 

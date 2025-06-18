@@ -90,7 +90,7 @@ public class Katana extends Weapon {
         // Create or update the katana view for animation
         if (katanaView == null) {
             // Get the actorsPane from the global controller
-            AnchorPane actorsPane = eventHandler.getGlobalController().getActorsPane();
+            AnchorPane actorsPane = eventHandler.getGlobalController().getEntitiesPane();
             katanaView = new KatanaView(actorsPane);
         }
 

@@ -1,7 +1,6 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Arrow;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
@@ -10,8 +9,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
 
 public class Bow extends Weapon {
     private static final int ARROW_SPEED = 10;
@@ -60,7 +57,7 @@ public class Bow extends Weapon {
         // Create or update the bow view for animation
         if (bowView == null) {
             // Get the actorsPane from the global controller
-            AnchorPane actorsPane = eventHandler.getGlobalController().getActorsPane();
+            AnchorPane actorsPane = eventHandler.getGlobalController().getEntitiesPane();
             bowView = new BowView(actorsPane);
         }
 
@@ -85,7 +82,7 @@ public class Bow extends Weapon {
                     normalizedDirX * ARROW_SPEED, 
                     normalizedDirY * ARROW_SPEED,
                     getDamage(),
-                    eventHandler.getGlobalController().getActorsPane(),
+                    eventHandler.getGlobalController().getEntitiesPane(),
                     eventHandler.getGlobalController()
                 );
 

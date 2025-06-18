@@ -12,8 +12,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="globalPane" prefHeight="1056.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.GlobalController">
+<AnchorPane fx:id="globalPane" prefHeight="1056.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.GlobalController">
    <children>
       <ImageView fitHeight="1056.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
@@ -22,9 +23,13 @@
       </ImageView>
       <TilePane fx:id="backgroundTileMap" prefHeight="1056.0" prefWidth="1920.0" />
       <TilePane fx:id="landTileMap" prefHeight="1056.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1920.0" />
-      <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+      <AnchorPane fx:id="entitiesPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
 
       </ImageView>
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="hudAnchorPane" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="heartsHbox" prefHeight="50.0" prefWidth="400.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -102,8 +107,11 @@
                   <Insets bottom="5.0" />
                </padding>
             </VBox>
-            <ListView fx:id="craftListView" fixedCellSize="70.0" minHeight="90.0" minWidth="656.0" orientation="HORIZONTAL" prefHeight="90.0" prefWidth="656.0" AnchorPane.leftAnchor="372.0" AnchorPane.rightAnchor="372.0" AnchorPane.topAnchor="75.0" />
-            <Button fx:id="craftButton" alignment="CENTER" minHeight="30.0" minWidth="64.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="64.0" text="Craft" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="668.0" AnchorPane.rightAnchor="668.0" AnchorPane.topAnchor="165.0" />
+            <ListView fx:id="craftListView" fixedCellSize="70.0" minHeight="90.0" minWidth="656.0" orientation="HORIZONTAL" prefHeight="90.0" prefWidth="656.0" AnchorPane.leftAnchor="372.0" AnchorPane.rightAnchor="372.0" AnchorPane.topAnchor="230.0" />
+            <Button fx:id="craftButton" alignment="CENTER" minHeight="30.0" minWidth="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="64.0" text="Craft" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="850.0" AnchorPane.rightAnchor="850.0" AnchorPane.topAnchor="325.0">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
             <HBox fx:id="recipeDisplay" alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" styleClass="hbox" AnchorPane.topAnchor="25.0" />
          </children>
       </AnchorPane>
