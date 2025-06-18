@@ -19,6 +19,7 @@ import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.Cooldown;
 import fr.iut.hev.root.model.items.Weapon;
@@ -267,7 +268,6 @@ public class GlobalController implements Initializable {
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
-        // ajouter le listener sur les colision avec le joueur a la place du check de colison des mur de cons
         /*if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
             pnjView.speak();
             this.dialogueCD.setLimit(2);
