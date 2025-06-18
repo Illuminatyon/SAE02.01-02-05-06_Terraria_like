@@ -24,7 +24,12 @@ public class Tree {
             this.health = 0;
     }
 
+    public void resetHealth() {
+        this.health = taille*40;
+    }
+
     public int getX() {return this.x;}
     public int getY() {return this.y;}
     public int getHealth() {return this.health;}
+    public int getTaille() {return this.taille;}
 }

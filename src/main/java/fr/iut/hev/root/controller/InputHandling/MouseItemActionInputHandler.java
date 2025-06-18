@@ -2,11 +2,14 @@ package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.TreeManager;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
+import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.utilities.Cooldown;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.InventoryView;
+import fr.iut.hev.root.view.TreeView;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -25,12 +28,16 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private MouseEvent mouseEvent;
     private GlobalView worldView;
     private TileMap tileMap;
+    private TreeManager treeManager;
+    private TreeView treeView;
 
-    public MouseItemActionInputHandler(InventoryView inventoryView, Player player, GlobalView worldView,TileMap tileMap) {
+    public MouseItemActionInputHandler(InventoryView inventoryView, Player player, GlobalView worldView,TileMap tileMap,TreeManager treeManager,TreeView treeView) {
         this.inventoryView = inventoryView;
         this.player = player;
         this.worldView = worldView;
         this.tileMap = tileMap;
+        this.treeManager = treeManager;
+        this.treeView = treeView;
         this.x = 0;
         this.y = 0;
         this.mouseClickIsPressed = false;
@@ -95,7 +102,10 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickPressedLoop() {
         if (player.usesItemInHand(this)) {
-            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
+            if (player.getItemInHand().getItemEnum().equals(ItemsEnum.WOODEN_HAX)) {
+                treeView.deleteSprite((int)x,(int)y);
+            }
+            else if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
     }
@@ -106,7 +116,10 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickReleasedLoop() {
         if (player.usesItemInHand(this)) {
-            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
+            if (player.getItemInHand().getItemEnum().equals(ItemsEnum.WOODEN_HAX)) {
+                treeView.deleteSprite((int)x,(int)y);
+            }
+            else if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
         this.mouseClickIsReleased = false;
@@ -140,4 +153,5 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public TileMap getTileMap() {return this.tileMap;}
     public double getX() {return this.x;}
     public double getY() {return this.y;}
+    public TreeManager getTreeManager() {return this.treeManager;}
 }

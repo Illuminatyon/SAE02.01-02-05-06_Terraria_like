@@ -53,7 +53,11 @@ public class ItemFactory {
     }
 
     public Tool createTool(ItemsEnum itemsEnum) {
-        return new Tool(itemsEnum);
+        if (itemsEnum.equals(ItemsEnum.WOODEN_HAX)) {
+            return new Hax(itemsEnum);
+        }
+        else
+            return new Tool(itemsEnum);
     }
 
     public Weapon createWeapon(ItemsEnum itemsEnum) {

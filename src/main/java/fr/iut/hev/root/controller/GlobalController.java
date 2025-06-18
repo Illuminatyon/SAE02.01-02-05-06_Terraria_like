@@ -7,6 +7,7 @@ import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.CraftingManager;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.TreeManager;
 import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
@@ -27,10 +28,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -51,6 +49,7 @@ public class GlobalController implements Initializable {
     private ItemFactory itemFactory;
     private CraftingManager craftingManager;
     public static Mob mob ;
+    private TreeManager treeManager;
 
     private GlobalView globalView;
     private HUDView hudView;
@@ -60,6 +59,7 @@ public class GlobalController implements Initializable {
     private HotbarView hotbarView;
     private MobView mobView;
     private CraftView craftView;
+    private TreeView treeView;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -93,6 +93,9 @@ public class GlobalController implements Initializable {
     @FXML
     private HBox recipeDisplay;
 
+    @FXML
+    private Pane treePane;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameLoop = new Timeline();
@@ -103,6 +106,8 @@ public class GlobalController implements Initializable {
 
         initItemEnums();
         initMap();
+        treeManager = new TreeManager(itemFactory,tileMap);
+        treeView = new TreeView(treePane,treeManager.getTrees());
         initActors();
 
         KeyFrame kf = new KeyFrame(
@@ -179,7 +184,7 @@ public class GlobalController implements Initializable {
 
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
-        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap);
+        mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap,treeManager,treeView);
 
         player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
