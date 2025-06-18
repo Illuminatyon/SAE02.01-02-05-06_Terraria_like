@@ -19,8 +19,19 @@ public class MainMenuView {
     private HashMap<World, HBox> worldsHBox;
     private HBox worldsSelectHBoxTemplate;
 
+    //public MainMenuView(MainMenuUIComponents uiComponents, SetProperty<World> worldsSetProperty) {
     public MainMenuView(MainMenuUIComponents uiComponents) {
         worldsHBox = new HashMap<>();
+        /*worldsSetProperty.addListener((SetChangeListener<? super World>) (change) -> {
+            if (change.wasAdded()) {
+                World addedWorld = change.getElementAdded();
+                createWorldHBox(addedWorld);
+            }
+            if (change.wasRemoved()) {
+                World removedWorld = change.getElementRemoved();
+                deleteWorldHBox(removedWorld);
+            }
+        });*/
 
         // Either load worlds here or in the controller
         //loadWorlds();

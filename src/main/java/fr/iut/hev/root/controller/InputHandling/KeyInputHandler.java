@@ -1,17 +1,23 @@
 package fr.iut.hev.root.controller.InputHandling;
 
 import fr.iut.hev.root.model.Player;
+import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.enums.PlayerActions;
+import fr.iut.hev.root.utils.JsonManager;
+import fr.iut.hev.root.utils.SaveManager;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class KeyInputHandler implements EventHandler<KeyEvent> {
+import java.io.IOException;
 
+public class KeyInputHandler implements EventHandler<KeyEvent> {
+    private World world;
     private Player player;
 
-    public KeyInputHandler(Player player) {
-        this.player = player;
+    public KeyInputHandler(World world) {
+        this.world = world;
+        this.player = world.getPlayer();
     }
 
     @Override
@@ -26,6 +32,13 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                 case KeyCode.Z -> {
                     player.receiveDamage(1);
                     System.out.println("pv = " + player.getHealth());
+                }
+                case KeyCode.ESCAPE -> {
+                    try {
+                        SaveManager.saveWorld(world);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model;
 
+import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.model.enums.TileTypes;
 import fr.iut.hev.root.model.enums.Tiles;
 import javafx.scene.image.Image;
@@ -7,12 +8,12 @@ import javafx.scene.image.Image;
 import java.net.URL;
 
 public class Tile {
-    private Tiles tile;
+    @Expose private Tiles tile;
     private int health;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
-    private int tileX;
-    private int tileY;
+    @Expose private int tileX; // Pas sur d'avoir besoin de les exposer
+    @Expose private int tileY;
 
     public Tile(Tiles tile, int x, int y) {
         this.tile = tile;

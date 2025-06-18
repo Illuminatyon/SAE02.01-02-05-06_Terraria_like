@@ -1,20 +1,29 @@
 package fr.iut.hev.root.controller;
 
-import fr.iut.hev.root.model.World;
+import fr.iut.hev.root.model.*;
+import fr.iut.hev.root.utils.JsonManager;
+import fr.iut.hev.root.utils.SaveManager;
 import fr.iut.hev.root.view.MainMenuUIComponents;
 import fr.iut.hev.root.view.MainMenuView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 public class MainMenuController implements Initializable {
-    private Set<World> worlds = new HashSet<>();
+    //private SetProperty<World> worldsSetProperty = new SimpleSetProperty<>(FXCollections.observableSet(new HashSet<>()));
+    //private Set<World> worlds;
+    private List<World> worlds;
     private MainMenuView mainMenuView;
     private World currentEditingWorld;
 
@@ -73,8 +82,11 @@ public class MainMenuController implements Initializable {
 
         mainMenuView = new MainMenuView(uiComponents);
 
-        // Load all things OR load everything needed in each respective class instead of here
-        //mainMenuView.loadWorlds();
+        // TODO: Load all things OR load everything needed in each respective class instead of here
+        worlds = new ArrayList<>();
+        for (World w : SaveManager.loadAllWorlds()) {
+            createWorldView(w);
+        }
 
         mainBtnPlay.setOnAction(e -> mainMenuView.openWorldsMenu());
         mainBtnSettings.setOnAction(e -> mainMenuView.openSettingsMenu());
@@ -87,19 +99,21 @@ public class MainMenuController implements Initializable {
         worldsBtnBack.setOnAction(e -> mainMenuView.openMainMenu());
         worldsBtnNewWorld.setOnAction(e -> mainMenuView.openWorldCreator());
         worldsCreateBtnBack.setOnAction(e -> mainMenuView.openWorldsMenu());
-        worldsCreateBtn.setOnAction(e -> createWorld(worldsCreateTextField.getText()));
+        worldsCreateBtn.setOnAction(e -> {
+            try {
+                createWorld(worldsCreateTextField.getText());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         worldsEditBtnBack.setOnAction(e -> mainMenuView.openWorldsMenu());
         worldsEditBtn.setOnAction(e -> editWorld(worldsEditTextField.getText()));
 
         settingsBtnBack.setOnAction(e -> mainMenuView.openMainMenu());
     }
 
-    private boolean worldNameExists(String worldName, boolean ignoreCase) {
-        if (ignoreCase) {
-            return worlds.stream().anyMatch(w -> w.getName().equalsIgnoreCase(worldName));
-        } else {
-            return worlds.stream().anyMatch(w -> w.getName().equals(worldName));
-        }
+    private boolean worldNameExists(String worldName) {
+        return worlds.stream().anyMatch(w -> w.getName().equalsIgnoreCase(worldName));
     }
 
     private void quitGame() {
@@ -109,41 +123,84 @@ public class MainMenuController implements Initializable {
     private void playOnWorld(World world) {
         // TODO: Show the loading screen
         // TODO: Load the world using the JSON save
-        System.out.println("Playing on world: " + world.getName());
+        world.setLastPlayed(System.currentTimeMillis());
+        try {
+            JsonManager.writeJson("./saves/" + world.getName() + "/world.json", world);
+
+
+
+            TileMap tileMap = JsonManager.readJson("./saves/" + world.getName() + "/map.json", TileMap.class);
+            Player player = JsonManager.readJson("./saves/" + world.getName() + "/player.json", Player.class);
+            player.initAfterDeserialization(tileMap, player.getPosX(), player.getPosY());
+            //ArrayList<Actor> actors = JsonManager.readJsonList("./saves/" + world.getName() + "/entities.json", Actor.class);
+            //ArrayList<Mob> mobs = JsonManager.readJsonList()
+            //World w = JsonManager.readJson("./saves/" + world.getName() + "/world.json", World.class);
+            world.setTileMap(tileMap);
+            world.setPlayer(player);
+            //world.setAliveActors(actors);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fr/iut/hev/root/view/globalView.fxml"));
+            Parent worldRoot = fxmlLoader.load();
+            GlobalController globalController = fxmlLoader.getController();
+            globalController.setWorld(world);
+            globalController.lateInit();
+            Stage stage = (Stage) root.getScene().getWindow();
+            Scene scene = new Scene(worldRoot, stage.getWidth(), stage.getHeight());
+            double x = stage.getX();
+            double y = stage.getY();
+            stage.setScene(scene);
+            stage.setX(x);
+            stage.setY(y);
+            stage.setTitle("Playing on " + world.getName());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String removeStartingAndTrailingSpaces(String input) {
         return input.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
     }
 
-    private void createWorld(String worldName) {
-        // Create a JSON World
+    private void createWorldView(World world) {
+        worlds.add(world);
+        Set<Button> worldManagementButtons = mainMenuView.createWorldHBox(world);
+
+        for (Button btn : worldManagementButtons) {
+            if (btn.getId().startsWith("worldBtnPlay")) {
+                btn.setOnAction(e -> playOnWorld(world));
+            } else if (btn.getId().startsWith("worldBtnEdit")) {
+                btn.setOnAction(e -> {
+                    currentEditingWorld = world;
+                    mainMenuView.openWorldEditor(world);
+                });
+            } else if (btn.getId().startsWith("worldBtnDelete")) {
+                btn.setOnAction(e -> deleteWorld(world));
+            }
+        }
+    }
+
+    private void createWorld(String worldName) throws IOException {
         if (worldName == null || worldName.isBlank()) {
             worldName = generateUniqueWorldName("My world");
         } else {
             worldName = removeStartingAndTrailingSpaces(worldName);
-            if (worldNameExists(worldName, true)) {
+            if (worldNameExists(worldName)) {
                 worldName = generateUniqueWorldName(worldName);
             }
         }
 
-        World newWorld = new World(worldName);
-        worlds.add(newWorld);
-        Set<Button> worldManagementButtons = mainMenuView.createWorldHBox(newWorld);
+        // Peut etre mettre ce code dans save manager ?
+        TileMap tileMap = new TileMap(1920, 1080);
+        Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
+        ArrayList<Actor> aliveActors = new ArrayList<>();
+        World newWorld = new World(worldName, tileMap, player, aliveActors);
+        // TODO: Create a JSON World
+        JsonManager.writeJson("./saves/" + worldName + "/map.json", tileMap);
+        JsonManager.writeJson("./saves/" + worldName + "/player.json", player);
+        JsonManager.writeJson("./saves/" + worldName + "/entities.json", aliveActors); // Count the loot ?
+        JsonManager.writeJson("./saves/" + worldName + "/world.json", newWorld);
 
-        for (Button btn : worldManagementButtons) {
-            if (btn.getId().startsWith("worldBtnPlay")) {
-                btn.setOnAction(e -> playOnWorld(newWorld));
-            } else if (btn.getId().startsWith("worldBtnEdit")) {
-                btn.setOnAction(e -> {
-                    currentEditingWorld = newWorld;
-                    mainMenuView.openWorldEditor(newWorld);
-                });
-            } else if (btn.getId().startsWith("worldBtnDelete")) {
-                btn.setOnAction(e -> deleteWorld(newWorld));
-            }
-        }
-
+        createWorldView(newWorld);
         mainMenuView.openWorldsMenu();
     }
 
@@ -153,7 +210,7 @@ public class MainMenuController implements Initializable {
             newWorldName = currentEditingWorld.getName();
         } else if (currentEditingWorld.getName().equalsIgnoreCase(newWorldName)) { // Use the name typed with changing case only
             newWorldName = newWorldName;
-        } else if (worldNameExists(newWorldName, true)) { // If the name already exists, generate a new one
+        } else if (worldNameExists(newWorldName)) { // If the name already exists, generate a new one
             newWorldName = generateUniqueWorldName(newWorldName);
         }
 
@@ -165,6 +222,7 @@ public class MainMenuController implements Initializable {
 
     private void deleteWorld(World world) {
         worlds.remove(world);
+        SaveManager.deleteWorldFolder(world.getName());
         mainMenuView.deleteWorldHBox(world);
     }
 
@@ -172,7 +230,7 @@ public class MainMenuController implements Initializable {
         int i = 1;
         String proposedName = baseName;
 
-        while (worldNameExists(proposedName, true)) {
+        while (worldNameExists(proposedName)) {
             proposedName = baseName + " " + i;
             i++;
         }

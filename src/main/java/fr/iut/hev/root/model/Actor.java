@@ -1,20 +1,21 @@
 package fr.iut.hev.root.model;
 
+import com.google.gson.annotations.Expose;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
-    private BooleanProperty isAliveProperty;
-    private IntegerProperty healthProperty;
-    private int moveSpeed;
-    private int jumpForce;
-    private boolean isJumping;
-    private int jumpingTestDecay;
-    private int reach;
+    @Expose private BooleanProperty isAliveProperty;
+    @Expose private IntegerProperty healthProperty;
+    @Expose private int moveSpeed;
+    @Expose private int jumpForce;
+    @Expose private boolean isJumping;
+    @Expose private int jumpingTestDecay;
+    @Expose private int reach;
 
-    private IntegerProperty lookDirectionProperty;
+    @Expose private IntegerProperty lookDirectionProperty;
     public enum LookDirections {
         RIGHT(1),
         LEFT(-1);

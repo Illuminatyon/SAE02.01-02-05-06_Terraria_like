@@ -35,28 +35,6 @@
                   <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0" maxWidth="700.0" prefWidth="700.0" vbarPolicy="NEVER">
                      <content>
                         <VBox fx:id="worldsContainer" alignment="TOP_CENTER" spacing="10.0">
-                           <children>
-                              <HBox alignment="CENTER" layoutX="23.0" layoutY="473.0" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
-                                 <children>
-                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
-                                       <image>
-                                          <Image url="@../img/tile/dirt_1.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label maxWidth="1.7976931348623157E308" text="World" textFill="WHITE" HBox.hgrow="ALWAYS">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <Button mnemonicParsing="false" text="Play" HBox.hgrow="NEVER" />
-                                    <Button layoutX="608.0" layoutY="23.0" mnemonicParsing="false" text="Edit" HBox.hgrow="NEVER" />
-                                    <Button layoutX="611.0" layoutY="23.0" mnemonicParsing="false" text="Delete" HBox.hgrow="NEVER" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </HBox>
-                           </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>

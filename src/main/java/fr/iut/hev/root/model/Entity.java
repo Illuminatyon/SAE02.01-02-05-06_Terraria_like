@@ -1,13 +1,15 @@
 package fr.iut.hev.root.model;
 
+import com.google.gson.annotations.Expose;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Entity {
-    private IntegerProperty posXProperty;
-    private IntegerProperty posYProperty;
-    private int width;
-    private int height;
+    @Expose private static String type;
+    @Expose private IntegerProperty posXProperty;
+    @Expose private IntegerProperty posYProperty;
+    @Expose private int width;
+    @Expose private int height;
     private int velocityX;
     private int velocityY;
     private int velocityMultiplier;
@@ -21,6 +23,11 @@ public class Entity {
         this.height = height;
         this.velocityX = 0;
         this.velocityY = 0;
+        this.tileMap = tileMap;
+        this.collider = new Collider(tileMap, this);
+    }
+
+    public void initAfterDeserialization(TileMap tileMap, int posX, int posY) {
         this.tileMap = tileMap;
         this.collider = new Collider(tileMap, this);
     }

@@ -2,10 +2,7 @@ package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInputHandler;
-import fr.iut.hev.root.model.Actor;
-import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.Player;
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -27,6 +24,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GlobalController implements Initializable {
+    private World world;
     private Timeline gameLoop;
     private Player player;
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
@@ -59,13 +57,17 @@ public class GlobalController implements Initializable {
     @FXML
     private GridPane expandedInventory;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void lateInit() {
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
+        aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         initMap();
-        initActors();
+        initPlayer();
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
@@ -100,14 +102,21 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+
     private void initMap() {
-        tileMap = new TileMap(1920,1056);
+        //tileMap = new TileMap(1920,1056);
+        tileMap = world.getTileMap();
         globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
         globalView.loadWorld();
     }
 
     private void initPlayer() {
-        player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
+        //player = new Player(0, -25, 32, 64, tileMap, 2, 10,3);
+        player = world.getPlayer();
         aliveActors.add(player);
         inventory = new Inventory();
 
@@ -119,7 +128,8 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth()));
         player.isAliveProperty().addListener(((observableValue, aBoolean, t1) -> playerView.deletePlayerSprite()));
 
-        KeyInputHandler keyboardHandler = new KeyInputHandler(player);
+        //KeyInputHandler keyboardHandler = new KeyInputHandler(player);
+        KeyInputHandler keyboardHandler = new KeyInputHandler(world);
 
         double playerCenterX = player_imageview.getLayoutX() + player_imageview.getTranslateX() + player_imageview.getFitWidth() / 2;
         double playerCenterY = player_imageview.getLayoutY() + player_imageview.getTranslateY() + player_imageview.getFitHeight() / 2;

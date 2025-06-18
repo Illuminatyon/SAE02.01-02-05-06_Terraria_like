@@ -1,0 +1,15 @@
+{
+  "activeActions": [],
+  "isAliveProperty": true,
+  "healthProperty": 10,
+  "moveSpeed": 2,
+  "jumpForce": 10,
+  "isJumping": false,
+  "jumpingTestDecay": 0,
+  "reach": 3,
+  "lookDirectionProperty": 1,
+  "posXProperty": 0,
+  "posYProperty": -25,
+  "width": 32,
+  "height": 64
+}

@@ -1,13 +1,14 @@
 package fr.iut.hev.root.model;
 
+import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.model.enums.PlayerActions;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends Actor {
-
-    private final Set<PlayerActions> activeActions;
+    private static String type = "Player";
+    @Expose private final Set<PlayerActions> activeActions;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce,int reach) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach);

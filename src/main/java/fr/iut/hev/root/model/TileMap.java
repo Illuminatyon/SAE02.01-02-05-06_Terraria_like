@@ -1,13 +1,17 @@
 package fr.iut.hev.root.model;
 
+import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.model.enums.Tiles;
 
 public class TileMap {
-    private final int width;
-    private final int height;
-    private final Tile[][] tileMap;
+    @Expose private int width, height;
+    @Expose private Tile[][] tileMap;
 
     public static final int format = 32;
+
+    public TileMap() {
+        // Peut rester vide ou initialiser avec des valeurs par défaut
+    }
 
     public TileMap(int width, int height) {
         /**
