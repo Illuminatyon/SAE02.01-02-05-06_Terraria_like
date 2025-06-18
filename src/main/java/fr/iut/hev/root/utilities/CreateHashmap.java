@@ -1,6 +1,6 @@
 package fr.iut.hev.root.utilities;
 
-import fr.iut.hev.root.model.enums.Tiles;
+import fr.iut.hev.root.model.enums.TilesEnum;
 import org.json.JSONObject;
 
 
@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 public class CreateHashmap {
 
-    public static HashMap HashMapReader() throws IOException {
+    public static HashMap<Integer, TilesEnum> hashMapReader() throws IOException {
 
 
             String filePath = "src/main/resources/fr/iut/hev/root/data/MapSave.json";
@@ -28,7 +28,7 @@ public class CreateHashmap {
             JSONObject jsonObject = new JSONObject(jsonContent.toString());
 
 
-            HashMap<Integer, Tiles> tileMap = new HashMap<>();
+            HashMap<Integer, TilesEnum> tileMap = new HashMap<>();
 
 
             Iterator<String> keys = jsonObject.keys();
@@ -37,7 +37,7 @@ public class CreateHashmap {
                 int intKey = Integer.parseInt(key);
                 String value = jsonObject.getString(key);
 
-                Tiles tile = Tiles.valueOf(value);
+                TilesEnum tile = TilesEnum.valueOf(value);
 
 
                 tileMap.put(intKey, tile);

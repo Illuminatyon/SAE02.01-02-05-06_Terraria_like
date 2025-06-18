@@ -5,6 +5,7 @@ module fr.iut.hev.root {
     requires jdk.javadoc;
     requires java.desktop;
     requires java.sql;
+    requires org.json;
 
 
     opens fr.iut.hev.root.controller to javafx.fxml;

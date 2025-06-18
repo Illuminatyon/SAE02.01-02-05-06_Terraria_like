@@ -38,6 +38,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -117,7 +118,11 @@ public class GlobalController implements Initializable {
         Weapon.setHitboxManager(hitboxManager);
 
         initItemEnums();
-        initMap();
+        try {
+            initMap();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         initActors();
 
         KeyFrame kf = new KeyFrame(
@@ -161,8 +166,8 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
-    private void initMap() {
-        tileMap = new TileMap(1920,1056,itemFactory);
+    private void initMap() throws IOException {
+        tileMap = new TileMap(3840,1440,itemFactory);
         globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
     }
 

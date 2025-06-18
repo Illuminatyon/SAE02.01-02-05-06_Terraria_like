@@ -5,6 +5,11 @@ import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
+import fr.iut.hev.root.utilities.CreateHashmap;
+import fr.iut.hev.root.utilities.SaveReader;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class TileMap {
     private final int width;
@@ -14,7 +19,7 @@ public class TileMap {
 
     public static final int format = 32;
 
-    public TileMap(int width, int height,ItemFactory itemFactory) {
+    public TileMap(int width, int height,ItemFactory itemFactory) throws IOException {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
@@ -24,8 +29,8 @@ public class TileMap {
         this.tileMap = new Tile[height/format][width/format];
 
         //génération de la map test
-        this.setTestMap();
-
+        //this.setTestMap();
+        this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
     }
 
     public Tile getTile(int tileX, int tileY) {
@@ -38,10 +43,23 @@ public class TileMap {
             return null;
     }
 
-    public void setTestMap() {
-        /**
-         * crée une map en 1920p avec 60*33 tile de test
-         */
+    public void setMap(String Path) throws IOException {
+        HashMap<Integer, TilesEnum> index = CreateHashmap.hashMapReader();
+        int[][] save = SaveReader.map(Path);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int tileIndex = save[y][x];
+                TilesEnum tileEnum = index.get(tileIndex);
+                Tile tile = new Tile(tileEnum, x, y);
+                this.addTile(tile);
+                System.out.println("Added Tile: " + tile);
+            }
+        }
+    }
+
+
+   /* public void setTestMap() {
+        /
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
@@ -102,14 +120,14 @@ public class TileMap {
 
         //this.getTile(57, 31).setTile(Tiles.DIRT);
 
-        /*for (int i = 16; i > 0; i--) {
+        for (int i = 16; i > 0; i--) {
             this.getTile(20, i).setTile(Tiles.DIRT);
         }
 
         for (int i = 16; i > 0; i--) {
             this.getTile(40, i).setTile(Tiles.DIRT);
-        }*/
-    }
+        }
+    }*/
 
     public void addTile(Tile tile) {
         /**
