@@ -179,4 +179,5 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public TileMap getTileMap() {return this.tileMap;}
     public double getX() {return this.x;}
     public double getY() {return this.y;}
+    public GlobalController getGlobalController() {return this.globalController;}
 }

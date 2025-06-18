@@ -15,6 +15,10 @@ public class Weapon extends Item {
         this.damage = getStats().getItemMainStat();
     }
 
+    public int getDamage() {
+        return this.damage;
+    }
+
     @Override
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
         int x = (int)eventHandler.getX() / format;

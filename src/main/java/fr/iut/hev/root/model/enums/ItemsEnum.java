@@ -17,7 +17,7 @@ public enum ItemsEnum {
     CRAFTING_TABLE("crafting_table",1,0, ItemTypesEnum.UTILITY),
     FURNACE("furnace",100,0, ItemTypesEnum.UTILITY),
 
-    DAGGER("dagger",1,1, ItemTypesEnum.WEAPON,ItemStatsEnum.DAGGER),
+    DAGGER("dagger",1,0.5, ItemTypesEnum.WEAPON,ItemStatsEnum.DAGGER),
 
     IRON_HELMET("iron_helmet",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_HELMET),
     IRON_CHESTPLATE("iron_chestplate",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_CHESTPLATE),

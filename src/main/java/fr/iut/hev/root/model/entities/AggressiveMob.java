@@ -52,8 +52,6 @@ public class AggressiveMob extends Mob {
         this.lastJumpTime = System.currentTimeMillis(); // Initialize the last jump time
         this.aliveActors = aliveActors; // Store the list of alive actors
         this.pathfinder = new AStar(tileMap); // Initialize the pathfinder
-
-        aliveActors.add(this);
     }
 
     /**

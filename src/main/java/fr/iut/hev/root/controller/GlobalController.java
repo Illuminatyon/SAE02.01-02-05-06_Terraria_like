@@ -82,8 +82,6 @@ public class GlobalController implements Initializable {
     @FXML
     private TilePane landTileMap;
 
-
-
     @FXML
     private HBox heartsHbox;
 
@@ -189,7 +187,7 @@ public class GlobalController implements Initializable {
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(5,itemFactory.createItem(ItemsEnum.IRON_INGOT),100);
-        inventory.add(6,itemFactory.createItem(ItemsEnum.STONE),100);
+        inventory.add(6,itemFactory.createItem(ItemsEnum.DAGGER), 1);;
         inventory.add(7,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
         inventory.add(8,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
 
@@ -353,5 +351,21 @@ public class GlobalController implements Initializable {
      */
     public double getCameraOffsetY() {
         return cameraOffsetY;
+    }
+
+    /**
+     * Gets the list of alive actors
+     * @return the list of alive actors
+     */
+    public ArrayList<Actor> getAliveActors() {
+        return aliveActors;
+    }
+
+    /**
+     * Gets the actors pane
+     * @return the actors pane
+     */
+    public AnchorPane getActorsPane() {
+        return actorsPane;
     }
 }

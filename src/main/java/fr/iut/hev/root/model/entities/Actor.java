@@ -66,7 +66,7 @@ public abstract class Actor extends Entity {
     }
 
     public void updateVerticalMovement() {
-        
+
     }
     public String getName(){return this.type.getName();}
 
@@ -105,8 +105,7 @@ public abstract class Actor extends Entity {
     public int getLookDirection() {return this.lookDirectionProperty.getValue();}
 
     public void receiveDamage(int damage) {
-        if (!(damage > this.getHealth()))
-            this.setHealth(getHealth() - damage);
+        this.setHealth(getHealth() - damage);
     }
 
     /*public LookDirections getLookDirection() { // TODO: fix

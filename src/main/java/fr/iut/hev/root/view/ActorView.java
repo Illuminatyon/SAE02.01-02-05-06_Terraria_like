@@ -82,7 +82,10 @@ public class ActorView {
 
 
     public void deleteActorSprite() {
-            actorSprite.setVisible(false);
+            // Remove the sprite from the AnchorPane instead of just hiding it
+            if (actorSprite != null && anchorPane != null) {
+                anchorPane.getChildren().remove(actorSprite);
+            }
         }
 
         public ImageView getActorSprite() {
