@@ -15,7 +15,7 @@ public enum ItemsEnum {
     WOODEN_SHOVEL("wooden_shovel",1,0,ItemTypesEnum.TOOL,ItemStatsEnum.WOODEN_SHOVEL),
     HAMMER("hammer",1,0, ItemTypesEnum.TOOL,ItemStatsEnum.HAMMER),
     CRAFTING_TABLE("crafting_table",1,0, ItemTypesEnum.UTILITY),
-    FURNACE("furnace",100,0, ItemTypesEnum.UTILITY),
+    FURNACE("furnace",100,0, ItemTypesEnum.BLOCK),
 
     DAGGER("dagger",1,0.5, ItemTypesEnum.WEAPON,ItemStatsEnum.DAGGER),
     KATANA("katana",1,0.7, ItemTypesEnum.WEAPON,ItemStatsEnum.KATANA),
@@ -28,6 +28,7 @@ public enum ItemsEnum {
 
     RAW_CHICKEN("raw_chicken",100,1.5, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
     CHICKEN_LEG("chicken_leg",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.CHICKEN_LEG),
+    COOKED_CHICKEN("cooked_chicken",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.COOKED_CHICKEN),
     CACA("caca",100,1,ItemTypesEnum.RESOURCES);
 
     private String name;
