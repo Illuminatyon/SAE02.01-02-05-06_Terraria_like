@@ -87,7 +87,8 @@ public enum ItemStatsEnum {
     IRON_CHESTPLATE(3001),
     IRON_LEGGINGS(3001),
 
-    RAW_CHICKEN(4003);
+    RAW_CHICKEN(4003),
+    CHICKEN_LEG(4002);
 
     private int statCode;
 

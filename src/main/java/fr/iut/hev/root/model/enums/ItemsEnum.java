@@ -27,6 +27,7 @@ public enum ItemsEnum {
     IRON_LEGGINGS("iron_leggings",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_LEGGINGS),
 
     RAW_CHICKEN("raw_chicken",100,1.5, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
+    CHICKEN_LEG("chicken_leg",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.CHICKEN_LEG),
     CACA("caca",100,1,ItemTypesEnum.RESOURCES);
 
     private String name;

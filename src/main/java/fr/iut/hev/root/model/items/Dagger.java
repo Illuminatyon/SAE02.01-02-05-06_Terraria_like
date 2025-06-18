@@ -83,11 +83,11 @@ public class Dagger extends Weapon {
         // Create animation timeline
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.seconds(0.2), e -> {
-                // Get the list of alive actors from the global controller
-                ArrayList<Actor> aliveActors = eventHandler.getGlobalController().getAliveActors();
+                // Get the list of alive actors from the global controller and create a copy to avoid ConcurrentModificationException
+                ArrayList<Actor> aliveActorsCopy = new ArrayList<>(eventHandler.getGlobalController().getAliveActors());
 
                 // Check for collisions with mobs
-                for (Actor actor : aliveActors) {
+                for (Actor actor : aliveActorsCopy) {
                     // Skip the player
                     if (actor == player) {
                         continue;
