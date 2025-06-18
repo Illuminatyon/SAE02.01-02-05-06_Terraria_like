@@ -1,0 +1,10 @@
+{
+	"AIR" : 0,
+    "GRASS" : 1,
+    "DIRT" : 2,
+    "STONE" : 3,
+    "TREE" : 4,
+    "IRON_ORE" : 5,
+    "CRAFTING_TABLE" : 6,
+    "FURNACE" : 7
+}
