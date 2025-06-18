@@ -44,4 +44,16 @@ public class PnjView extends ActorView{
     public Label getPhrase() {
         return phrase;
     }
+
+    @Override
+    public void deleteActorSprite() {
+        // Remove the dialogue text from the AnchorPane
+        if (phrase != null && getAnchorPane() != null) {
+            getAnchorPane().getChildren().remove(phrase);
+            System.out.println("[DEBUG_LOG] PNJ dialogue text removed from AnchorPane");
+        }
+
+        // Call the parent method to remove the actor sprite
+        super.deleteActorSprite();
+    }
 }
