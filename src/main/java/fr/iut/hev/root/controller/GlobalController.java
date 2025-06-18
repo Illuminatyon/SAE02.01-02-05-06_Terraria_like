@@ -10,14 +10,10 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
-import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
-//import fr.iut.hev.root.model.enums.ConsumableStats;
 import fr.iut.hev.root.model.enums.DialogueEnum;
-import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.RecipesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
@@ -146,16 +142,13 @@ public class GlobalController implements Initializable {
                             Actor currentActor = aliveActors.get(i);
                             if (currentActor != null) { // Check if actor is not null
                                 currentActor.updatePosition();
+                                // Update hitbox positions for the actor
+                                hitboxManager.updateHitboxPositions(currentActor);
                             } else {
                                 // Remove null actors from the list
                                 aliveActors.remove(i);
                             }
                         }
-                        Actor currentActor = aliveActors.get(i);
-                        currentActor.updatePosition();
-
-                        // Update hitbox positions for the actor
-                        hitboxManager.updateHitboxPositions(currentActor);
                     }
                     for (Loot loot : Loot.lootOnMapProperty) {
                         loot.updatePosition();
@@ -179,6 +172,9 @@ public class GlobalController implements Initializable {
 
                     // Check if player is near crafting stations
                     checkCraftingStationProximity();
+
+                    // Check if player is near PNJ for dialogue
+                    checkPnjDialogue();
 
                     cooldownManager.allCooldownsTick();
                 })
@@ -231,8 +227,8 @@ public class GlobalController implements Initializable {
 
         keyboardHandler = new KeyInputHandler(player,inventoryView,craftView);
 
-        double playerCenterX = 0/*playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2*/;
-        double playerCenterY = 0/*playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2*/;
+        double playerCenterX = 0;
+        double playerCenterY = 0;
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
@@ -299,13 +295,21 @@ public class GlobalController implements Initializable {
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
-        if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
-            pnjView.speak();
-            this.dialogueCD.setLimit(2);
-            this.dialogueCD.start();
-            System.out.println(pnjView.getPhrase());
+    }
+
+    /**
+     * Checks if the player is near a PNJ and triggers dialogue if needed
+     */
+    private void checkPnjDialogue() {
+        if (player == null || pnjView == null || dialogueCD == null) {
+            return;
         }
 
+        if ((player.getCollider().hasCollisionRight() || player.getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
+            pnjView.speak();
+            dialogueCD.setLimit(2);
+            dialogueCD.start();
+        }
     }
 
     private void initItemEnums() {
@@ -459,12 +463,5 @@ public class GlobalController implements Initializable {
         // Update the crafting manager
         craftingManager.setNearCraftingTable(foundCraftingTable);
         craftingManager.setNearFurnace(foundFurnace);
-
-        // Debug output
-        if (foundCraftingTable || foundFurnace) {
-            System.out.println("Player near: " +
-                (foundCraftingTable ? "Crafting Table " : "") +
-                (foundFurnace ? "Furnace" : ""));
-        }
     }
 }
