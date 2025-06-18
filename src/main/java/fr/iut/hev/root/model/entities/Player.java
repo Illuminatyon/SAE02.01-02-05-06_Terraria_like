@@ -43,12 +43,14 @@ public class Player extends Actor {
 
     public void update() {
         updatePosition();
-        for (Loot loot : Loot.lootOnMapProperty.get()) {
-        if (getCollider().intersectsWith(loot.getCollider())) {
-            pickUp(loot);
+        // Create a copy of the loot collection to avoid ConcurrentModificationException
+        Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get());
+        for (Loot loot : lootCopy) {
+            if (getCollider().intersectsWith(loot.getCollider())) {
+                pickUp(loot);
+            }
         }
     }
-}
 
     @Override
     public void updatePosition() {
@@ -64,8 +66,9 @@ public class Player extends Actor {
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
 
-        // TMP
-        for (Loot loot : Loot.lootOnMapProperty.get()) {
+        // Create a copy of the loot collection to avoid ConcurrentModificationException
+        Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get());
+        for (Loot loot : lootCopy) {
             if (getCollider().intersectsWith(loot.getCollider())) {
                 pickUp(loot);
             }

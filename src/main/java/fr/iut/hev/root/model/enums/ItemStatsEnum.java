@@ -80,6 +80,7 @@ public enum ItemStatsEnum {
     HAMMER(1044),
 
     DAGGER(2003),
+    BOW(2002),
 
     IRON_HELMET(3001),
     IRON_CHESTPLATE(3001),

@@ -131,8 +131,15 @@ public class GlobalController implements Initializable {
                 Duration.seconds(0.017),
                 (ev -> {
                     for (int i = aliveActors.size() - 1; i >= 0; i--) {
-                        Actor currentActor = aliveActors.get(i);
-                        currentActor.updatePosition();
+                        if (i < aliveActors.size()) { // Check if index is still valid
+                            Actor currentActor = aliveActors.get(i);
+                            if (currentActor != null) { // Check if actor is not null
+                                currentActor.updatePosition();
+                            } else {
+                                // Remove null actors from the list
+                                aliveActors.remove(i);
+                            }
+                        }
                     }
                     for (Loot loot : Loot.lootOnMapProperty) {
                         loot.updatePosition();
@@ -187,9 +194,11 @@ public class GlobalController implements Initializable {
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(5,itemFactory.createItem(ItemsEnum.IRON_INGOT),100);
-        inventory.add(6,itemFactory.createItem(ItemsEnum.DAGGER), 1);;
-        inventory.add(7,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
-        inventory.add(8,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
+        inventory.add(6,itemFactory.createItem(ItemsEnum.DAGGER), 1);
+        inventory.add(7,itemFactory.createItem(ItemsEnum.BOW), 1);
+        inventory.add(8,itemFactory.createItem(ItemsEnum.ARROW), 64);
+        inventory.add(9,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
+        inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player,playerView,aliveActors));
@@ -310,6 +319,11 @@ public class GlobalController implements Initializable {
 
         // Update the positions of all actors based on the camera offset
         for (Actor actor : aliveActors) {
+            if (actor == null) {
+                // Skip null actors
+                continue;
+            }
+
             if (actor.equals(player)) {
                 // Update player position
                 if (playerView != null && playerView.getActorSprite() != null) {
@@ -328,6 +342,7 @@ public class GlobalController implements Initializable {
                     pnjView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
                     pnjView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
                 }
+                // Note: Arrow actors are handled by their own view class and don't need special handling here
             }
         }
 
@@ -367,5 +382,13 @@ public class GlobalController implements Initializable {
      */
     public AnchorPane getActorsPane() {
         return actorsPane;
+    }
+
+    /**
+     * Gets the item factory
+     * @return the item factory
+     */
+    public ItemFactory getItemFactory() {
+        return itemFactory;
     }
 }

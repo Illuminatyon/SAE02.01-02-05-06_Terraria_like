@@ -80,7 +80,8 @@ public class InventoryView {
         if (cell instanceof Pane pane) {
             for (Node child : pane.getChildren()) {
                 if (child instanceof ImageView imageView) {
-                    imageView.setImage(getImageFromSlot(slot));
+                    Image image = getImageFromSlot(slot);
+                    imageView.setImage(image);
                 } else if (child instanceof Label label) {
                     label.setText(getQuantityTextFromSlot(slot));
                 }
@@ -92,14 +93,36 @@ public class InventoryView {
         if (slot.getItem() == null) return null;
         String name = slot.getItem().getItemEnum().getName();
         String path = "/fr/iut/hev/root/img/items/" + name + ".png";
-        return new Image(getClass().getResource(path).toExternalForm());
+        try {
+            java.net.URL resourceUrl = getClass().getResource(path);
+            if (resourceUrl != null) {
+                return new Image(resourceUrl.toExternalForm());
+            } else {
+                System.err.println("Resource not found: " + path);
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + path + " - " + e.getMessage());
+            return null;
+        }
     }
 
     private Image getImageFromHold(HashMap<Item,Integer> onHold) {
         if (onHold == null)
             return null;
         String path = "/fr/iut/hev/root/img/items/" + onHold.keySet().iterator().next().getItemEnum().getName() + ".png";
-        return new Image(getClass().getResource(path).toExternalForm());
+        try {
+            java.net.URL resourceUrl = getClass().getResource(path);
+            if (resourceUrl != null) {
+                return new Image(resourceUrl.toExternalForm());
+            } else {
+                System.err.println("Resource not found: " + path);
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + path + " - " + e.getMessage());
+            return null;
+        }
     }
 
     private String getQuantityTextFromSlot(InventorySlot slot) {
@@ -156,10 +179,12 @@ public class InventoryView {
     public void updateOnHoldPane(HashMap<Item,Integer> onHold) {
         Pane pane = (Pane) hudAnchorPane.getChildren().get(5);
         for (Node child : pane.getChildren()) {
-            if (child instanceof Label)
+            if (child instanceof Label) {
                 ((Label) child).setText(getQuantityTextFromHold(onHold));
-            else if (child instanceof ImageView)
-                ((ImageView) child).setImage(getImageFromHold(onHold));
+            } else if (child instanceof ImageView) {
+                Image image = getImageFromHold(onHold);
+                ((ImageView) child).setImage(image);
+            }
         }
     }
 
