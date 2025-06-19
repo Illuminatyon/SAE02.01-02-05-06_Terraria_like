@@ -6,7 +6,7 @@ import fr.iut.hev.root.model.TileMap;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class Entity {
+public abstract class Entity {
     private IntegerProperty posXProperty;
     private IntegerProperty posYProperty;
     private int width;

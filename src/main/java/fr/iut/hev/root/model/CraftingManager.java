@@ -62,4 +62,5 @@ public class CraftingManager {
     public RecipesEnum getSelectedRecipe() {return this.selectedRecipeProperty.getValue();}
     public void setSelectedRecipe(RecipesEnum recipe) {this.selectedRecipeProperty.setValue(recipe);}
     public ObjectProperty<RecipesEnum> selectedRecipeProperty() {return this.selectedRecipeProperty;}
+    public void addRecipe(RecipesEnum recipesEnum) {recipesAvailable.add(recipesEnum);}
 }

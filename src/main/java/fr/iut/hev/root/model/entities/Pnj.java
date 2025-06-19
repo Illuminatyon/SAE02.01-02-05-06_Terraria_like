@@ -8,7 +8,7 @@ import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 
-public class Pnj extends Mob{
+public class Pnj extends Mob implements Interactive {
 
     public Pnj(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager);
@@ -39,5 +39,7 @@ public class Pnj extends Mob{
         }
     }
 
-
+    public void handlerInteraction() {
+        System.out.println("interaction") ;
+    }
 }

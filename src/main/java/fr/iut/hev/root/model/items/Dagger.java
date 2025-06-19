@@ -1,4 +1,4 @@
-package fr.iut.hev.root.model.items;
+/*package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Collider;
@@ -126,3 +126,4 @@ public class Dagger extends Weapon {
         mob.setVelocityY((int)(dirY * KNOCKBACK_STRENGTH));
     }
 }
+*/

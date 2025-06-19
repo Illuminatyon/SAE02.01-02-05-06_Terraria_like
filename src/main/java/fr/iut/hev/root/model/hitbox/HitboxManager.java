@@ -2,6 +2,7 @@ package fr.iut.hev.root.model.hitbox;
 
 import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Entity;
+import fr.iut.hev.root.model.entities.Interactive;
 import fr.iut.hev.root.model.enums.HitboxType;
 
 import java.util.ArrayList;
@@ -15,12 +16,14 @@ import java.util.Map;
  */
 public class HitboxManager {
     private Map<Entity, List<Hitbox>> entityHitboxes;
+    private HashMap<Interactive,Hitbox> interactiveHitboxes;
     
     /**
      * Creates a new hitbox manager.
      */
     public HitboxManager() {
         this.entityHitboxes = new HashMap<>();
+        this.interactiveHitboxes = new HashMap<>();
     }
     
     /**
@@ -30,10 +33,15 @@ public class HitboxManager {
      * @param hitbox The hitbox to add
      */
     public void addHitbox(Entity entity, Hitbox hitbox) {
+        if (!(hitbox.getType().equals(HitboxType.INTERACTION))) {
         if (!entityHitboxes.containsKey(entity)) {
             entityHitboxes.put(entity, new ArrayList<>());
         }
         entityHitboxes.get(entity).add(hitbox);
+        }
+        else {
+            interactiveHitboxes.put((Interactive) entity,hitbox);
+        }
     }
     
     /**
@@ -50,6 +58,14 @@ public class HitboxManager {
      * 
      * @param entity The entity to update hitboxes for
      */
+    /*public void updateHitboxPositions(Entity entity) {
+
+        if (entityHitboxes.containsKey(entity)) {
+            for (Hitbox hitbox : entityHitboxes.get(entity)) {
+                hitbox.setPosition(entity.getPosX(), entity.getPosY());
+            }
+        }
+    }*/
     
     /**
      * Checks for collisions between attack hitboxes and vulnerable hitboxes.
@@ -107,9 +123,21 @@ public class HitboxManager {
         return hitEntities;
     }
 
+    public ArrayList<Interactive> checkInteractiveCollision(Entity entity) {
+        Hitbox entityHitbox = getEntityHitbox(entity,HitboxType.INTERACTION);
+        ArrayList<Interactive> entities = new ArrayList<>();
+
+        for (Map.Entry<Interactive,Hitbox> hitbox : getInteractiveHitboxes().entrySet()) {
+            if (hitbox.getValue() != entityHitbox && entityHitbox.intersects(hitbox.getValue())) {
+                entities.add(hitbox.getKey());
+            }
+        }
+        return entities;
+    }
+    
     /**
      * Creates a default vulnerable hitbox for an entity based on its dimensions.
-     *
+     * 
      * @param entity The entity to create a hitbox for
      * @return The created hitbox
      */
@@ -121,13 +149,15 @@ public class HitboxManager {
             entity.getHeight(),
                 type
         );
+        hitbox.xProperty().bind(entity.posXProperty());
+        hitbox.yProperty().bind(entity.posYProperty());
         addHitbox(entity, hitbox);
         return hitbox;
     }
-
+    
     /**
      * Creates an attack hitbox for a weapon.
-     *
+     * 
      * @param attacker The entity that is attacking
      * @param offsetX The x offset from the entity's position
      * @param offsetY The y offset from the entity's position
@@ -146,10 +176,10 @@ public class HitboxManager {
         addHitbox(attacker, hitbox);
         return hitbox;
     }
-
+    
     /**
      * Creates a circular attack hitbox.
-     *
+     * 
      * @param attacker The entity that is attacking
      * @param offsetX The x offset from the entity's position
      * @param offsetY The y offset from the entity's position
@@ -165,5 +195,17 @@ public class HitboxManager {
         );
         addHitbox(attacker, hitbox);
         return hitbox;
+    }
+
+    public Hitbox getEntityHitbox(Entity entity,HitboxType hitboxType) {
+        for (Hitbox hitbox : entityHitboxes.get(entity)) {
+            if (hitbox.getType().equals(hitboxType))
+                return hitbox;
+        }
+        return null;
+    }
+
+    public HashMap<Interactive,Hitbox> getInteractiveHitboxes() {
+        return interactiveHitboxes;
     }
 }

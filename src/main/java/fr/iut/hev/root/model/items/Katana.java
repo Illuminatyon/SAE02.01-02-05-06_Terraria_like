@@ -1,4 +1,4 @@
-package fr.iut.hev.root.model.items;
+/*package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Collider;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Katana weapon class
- */
+ *//*
 public class Katana extends Weapon {
     private static final int KNOCKBACK_STRENGTH = 8;
     private boolean isAnimating = false;
@@ -155,4 +155,4 @@ public class Katana extends Weapon {
         mob.setVelocityX((int)(dirX * KNOCKBACK_STRENGTH));
         mob.setVelocityY((int)(dirY * KNOCKBACK_STRENGTH));
     }
-}
+}*/

@@ -5,6 +5,7 @@ import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
+import fr.iut.hev.root.controller.Listeners.InteractionHitboxListener;
 import fr.iut.hev.root.model.CraftingManager;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Tile;
@@ -162,7 +163,7 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayer() {
-        player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER, this.hitboxManager);
+        player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER, this.hitboxManager,itemFactory);
         aliveActors.add(player);
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
@@ -194,6 +195,7 @@ public class GlobalController implements Initializable {
         craftButton.setOnAction(actionEvent -> {
             craftingManager.crafts();
         });
+        player.posXProperty().addListener(new InteractionHitboxListener(player,hitboxManager));
 
         keyboardHandler = new KeyInputHandler(player,inventoryView,craftView);
 

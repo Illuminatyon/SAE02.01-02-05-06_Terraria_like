@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model.entities;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
+import fr.iut.hev.root.model.CraftingManager;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
@@ -11,6 +12,7 @@ import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.Item;
+import fr.iut.hev.root.model.items.ItemFactory;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -25,11 +27,12 @@ public class Player extends Actor {
     private ObjectProperty<Item> itemInHandProperty;
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
+    private CraftingManager craftingManager;
 
-
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager, ItemFactory itemFactory) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor, hitboxManager);
         this.inventory = new Inventory();
+        this.craftingManager = new CraftingManager(inventory,itemFactory);
         this.playerMouvementEnums = new HashSet<>();
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
@@ -184,4 +187,5 @@ public class Player extends Actor {
     public IntegerProperty quantityOfItemInHandProperty() {return this.quantityOfItemInHandProperty;}
     public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
     public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
+    public CraftingManager getCraftingManager() {return craftingManager;}
 }

@@ -66,18 +66,9 @@ public class ItemFactory {
             case ItemsEnum.DAGGER -> {
                 return new Dagger(itemsEnum,hitboxManager);
             }
+            default -> {
+            return null;}
         }
-
-
-
-        if (itemsEnum == ItemsEnum.DAGGER) {
-            return new Dagger(itemsEnum,hitboxManager);
-        } else if (itemsEnum == ItemsEnum.KATANA) {
-            return new Katana(itemsEnum,hitboxManager);
-        } else if (itemsEnum == ItemsEnum.BOW) {
-            //return new Bow(itemsEnum,hitboxManager,this);
-        }
-        return new Weapon(itemsEnum,hitboxManager);
     }
 
     public ArmorPiece createArmorPiece(ItemsEnum itemsEnum) {
