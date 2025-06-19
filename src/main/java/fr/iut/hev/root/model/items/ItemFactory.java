@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model.items;
 
+import fr.iut.hev.root.model.enums.ArmorTypesEnum;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
@@ -81,6 +82,19 @@ public class ItemFactory {
     }
 
     public ArmorPiece createArmorPiece(ItemsEnum itemsEnum) {
-        return new ArmorPiece(itemsEnum);
+        ArmorTypesEnum armorType = null;
+        String itemName = itemsEnum.getName();
+
+        if (itemName.contains("helmet")) {
+            armorType = ArmorTypesEnum.HELMET;
+        } else if (itemName.contains("chestplate")) {
+            armorType = ArmorTypesEnum.CHESTPLATE;
+        } else if (itemName.contains("leggings")) {
+            armorType = ArmorTypesEnum.LEGGINGS;
+        } else if (itemName.contains("boots")) {
+            armorType = ArmorTypesEnum.BOOTS;
+        }
+
+        return new ArmorPiece(itemsEnum, armorType);
     }
 }

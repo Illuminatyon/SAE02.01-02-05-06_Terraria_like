@@ -40,3 +40,33 @@
 .pane {
     -fx-background-color: rgb(0,0,0,0.25);
 }
+
+/* Armor slot styles */
+.armor-slot {
+    -fx-border-color: #52A548;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+}
+
+.armor-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-padding: 2px;
+}
+
+.helmet-slot {
+    -fx-border-color: #FF8C00;
+}
+
+.chestplate-slot {
+    -fx-border-color: #4169E1;
+}
+
+.leggings-slot {
+    -fx-border-color: #9932CC;
+}
+
+.boots-slot {
+    -fx-border-color: #228B22;
+}

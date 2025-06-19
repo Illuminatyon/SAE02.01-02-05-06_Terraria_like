@@ -25,6 +25,7 @@ public enum ItemsEnum {
     IRON_HELMET("iron_helmet",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_HELMET),
     IRON_CHESTPLATE("iron_chestplate",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_CHESTPLATE),
     IRON_LEGGINGS("iron_leggings",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_LEGGINGS),
+    IRON_BOOTS("iron_boots",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_BOOTS),
 
     RAW_CHICKEN("raw_chicken",100,1.5, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
     CHICKEN_LEG("chicken_leg",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.CHICKEN_LEG),

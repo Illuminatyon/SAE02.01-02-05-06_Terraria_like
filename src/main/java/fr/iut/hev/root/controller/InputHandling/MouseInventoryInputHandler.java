@@ -1,6 +1,8 @@
 package fr.iut.hev.root.controller.InputHandling;
 
+import fr.iut.hev.root.model.ArmorInventory;
 import fr.iut.hev.root.model.Inventory;
+import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.beans.property.DoubleProperty;
@@ -16,18 +18,24 @@ import java.util.HashMap;
 public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
 
     private Inventory inventory;
+    private ArmorInventory armorInventory;
     private InventoryView inventoryView;
     private ObjectProperty<HashMap<Item, Integer>> onHoldProperty;
     private MouseEvent mouseEvent;
     private DoubleProperty xProperty;
     private DoubleProperty yProperty;
+    private static final int ARMOR_SLOT_START_INDEX = 50; // Assuming regular inventory has 50 slots
 
-    public MouseInventoryInputHandler(Inventory inventory,InventoryView inventoryView) {
+    public MouseInventoryInputHandler(Inventory inventory, InventoryView inventoryView) {
         this.inventory = inventory;
         this.inventoryView = inventoryView;
         this.onHoldProperty = new SimpleObjectProperty<>(null);
         this.xProperty = new SimpleDoubleProperty(0);
         this.yProperty = new SimpleDoubleProperty(0);
+    }
+
+    public void setArmorInventory(ArmorInventory armorInventory) {
+        this.armorInventory = armorInventory;
     }
 
     @Override
@@ -52,22 +60,63 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
     public void onLeftClickPressed() {
         int slotIndex = fromTargetStringToInd(mouseEvent.getTarget().toString());
         if (slotIndex != -1) {
-            if (getOnHold() == null) {
-                setOnHold(inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity()));
+            // Check if this is an armor slot
+            if (slotIndex >= ARMOR_SLOT_START_INDEX && armorInventory != null) {
+                int armorSlotIndex = slotIndex - ARMOR_SLOT_START_INDEX;
+
+                if (getOnHold() == null) {
+                    // Remove item from armor slot
+                    setOnHold(armorInventory.remove(armorSlotIndex));
+                } else {
+                    // Try to add item to armor slot
+                    Item item = getOnHold().keySet().iterator().next();
+                    int quantity = getOnHold().get(item);
+
+                    // Only allow armor items to be placed in armor slots
+                    if (item.getItemEnum().getItemType() == ItemTypesEnum.ARMOR_PIECE) {
+                        HashMap<Item, Integer> result = armorInventory.add(armorSlotIndex, item, quantity);
+                        if (result != null) {
+                            // If there was an item in the slot, it gets swapped to the cursor
+                            setOnHold(result);
+                        } else if (armorInventory.getArmorSlot(armorSlotIndex).getItem() == item) {
+                            // If placement was successful (result is null) and there was no previous item,
+                            // set onHold to null to remove the item from the cursor
+                            setOnHold(null);
+                        }
+                        // If placement failed (armor piece not appropriate for slot), keep the item in the cursor
+                        // by not changing onHold
+                    }
+                }
             } else {
-                setOnHold(inventory.add(slotIndex, getOnHold().keySet().iterator().next(), getOnHold().get(getOnHold().keySet().iterator().next())));
+                // Regular inventory slot
+                if (getOnHold() == null) {
+                    setOnHold(inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity()));
+                } else {
+                    setOnHold(inventory.add(slotIndex, getOnHold().keySet().iterator().next(), getOnHold().get(getOnHold().keySet().iterator().next())));
+                }
             }
         }
         else {
-            System.out.println("item droped");
+            System.out.println("item dropped");
         }
     }
 
     public void onRightClickPressed() {
         int slotIndex = fromTargetStringToInd(mouseEvent.getTarget().toString());
         if (slotIndex != -1) {
-            if (getOnHold() == null) {
-                setOnHold(inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity()/2));
+            // Check if this is an armor slot
+            if (slotIndex >= ARMOR_SLOT_START_INDEX && armorInventory != null) {
+                int armorSlotIndex = slotIndex - ARMOR_SLOT_START_INDEX;
+
+                if (getOnHold() == null) {
+                    // Remove item from armor slot
+                    setOnHold(armorInventory.remove(armorSlotIndex));
+                }
+            } else {
+                // Regular inventory slot
+                if (getOnHold() == null) {
+                    setOnHold(inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity()/2));
+                }
             }
         }
     }

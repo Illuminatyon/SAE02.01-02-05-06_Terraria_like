@@ -180,13 +180,13 @@ public class GlobalController implements Initializable {
         hudView = new HUDView(player.getHealth(),heartsHbox);
         playerView = new PlayerView(player,tileMap, entitiesPane);
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
-        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
+        inventoryView = new InventoryView(inventory, player.getArmorInventory(), hotbarInventory, expandedInventory, hudAnchorPane, craftView);
         hotbarView = new HotbarView(hotbarInventory);
 
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
-        inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),45);
-        inventory.add(2,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),20);
+        inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),1);
+        inventory.add(2,itemFactory.createItem(ItemsEnum.IRON_CHESTPLATE),1);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
         inventory.add(5, itemFactory.createItem(ItemsEnum.KATANA), 1);
@@ -211,6 +211,7 @@ public class GlobalController implements Initializable {
         playerLightCircle.setCursorVisible(false);
 
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
+        mouseInventoryHandler.setArmorInventory(player.getArmorInventory());
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
         mouseItemActionHandler = new MouseItemActionInputHandler(inventoryView,player,globalView,tileMap,this);
 

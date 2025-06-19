@@ -9,7 +9,6 @@
 <AnchorPane fx:id="root"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="fr.iut.hev.root.controller.MainController"
+            fx:controller="fr.iut.hev.root.controller.GlobalController"
             prefHeight="400.0" prefWidth="600.0">
-
 </AnchorPane>
