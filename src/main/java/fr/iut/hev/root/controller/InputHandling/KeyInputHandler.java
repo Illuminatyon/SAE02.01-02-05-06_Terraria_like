@@ -5,7 +5,6 @@ import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
 import fr.iut.hev.root.view.CraftView;
 import fr.iut.hev.root.view.InventoryView;
 import fr.iut.hev.root.model.World;
-import fr.iut.hev.root.utils.SaveManager;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -41,13 +40,6 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                 case KeyCode.Z -> {
                     player.receiveDamage(1);
                     System.out.println("pv = " + player.getHealth());
-                }
-                case KeyCode.ESCAPE -> {
-                    try {
-                        SaveManager.saveWorld(world);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
             }
         } else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {

@@ -7,8 +7,6 @@ import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
-import fr.iut.hev.root.utils.JsonManager;
-import fr.iut.hev.root.utils.SaveManager;
 import fr.iut.hev.root.view.MainMenuUIComponents;
 import fr.iut.hev.root.view.MainMenuView;
 import javafx.application.Platform;
@@ -91,9 +89,6 @@ public class MainMenuController implements Initializable {
 
         // TODO: Load all things OR load everything needed in each respective class instead of here
         worlds = new ArrayList<>();
-        for (World w : SaveManager.loadAllWorlds()) {
-            createWorldView(w);
-        }
 
         mainBtnPlay.setOnAction(e -> mainMenuView.openWorldsMenu());
         mainBtnSettings.setOnAction(e -> mainMenuView.openSettingsMenu());
@@ -211,7 +206,6 @@ public class MainMenuController implements Initializable {
 
     private void deleteWorld(World world) {
         worlds.remove(world);
-        SaveManager.deleteWorldFolder(world.getName());
         mainMenuView.deleteWorldHBox(world);
     }
 
