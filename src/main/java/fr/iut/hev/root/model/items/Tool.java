@@ -27,7 +27,6 @@ public class Tool extends Item {
         TileMap tileMap = eventHandler.getTileMap();
         Player player = eventHandler.getPlayer();
 
-        // Check if the target position is within reach (3 tiles)
         if (!player.isWithinReach(x, y, 3)) {
             return false;
         }
@@ -35,11 +34,8 @@ public class Tool extends Item {
         if (eventHandler.getMouseClickIsPressed()) {
             if (!(tileMap.isTileEmpty(x,y))) {
                 ItemStatsEnum statsToolInHand = player.getItemInHand().getItemEnum().getStats();
-                System.out.println(statsToolInHand.getEfficientBlockAgainst());
-                System.out.println(tileMap.getTile(x,y).getTileEnum().getBlockTypesEnum());
                 if (statsToolInHand.getEfficientBlockAgainst().equals(tileMap.getTile(x,y).getTileEnum().getBlockTypesEnum())) {
                     tileMap.tileGetsMined(x, y, statsToolInHand.getMiningSpeed());
-                    System.out.println("effective");
                 }
                 else {
                     tileMap.tileGetsMined(x, y, 1);
@@ -49,7 +45,6 @@ public class Tool extends Item {
             }
         }
         else if (eventHandler.getMouseClickIsReleased()) {
-            // Reset block health when mouse is released
             if (!(tileMap.isTileEmpty(x,y))) {
                 tileMap.getTile(x,y).resetHealth();
                 return true;

@@ -5,7 +5,10 @@ import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
 import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
-import fr.iut.hev.root.model.*;
+import fr.iut.hev.root.model.CraftingManager;
+import fr.iut.hev.root.model.Inventory;
+import fr.iut.hev.root.model.Tile;
+import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.enums.*;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
@@ -91,12 +94,6 @@ public class GlobalController implements Initializable {
     @FXML private ListView<RecipesEnum> craftListView;
     @FXML private Button craftButton;
     @FXML private HBox recipeDisplay;
-
-    @FXML
-    private Button craftButton;
-
-    @FXML
-    private HBox recipeDisplay;
 
     public void setWorld(World world) {
         this.world = world;
@@ -260,7 +257,7 @@ public class GlobalController implements Initializable {
 
                     updateCameraPosition();
                     checkCraftingStationProximity();
-                    checkPnjDialogue();
+                    //checkPnjDialogue();
 
                     cooldownManager.allCooldownsTick();
                 })
@@ -293,8 +290,7 @@ public class GlobalController implements Initializable {
 
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
-        inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),45);
-        inventory.add(2,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),20);
+        inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
         inventory.add(5, itemFactory.createItem(ItemsEnum.KATANA), 1);
@@ -373,7 +369,7 @@ public class GlobalController implements Initializable {
     // Methode en com dans world
     private void initAggressiveMob(Player player) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, entitiesPane, 1 // Use actorsPane instead of globalPane
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,itemFactory));
@@ -447,18 +443,15 @@ public class GlobalController implements Initializable {
         // Update the positions of all actors based on the camera offset
         /*for (Actor actor : aliveActors) {
             if (actor == null) {
-                // Skip null actors
                 continue;
             }
 
             if (actor.equals(player)) {
-                // Update player position
                 if (playerView != null && playerView.getActorSprite() != null) {
                     playerView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
                     playerView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
                 }
             } else {
-                // Update other actors' positions
                 if (actor == mob && mobView != null && mobView.getActorSprite() != null) {
                     mobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
                     mobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
@@ -531,49 +524,5 @@ public class GlobalController implements Initializable {
      */
     /*public ItemFactory getItemFactory() {
         return itemFactory;
-    }*/
-
-    /**
-     * Checks if the player is near any crafting stations (furnace or crafting table)
-     * and updates the crafting manager accordingly
-     */
-    private void checkCraftingStationProximity() {
-        if (player == null || tileMap == null || craftingManager == null) {
-            return;
-        }
-
-        // Get player position in tile coordinates
-        int playerTileX = (int) (player.getPosX() / TileMap.format);
-        int playerTileY = (int) (player.getPosY() / TileMap.format);
-
-        // Check a 3x3 area around the player for crafting stations
-        boolean foundCraftingTable = false;
-        boolean foundFurnace = false;
-
-        for (int x = playerTileX - 3; x <= playerTileX + 3; x++) {
-            for (int y = playerTileY - 3; y <= playerTileY + 3; y++) {
-                // Skip if out of bounds
-                if (x < 0 || y < 0 || x >= tileMap.getWidth() || y >= tileMap.getHeight()) {
-                    continue;
-                }
-
-                // Get the tile at this position
-                Tile tile = tileMap.getTile(x, y);
-                if (tile != null && tile.getTileEnum() != null) {
-                    // Check if it's a crafting table
-                    if (tile.getTileEnum() == TilesEnum.CRAFTING_TABLE) {
-                        foundCraftingTable = true;
-                    }
-                    // Check if it's a furnace
-                    else if (tile.getTileEnum() == TilesEnum.FURNACE) {
-                        foundFurnace = true;
-                    }
-                }
-            }
-        }
-
-        // Update the crafting manager
-        craftingManager.setNearCraftingTable(foundCraftingTable);
-        craftingManager.setNearFurnace(foundFurnace);
     }
 }

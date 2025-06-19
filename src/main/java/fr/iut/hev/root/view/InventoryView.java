@@ -185,9 +185,6 @@ public class InventoryView {
     }
 
     public void updateOnHoldPosition(double x,double y) {
-        for (Node node : hudAnchorPane.getChildren()) {
-            System.out.println(node);
-        }
         Pane pane = (Pane) hudAnchorPane.getChildren().get(5);
         pane.setTranslateX(x+1);
         pane.setTranslateY(y+1);
