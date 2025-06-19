@@ -16,7 +16,7 @@ public class Mob extends Actor {
 
     public Mob(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager );
-        getHitboxManager().createHitbox(this,HitboxType.ATTACK);
+
     }
 
     @Override
