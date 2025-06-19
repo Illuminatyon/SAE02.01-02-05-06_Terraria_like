@@ -62,13 +62,14 @@ public class ItemFactory {
     }
 
     public Weapon createWeapon(ItemsEnum itemsEnum) {
-        switch (itemsEnum) {
+        /*switch (itemsEnum) {
             case ItemsEnum.DAGGER -> {
                 return new Dagger(itemsEnum,hitboxManager);
             }
             default -> {
             return null;}
-        }
+        }*/
+        return  new Weapon(itemsEnum,hitboxManager);
     }
 
     public ArmorPiece createArmorPiece(ItemsEnum itemsEnum) {
