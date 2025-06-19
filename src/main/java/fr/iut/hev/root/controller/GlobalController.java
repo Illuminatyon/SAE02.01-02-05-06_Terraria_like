@@ -172,7 +172,7 @@ public class GlobalController implements Initializable {
         hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
 
 
-        hudView = new HUDView(player.getHealth(),heartsHbox);
+        hudView = new HUDView(player, heartsHbox);
         playerView = new PlayerView(player,tileMap, entitiesPane);
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, player.getArmorInventory(), hotbarInventory, expandedInventory, hudAnchorPane, craftView);
@@ -180,15 +180,15 @@ public class GlobalController implements Initializable {
 
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
-        inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),1);
+        inventory.add(1,itemFactory.createItem(ItemsEnum.IRON_BOOTS),1);
         inventory.add(2,itemFactory.createItem(ItemsEnum.IRON_CHESTPLATE),1);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
-        inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
+        inventory.add(4,itemFactory.createItem(ItemsEnum.IRON_LEGGINGS),1);
         inventory.add(5, itemFactory.createItem(ItemsEnum.KATANA), 1);
         inventory.add(6,itemFactory.createItem(ItemsEnum.DAGGER), 1);
         inventory.add(7,itemFactory.createItem(ItemsEnum.BOW), 1);
         inventory.add(8,itemFactory.createItem(ItemsEnum.ARROW), 64);
-        inventory.add(9,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
+        inventory.add(9,itemFactory.createItem(ItemsEnum.IRON_HELMET),1);
         inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
 
         player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));

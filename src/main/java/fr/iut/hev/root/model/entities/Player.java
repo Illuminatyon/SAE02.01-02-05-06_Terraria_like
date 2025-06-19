@@ -199,8 +199,17 @@ public class Player extends Actor {
     }
 
     public int getMaxHealth() {
-        // Return the maximum health value for the player
-        // This can be adjusted based on armor or other factors in the future
-        return 10;
+        // Base health value
+        int baseHealth = 10;
+
+        // Add half a heart (1 health point) for each armor piece equipped
+        int armorBonus = 0;
+        for (int i = 0; i < armorInventory.getSize(); i++) {
+            if (armorInventory.getArmorSlot(i).getItem() != null) {
+                armorBonus += 1; // Add 1 health point (half a heart) for each armor piece
+            }
+        }
+
+        return baseHealth + armorBonus;
     }
 }

@@ -185,9 +185,15 @@ public class InventoryView {
         String name = slot.getItem().getItemEnum().getName();
         String path;
 
-        // Special case for IRON_CHESTPLATE to use chestplate.png
+        // Special cases for armor pieces to use their generic sprite files
         if (slot.getItem().getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_CHESTPLATE) {
             path = "/fr/iut/hev/root/img/items/chestplate.png";
+        } else if (slot.getItem().getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_HELMET) {
+            path = "/fr/iut/hev/root/img/items/helmet.png";
+        } else if (slot.getItem().getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_LEGGINGS) {
+            path = "/fr/iut/hev/root/img/items/leggings.png";
+        } else if (slot.getItem().getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_BOOTS) {
+            path = "/fr/iut/hev/root/img/items/boots.png";
         } else {
             path = "/fr/iut/hev/root/img/items/" + name + ".png";
         }
@@ -213,9 +219,15 @@ public class InventoryView {
         Item item = onHold.keySet().iterator().next();
         String path;
 
-        // Special case for IRON_CHESTPLATE to use chestplate.png
+        // Special cases for armor pieces to use their generic sprite files
         if (item.getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_CHESTPLATE) {
             path = "/fr/iut/hev/root/img/items/chestplate.png";
+        } else if (item.getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_HELMET) {
+            path = "/fr/iut/hev/root/img/items/helmet.png";
+        } else if (item.getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_LEGGINGS) {
+            path = "/fr/iut/hev/root/img/items/leggings.png";
+        } else if (item.getItemEnum() == fr.iut.hev.root.model.enums.ItemsEnum.IRON_BOOTS) {
+            path = "/fr/iut/hev/root/img/items/boots.png";
         } else {
             path = "/fr/iut/hev/root/img/items/" + item.getItemEnum().getName() + ".png";
         }

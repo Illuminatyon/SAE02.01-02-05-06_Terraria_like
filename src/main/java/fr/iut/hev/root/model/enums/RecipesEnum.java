@@ -25,6 +25,12 @@ public enum RecipesEnum {
     KATANA(ItemsEnum.KATANA,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.STICK,2),new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,3))),RecipeAvailability.CRAFTING_TABLE),
     BOW(ItemsEnum.BOW,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.STICK,3),new AbstractMap.SimpleEntry<>(ItemsEnum.FEATHER,2))),RecipeAvailability.CRAFTING_TABLE),
 
+    // Armor recipes
+    IRON_HELMET(ItemsEnum.IRON_HELMET,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,5))),RecipeAvailability.CRAFTING_TABLE),
+    IRON_CHESTPLATE(ItemsEnum.IRON_CHESTPLATE,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,8))),RecipeAvailability.CRAFTING_TABLE),
+    IRON_LEGGINGS(ItemsEnum.IRON_LEGGINGS,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,7))),RecipeAvailability.CRAFTING_TABLE),
+    IRON_BOOTS(ItemsEnum.IRON_BOOTS,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,4))),RecipeAvailability.CRAFTING_TABLE),
+
     CACA(ItemsEnum.CACA,3,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.DIRT,2))),RecipeAvailability.INVENTORY);
 
 

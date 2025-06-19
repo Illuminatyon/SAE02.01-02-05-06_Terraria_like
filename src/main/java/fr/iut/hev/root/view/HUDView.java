@@ -15,11 +15,21 @@ public class HUDView {
     private HBox heartsHbox;
     private ArrayList<ImageView> fullHearts;
     private ImageView halfHeart;
+    private Player player;
 
-    public HUDView(int health,HBox heartsHbox) {
+    public HUDView(int health, HBox heartsHbox) {
         this.heartsHbox = heartsHbox;
         this.fullHearts = new ArrayList<>();
         initFullHearts(health);
+        this.halfHeart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_half.png").toExternalForm()));
+        setFit();
+    }
+
+    public HUDView(Player player, HBox heartsHbox) {
+        this.player = player;
+        this.heartsHbox = heartsHbox;
+        this.fullHearts = new ArrayList<>();
+        initFullHearts(player.getMaxHealth());
         this.halfHeart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_half.png").toExternalForm()));
         setFit();
     }
@@ -29,6 +39,14 @@ public class HUDView {
         int health = playerHealth.intValue();
         double nbHearts = health / 2.0;
         int loopIteration;
+
+        // If player is set, check if max health has changed and update fullHearts if needed
+        if (player != null) {
+            int maxHealth = player.getMaxHealth();
+            if (fullHearts.size() < maxHealth / 2) {
+                updateMaxHealth(maxHealth);
+            }
+        }
 
         heartsHbox.getChildren().clear();
         if (health > 0) {
@@ -43,6 +61,14 @@ public class HUDView {
                 heartsHbox.getChildren().add(heart);
             }
         }
+    }
+
+    public void updateMaxHealth(int maxHealth) {
+        // Clear existing hearts
+        fullHearts.clear();
+
+        // Reinitialize with new max health
+        initFullHearts(maxHealth);
     }
 
     public void setFit() {
