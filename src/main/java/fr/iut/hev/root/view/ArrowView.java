@@ -65,8 +65,8 @@ public class ArrowView extends ActorView {
                 arrowSprite.setFitWidth(32);
                 arrowSprite.setPreserveRatio(true);
 
-                // Rotate the arrow based on its velocity
-                arrowSprite.setRotate(arrow.getAngle());
+                // Rotate the arrow based on its velocity, adding 45 degrees to give the impression of being shot
+                arrowSprite.setRotate(arrow.getAngle() + 45);
             }
 
             // Initially position the arrow in the world plane
@@ -87,34 +87,8 @@ public class ArrowView extends ActorView {
      * Updates the arrow sprite's position and rotation
      */
     public void update() {
-        if (arrowSprite != null && arrow != null) {
-            // Debug: Log arrow update
-            System.out.println("[DEBUG_LOG] Updating arrow sprite at position: " + arrow.getPosX() + ", " + arrow.getPosY());
-
-            // Update position with camera offset
-            double cameraOffsetX = 0;
-            double cameraOffsetY = 0;
-
-            // Get camera offset from GlobalController if available
-            if (arrow instanceof fr.iut.hev.root.model.entities.Arrow) {
-                fr.iut.hev.root.model.entities.Arrow arrowEntity = (fr.iut.hev.root.model.entities.Arrow) arrow;
-                if (arrowEntity.getGlobalController() != null) {
-                    cameraOffsetX = arrowEntity.getGlobalController().getCameraOffsetX();
-                    cameraOffsetY = arrowEntity.getGlobalController().getCameraOffsetY();
-                }
-            }
-
-            // Update position with camera offset
-            // Use setTranslateX/Y to position arrows in the world plane
-            arrowSprite.setTranslateX(arrow.getPosX() + cameraOffsetX);
-            arrowSprite.setTranslateY(arrow.getPosY() + cameraOffsetY);
-
-            // Update rotation based on arrow's velocity
-            arrowSprite.setRotate(arrow.getAngle());
-
-            // Make sure the arrow is visible
-            arrowSprite.setVisible(true);
-        } else {
+        // If the arrow or sprite is null, don't update
+        if (arrowSprite == null || arrow == null) {
             // Debug: Log why update was skipped
             if (arrowSprite == null) {
                 System.out.println("[DEBUG_LOG] Arrow update skipped: arrowSprite is null");
@@ -122,7 +96,46 @@ public class ArrowView extends ActorView {
             if (arrow == null) {
                 System.out.println("[DEBUG_LOG] Arrow update skipped: arrow is null");
             }
+            return;
         }
+
+        // If the arrow has hit something, delete the sprite and return
+        if (arrow instanceof fr.iut.hev.root.model.entities.Arrow) {
+            fr.iut.hev.root.model.entities.Arrow arrowEntity = (fr.iut.hev.root.model.entities.Arrow) arrow;
+            if (arrowEntity.hasHit()) {
+                System.out.println("[DEBUG_LOG] Arrow update skipped: arrow has hit something");
+                // Delete the sprite if the arrow has hit something
+                deleteActorSprite();
+                return;
+            }
+        }
+
+        // Debug: Log arrow update
+        System.out.println("[DEBUG_LOG] Updating arrow sprite at position: " + arrow.getPosX() + ", " + arrow.getPosY());
+
+        // Update position with camera offset
+        double cameraOffsetX = 0;
+        double cameraOffsetY = 0;
+
+        // Get camera offset from GlobalController if available
+        if (arrow instanceof fr.iut.hev.root.model.entities.Arrow) {
+            fr.iut.hev.root.model.entities.Arrow arrowEntity = (fr.iut.hev.root.model.entities.Arrow) arrow;
+            if (arrowEntity.getGlobalController() != null) {
+                cameraOffsetX = arrowEntity.getGlobalController().getCameraOffsetX();
+                cameraOffsetY = arrowEntity.getGlobalController().getCameraOffsetY();
+            }
+        }
+
+        // Update position with camera offset
+        // Use setTranslateX/Y to position arrows in the world plane
+        arrowSprite.setTranslateX(arrow.getPosX() + cameraOffsetX);
+        arrowSprite.setTranslateY(arrow.getPosY() + cameraOffsetY);
+
+        // Update rotation based on arrow's velocity, adding 45 degrees to give the impression of being shot
+        arrowSprite.setRotate(arrow.getAngle() + 45);
+
+        // Make sure the arrow is visible
+        arrowSprite.setVisible(true);
     }
 
     /**

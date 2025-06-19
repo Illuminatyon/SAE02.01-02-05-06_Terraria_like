@@ -1,6 +1,8 @@
 package fr.iut.hev.root.view;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -12,14 +14,36 @@ import java.io.InputStream;
  * View class for the bow animation
  */
 public class BowView {
+    private static BowView instance;
     private ImageView bowSprite;
     private AnchorPane anchorPane;
 
     /**
-     * Constructor for the BowView
+     * Gets the singleton instance of BowView
+     * @param anchorPane the anchor pane to add the bow sprite to
+     * @return the BowView instance
+     */
+    public static BowView getInstance(AnchorPane anchorPane) {
+        if (instance == null) {
+            instance = new BowView(anchorPane);
+        } else if (instance.anchorPane != anchorPane) {
+            // If the anchor pane has changed, update it
+            instance.anchorPane = anchorPane;
+            // Remove the sprite from the old anchor pane if it exists
+            if (instance.bowSprite != null && instance.bowSprite.getParent() != null) {
+                ((AnchorPane)instance.bowSprite.getParent()).getChildren().remove(instance.bowSprite);
+                // Add it to the new anchor pane
+                anchorPane.getChildren().add(instance.bowSprite);
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Private constructor for the BowView (singleton pattern)
      * @param anchorPane the anchor pane to add the bow sprite to
      */
-    public BowView(AnchorPane anchorPane) {
+    private BowView(AnchorPane anchorPane) {
         this.anchorPane = anchorPane;
         loadBowSprite();
     }
@@ -28,7 +52,7 @@ public class BowView {
      * Loads the bow sprite
      */
     private void loadBowSprite() {
-        // Use the Bow_JE2_BE1 image for the bow
+        // Use the bow image for the bow
         String path = "/fr/iut/hev/root/img/items/bow.png";
         System.out.println("Trying to load bow image from path: " + path);
 
@@ -59,13 +83,61 @@ public class BowView {
     }
 
     /**
+     * Starts the bow animation and executes a callback when complete
+     * @param playerCenterX the x position of the player center
+     * @param playerCenterY the y position of the player center
+     * @param dirX the normalized x direction
+     * @param dirY the normalized y direction
+     * @param cameraOffsetX the camera offset x
+     * @param cameraOffsetY the camera offset y
+     * @param onAnimationComplete callback to execute when animation completes
+     */
+    public void startBowAnimation(double playerCenterX, double playerCenterY, 
+                                 double dirX, double dirY, 
+                                 double cameraOffsetX, double cameraOffsetY,
+                                 Runnable onAnimationComplete) {
+        // Position the bow in front of the player in the direction of the mouse
+        double bowX = playerCenterX + dirX * 20; // 20 pixels in front of player
+        double bowY = playerCenterY + dirY * 20;
+
+        // Show the bow animation
+        showBowAnimation(
+            bowX + cameraOffsetX, 
+            bowY + cameraOffsetY, 
+            dirX, 
+            dirY
+        );
+
+        // Create a fade transition to make the bow disappear
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.4), bowSprite);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setDelay(Duration.seconds(0.2));
+
+        // Create animation timeline
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> {
+                // Execute the callback
+                if (onAnimationComplete != null) {
+                    onAnimationComplete.run();
+                }
+
+                // Hide the bow after the animation completes
+                fadeTransition.play();
+            })
+        );
+
+        timeline.play();
+    }
+
+    /**
      * Shows the bow animation
      * @param x the x position of the bow
      * @param y the y position of the bow
      * @param dirX the x direction of the bow
      * @param dirY the y direction of the bow
      */
-    public void showBowAnimation(double x, double y, double dirX, double dirY) {
+    private void showBowAnimation(double x, double y, double dirX, double dirY) {
         if (bowSprite == null) {
             System.err.println("ERROR: Bow sprite is null");
             return;
@@ -100,7 +172,8 @@ public class BowView {
      * Hides the bow
      */
     public void hideBow() {
-        // In the simplified version, we don't hide the bow immediately
-        // It will stay visible until the next animation
+        if (bowSprite != null) {
+            bowSprite.setVisible(false);
+        }
     }
 }

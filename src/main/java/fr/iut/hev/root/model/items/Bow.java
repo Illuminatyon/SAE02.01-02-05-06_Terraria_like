@@ -6,19 +6,14 @@ import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.view.BowView;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 
 public class Bow extends Weapon {
-    private static final int ARROW_SPEED = 10;
+    public static final int ARROW_SPEED = 10;
     private boolean isAnimating = false;
-    private BowView bowView;
     private ItemFactory itemFactory;
 
-    public Bow(ItemsEnum itemsEnum, HitboxManager hitboxManager,ItemFactory itemFactory) {
-        super(itemsEnum,hitboxManager);
+    public Bow(ItemsEnum itemsEnum, HitboxManager hitboxManager, ItemFactory itemFactory) {
+        super(itemsEnum, hitboxManager);
         this.itemFactory = itemFactory;
     }
 
@@ -37,6 +32,9 @@ public class Bow extends Weapon {
             return false;
         }
 
+        // Set animating flag
+        isAnimating = true;
+
         // Calculate the position for the bow based on player position
         double playerCenterX = player.getPosX() + player.getWidth() / 2;
         double playerCenterY = player.getPosY() + player.getHeight() / 2;
@@ -50,60 +48,57 @@ public class Bow extends Weapon {
         final double normalizedDirX = dirX / length;
         final double normalizedDirY = dirY / length;
 
-        // Position the bow in front of the player in the direction of the mouse
-        double bowX = playerCenterX + normalizedDirX * 20; // 20 pixels in front of player
-        double bowY = playerCenterY + normalizedDirY * 20;
+        // Create or get the bow view and start the animation
+        BowView.getInstance(eventHandler.getGlobalController().getEntitiesPane())
+               .startBowAnimation(
+                   playerCenterX, 
+                   playerCenterY, 
+                   normalizedDirX, 
+                   normalizedDirY, 
+                   eventHandler.getGlobalController().getCameraOffsetX(),
+                   eventHandler.getGlobalController().getCameraOffsetY(),
+                   () -> {
+                       // This will be called when the animation completes
+                       // Create and shoot an arrow
+                       Arrow arrow = createArrow(
+                           (int)playerCenterX, 
+                           (int)playerCenterY, 
+                           normalizedDirX, 
+                           normalizedDirY, 
+                           eventHandler
+                       );
 
-        // Set animating flag
-        isAnimating = true;
+                       // Add the arrow to the game
+                       eventHandler.getGlobalController().getAliveActors().add(arrow);
 
-        // Create or update the bow view for animation
-        if (bowView == null) {
-            // Get the actorsPane from the global controller
-            AnchorPane actorsPane = eventHandler.getGlobalController().getEntitiesPane();
-            bowView = new BowView(actorsPane);
-        }
+                       // Consume one arrow from inventory
+                       consumeArrow(player);
 
-        // Show the bow animation
-        bowView.showBowAnimation(
-            bowX + eventHandler.getGlobalController().getCameraOffsetX(), 
-            bowY + eventHandler.getGlobalController().getCameraOffsetY(), 
-            normalizedDirX, 
-            normalizedDirY
-        );
-
-        // Create animation timeline
-        Timeline timeline = new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> {
-                // Create and shoot an arrow
-                Arrow arrow = new Arrow(
-                    (int)playerCenterX, 
-                    (int)playerCenterY, 
-                    16, 
-                    4, 
-                    eventHandler.getTileMap(),
-                    normalizedDirX * ARROW_SPEED, 
-                    normalizedDirY * ARROW_SPEED,
-                    getDamage(),
-                    eventHandler.getGlobalController().getEntitiesPane(),
-                    eventHandler.getGlobalController(),
-                    itemFactory
-                );
-
-                // Add the arrow to the game
-                eventHandler.getGlobalController().getAliveActors().add(arrow);
-
-                // Consume one arrow from inventory
-                consumeArrow(player);
-
-                // End animation
-                isAnimating = false;
-            })
-        );
-
-        timeline.play();
+                       // End animation
+                       isAnimating = false;
+                   }
+               );
 
         return true;
+    }
+
+    /**
+     * Creates an arrow entity
+     */
+    public Arrow createArrow(int posX, int posY, double dirX, double dirY, MouseItemActionInputHandler eventHandler) {
+        return new Arrow(
+            posX, 
+            posY, 
+            16, 
+            4, 
+            eventHandler.getTileMap(),
+            dirX * ARROW_SPEED, 
+            dirY * ARROW_SPEED,
+            getDamage(),
+            eventHandler.getGlobalController().getEntitiesPane(),
+            eventHandler.getGlobalController(),
+            itemFactory
+        );
     }
 
     private boolean playerHasArrows(Player player) {

@@ -57,6 +57,15 @@ public class Arrow extends Actor {
         // If arrow has hit something, don't update position
         if (hasHit) {
             System.out.println("[DEBUG_LOG] Arrow has already hit something, skipping update");
+
+            // Ensure the arrow is removed from the view if it's still present
+            if (arrowView != null && arrowView.getActorSprite() != null) {
+                System.out.println("[DEBUG_LOG] Arrow still has a sprite, removing it");
+                arrowView.deleteActorSprite();
+                // Set arrowView to null to prevent further deletion attempts
+                arrowView = null;
+            }
+
             return;
         }
 
@@ -72,20 +81,11 @@ public class Arrow extends Actor {
             // Debug: Log arrow hit terrain
             System.out.println("[DEBUG_LOG] Arrow hit terrain at position: " + getPosX() + ", " + getPosY());
 
-            // Remove the arrow from the view
+            // Set health to 0 to trigger DeathListener, which will handle removing the arrow from aliveActors
             setHealth(0);
-
-            // Debug: Log arrow health set to 0
             System.out.println("[DEBUG_LOG] Arrow health set to 0 after hitting terrain");
 
-            // Ensure the arrow view is removed immediately
-            if (arrowView != null) {
-                arrowView.deleteActorSprite();
-                System.out.println("[DEBUG_LOG] Arrow view deleted after hitting terrain");
-            } else {
-                System.out.println("[DEBUG_LOG] Arrow view was already null when trying to delete after hitting terrain");
-            }
-
+            // Let the DeathListener handle the sprite removal
             return;
         }
 
@@ -103,22 +103,15 @@ public class Arrow extends Actor {
                     // Apply damage to actor
                     actor.receiveDamage(damage);
 
-                    // Mark arrow as hit and remove it from the view
-                    System.out.println("[DEBUG_LOG] Arrow hit a mob: " + actor.getName() + " at position: " + getPosX() + ", " + getPosY());
-                    setHealth(0);
+                    // Mark arrow as hit
                     hasHit = true;
+                    System.out.println("[DEBUG_LOG] Arrow hit a mob: " + actor.getName() + " at position: " + getPosX() + ", " + getPosY());
 
-                    // Debug: Log arrow health set to 0
+                    // Set health to 0 to trigger DeathListener, which will handle removing the arrow from aliveActors
+                    setHealth(0);
                     System.out.println("[DEBUG_LOG] Arrow health set to 0 after hitting mob: " + actor.getName());
 
-                    // Ensure the arrow view is removed immediately
-                    if (arrowView != null) {
-                        arrowView.deleteActorSprite();
-                        System.out.println("[DEBUG_LOG] Arrow view deleted after hitting mob: " + actor.getName());
-                    } else {
-                        System.out.println("[DEBUG_LOG] Arrow view was already null when trying to delete after hitting mob: " + actor.getName());
-                    }
-
+                    // Let the DeathListener handle the sprite removal
                     return;
                 }
             }
@@ -156,5 +149,13 @@ public class Arrow extends Actor {
     // Get the GlobalController
     public GlobalController getGlobalController() {
         return globalController;
+    }
+
+    /**
+     * Checks if the arrow has hit something
+     * @return true if the arrow has hit something, false otherwise
+     */
+    public boolean hasHit() {
+        return hasHit;
     }
 }
