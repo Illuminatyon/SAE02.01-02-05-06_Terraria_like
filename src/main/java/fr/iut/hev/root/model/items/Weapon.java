@@ -10,23 +10,16 @@ import static fr.iut.hev.root.model.TileMap.format;
 public class Weapon extends Item {
 
     private int damage;
-    private static HitboxManager hitboxManager;
+    private HitboxManager hitboxManager;
 
-    public Weapon(ItemsEnum itemsEnum) {
+    public Weapon(ItemsEnum itemsEnum,HitboxManager hitboxManager) {
         super(itemsEnum);
+        this.hitboxManager = hitboxManager;
         this.damage = getStats().getItemMainStat();
     }
 
     public int getDamage() {
         return this.damage;
-    }
-
-    /**
-     * Sets the hitbox manager for all weapons
-     * @param manager The hitbox manager to use
-     */
-    public static void setHitboxManager(HitboxManager manager) {
-        hitboxManager = manager;
     }
 
     @Override

@@ -3,6 +3,10 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.enums.HitboxType;
+import fr.iut.hev.root.model.hitbox.Hitbox;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 
 public class Mob extends Actor {
     private long lastDirectionChangeTime = 0;
@@ -10,8 +14,9 @@ public class Mob extends Actor {
     private int jumpCooldown= 1000;
     private long lastJumpTime = 0;
 
-    public Mob(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
-        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor);
+    public Mob(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager );
+        getHitboxManager().createHitbox(this,HitboxType.ATTACK);
     }
 
     @Override

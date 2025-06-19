@@ -4,9 +4,9 @@ import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
-import javafx.beans.property.BooleanProperty;
+import fr.iut.hev.root.model.enums.HitboxType;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
@@ -17,6 +17,7 @@ public abstract class Actor extends Entity {
     @Expose private int jumpingTestDecay;
     @Expose private int reach;
     @Expose private ActorEnum type;
+    private HitboxManager hitboxManager;
 
     @Expose private IntegerProperty lookDirectionProperty;
     public enum LookDirections {
@@ -30,7 +31,7 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
@@ -40,6 +41,9 @@ public abstract class Actor extends Entity {
         this.jumpingTestDecay = 0;
         this.reach = reach;
         this.type = type;
+        this.hitboxManager = new HitboxManager();
+        hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
+
     }
 
     @Override
@@ -59,6 +63,10 @@ public abstract class Actor extends Entity {
         } else {
             super.setVelocityY(0);
         }
+    }
+
+    public HitboxManager getHitboxManager() {
+        return hitboxManager;
     }
 
     public void updateHorizontalMovement() {

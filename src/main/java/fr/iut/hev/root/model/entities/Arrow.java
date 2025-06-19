@@ -5,6 +5,8 @@ import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.view.actor.ArrowView;
 import javafx.scene.layout.AnchorPane;
 
@@ -17,19 +19,20 @@ public class Arrow extends Actor {
     private int damage;
     private ArrowView arrowView;
     private boolean hasHit = false;
+    private ItemFactory itemFactory;
 
-    //private GlobalController globalController;
+    private GlobalController globalController; // Global controller should not be here, commented in world
 
-    public Arrow(int posX, int posY, int width, int height, TileMap tileMap, 
-                 double velocityX, double velocityY, int damage, 
-                 AnchorPane actorsPane, GlobalController globalController) {
+    public Arrow(int posX, int posY, int width, int height, TileMap tileMap,
+                 double velocityX, double velocityY, int damage,
+                 AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory) {
         // Use the ARROW ActorEnum
         super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW);
 
         this.velocityXInitial = velocityX;
         this.velocityYInitial = velocityY;
         this.damage = damage;
-        //this.globalController = globalController;
+        this.globalController = globalController; // En commentaire sur world
 
         // Set initial velocity
         setVelocityX((int)velocityX);
@@ -39,7 +42,7 @@ public class Arrow extends Actor {
         this.arrowView = new ArrowView(this, tileMap, actorsPane);
 
         // Add death listener to remove arrow when it hits something
-        //healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors()));
+        healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors(),itemFactory)); // En commentaire dans world a cause de gloalcontroller
 
         // Debug: Log arrow creation
         System.out.println("[DEBUG_LOG] Arrow created at position: " + posX + ", " + posY);
@@ -86,7 +89,8 @@ public class Arrow extends Actor {
         }
 
         // Check for collisions with actors
-        /*ArrayList<Actor> aliveActors = getAliveActors();
+        // DE ICI en com
+        ArrayList<Actor> aliveActors = getAliveActors();
         if (aliveActors != null) {
             for (Actor actor : aliveActors) {
                 // Skip self and player
@@ -118,7 +122,7 @@ public class Arrow extends Actor {
                     return;
                 }
             }
-        }*/
+        } // JUSQU ICI en com
 
         // Update position
         posXProperty().set(posXProperty().getValue() + getVelocityX());
@@ -128,7 +132,7 @@ public class Arrow extends Actor {
         if (!hasHit) {
             if (arrowView != null) {
                 System.out.println("[DEBUG_LOG] Updating arrow view");
-                //arrowView.update();
+                arrowView.update(); // En com
             } else {
                 System.out.println("[DEBUG_LOG] Cannot update arrow view: arrowView is null");
             }
@@ -137,12 +141,13 @@ public class Arrow extends Actor {
         }
     }
 
-    /*private ArrayList<Actor> getAliveActors() {
+    // DE ICI en com
+    private ArrayList<Actor> getAliveActors() {
         if (globalController != null) {
             return globalController.getAliveActors();
         }
         return null;
-    }
+    } // JUSQU ICI en com a cause du globalcontroller
 
     // Calculate the angle of the arrow based on its velocity
     public double getAngle() {
@@ -152,5 +157,5 @@ public class Arrow extends Actor {
     // Get the GlobalController
     public GlobalController getGlobalController() {
         return globalController;
-    }*/
+    }
 }

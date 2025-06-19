@@ -178,6 +178,8 @@ public class InventoryView {
             } else if (child instanceof ImageView) {
                 Image image = getImageFromHold(onHold);
                 ((ImageView) child).setImage(image);
+                ((ImageView) child).setFitWidth(50);
+                ((ImageView) child).setFitHeight(50);
             }
         }
     }

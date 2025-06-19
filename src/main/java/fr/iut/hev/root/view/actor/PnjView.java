@@ -20,32 +20,36 @@ public class PnjView extends ActorView {
         this.phrase.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5;");
         this.phrase.setVisible(false);
         this.getAnchorPane().getChildren().add(phrase);
-        phrase.translateXProperty().bind(this.getActor().posXProperty().add(30));
-        phrase.translateYProperty().bind(this.getActor().posYProperty().subtract(30));
+
     }
 
     public void speak() {
         DialogueEnum[] text = DialogueEnum.values();
         if (count >= text.length) {
-            count = 0; // Reset if exceeding bounds
+            count = 0;
         }
-            this.phrase.setText(text[count].getTexte());
-        System.out.println(text[count].getTexte());
 
+        this.phrase.setText(text[count].getTexte());
+        this.phrase.setVisible(true);
 
-            this.phrase.setVisible(true);
-            System.out.println(this.phrase);
-
-
-            PauseTransition pause = new PauseTransition(Duration.seconds(10));
-            pause.setOnFinished(event -> this.phrase.setVisible(false));
-            pause.play();
-            count++;
-
+        PauseTransition pause = new PauseTransition(Duration.seconds(10));
+        pause.setOnFinished(event -> this.phrase.setVisible(false));
+        pause.play();
+        count++;
     }
 
     public Label getPhrase() {
         return phrase;
     }
-}
 
+    @Override
+    public void deleteActorSprite() {
+        // Remove the dialogue text from the AnchorPane
+        if (phrase != null && getAnchorPane() != null) {
+            getAnchorPane().getChildren().remove(phrase);
+                    }
+
+
+        super.deleteActorSprite();
+    }
+}

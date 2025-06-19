@@ -28,6 +28,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private MouseEvent mouseEvent;
     private GlobalView worldView;
     private TileMap tileMap;
+    private GlobalController globalController; // Retirer global controller peut etre, enft c un handler alors jsp
 
     public MouseItemActionInputHandler(World world, InventoryView inventoryView, GlobalView worldView) {
         this.world = world;
@@ -35,6 +36,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         this.player = world.getPlayer();
         this.worldView = worldView;
         this.tileMap = world.getTileMap();
+        this.globalController = globalController;
         this.x = 0;
         this.y = 0;
         this.mouseClickIsPressed = false;
@@ -48,31 +50,11 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent mouseEvent) {
         if (!inventoryView.getInventoryOpened() && !itemUseCooldown.getOnGoing()) {
-            // Adjust mouse coordinates by camera offset
-            //x = mouseEvent.getX() - world.getCamera().getOffsetX();
-            //y = mouseEvent.getY() - world.getCamera().getOffsetY();
+            x = mouseEvent.getX() - globalController.getCameraOffsetX();
+            y = mouseEvent.getY() - globalController.getCameraOffsetY();
 
             if (player.getItemInHand() == null) {
-                // Handle empty hand - no longer allows breaking blocks
-                // Still track mouse events for consistency
-                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-                    this.mouseClickIsPressed = true;
-                    this.mouseEvent = mouseEvent;
-                }
-                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
-                    mouseClickIsPressed = false;
-                    mouseClickIsReleased = true;
-
-                    // Call the appropriate method based on which mouse button was released
-                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        onLeftClickReleased();
-                    } else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                        onRightClickReleased();
-                    }
-                }
-                if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
-                    this.mouseEvent = mouseEvent;
-                }
+                System.out.println("prout");
             }
             else {
                 if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK)) {
@@ -120,10 +102,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     }
 
     public void onLeftClickPressedLoop() {
-        if (player.getItemInHand() == null) {
-            // Empty hands can no longer break blocks
-            // Only tools can break blocks now
-        } else if (player.usesItemInHand(this)) {
+        if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
@@ -134,10 +113,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     }
 
     public void onLeftClickReleasedLoop() {
-        if (player.getItemInHand() == null) {
-            // Empty hands can no longer break blocks
-            // Only tools can break blocks now
-        } else if (player.usesItemInHand(this)) {
+        if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
@@ -149,16 +125,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     }
 
     public void onLeftClickReleased() {
-        if (player.getItemInHand() == null) {
-            // Empty hands can no longer break blocks
-            // Only tools can break blocks now
-            // Still set a small cooldown for consistency
-            itemUseCooldown.setLimit(0.1);
-            itemUseCooldown.start();
-        } else {
-            player.usesItemInHand(this);
-            itemUseCooldown.start();
-        }
+        player.usesItemInHand(this);
+        itemUseCooldown.start();
     }
     public void onRightClickReleased() {
 
@@ -180,4 +148,5 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public TileMap getTileMap() {return this.tileMap;}
     public double getX() {return this.x;}
     public double getY() {return this.y;}
+    public GlobalController getGlobalController() {return this.globalController;}
 }

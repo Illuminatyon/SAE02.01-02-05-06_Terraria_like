@@ -1,12 +1,18 @@
 package fr.iut.hev.root.model.entities;
 
+import com.sun.source.tree.WhileLoopTree;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.enums.HitboxType;
+import fr.iut.hev.root.model.hitbox.Hitbox;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 
 public class Pnj extends Mob{
 
-    public Pnj(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
-        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor);
+    public Pnj(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager);
+        getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
     }
 
     @Override

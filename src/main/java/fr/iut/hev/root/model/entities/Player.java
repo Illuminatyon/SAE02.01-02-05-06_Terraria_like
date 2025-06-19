@@ -6,7 +6,11 @@ import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
+import fr.iut.hev.root.model.hitbox.Hitbox;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -20,8 +24,19 @@ public class Player extends Actor {
     @Expose private Inventory inventory;
     @Expose private Set<PlayerMouvementsEnum> playerMouvementEnums;
     private ObjectProperty<Item> itemInHandProperty;
-    private IntegerProperty quantityOfItemInHandProperty; // Necessaire ?
+    private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
+
+
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor, hitboxManager);
+        this.inventory = new Inventory();
+        this.playerMouvementEnums = new HashSet<>();
+        this.indexItemInHand = new SimpleIntegerProperty(0);
+        this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
+        this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
+        getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
+    }
 
     @Override
     public void initAfterDeserialization(TileMap tileMap, int posX, int posY) {
@@ -30,34 +45,6 @@ public class Player extends Actor {
         quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
         indexItemInHand = new SimpleIntegerProperty(0);
     }
-
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
-        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor);
-        this.inventory = new Inventory();
-        this.playerMouvementEnums = new HashSet<>();
-        this.indexItemInHand = new SimpleIntegerProperty(0);
-        this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
-        this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-    }
-
-    /*public void initAfterDeserialization(TileMap tileMap, double x, double y) {
-        System.out.println(">> initAfterDeserialization: start");
-
-        super.setTileMap(tileMap);
-        super.setPosX(x);
-        super.setPosY(y);
-
-        System.out.println(">> setting itemInHandProperty");
-        itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
-
-        System.out.println(">> setting quantityOfItemInHandProperty");
-        quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-
-        System.out.println(">> setting indexItemInHand");
-        indexItemInHand = new SimpleIntegerProperty(0);
-
-        System.out.println(">> initAfterDeserialization: end");
-    }*/
 
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
         this.playerMouvementEnums.add(playerMouvementsEnum);
@@ -70,7 +57,6 @@ public class Player extends Actor {
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;}
 
     public void update() {
-        System.out.println(super.getPosX());
         updatePosition();
         // Create a copy of the loot collection to avoid ConcurrentModificationException
         Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get());
@@ -199,10 +185,7 @@ public class Player extends Actor {
         this.quantityOfItemInHandProperty.setValue(quantityOfItemInHandProperty.getValue() - 1);
     }
 
-    public Item getItemInHand() {
-        return this.itemInHandProperty.getValue();
-    }
-
+    public Item getItemInHand() {return this.itemInHandProperty.getValue();}
     public void setItemInHandProperty(Item itemInHandProperty) {this.itemInHandProperty.setValue(itemInHandProperty);}
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}
