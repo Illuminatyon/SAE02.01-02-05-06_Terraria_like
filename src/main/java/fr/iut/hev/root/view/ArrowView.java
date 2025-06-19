@@ -99,12 +99,12 @@ public class ArrowView extends ActorView {
             return;
         }
 
-        // If the arrow has hit something, delete the sprite and return
+        // If the arrow has hit something or has 0 health, delete the sprite and return
         if (arrow instanceof fr.iut.hev.root.model.entities.Arrow) {
             fr.iut.hev.root.model.entities.Arrow arrowEntity = (fr.iut.hev.root.model.entities.Arrow) arrow;
-            if (arrowEntity.hasHit()) {
-                System.out.println("[DEBUG_LOG] Arrow update skipped: arrow has hit something");
-                // Delete the sprite if the arrow has hit something
+            if (arrowEntity.hasHit() || arrowEntity.getHealth() <= 0) {
+                System.out.println("[DEBUG_LOG] Arrow update skipped: arrow has hit something or has 0 health");
+                // Delete the sprite if the arrow has hit something or has 0 health
                 deleteActorSprite();
                 return;
             }
@@ -149,6 +149,7 @@ public class ArrowView extends ActorView {
 
     /**
      * Overrides the deleteActorSprite method to set arrowSprite to null after removing it from the AnchorPane
+     * Uses Platform.runLater() to ensure UI updates happen on the JavaFX thread
      */
     @Override
     public void deleteActorSprite() {
@@ -168,17 +169,23 @@ public class ArrowView extends ActorView {
             System.out.println("[DEBUG_LOG] Arrow sprite not found in AnchorPane");
         }
 
-        // Call the parent method to remove the sprite from the AnchorPane
-        super.deleteActorSprite();
+        // Use Platform.runLater() to ensure UI updates happen on the JavaFX thread
+        javafx.application.Platform.runLater(() -> {
+            // Call the parent method to remove the sprite from the AnchorPane
+            if (arrowSprite != null && getAnchorPane() != null) {
+                getAnchorPane().getChildren().remove(arrowSprite);
+                System.out.println("[DEBUG_LOG] Arrow sprite removed from AnchorPane via Platform.runLater()");
+            }
+
+            // Force a refresh of the AnchorPane to ensure the sprite is visually removed
+            if (getAnchorPane() != null) {
+                getAnchorPane().requestLayout();
+                System.out.println("[DEBUG_LOG] Requested layout refresh for AnchorPane");
+            }
+        });
 
         // Set arrowSprite to null to prevent further updates
         arrowSprite = null;
         System.out.println("[DEBUG_LOG] Arrow sprite set to null");
-
-        // Force a refresh of the AnchorPane to ensure the sprite is visually removed
-        if (getAnchorPane() != null) {
-            getAnchorPane().requestLayout();
-            System.out.println("[DEBUG_LOG] Requested layout refresh for AnchorPane");
-        }
     }
 }

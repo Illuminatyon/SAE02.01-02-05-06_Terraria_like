@@ -40,6 +40,8 @@ public class Bow extends Weapon {
         double playerCenterY = player.getPosY() + player.getHeight() / 2;
 
         // Calculate direction vector from player to mouse
+        // eventHandler.getX() and eventHandler.getY() are already in world coordinates
+        // (they have the camera offset subtracted in MouseItemActionInputHandler)
         final double dirX = eventHandler.getX() - playerCenterX;
         final double dirY = eventHandler.getY() - playerCenterY;
 

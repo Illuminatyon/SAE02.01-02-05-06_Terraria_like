@@ -24,11 +24,15 @@ public class Arrow extends Actor {
     private boolean hasHit = false;
     private ItemFactory itemFactory;
 
+    // Store the original double values of velocity for more precise movement
+    private double velocityXDouble;
+    private double velocityYDouble;
+
     private GlobalController globalController;
 
     public Arrow(int posX, int posY, int width, int height, TileMap tileMap,
                  double velocityX, double velocityY, int damage,
-                 AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory) {
+                 AnchorPane actorsPane, GlobalController globalController, ItemFactory itemFactory) {
         // Use the ARROW ActorEnum
         super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW, new HitboxManager());
 
@@ -38,19 +42,40 @@ public class Arrow extends Actor {
         this.globalController = globalController;
         this.itemFactory = itemFactory;
 
-        // Set initial velocity
+        // Store the original double values for more precise movement
+        this.velocityXDouble = velocityX;
+        this.velocityYDouble = velocityY;
+
+        // Set initial velocity (still needed for collision detection)
         setVelocityX((int)velocityX);
         setVelocityY((int)velocityY);
 
         // Create arrow view
         this.arrowView = new ArrowView(this, tileMap, actorsPane);
 
-        // Create attack hitbox for the arrow
-        // Using a rectangular hitbox that matches the arrow's dimensions
-        getHitboxManager().createHitbox(this, HitboxType.ATTACK);
+        // Calculate the angle of the arrow
+        double angle = Math.atan2(velocityY, velocityX);
+
+        // Create a longer, thinner hitbox in the direction of travel for better collision detection
+        double hitboxLength = width * 1.5; // Make the hitbox longer than the arrow
+        double hitboxWidth = height * 0.8; // Make the hitbox thinner than the arrow
+
+        // Create a custom attack hitbox that is longer in the direction of travel
+        // This will make the arrow more likely to hit targets
+        double offsetX = Math.cos(angle) * width / 4; // Offset the hitbox to be centered on the arrow
+        double offsetY = Math.sin(angle) * height / 4;
+
+        // Remove the default VULNERABLE hitbox created by Actor constructor
+        getHitboxManager().removeHitboxes(this);
+
+        // Create a custom attack hitbox
+        getHitboxManager().createWeaponAttackHitbox(this, -width/2, -height/2, width, height);
+
+        // Create a custom vulnerable hitbox
+        getHitboxManager().createHitbox(this, HitboxType.VULNERABLE);
 
         // Add death listener to remove arrow when it hits something
-        healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors(),itemFactory));
+        healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors(), itemFactory));
 
         // Debug: Log arrow creation
         System.out.println("[DEBUG_LOG] Arrow created at position: " + posX + ", " + posY);
@@ -69,15 +94,22 @@ public class Arrow extends Actor {
             if (arrowView != null && arrowView.getActorSprite() != null) {
                 System.out.println("[DEBUG_LOG] Arrow still has a sprite, removing it");
                 arrowView.deleteActorSprite();
-                // Set arrowView to null to prevent further deletion attempts
-                arrowView = null;
+                // Don't set arrowView to null here, let DeathListener handle it
+            }
+
+            // Set health to 0 to trigger DeathListener if it hasn't been triggered yet
+            if (getHealth() > 0) {
+                setHealth(0);
+                System.out.println("[DEBUG_LOG] Arrow health set to 0 after hasHit check in updatePosition");
             }
 
             return;
         }
 
         // Apply gravity to Y velocity (arrows should arc)
-        setVelocityY(getVelocityY() + (int)(Gravity.getGravityForce() * GRAVITY_FACTOR));
+        // Update both the integer and double velocity values
+        velocityYDouble += Gravity.getGravityForce() * GRAVITY_FACTOR;
+        setVelocityY((int)velocityYDouble);
 
         // Check for collisions with terrain
         if (getCollider().hasCollisionRight() || getCollider().hasCollisionLeft() || 
@@ -128,7 +160,7 @@ public class Arrow extends Actor {
         if (aliveActors != null) {
             for (Actor actor : aliveActors) {
                 // Skip self and player
-                if (actor == this || actor instanceof Player) {
+                if (actor.equals(this) || actor instanceof Player) {
                     continue;
                 }
 
@@ -151,16 +183,13 @@ public class Arrow extends Actor {
             }
         }
 
-        // Update position
-        posXProperty().set(posXProperty().getValue() + getVelocityX());
-        posYProperty().set(posYProperty().getValue() + getVelocityY());
+        // Update position using the double values for more precise movement
+        posXProperty().set(posXProperty().getValue() + (int)velocityXDouble);
+        posYProperty().set(posYProperty().getValue() + (int)velocityYDouble);
 
-        // Update the arrow view only if the arrow hasn't hit anything
+        // The arrow view update is now handled by the GlobalController in updateCameraPosition()
         if (!hasHit) {
-            if (arrowView != null) {
-                System.out.println("[DEBUG_LOG] Updating arrow view");
-                arrowView.update();
-            } else {
+            if (arrowView == null) {
                 System.out.println("[DEBUG_LOG] Cannot update arrow view: arrowView is null");
             }
         } else {
@@ -177,7 +206,8 @@ public class Arrow extends Actor {
 
     // Calculate the angle of the arrow based on its velocity
     public double getAngle() {
-        return Math.toDegrees(Math.atan2(getVelocityY(), getVelocityX()));
+        // Use the double velocity values for more accurate angle calculation
+        return Math.toDegrees(Math.atan2(velocityYDouble, velocityXDouble));
     }
 
     // Get the GlobalController
@@ -199,5 +229,13 @@ public class Arrow extends Actor {
      */
     public HitboxManager getHitboxManager() {
         return super.getHitboxManager();
+    }
+
+    /**
+     * Gets the arrow view
+     * @return the arrow view
+     */
+    public ArrowView getArrowView() {
+        return arrowView;
     }
 }

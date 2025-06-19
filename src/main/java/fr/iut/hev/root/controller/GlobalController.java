@@ -171,7 +171,6 @@ public class GlobalController implements Initializable {
 
         hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
 
-
         hudView = new HUDView(player, heartsHbox);
         playerView = new PlayerView(player,tileMap, entitiesPane);
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
@@ -323,6 +322,18 @@ public class GlobalController implements Initializable {
                 if (playerView != null && playerView.getActorSprite() != null) {
                     playerView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
                     playerView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                }
+            } else if (actor instanceof Arrow) {
+                // Update Arrow views
+                Arrow arrow = (Arrow) actor;
+                if (arrow.getArrowView() != null && arrow.getArrowView().getActorSprite() != null && !arrow.hasHit() && arrow.getHealth() > 0) {
+                    arrow.getArrowView().update();
+                } else if (arrow.getHealth() <= 0 || arrow.hasHit()) {
+                    // Ensure the arrow is properly removed from aliveActors if it's dead or has hit something
+                    System.out.println("[DEBUG_LOG] Arrow is dead or has hit something, ensuring it's removed from aliveActors");
+                    if (aliveActors.contains(arrow)) {
+                        aliveActors.remove(arrow);
+                    }
                 }
             } else {
                 if (actor == mob && mobView != null && mobView.getActorSprite() != null) {
