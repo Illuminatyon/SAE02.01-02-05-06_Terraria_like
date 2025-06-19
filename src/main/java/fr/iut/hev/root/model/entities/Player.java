@@ -1,6 +1,5 @@
 package fr.iut.hev.root.model.entities;
 
-import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;

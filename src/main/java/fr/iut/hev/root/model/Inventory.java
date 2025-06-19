@@ -1,6 +1,5 @@
 package fr.iut.hev.root.model;
 
-import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.Item;
 

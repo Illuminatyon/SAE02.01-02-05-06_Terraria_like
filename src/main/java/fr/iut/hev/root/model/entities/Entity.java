@@ -3,7 +3,6 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.Collider;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
-import com.google.gson.annotations.Expose;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 

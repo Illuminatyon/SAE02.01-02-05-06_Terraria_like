@@ -5,7 +5,6 @@ import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
-import com.google.gson.annotations.Expose;
 
 public class TileMap {
     private ItemFactory itemFactory;

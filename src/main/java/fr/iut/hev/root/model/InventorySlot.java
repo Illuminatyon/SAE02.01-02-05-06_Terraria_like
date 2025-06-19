@@ -1,6 +1,5 @@
 package fr.iut.hev.root.model;
 
-import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.model.exception.InsufficientQuantityException;
 import fr.iut.hev.root.model.items.Item;
 import javafx.beans.property.IntegerProperty;

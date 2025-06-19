@@ -1,6 +1,5 @@
 package fr.iut.hev.root.model.items;
 
-import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.enums.ItemStatsEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
@@ -9,7 +8,7 @@ import java.util.Optional;
 
 public class Item {
 
-    @Expose private ItemsEnum item;
+    private ItemsEnum item;
     private double cooldown;
 
     public Item(ItemsEnum item) {

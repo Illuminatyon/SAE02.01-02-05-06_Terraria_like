@@ -1,15 +1,14 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.enums.TilesEnum;
-import com.google.gson.annotations.Expose;
 
 public class Tile {
     private TilesEnum tileEnum;
     private int health;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
-    @Expose private int tileX; // Pas sur d'avoir besoin de les exposer
-    @Expose private int tileY;
+    private int tileX; // Pas sur d'avoir besoin de les exposer
+    private int tileY;
 
     public Tile(TilesEnum tileEnum, int x, int y) {
         this.tileEnum = tileEnum;
