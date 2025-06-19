@@ -5,7 +5,8 @@ public enum ActorEnum {
     ZOMBIE("evil and intimidating codsworth","mob",5),
     POULET("poulet","mob",4),
     HOMPS("homps","pnj",10),
-    ARROW("arrow","projectile",1);
+    ARROW("arrow","projectile",1),
+    BOSS("boss","mob",20);
 
     private String name;
     private String Type;

@@ -61,6 +61,7 @@ public class GlobalController implements Initializable {
     private HotbarView hotbarView;
     private MobView mobView;
     private MobView aggressiveMobView;
+    private MobView bossMobView;
     private PnjView pnjView;
     private CraftView craftView;
     private Cooldown dialogueCD;
@@ -248,7 +249,8 @@ public class GlobalController implements Initializable {
         aliveActors = new ArrayList<>();
         initPlayer();
         initmob();
-        initAggressiveMob(player);
+        // Removed initAggressiveMob(player) as requested
+        initBossMob(player);
         initPnj();
     }
 
@@ -259,6 +261,21 @@ public class GlobalController implements Initializable {
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,itemFactory));
         aliveActors.add(aggressiveMob);
+    }
+
+    private void initBossMob(Player player) {
+        // Create a larger AggressiveMob with a bigger hitbox
+        AggressiveMob bossMob = new AggressiveMob(
+                10, 0, 80, 108, tileMap, 20, 1, 15, 15, ActorEnum.BOSS, player, 25, 2000, aliveActors, entitiesPane, 2, this.hitboxManager
+        );
+        // Create a view for the boss mob
+        MobView bossMobView = new MobView(bossMob, tileMap, entitiesPane);
+        // Add a death listener
+        bossMob.healthProperty().addListener(new DeathListener(bossMob, bossMobView, aliveActors, itemFactory));
+        // Add to alive actors
+        aliveActors.add(bossMob);
+        // Store the view for camera updates
+        this.bossMobView = bossMobView;
     }
     private void initPnj() {
         Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS, this.hitboxManager);
@@ -339,9 +356,14 @@ public class GlobalController implements Initializable {
                 if (actor == mob && mobView != null && mobView.getActorSprite() != null) {
                     mobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
                     mobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                } else if (actor instanceof AggressiveMob && aggressiveMobView != null && aggressiveMobView.getActorSprite() != null) {
-                    aggressiveMobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    aggressiveMobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                } else if (actor instanceof AggressiveMob) {
+                    if (actor.getName().equals("boss") && bossMobView != null && bossMobView.getActorSprite() != null) {
+                        bossMobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                        bossMobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                    } else if (aggressiveMobView != null && aggressiveMobView.getActorSprite() != null) {
+                        aggressiveMobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
+                        aggressiveMobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                    }
                 } else if (pnjView != null && pnjView.getActorSprite() != null && actor.getName().equals("homps")) {
                     pnjView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
                     pnjView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
