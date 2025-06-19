@@ -82,7 +82,7 @@ public class CraftView {
 
         recipeDisplay.getChildren().clear();
         recipeDisplay.setPrefWidth((getSelectedRecipe().getIngredients().size() * 2 + 1) * 50);
-        recipeDisplay.setLayoutX(700 - (recipeDisplay.getPrefWidth() / 2));
+        recipeDisplay.setLayoutX(960 - (recipeDisplay.getPrefWidth() / 2));
 
         recipeDisplay.setPrefHeight(50);
         recipeDisplay.setMinHeight(50);

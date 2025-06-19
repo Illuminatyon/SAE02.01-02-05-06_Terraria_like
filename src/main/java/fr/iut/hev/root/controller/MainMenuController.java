@@ -178,7 +178,7 @@ public class MainMenuController implements Initializable {
 
         ItemFactory itemFactory = new ItemFactory();
         HitboxManager hitboxManager = new HitboxManager();
-        TileMap tileMap = new TileMap(1920, 1080, itemFactory);
+        TileMap tileMap = new TileMap(1920, 1056, itemFactory);
         Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER, hitboxManager);
         //player.initAfterDeserialization(tileMap, player.getPosX(), player.getPosY());
         ArrayList<Actor> aliveActors = new ArrayList<>();

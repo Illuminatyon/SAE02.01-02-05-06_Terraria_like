@@ -71,7 +71,7 @@ public class GlobalController implements Initializable {
     private LootView lootView;
 
     // AnchorPane for actors that will move with the camera
-    //private AnchorPane actorsPane; // was in world
+    @FXML
     private AnchorPane entitiesPane; // was in weapons
 
     // Idk what is this, name is not clear
@@ -168,9 +168,6 @@ public class GlobalController implements Initializable {
 
         cooldownManager = new CooldownManager();
         hitboxManager = new HitboxManager();
-
-        entitiesPane = new AnchorPane();
-        globalPane.getChildren().add(entitiesPane);
 
         worldProperty.addListener((obs, oldWorld, newWorld) -> {
             if (newWorld != null) {
