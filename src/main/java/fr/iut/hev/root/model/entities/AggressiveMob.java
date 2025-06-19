@@ -25,11 +25,10 @@ public class AggressiveMob extends Mob {
     private static final long AGGRO_TIMEOUT = 5000; // 5 seconds timeout
     private int jumpCooldown = 1000; // 1 second cooldown between jumps
     private long lastJumpTime = 0; // Time of the last jump
-    private List<Actor> aliveActors; // List of all alive actors
     private int currentDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour stationnaire
     private long lastDirectionChangeTime = 0;
     private AStar pathfinder; // A* pathfinding algorithm
-
+    private ArrayList<Actor> aliveActors;
     @Override
     public void updatePosition() {
         // Use Mob's implementation for physical behavior
@@ -41,7 +40,7 @@ public class AggressiveMob extends Mob {
             TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach,
             ActorEnum type, Player player,
             int aggroDistance, int attackCooldown,
-            List<Actor> aliveActors, Pane globalPane,
+            ArrayList<Actor> aliveActors,
             int damage,
             HitboxManager hitboxManager
     ) {

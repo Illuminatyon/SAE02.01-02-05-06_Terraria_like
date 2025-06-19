@@ -48,7 +48,7 @@ public class GlobalController implements Initializable {
     private CraftingManager craftingManager;
     private HitboxManager hitboxManager;
     public static Mob mob ;
-
+    private ActorFactory actorFactory;
     // Variables for the scrolling camera
     private double cameraOffsetX = 0;
     private double cameraOffsetY = 0;
@@ -112,6 +112,7 @@ public class GlobalController implements Initializable {
 
         initItemEnums();
         initMap();
+        this.actorFactory=new ActorFactory(tileMap, player, hitboxManager);
         initActors();
 
         updateCameraPosition();
@@ -251,7 +252,7 @@ public class GlobalController implements Initializable {
 
     private void initAggressiveMob(Player player) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors,1, this.hitboxManager // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,itemFactory));
