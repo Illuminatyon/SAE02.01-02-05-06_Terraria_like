@@ -88,6 +88,7 @@ public class MainMenuController implements Initializable {
         mainMenuView = new MainMenuView(uiComponents);
 
         // TODO: Load all things OR load everything needed in each respective class instead of here
+        worlds = new ArrayList<>();
 
         mainBtnPlay.setOnAction(e -> mainMenuView.openWorldsMenu());
         mainBtnSettings.setOnAction(e -> mainMenuView.openSettingsMenu());
@@ -204,10 +205,8 @@ public class MainMenuController implements Initializable {
     }
 
     private void deleteWorld(World world) {
-//        worlds.remove(world);
-//        SaveManager.deleteWorldFolder(world.getName());
-//        mainMenuView.deleteWorldHBox(world);
-        System.out.println("world deleted");
+        worlds.remove(world);
+        mainMenuView.deleteWorldHBox(world);
     }
 
     private String generateUniqueWorldName(String baseName) {
