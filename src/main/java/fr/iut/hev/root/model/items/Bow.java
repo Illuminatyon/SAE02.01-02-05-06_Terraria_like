@@ -5,7 +5,8 @@ import fr.iut.hev.root.model.entities.Arrow;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
-import fr.iut.hev.root.view.BowView;
+import fr.iut.hev.root.view.actor.ActorView;
+import fr.iut.hev.root.view.weapon.BowView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.AnchorPane;
@@ -14,7 +15,7 @@ import javafx.util.Duration;
 public class Bow extends Weapon {
     private static final int ARROW_SPEED = 10;
     private boolean isAnimating = false;
-    private BowView bowView;
+    private BowView bowView; // N'est pas censé connaitre la vue
     private ItemFactory itemFactory;
 
     public Bow(ItemsEnum itemsEnum, HitboxManager hitboxManager,ItemFactory itemFactory) {
@@ -66,9 +67,9 @@ public class Bow extends Weapon {
 
         // Show the bow animation
         bowView.showBowAnimation(
-            bowX + eventHandler.getGlobalController().getCameraOffsetX(), 
-            bowY + eventHandler.getGlobalController().getCameraOffsetY(), 
-            normalizedDirX, 
+            bowX + eventHandler.getGlobalController().getCamera().getCurrentCamX(),
+            bowY + eventHandler.getGlobalController().getCamera().getCurrentCamY(),
+            normalizedDirX,
             normalizedDirY
         );
 
@@ -77,21 +78,23 @@ public class Bow extends Weapon {
             new KeyFrame(Duration.seconds(0.5), e -> {
                 // Create and shoot an arrow
                 Arrow arrow = new Arrow(
-                    (int)playerCenterX, 
-                    (int)playerCenterY, 
-                    16, 
-                    4, 
+                    (int)playerCenterX,
+                    (int)playerCenterY,
+                    16,
+                    4,
                     eventHandler.getTileMap(),
-                    normalizedDirX * ARROW_SPEED, 
+                    normalizedDirX * ARROW_SPEED,
                     normalizedDirY * ARROW_SPEED,
                     getDamage(),
                     eventHandler.getGlobalController().getEntitiesPane(),
                     eventHandler.getGlobalController(),
-                    itemFactory
+                    itemFactory,
+                    super.getHitboxManager()
                 );
 
                 // Add the arrow to the game
-                eventHandler.getGlobalController().getAliveActors().add(arrow);
+                //eventHandler.getGlobalController().getAliveActors().add(arrow); // Pk ?
+                // Arrow est censé dans ce cas être une Entity, pas un Actor
 
                 // Consume one arrow from inventory
                 consumeArrow(player);

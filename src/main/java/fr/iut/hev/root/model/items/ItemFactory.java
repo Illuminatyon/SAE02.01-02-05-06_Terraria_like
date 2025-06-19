@@ -12,6 +12,10 @@ public class ItemFactory {
         this.hitboxManager = hitboxManager;
     }
 
+    public ItemFactory() {
+        this(null);
+    }
+
     public Item createItem(ItemsEnum itemsEnum) {
         switch (itemsEnum.getItemType()) {
             case ItemTypesEnum.BLOCK -> {
@@ -50,6 +54,9 @@ public class ItemFactory {
     }
 
     public Utility createUtility(ItemsEnum itemsEnum) {
+        if (hitboxManager == null) {
+            return null;
+        }
         return new Utility(itemsEnum,hitboxManager);
     }
 
@@ -62,6 +69,9 @@ public class ItemFactory {
     }
 
     public Weapon createWeapon(ItemsEnum itemsEnum) {
+        if (hitboxManager == null) {
+            return null;
+        }
         switch (itemsEnum) {
             case ItemsEnum.DAGGER -> {
                 return new Dagger(itemsEnum,hitboxManager);

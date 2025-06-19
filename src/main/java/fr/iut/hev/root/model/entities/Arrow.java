@@ -6,6 +6,7 @@ import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.view.actor.ArrowView;
 import javafx.scene.layout.AnchorPane;
@@ -13,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 
 public class Arrow extends Actor {
-    private static final double GRAVITY_FACTOR = 0.0; // No gravity for arrows
+    private static final double GRAVITY_FACTOR = 0.1; // No gravity for arrows
     private double velocityXInitial;
     private double velocityYInitial;
     private int damage;
@@ -25,9 +26,9 @@ public class Arrow extends Actor {
 
     public Arrow(int posX, int posY, int width, int height, TileMap tileMap,
                  double velocityX, double velocityY, int damage,
-                 AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory) {
+                 AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory, HitboxManager hitboxManager) {
         // Use the ARROW ActorEnum
-        super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW);
+        super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW, hitboxManager);
 
         this.velocityXInitial = velocityX;
         this.velocityYInitial = velocityY;
@@ -42,7 +43,7 @@ public class Arrow extends Actor {
         this.arrowView = new ArrowView(this, tileMap, actorsPane);
 
         // Add death listener to remove arrow when it hits something
-        healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors(),itemFactory)); // En commentaire dans world a cause de gloalcontroller
+        //healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors(),itemFactory)); // En commentaire dans world a cause de gloalcontroller
 
         // Debug: Log arrow creation
         System.out.println("[DEBUG_LOG] Arrow created at position: " + posX + ", " + posY);
@@ -143,9 +144,9 @@ public class Arrow extends Actor {
 
     // DE ICI en com
     private ArrayList<Actor> getAliveActors() {
-        if (globalController != null) {
+        /*if (globalController != null) {
             return globalController.getAliveActors();
-        }
+        }*/
         return null;
     } // JUSQU ICI en com a cause du globalcontroller
 

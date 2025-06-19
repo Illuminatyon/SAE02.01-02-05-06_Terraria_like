@@ -4,7 +4,7 @@ import fr.iut.hev.root.model.enums.TilesEnum;
 import com.google.gson.annotations.Expose;
 
 public class Tile {
-    @Expose private TilesEnum tileEnum;
+    private TilesEnum tileEnum;
     private int health;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle

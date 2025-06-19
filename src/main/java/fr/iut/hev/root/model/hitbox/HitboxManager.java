@@ -114,7 +114,7 @@ public class HitboxManager {
         return hitEntities;
     }
 
-    public Entity checkInteractiveCollision(Entity entity) {
+    /*public Entity checkInteractiveCollision(Entity entity) {
         // Get all attack hitboxes for the attacker
         List<Hitbox> attackHitboxes = new ArrayList<>();
         for (Hitbox hitbox : entityHitboxes.get(attacker)) {
@@ -154,7 +154,7 @@ public class HitboxManager {
         }
 
         return hitEntities;
-    }
+    }*/
     
     /**
      * Creates a default vulnerable hitbox for an entity based on its dimensions.
@@ -221,5 +221,8 @@ public class HitboxManager {
     public Hitbox getInteractiveHitbox(Entity entity) {
         for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
 
+        }
+
+        return null;
     }
 }

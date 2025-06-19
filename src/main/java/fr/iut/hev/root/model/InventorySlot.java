@@ -9,9 +9,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class InventorySlot {
-    @Expose private ObjectProperty<Item> itemProperty;
-    @Expose private IntegerProperty quantityProperty;
-    @Expose private final int index;
+    private ObjectProperty<Item> itemProperty;
+    private IntegerProperty quantityProperty;
+    private final int index;
 
     public InventorySlot(int index) {
         this.itemProperty = new SimpleObjectProperty<Item>();

@@ -77,6 +77,8 @@ public class RectangleHitbox implements Hitbox {
 
     @Override
     public void setPosition(double x, double y) {
+        xProperty.unbind(); // Jsp pk mais ca marche donc je laisse
+        yProperty.unbind();
         setX(x);
         setY(y);
     }
@@ -104,8 +106,21 @@ public class RectangleHitbox implements Hitbox {
         return height;
     }
 
-    public void setX(double x) {this.xProperty.setValue(x);}
-    public void setY(double y) {this.yProperty.setValue(y);}
-    public DoubleProperty xProperty() {return this.xProperty;}
-    public DoubleProperty yProperty() {return this.yProperty;}
+    public void setX(double x) {
+        /*System.out.println(x);
+        System.out.println(xProperty);*/
+        this.xProperty.setValue(x);
+    }
+
+    public void setY(double y) {
+        this.yProperty.setValue(y);
+    }
+
+    public DoubleProperty xProperty() {
+        return this.xProperty;
+    }
+
+    public DoubleProperty yProperty() {
+        return this.yProperty;
+    }
 }

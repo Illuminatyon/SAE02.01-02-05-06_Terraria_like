@@ -60,4 +60,12 @@ public class Camera {
             lootView.updateLootPositions(currentCamX, currentCamY);
         }
     }
+
+    public double getCurrentCamX() {
+        return currentCamX;
+    }
+
+    public double getCurrentCamY() {
+        return currentCamY;
+    }
 }

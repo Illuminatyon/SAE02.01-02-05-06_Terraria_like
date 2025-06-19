@@ -10,16 +10,15 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
-    @Expose private IntegerProperty healthProperty;
-    @Expose private int moveSpeed;
-    @Expose private int jumpForce;
-    @Expose private boolean isJumping;
-    @Expose private int jumpingTestDecay;
-    @Expose private int reach;
-    @Expose private ActorEnum type;
+    private IntegerProperty healthProperty;
+    private int moveSpeed;
+    private int jumpForce;
+    private boolean isJumping;
+    private int jumpingTestDecay;
+    private int reach;
+    private ActorEnum type;
     private HitboxManager hitboxManager;
-
-    @Expose private IntegerProperty lookDirectionProperty;
+    private IntegerProperty lookDirectionProperty;
     public enum LookDirections {
         RIGHT(1),
         LEFT(-1);
@@ -43,7 +42,6 @@ public abstract class Actor extends Entity {
         this.type = type;
         this.hitboxManager = new HitboxManager();
         hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
-
     }
 
     @Override

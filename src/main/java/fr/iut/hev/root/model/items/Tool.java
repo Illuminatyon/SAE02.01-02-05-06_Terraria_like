@@ -32,6 +32,7 @@ public class Tool extends Item {
         }
 
         if (eventHandler.getMouseClickIsPressed()) {
+            System.out.println("mouse clicked");
             if (!(tileMap.isTileEmpty(x,y))) {
                 ItemStatsEnum statsToolInHand = player.getItemInHand().getItemEnum().getStats();
                 if (statsToolInHand.getEfficientBlockAgainst().equals(tileMap.getTile(x,y).getTileEnum().getBlockTypesEnum())) {

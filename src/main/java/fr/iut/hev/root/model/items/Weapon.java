@@ -38,4 +38,8 @@ public class Weapon extends Item {
         // For now, just return true to indicate the weapon was used successfully
         return true;
     }
+
+    public HitboxManager getHitboxManager() {
+        return hitboxManager;
+    }
 }

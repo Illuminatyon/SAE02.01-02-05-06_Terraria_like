@@ -45,7 +45,7 @@ public class SaveManager {
         JsonManager.writeJson(basePath + "/world.json", world);
         JsonManager.writeJson(basePath + "/map.json", world.getTileMap());
         JsonManager.writeJson(basePath + "/player.json", world.getPlayer());
-        JsonManager.writeJson(basePath + "/entities.json", world.getAliveActors());
+        JsonManager.writeJson(basePath + "/entities.json", world.getAliveMobs());
     }
 
     public static boolean deleteWorldFolder(String worldName) {

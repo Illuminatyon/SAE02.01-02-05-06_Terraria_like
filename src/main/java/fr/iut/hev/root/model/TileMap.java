@@ -9,8 +9,8 @@ import com.google.gson.annotations.Expose;
 
 public class TileMap {
     private ItemFactory itemFactory;
-    @Expose private int width, height;
-    @Expose private Tile[][] tileMap;
+    private int width, height;
+    private Tile[][] tileMap;
 
     public static final int format = 32;
 
@@ -19,6 +19,7 @@ public class TileMap {
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
         this.itemFactory = itemFactory;
+        System.out.println("In TileMap: " + this.itemFactory);
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];

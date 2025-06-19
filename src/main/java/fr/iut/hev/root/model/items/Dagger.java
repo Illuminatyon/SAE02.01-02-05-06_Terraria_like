@@ -9,7 +9,7 @@ import fr.iut.hev.root.model.entities.Mob;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
-import fr.iut.hev.root.view.DaggerView;
+import fr.iut.hev.root.view.weapon.DaggerView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.AnchorPane;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class Dagger extends Weapon {
     private static final int KNOCKBACK_STRENGTH = 5;
     private boolean isAnimating = false;
-    private DaggerView daggerView;
+    private fr.iut.hev.root.view.weapon.DaggerView daggerView;
 
     public Dagger(ItemsEnum itemsEnum, HitboxManager hitboxManager) {
         super(itemsEnum,hitboxManager);
@@ -75,8 +75,8 @@ public class Dagger extends Weapon {
 
         // Show the dagger animation
         daggerView.showDaggerAnimation(
-            daggerX + eventHandler.getGlobalController().getCameraOffsetX(), 
-            daggerY + eventHandler.getGlobalController().getCameraOffsetY(), 
+            daggerX + eventHandler.getGlobalController().getCamera().getCurrentCamX(),
+            daggerY + eventHandler.getGlobalController().getCamera().getCurrentCamY(),
             normalizedDirX, 
             normalizedDirY
         );
@@ -85,10 +85,11 @@ public class Dagger extends Weapon {
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.seconds(0.2), e -> {
                 // Get the list of alive actors from the global controller and create a copy to avoid ConcurrentModificationException
-                ArrayList<Actor> aliveActorsCopy = new ArrayList<>(eventHandler.getGlobalController().getAliveActors());
+                //ArrayList<Actor> aliveActorsCopy = new ArrayList<>(eventHandler.getGlobalController().getAliveActors());
+                // ENtity pas Actor + pas le droit au controller
 
                 // Check for collisions with mobs
-                for (Actor actor : aliveActorsCopy) {
+                /*for (Actor actor : aliveActorsCopy) {
                     // Skip the player
                     if (actor == player) {
                         continue;
@@ -104,7 +105,7 @@ public class Dagger extends Weapon {
                             applyKnockback((Mob) actor, normalizedDirX, normalizedDirY);
                         }
                     }
-                }
+                }*/
             }),
             new KeyFrame(Duration.seconds(0.4), e -> {
                 // End animation

@@ -7,6 +7,7 @@ import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.utilities.Cooldown;
+import fr.iut.hev.root.view.Camera;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.event.EventHandler;
@@ -20,6 +21,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private InventoryView inventoryView;
     private World world;
     private Player player;
+    private Camera camera;
     private Cooldown itemUseCooldown;
     private double x;
     private double y;
@@ -30,10 +32,11 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private TileMap tileMap;
     private GlobalController globalController; // Retirer global controller peut etre, enft c un handler alors jsp
 
-    public MouseItemActionInputHandler(World world, InventoryView inventoryView, GlobalView worldView) {
+    public MouseItemActionInputHandler(World world, Camera camera, InventoryView inventoryView, GlobalView worldView) {
         this.world = world;
         this.inventoryView = inventoryView;
         this.player = world.getPlayer();
+        this.camera = camera;
         this.worldView = worldView;
         this.tileMap = world.getTileMap();
         this.globalController = globalController;
@@ -56,8 +59,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
             }
             else {
                 if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY)) {
-                    x = mouseEvent.getX() - globalController.getCameraOffsetX();
-                    y = mouseEvent.getY() - globalController.getCameraOffsetY();
+                    x = mouseEvent.getX() - camera.getCurrentCamX();
+                    y = mouseEvent.getY() - camera.getCurrentCamY();
                     if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
                         this.mouseClickIsPressed = true;
                         this.mouseEvent = mouseEvent;

@@ -29,7 +29,7 @@ public class ArrowView extends ActorView {
     /**
      * Loads the arrow sprite
      */
-    /*@Override
+    @Override
     public void load() {
         // Use the arrow.png image for the arrow
         String path = "/fr/iut/hev/root/img/items/arrow.png";
@@ -81,12 +81,12 @@ public class ArrowView extends ActorView {
             System.err.println("Exception while loading arrow image");
             e.printStackTrace();
         }
-    }*/
+    }
 
     /**
      * Updates the arrow sprite's position and rotation
      */
-    /*public void update() {
+    public void update() {
         if (arrowSprite != null && arrow != null) {
             // Debug: Log arrow update
             System.out.println("[DEBUG_LOG] Updating arrow sprite at position: " + arrow.getPosX() + ", " + arrow.getPosY());
@@ -99,8 +99,8 @@ public class ArrowView extends ActorView {
             if (arrow instanceof fr.iut.hev.root.model.entities.Arrow) {
                 fr.iut.hev.root.model.entities.Arrow arrowEntity = (fr.iut.hev.root.model.entities.Arrow) arrow;
                 if (arrowEntity.getGlobalController() != null) {
-                    cameraOffsetX = arrowEntity.getGlobalController().getCameraOffsetX();
-                    cameraOffsetY = arrowEntity.getGlobalController().getCameraOffsetY();
+                    cameraOffsetX = arrowEntity.getGlobalController().getCamera().getCurrentCamX();
+                    cameraOffsetY = arrowEntity.getGlobalController().getCamera().getCurrentCamY();
                 }
             }
 
@@ -123,7 +123,7 @@ public class ArrowView extends ActorView {
                 System.out.println("[DEBUG_LOG] Arrow update skipped: arrow is null");
             }
         }
-    }*/
+    }
 
     /**
      * Gets the arrow sprite

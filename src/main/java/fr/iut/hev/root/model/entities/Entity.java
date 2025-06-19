@@ -8,10 +8,10 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Entity {
-    @Expose private IntegerProperty posXProperty;
-    @Expose private IntegerProperty posYProperty;
-    @Expose private int width;
-    @Expose private int height;
+    private IntegerProperty posXProperty;
+    private IntegerProperty posYProperty;
+    private int width;
+    private int height;
     private int velocityX;
     private int velocityY;
     private int velocityMultiplier;

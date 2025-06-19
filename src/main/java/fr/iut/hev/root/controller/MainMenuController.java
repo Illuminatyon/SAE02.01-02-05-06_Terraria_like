@@ -5,6 +5,7 @@ import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Mob;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.utils.JsonManager;
 import fr.iut.hev.root.utils.SaveManager;
@@ -131,30 +132,10 @@ public class MainMenuController implements Initializable {
         // TODO: Load the world using the JSON save
         world.setLastPlayed(System.currentTimeMillis());
         try {
-            JsonManager.writeJson("./saves/" + world.getName() + "/world.json", world);
-
-            TileMap tileMap = JsonManager.readJson("./saves/" + world.getName() + "/map.json", TileMap.class);
-            Player player = JsonManager.readJson("./saves/" + world.getName() + "/player.json", Player.class);
-            player.initAfterDeserialization(tileMap, player.getPosX(), player.getPosY());
-            //ArrayList<Actor> actors = JsonManager.readJsonList("./saves/" + world.getName() + "/entities.json", Actor.class);
-            World w = JsonManager.readJson("./saves/" + world.getName() + "/world.json", World.class);
-            w.setItemFactory(new ItemFactory());
-            w.setTileMap(tileMap);
-            w.setPlayer(player);
-            //w.setAliveActors(actors);
-            w.setAliveActors(new ArrayList<>());
-
-            world.setItemFactory(new ItemFactory());
-            world.setTileMap(tileMap);
-            world.setPlayer(player);
-            //world.setAliveActors(actors);
-            world.setAliveActors(new ArrayList<>());
-
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fr/iut/hev/root/view/globalView.fxml"));
             Parent worldRoot = fxmlLoader.load();
             GlobalController globalController = fxmlLoader.getController();
             globalController.setWorld(world);
-            globalController.lateInit();
             Stage stage = (Stage) root.getScene().getWindow();
             Scene scene = new Scene(worldRoot, stage.getWidth(), stage.getHeight());
             double x = stage.getX();
@@ -200,19 +181,13 @@ public class MainMenuController implements Initializable {
             }
         }
 
-        // Peut etre mettre ce code dans save manager ?
         ItemFactory itemFactory = new ItemFactory();
+        HitboxManager hitboxManager = new HitboxManager();
         TileMap tileMap = new TileMap(1920, 1080, itemFactory);
-        //Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
-        Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
-        player.initAfterDeserialization(tileMap, player.getPosX(), player.getPosY());
+        Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER, hitboxManager);
+        //player.initAfterDeserialization(tileMap, player.getPosX(), player.getPosY());
         ArrayList<Actor> aliveActors = new ArrayList<>();
-        World newWorld = new World(worldName, tileMap, player, aliveActors);
-        // TODO: Create a JSON World
-        JsonManager.writeJson("./saves/" + worldName + "/map.json", tileMap);
-        JsonManager.writeJson("./saves/" + worldName + "/player.json", player);
-        JsonManager.writeJson("./saves/" + worldName + "/entities.json", aliveActors); // Count the loot ?
-        JsonManager.writeJson("./saves/" + worldName + "/world.json", newWorld);
+        World newWorld = new World(worldName, tileMap, player, aliveActors, hitboxManager, itemFactory);
 
         createWorldView(newWorld);
         mainMenuView.openWorldsMenu();

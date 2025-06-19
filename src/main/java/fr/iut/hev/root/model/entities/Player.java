@@ -21,12 +21,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends Actor {
-    @Expose private Inventory inventory;
-    @Expose private Set<PlayerMouvementsEnum> playerMouvementEnums;
+    private Inventory inventory;
+    private Set<PlayerMouvementsEnum> playerMouvementEnums;
     private ObjectProperty<Item> itemInHandProperty;
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
-
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor, hitboxManager);
@@ -36,14 +35,6 @@ public class Player extends Actor {
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
         getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
-    }
-
-    @Override
-    public void initAfterDeserialization(TileMap tileMap, int posX, int posY) {
-        super.initAfterDeserialization(tileMap, posX, posY);
-        itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
-        quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-        indexItemInHand = new SimpleIntegerProperty(0);
     }
 
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
@@ -143,10 +134,11 @@ public class Player extends Actor {
     }
 
     public boolean usesItemInHand(MouseItemActionInputHandler eventHandler) {
-        if (getQuantityOfItemInHand() > 0)
+        if (getQuantityOfItemInHand() > 0) {
             return getItemInHand().isUsed(eventHandler);
-        else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -185,7 +177,11 @@ public class Player extends Actor {
         this.quantityOfItemInHandProperty.setValue(quantityOfItemInHandProperty.getValue() - 1);
     }
 
-    public Item getItemInHand() {return this.itemInHandProperty.getValue();}
+    public Item getItemInHand() {
+        System.out.println(itemInHandProperty.getValue());
+        return this.itemInHandProperty.getValue();
+    }
+
     public void setItemInHandProperty(Item itemInHandProperty) {this.itemInHandProperty.setValue(itemInHandProperty);}
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}

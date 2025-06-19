@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory {
-    @Expose private ArrayList<InventorySlot> slots;
+    private ArrayList<InventorySlot> slots;
     private final int size;
     private int slotsOccupied;
 

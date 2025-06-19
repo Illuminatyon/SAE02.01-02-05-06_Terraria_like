@@ -9,7 +9,7 @@ import fr.iut.hev.root.model.entities.Mob;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
-import fr.iut.hev.root.view.KatanaView;
+import fr.iut.hev.root.view.weapon.KatanaView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.AnchorPane;
@@ -97,12 +97,12 @@ public class Katana extends Weapon {
 
         // Show the katana plunge animation
         katanaView.showKatanaPlungeAnimation(
-            katanaX + eventHandler.getGlobalController().getCameraOffsetX(), 
-            katanaY + eventHandler.getGlobalController().getCameraOffsetY(), 
+            katanaX + eventHandler.getGlobalController().getCamera().getCurrentCamX(),
+            katanaY + eventHandler.getGlobalController().getCamera().getCurrentCamY(),
             normalizedDirX, 
             normalizedDirY,
-            targetX + eventHandler.getGlobalController().getCameraOffsetX(),
-            targetY + eventHandler.getGlobalController().getCameraOffsetY()
+            targetX + eventHandler.getGlobalController().getCamera().getCurrentCamX(),
+            targetY + eventHandler.getGlobalController().getCamera().getCurrentCamY()
         );
 
         // Create animation timeline with increased cooldown (2 seconds total)
@@ -110,13 +110,13 @@ public class Katana extends Weapon {
             // Apply damage when the katana reaches the target (0.25 seconds)
             new KeyFrame(Duration.seconds(0.25), e -> {
                 // Get the list of alive actors from the global controller
-                ArrayList<Actor> aliveActors = eventHandler.getGlobalController().getAliveActors();
+                //ArrayList<Actor> aliveActors = eventHandler.getGlobalController().getAliveActors();
 
                 // Create a copy of the aliveActors list to avoid ConcurrentModificationException
-                ArrayList<Actor> actorsCopy = new ArrayList<>(aliveActors);
+                //ArrayList<Actor> actorsCopy = new ArrayList<>(aliveActors);
 
                 // Check for collisions with mobs
-                for (Actor actor : actorsCopy) {
+                /*for (Actor actor : actorsCopy) {
                     // Skip the player
                     if (actor == player) {
                         continue;
@@ -134,7 +134,7 @@ public class Katana extends Weapon {
 
                         System.out.println("Katana hit " + actor.getName() + "! Remaining health: " + actor.getHealth());
                     }
-                }
+                }*/
             }),
             new KeyFrame(Duration.seconds(2.0), e -> {
                 // End animation and reset after 2 seconds (increased cooldown)
