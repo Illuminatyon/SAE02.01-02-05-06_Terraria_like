@@ -7,15 +7,19 @@ import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
+import fr.iut.hev.root.view.MobView;
+import javafx.scene.layout.AnchorPane;
 
 public class Mob extends Actor {
     private long lastDirectionChangeTime = 0;
     private int currentDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour stationnaire
     private int jumpCooldown= 1000;
     private long lastJumpTime = 0;
+    private MobView  mobView;
 
-    public Mob(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+    public Mob(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager, AnchorPane pane) {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager );
+        this.mobView = new MobView(this,tileMap,pane);
 
     }
 

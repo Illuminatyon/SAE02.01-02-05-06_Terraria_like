@@ -47,7 +47,6 @@ public class GlobalController implements Initializable {
     private ItemFactory itemFactory;
     private CraftingManager craftingManager;
     private HitboxManager hitboxManager;
-    public static Mob mob ;
     private ActorFactory actorFactory;
     // Variables for the scrolling camera
     private double cameraOffsetX = 0;
@@ -59,9 +58,6 @@ public class GlobalController implements Initializable {
     private MouseCursorCircleView playerLightCircle;
     private InventoryView inventoryView;
     private HotbarView hotbarView;
-    private MobView mobView;
-    private MobView aggressiveMobView;
-    private PnjView pnjView;
     private CraftView craftView;
     private Cooldown dialogueCD;
     private LootView lootView;
@@ -115,7 +111,7 @@ public class GlobalController implements Initializable {
         this.actorFactory=new ActorFactory(tileMap, player, hitboxManager);
         initActors();
 
-        updateCameraPosition();
+
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
@@ -125,6 +121,7 @@ public class GlobalController implements Initializable {
                             Actor currentActor = aliveActors.get(i);
                             if (currentActor != null) {
                                 currentActor.updatePosition();
+                                System.out.println(player.getPosX());
                             } else {
                                 aliveActors.remove(i);
                             }
@@ -146,8 +143,8 @@ public class GlobalController implements Initializable {
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
 
-                    updateCameraPosition();
-                    checkPnjDialogue();
+
+                    //checkPnjDialogue();
 
                     cooldownManager.allCooldownsTick();
                 })
@@ -163,7 +160,7 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayer() {
-        player = new Player(0, 0, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER, this.hitboxManager);
+        player = new Player(0, 30, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER, this.hitboxManager);
         aliveActors.add(player);
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
@@ -234,12 +231,13 @@ public class GlobalController implements Initializable {
         });
     }
 
-    private void initmob() {
-        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET, hitboxManager);
-        this.mobView = new MobView(mob, tileMap, entitiesPane);
+    private MobView initmob() {
+        Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET, hitboxManager, entitiesPane);
+        MobView mobView = new MobView(mob, tileMap, entitiesPane);
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors,itemFactory));
         aliveActors.add(mob);
         hitboxManager.createHitbox(mob,HitboxType.VULNERABLE);
+        return mobView;
     }
 
     private void initActors() {
@@ -250,26 +248,28 @@ public class GlobalController implements Initializable {
         initPnj();
     }
 
-    private void initAggressiveMob(Player player) {
+    private MobView initAggressiveMob(Player player) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors,1, this.hitboxManager // Use actorsPane instead of globalPane
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors,1, this.hitboxManager, entitiesPane // Use actorsPane instead of globalPane
         );
-        this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
+        MobView aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,itemFactory));
         aliveActors.add(aggressiveMob);
+        return aggressiveMobView;
     }
-    private void initPnj() {
-        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS, this.hitboxManager);
-        this.pnjView = new PnjView(homps, tileMap, entitiesPane);
+    private PnjView initPnj() {
+        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS, this.hitboxManager, entitiesPane);
+        PnjView pnjView = new PnjView(homps, tileMap, entitiesPane);
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors,itemFactory));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
+        return pnjView;
     }
 
     /**
      * Checks if the player is near a PNJ and triggers dialogue if needed
      */
-    private void checkPnjDialogue() {
+    /*private void checkPnjDialogue() {
         if (player == null || pnjView == null || dialogueCD == null) {
             return;
         }
@@ -280,7 +280,7 @@ public class GlobalController implements Initializable {
             dialogueCD.start();
         }
     }
-
+*/
     private void initItemEnums() {
         for (ItemsEnum itemsEnum : ItemsEnum.values()) {
             if (itemsEnum.getItemType().equals(ItemTypesEnum.BLOCK) || itemsEnum.getItemType().equals(ItemTypesEnum.UTILITY)) {
@@ -289,62 +289,6 @@ public class GlobalController implements Initializable {
         }
     }
 
-    /**
-     * Updates the camera position to center on the player
-     */
-    private void updateCameraPosition() {
-        if (player == null || landTileMap == null || backgroundTileMap == null) {
-            return;
-        }
-
-        double screenWidth = globalPane.getWidth();
-        double screenHeight = globalPane.getHeight();
-
-        double playerCenterX = player.getPosX() + player.getWidth() / 2;
-        double playerCenterY = player.getPosY() + player.getHeight() / 2;
-
-        cameraOffsetX = (screenWidth / 2) - playerCenterX;
-        cameraOffsetY = (screenHeight / 2) - playerCenterY;
-
-        landTileMap.setTranslateX(cameraOffsetX);
-        landTileMap.setTranslateY(cameraOffsetY);
-        backgroundTileMap.setTranslateX(cameraOffsetX);
-        backgroundTileMap.setTranslateY(cameraOffsetY);
-
-        for (Actor actor : aliveActors) {
-            if (actor == null) {
-                continue;
-            }
-
-            if (actor.equals(player)) {
-                if (playerView != null && playerView.getActorSprite() != null) {
-                    playerView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    playerView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                }
-            } else {
-                if (actor == mob && mobView != null && mobView.getActorSprite() != null) {
-                    mobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    mobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                } else if (actor instanceof AggressiveMob && aggressiveMobView != null && aggressiveMobView.getActorSprite() != null) {
-                    aggressiveMobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    aggressiveMobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                } else if (pnjView != null && pnjView.getActorSprite() != null && actor.getName().equals("homps")) {
-                    pnjView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    pnjView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                }
-            }
-        }
-        if (lootView != null) {
-            lootView.updateLootPositions(cameraOffsetX, cameraOffsetY);
-        }
-
-        if (pnjView != null && pnjView.getActorSprite() != null && pnjView.getPhrase() != null) {
-            double pnjX = pnjView.getActorSprite().getLayoutX();
-            double pnjY = pnjView.getActorSprite().getLayoutY();
-            pnjView.getPhrase().setLayoutX(pnjX + 30);
-            pnjView.getPhrase().setLayoutY(pnjY - 30);
-        }
-    }
 
     /**
      * Gets the current camera offset X

@@ -9,6 +9,7 @@ import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.pathfinding.AStar;
 import fr.iut.hev.root.model.pathfinding.Point;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.util.*;
@@ -42,9 +43,10 @@ public class AggressiveMob extends Mob {
             int aggroDistance, int attackCooldown,
             ArrayList<Actor> aliveActors,
             int damage,
-            HitboxManager hitboxManager
+            HitboxManager hitboxManager,
+            AnchorPane pane
     ) {
-        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type, hitboxManager);
+        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type, hitboxManager,pane);
         this.target = player;
         this.aggroDistance = aggroDistance;
         this.attackCooldown = attackCooldown;
