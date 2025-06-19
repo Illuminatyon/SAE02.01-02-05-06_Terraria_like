@@ -6,6 +6,7 @@ import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.view.ArrowView;
 import javafx.scene.layout.AnchorPane;
@@ -27,7 +28,7 @@ public class Arrow extends Actor {
                  double velocityX, double velocityY, int damage,
                  AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory) {
         // Use the ARROW ActorEnum
-        super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW);
+        super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW, new HitboxManager());
 
         this.velocityXInitial = velocityX;
         this.velocityYInitial = velocityY;

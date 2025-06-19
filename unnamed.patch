@@ -1,0 +1,371 @@
+Index: src/main/java/fr/iut/hev/root/model/hitbox/HitboxManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/fr/iut/hev/root/model/hitbox/HitboxManager.java b/src/main/java/fr/iut/hev/root/model/hitbox/HitboxManager.java
+--- a/src/main/java/fr/iut/hev/root/model/hitbox/HitboxManager.java
++++ b/src/main/java/fr/iut/hev/root/model/hitbox/HitboxManager.java	(date 1750340411357)
+@@ -15,17 +15,17 @@
+  */
+ public class HitboxManager {
+     private Map<Entity, List<Hitbox>> entityHitboxes;
+-    
++
+     /**
+      * Creates a new hitbox manager.
+      */
+     public HitboxManager() {
+         this.entityHitboxes = new HashMap<>();
+     }
+-    
++
+     /**
+      * Adds a hitbox to an entity.
+-     * 
++     *
+      * @param entity The entity to add the hitbox to
+      * @param hitbox The hitbox to add
+      */
+@@ -35,44 +35,58 @@
+         }
+         entityHitboxes.get(entity).add(hitbox);
+     }
+-    
++
+     /**
+      * Removes all hitboxes from an entity.
+-     * 
++     *
+      * @param entity The entity to remove hitboxes from
+      */
+     public void removeHitboxes(Entity entity) {
+         entityHitboxes.remove(entity);
+     }
+-    
++
+     /**
+      * Updates the positions of all hitboxes for an entity.
+-     * 
++     *
+      * @param entity The entity to update hitboxes for
+      */
+     public void updateHitboxPositions(Entity entity) {
+         if (entityHitboxes.containsKey(entity)) {
+             for (Hitbox hitbox : entityHitboxes.get(entity)) {
+-                hitbox.setPosition(entity.getPosX(), entity.getPosY());
++                // Skip setting position if the hitbox's properties are bound
++                // The binding will automatically update the position
++                if (hitbox instanceof RectangleHitbox) {
++                    RectangleHitbox rectHitbox = (RectangleHitbox) hitbox;
++                    if (!rectHitbox.xProperty().isBound() && !rectHitbox.yProperty().isBound()) {
++                        hitbox.setPosition(entity.getPosX(), entity.getPosY());
++                    }
++                } else if (hitbox instanceof CircleHitbox) {
++                    CircleHitbox circleHitbox = (CircleHitbox) hitbox;
++                    if (!circleHitbox.xProperty().isBound() && !circleHitbox.yProperty().isBound()) {
++                        hitbox.setPosition(entity.getPosX(), entity.getPosY());
++                    }
++                } else {
++                    hitbox.setPosition(entity.getPosX(), entity.getPosY());
++                }
+             }
+         }
+     }
+-    
++
+     /**
+      * Checks for collisions between attack hitboxes and vulnerable hitboxes.
+      * If a collision is detected, damage is applied to the vulnerable entity.
+-     * 
++     *
+      * @param attacker The entity that is attacking
+-     * @param damage The amount of damage to apply
++     * @param damage   The amount of damage to apply
+      * @return A list of entities that were hit
+      */
+     public List<Entity> checkAttackCollisions(Entity attacker, int damage) {
+-            List<Entity> hitEntities = new ArrayList<>();
+-        
++        List<Entity> hitEntities = new ArrayList<>();
++
+         if (!entityHitboxes.containsKey(attacker)) {
+             return hitEntities;
+         }
+-        
++
+         // Get all attack hitboxes for the attacker
+         List<Hitbox> attackHitboxes = new ArrayList<>();
+         for (Hitbox hitbox : entityHitboxes.get(attacker)) {
+@@ -80,16 +94,16 @@
+                 attackHitboxes.add(hitbox);
+             }
+         }
+-        
++
+         // Check for collisions with vulnerable hitboxes of other entities
+         for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
+             Entity target = entry.getKey();
+-            
++
+             // Skip the attacker
+             if (target == attacker) {
+                 continue;
+             }
+-            
++
+             // Check if any attack hitbox intersects with any vulnerable hitbox
+             boolean hit = false;
+             for (Hitbox attackHitbox : attackHitboxes) {
+@@ -103,71 +117,67 @@
+                     break;
+                 }
+             }
+-            
++
+             // If a hit was detected, apply damage and add to the list
+             if (hit && target instanceof Actor) {
+                 ((Actor) target).receiveDamage(damage);
+                 hitEntities.add(target);
+             }
+         }
+-        
++
+         return hitEntities;
+     }
+ 
+     public Entity checkInteractiveCollision(Entity entity) {
+-        // Get all attack hitboxes for the attacker
+-        List<Hitbox> attackHitboxes = new ArrayList<>();
+-        for (Hitbox hitbox : entityHitboxes.get(attacker)) {
+-            if (hitbox.getType() == HitboxType.ATTACK) {
+-                attackHitboxes.add(hitbox);
++        // Check if entity has interaction hitboxes
++        if (!entityHitboxes.containsKey(entity)) {
++            return null;
++        }
++
++        // Get all interaction hitboxes for the entity
++        List<Hitbox> interactionHitboxes = new ArrayList<>();
++        for (Hitbox hitbox : entityHitboxes.get(entity)) {
++            if (hitbox.getType() == HitboxType.INTERACTION) {
++                interactionHitboxes.add(hitbox);
+             }
+         }
+ 
+-        // Check for collisions with vulnerable hitboxes of other entities
++        // Check for collisions with other entities
+         for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
+             Entity target = entry.getKey();
+ 
+-            // Skip the attacker
+-            if (target == attacker) {
++            // Skip the entity itself
++            if (target == entity) {
+                 continue;
+             }
+ 
+-            // Check if any attack hitbox intersects with any vulnerable hitbox
+-            boolean hit = false;
+-            for (Hitbox attackHitbox : attackHitboxes) {
++            // Check if any interaction hitbox intersects with any hitbox of the target
++            for (Hitbox interactionHitbox : interactionHitboxes) {
+                 for (Hitbox targetHitbox : entry.getValue()) {
+-                    if (targetHitbox.getType() == HitboxType.VULNERABLE && attackHitbox.intersects(targetHitbox)) {
+-                        hit = true;
+-                        break;
++                    if (interactionHitbox.intersects(targetHitbox)) {
++                        // Return the first entity that intersects
++                        return target;
+                     }
+                 }
+-                if (hit) {
+-                    break;
+-                }
+-            }
++            }
++        }
+ 
+-            // If a hit was detected, apply damage and add to the list
+-            if (hit && target instanceof Actor) {
+-                ((Actor) target).receiveDamage(damage);
+-                hitEntities.add(target);
+-            }
+-        }
+-
+-        return hitEntities;
++        // No collision found
++        return null;
+     }
+-    
++
+     /**
+      * Creates a default vulnerable hitbox for an entity based on its dimensions.
+-     * 
++     *
+      * @param entity The entity to create a hitbox for
+      * @return The created hitbox
+      */
+     public Hitbox createHitbox(Entity entity, HitboxType type) {
+         Hitbox hitbox = new RectangleHitbox(
+-            entity.getPosX(),
+-            entity.getPosY(),
+-            entity.getWidth(),
+-            entity.getHeight(),
++                entity.getPosX(),
++                entity.getPosY(),
++                entity.getWidth(),
++                entity.getHeight(),
+                 type
+         );
+         hitbox.xProperty().bind(entity.posXProperty());
+@@ -175,44 +185,44 @@
+         addHitbox(entity, hitbox);
+         return hitbox;
+     }
+-    
++
+     /**
+      * Creates an attack hitbox for a weapon.
+-     * 
++     *
+      * @param attacker The entity that is attacking
+-     * @param offsetX The x offset from the entity's position
+-     * @param offsetY The y offset from the entity's position
+-     * @param width The width of the attack hitbox
+-     * @param height The height of the attack hitbox
++     * @param offsetX  The x offset from the entity's position
++     * @param offsetY  The y offset from the entity's position
++     * @param width    The width of the attack hitbox
++     * @param height   The height of the attack hitbox
+      * @return The created hitbox
+      */
+     public Hitbox createWeaponAttackHitbox(Entity attacker, double offsetX, double offsetY, double width, double height) {
+         Hitbox hitbox = new RectangleHitbox(
+-            attacker.getPosX() + offsetX,
+-            attacker.getPosY() + offsetY,
+-            width,
+-            height,
+-            HitboxType.ATTACK
++                attacker.getPosX() + offsetX,
++                attacker.getPosY() + offsetY,
++                width,
++                height,
++                HitboxType.ATTACK
+         );
+         addHitbox(attacker, hitbox);
+         return hitbox;
+     }
+-    
++
+     /**
+      * Creates a circular attack hitbox.
+-     * 
++     *
+      * @param attacker The entity that is attacking
+-     * @param offsetX The x offset from the entity's position
+-     * @param offsetY The y offset from the entity's position
+-     * @param radius The radius of the attack hitbox
++     * @param offsetX  The x offset from the entity's position
++     * @param offsetY  The y offset from the entity's position
++     * @param radius   The radius of the attack hitbox
+      * @return The created hitbox
+      */
+     public Hitbox createCircularAttackHitbox(Entity attacker, double offsetX, double offsetY, double radius) {
+         Hitbox hitbox = new CircleHitbox(
+-            attacker.getPosX() + offsetX,
+-            attacker.getPosY() + offsetY,
+-            radius,
+-            HitboxType.ATTACK
++                attacker.getPosX() + offsetX,
++                attacker.getPosY() + offsetY,
++                radius,
++                HitboxType.ATTACK
+         );
+         addHitbox(attacker, hitbox);
+         return hitbox;
+@@ -220,6 +230,15 @@
+ 
+     public Hitbox getInteractiveHitbox(Entity entity) {
+         for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
+-
++            Entity target = entry.getKey();
++            if (target == entity) {
++                for (Hitbox hitbox : entry.getValue()) {
++                    if (hitbox.getType() == HitboxType.INTERACTION) {
++                        return hitbox;
++                    }
++                }
++            }
++        }
++        return null;
+     }
+-}
+\ No newline at end of file
++}
+Index: src/main/java/fr/iut/hev/root/model/entities/Arrow.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/fr/iut/hev/root/model/entities/Arrow.java b/src/main/java/fr/iut/hev/root/model/entities/Arrow.java
+--- a/src/main/java/fr/iut/hev/root/model/entities/Arrow.java
++++ b/src/main/java/fr/iut/hev/root/model/entities/Arrow.java	(date 1750340090382)
+@@ -6,6 +6,7 @@
+ import fr.iut.hev.root.model.TileMap;
+ import fr.iut.hev.root.model.enums.ActorEnum;
+ import fr.iut.hev.root.model.enums.ItemsEnum;
++import fr.iut.hev.root.model.hitbox.HitboxManager;
+ import fr.iut.hev.root.model.items.ItemFactory;
+ import fr.iut.hev.root.view.ArrowView;
+ import javafx.scene.layout.AnchorPane;
+@@ -27,12 +28,13 @@
+                  double velocityX, double velocityY, int damage,
+                  AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory) {
+         // Use the ARROW ActorEnum
+-        super(posX, posY, width, height, tileMap, 1, 0, 0, 0);
++        super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW, new HitboxManager());
+ 
+         this.velocityXInitial = velocityX;
+         this.velocityYInitial = velocityY;
+         this.damage = damage;
+         this.globalController = globalController;
++        this.itemFactory = itemFactory;
+ 
+         // Set initial velocity
+         setVelocityX((int)velocityX);
+Index: src/main/java/fr/iut/hev/root/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/fr/iut/hev/root/Main.java b/src/main/java/fr/iut/hev/root/Main.java
+--- a/src/main/java/fr/iut/hev/root/Main.java
++++ b/src/main/java/fr/iut/hev/root/Main.java	(date 1750340502817)
+@@ -14,7 +14,7 @@
+     @Override
+     public void start(Stage stage) throws IOException {
+         Pane root = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("view/globalView.fxml")));
+-        scene = new Scene(root, 1920, 1056   );
++        scene = new Scene(root, 1400, 800);
+         stage.setTitle("ROOT");
+         stage.setScene(scene);
+         stage.show();
+Index: src/main/java/fr/iut/hev/root/controller/GlobalController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/fr/iut/hev/root/controller/GlobalController.java b/src/main/java/fr/iut/hev/root/controller/GlobalController.java
+--- a/src/main/java/fr/iut/hev/root/controller/GlobalController.java
++++ b/src/main/java/fr/iut/hev/root/controller/GlobalController.java	(date 1750340377336)
+@@ -107,8 +107,8 @@
+ 
+         lootView = new LootView(entitiesPane);
+         cooldownManager = new CooldownManager();
+-        itemFactory = new ItemFactory(hitboxManager);
+         hitboxManager = new HitboxManager();
++        itemFactory = new ItemFactory(hitboxManager);
+ 
+         initItemEnums();
+         initMap();

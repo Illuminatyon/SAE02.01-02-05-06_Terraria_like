@@ -3,7 +3,10 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.enums.TileTypesEnum;
+import fr.iut.hev.root.model.hitbox.Hitbox;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.pathfinding.AStar;
 import fr.iut.hev.root.model.pathfinding.Point;
 import javafx.scene.layout.Pane;
@@ -39,9 +42,10 @@ public class AggressiveMob extends Mob {
             ActorEnum type, Player player,
             int aggroDistance, int attackCooldown,
             List<Actor> aliveActors, Pane globalPane,
-            int damage
+            int damage,
+            HitboxManager hitboxManager
     ) {
-        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type);
+        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type, hitboxManager);
         this.target = player;
         this.aggroDistance = aggroDistance;
         this.attackCooldown = attackCooldown;
@@ -52,6 +56,7 @@ public class AggressiveMob extends Mob {
         this.lastJumpTime = System.currentTimeMillis(); // Initialize the last jump time
         this.aliveActors = aliveActors; // Store the list of alive actors
         this.pathfinder = new AStar(tileMap); // Initialize the pathfinder
+        getHitboxManager().createHitbox(this, HitboxType.ATTACK);
     }
 
     /**

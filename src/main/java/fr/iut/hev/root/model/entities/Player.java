@@ -7,6 +7,7 @@ import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -23,10 +24,9 @@ public class Player extends Actor {
     private ObjectProperty<Item> itemInHandProperty;
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
-    private int maxHealth;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
-        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor);
+        super(posX, posY, width, height, tileMap, 10, moveSpeed, jumpForce, reach, actor, new HitboxManager());
         this.inventory = new Inventory();
         this.armorInventory = new ArmorInventory();
         this.armorInventory.setPlayer(this);
@@ -34,7 +34,6 @@ public class Player extends Actor {
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-        this.maxHealth = 10; // Initialize maxHealth to base health
     }
 
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
@@ -189,37 +188,19 @@ public class Player extends Actor {
         return this.armorInventory;
     }
 
-    /**
-     * Gets the player's maximum health
-     * @return the maximum health value
-     */
-    public int getMaxHealth() {
-        return this.maxHealth;
+    public void updateHealthWithArmorBonus() {
+        // Update player health based on armor value
+        // This method is called when armor is added or removed
+        // The total armor value is calculated in ArmorInventory.getTotalArmorValue()
+        // For now, we'll just ensure health doesn't exceed maximum
+        if (getHealth() > getMaxHealth()) {
+            setHealth(getMaxHealth());
+        }
     }
 
-    /**
-     * Updates the player's health based on the armor bonus
-     * This method is called when armor is added or removed
-     */
-    public void updateHealthWithArmorBonus() {
-        // Get the total armor value from the armor inventory
-        int armorValue = armorInventory.getTotalArmorValue();
-
-        // Calculate the new max health based on the base health (10) plus armor value
-        int newMaxHealth = 10 + armorValue;
-
-        // Get the current health
-        int currentHealth = getHealth();
-
-        // Update max health
-        this.maxHealth = newMaxHealth;
-
-        // If current health is greater than max health, cap it at max health
-        // This ensures health isn't fully restored when equipping armor
-        if (currentHealth > newMaxHealth) {
-            setHealth(newMaxHealth);
-        }
-        // If current health is less than max health, keep it as is
-        // This ensures damaged health isn't restored when equipping armor
+    public int getMaxHealth() {
+        // Return the maximum health value for the player
+        // This can be adjusted based on armor or other factors in the future
+        return 10;
     }
 }

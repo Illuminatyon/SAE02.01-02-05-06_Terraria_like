@@ -10,15 +10,10 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.*;
-import fr.iut.hev.root.model.enums.ItemTypesEnum;
-import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.enums.RecipesEnum;
-import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.enums.*;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.Cooldown;
-import fr.iut.hev.root.model.items.Weapon;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import javafx.animation.KeyFrame;
@@ -174,7 +169,7 @@ public class GlobalController implements Initializable {
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
 
-        hitboxManager.createDefaultVulnerableHitbox(player);
+        hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
 
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
@@ -243,11 +238,11 @@ public class GlobalController implements Initializable {
     }
 
     private void initmob() {
-        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET);
+        this.mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, ActorEnum.POULET, hitboxManager);
         this.mobView = new MobView(mob, tileMap, entitiesPane);
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors,itemFactory));
         aliveActors.add(mob);
-        hitboxManager.createDefaultVulnerableHitbox(mob);
+        hitboxManager.createHitbox(mob,HitboxType.VULNERABLE);
     }
 
     private void initActors() {
@@ -260,14 +255,14 @@ public class GlobalController implements Initializable {
 
     private void initAggressiveMob(Player player) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, entitiesPane, 1 // Use actorsPane instead of globalPane
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,itemFactory));
         aliveActors.add(aggressiveMob);
     }
     private void initPnj() {
-        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS);
+        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS, this.hitboxManager);
         this.pnjView = new PnjView(homps, tileMap, entitiesPane);
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors,itemFactory));
         aliveActors.add(homps);
