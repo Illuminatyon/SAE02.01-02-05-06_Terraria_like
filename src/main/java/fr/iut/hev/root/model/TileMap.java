@@ -132,7 +132,6 @@ public class TileMap {
     public void tileGetsMined(int x, int y,int damage) {
         Tile currentTile = this.getTile(x,y);
         if (!(currentTile.getHealth() <= 0)) {
-            System.out.println(currentTile.getHealth());
             currentTile.takesDamage(damage);
         }
         if (currentTile.getHealth() <= 0) {

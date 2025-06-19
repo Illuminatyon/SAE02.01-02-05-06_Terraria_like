@@ -152,8 +152,7 @@ public class GlobalController implements Initializable {
                     }
 
                     updateCameraPosition();
-                    checkCraftingStationProximity();
-                    checkPnjDialogue();
+                    //checkPnjDialogue();
 
                     cooldownManager.allCooldownsTick();
                 })
@@ -185,8 +184,7 @@ public class GlobalController implements Initializable {
 
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
-        inventory.add(1,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),45);
-        inventory.add(2,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),20);
+        inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
         inventory.add(5, itemFactory.createItem(ItemsEnum.KATANA), 1);
@@ -391,42 +389,5 @@ public class GlobalController implements Initializable {
      */
     public ItemFactory getItemFactory() {
         return itemFactory;
-    }
-
-    /**
-     * Checks if the player is near any crafting stations (furnace or crafting table)
-     * and updates the crafting manager accordingly
-     */
-    private void checkCraftingStationProximity() {
-        if (player == null || tileMap == null || craftingManager == null) {
-            return;
-        }
-
-        int playerTileX = (int) (player.getPosX() / TileMap.format);
-        int playerTileY = (int) (player.getPosY() / TileMap.format);
-
-        boolean foundCraftingTable = false;
-        boolean foundFurnace = false;
-
-        for (int x = playerTileX - 3; x <= playerTileX + 3; x++) {
-            for (int y = playerTileY - 3; y <= playerTileY + 3; y++) {
-                if (x < 0 || y < 0 || x >= tileMap.getWidth() || y >= tileMap.getHeight()) {
-                    continue;
-                }
-
-                Tile tile = tileMap.getTile(x, y);
-                if (tile != null && tile.getTileEnum() != null) {
-                    if (tile.getTileEnum() == TilesEnum.CRAFTING_TABLE) {
-                        foundCraftingTable = true;
-                    }
-                    else if (tile.getTileEnum() == TilesEnum.FURNACE) {
-                        foundFurnace = true;
-                    }
-                }
-            }
-        }
-
-        craftingManager.setNearCraftingTable(foundCraftingTable);
-        craftingManager.setNearFurnace(foundFurnace);
     }
 }

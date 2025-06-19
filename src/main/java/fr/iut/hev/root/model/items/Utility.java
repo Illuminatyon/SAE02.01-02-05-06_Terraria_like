@@ -36,6 +36,7 @@ public class Utility extends Item {
             tileMap.addTile(new Tile(currentItem,x,y));
             player.getInventory().remove(player.getIndexItemInHand(),1);
             player.consumeOneItem();
+            System.out.println(tileMap.getTile(x,y));
             return true;
         }
         return false;

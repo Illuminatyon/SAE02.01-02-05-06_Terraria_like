@@ -103,8 +103,6 @@ public class Dagger extends Weapon {
                         if (actor instanceof Mob) {
                             applyKnockback((Mob) actor, normalizedDirX, normalizedDirY);
                         }
-
-                        System.out.println("Dagger hit " + actor.getName() + "! Remaining health: " + actor.getHealth());
                     }
                 }
             }),

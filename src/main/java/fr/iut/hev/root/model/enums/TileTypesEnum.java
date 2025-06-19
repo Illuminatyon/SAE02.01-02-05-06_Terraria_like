@@ -4,7 +4,7 @@ public enum TileTypesEnum {
     AIR("AIR", false, false), // _ A la fin pour les vrais trucs
     LIQUID("LIQUID", false, false),
     BACKGROUND("BACKGROUND",false,true),
-    UTILITIES("UTILITIES",true,true),
+    UTILITIES("UTILITIES",false,true),
     BLOCK("BLOCK", true, true);
 
     private final String name;
