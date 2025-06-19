@@ -2,7 +2,7 @@ package fr.iut.hev.root.model.enums;
 
 // Ca ou deux enums ?
 public enum TilesEnum {
-    AIR("air", TileTypesEnum.AIR,0),
+    AIR("ciel", TileTypesEnum.AIR,0),
     GRASS("grass", TileTypesEnum.BLOCK,8, ItemsEnum.DIRT, BlockTypesEnum.GROUND_TYPE),
     DIRT("dirt", TileTypesEnum.BLOCK,16, ItemsEnum.DIRT, BlockTypesEnum.GROUND_TYPE),
     STONE("stone", TileTypesEnum.BLOCK,12, ItemsEnum.STONE, BlockTypesEnum.ROCK_TYPE),
@@ -16,8 +16,8 @@ public enum TilesEnum {
     DARKSTONE("darkstone",TileTypesEnum.BLOCK,12,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
     PIERRE("pierre",TileTypesEnum.BLOCK,24,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
     MUR("mur",TileTypesEnum.BLOCK,10,ItemsEnum.MUR,BlockTypesEnum.INDESTRUCTIBLE_TYPE),
-    PIERREFOND("darkstone_background",TileTypesEnum.AIR,0),
-    MURFOND("mur_background",TileTypesEnum.AIR,0),
+    PIERREFOND("darkstone",TileTypesEnum.AIR,0),
+    MURFOND("mur",TileTypesEnum.AIR,0),
     COPIUM("copium",TileTypesEnum.BLOCK,30,ItemsEnum.COPIUM_BLOCK,BlockTypesEnum.ROCK_TYPE);
 
 

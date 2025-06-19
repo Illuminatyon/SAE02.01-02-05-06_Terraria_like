@@ -20,8 +20,8 @@
             <Image url="@../img/background/background.png" />
          </image>
       </ImageView>
-      <TilePane fx:id="backgroundTileMap" prefHeight="1056.0" prefWidth="1920.0" />
-      <TilePane fx:id="landTileMap" prefHeight="1056.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1920.0" />
+      <TilePane fx:id="backgroundTileMap" prefHeight="1440.0" prefWidth="3840.0" />
+      <TilePane fx:id="landTileMap" prefHeight="1440.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="3840.0" />
       <ImageView fx:id="player_imageview" fitHeight="64.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
 
       </ImageView>

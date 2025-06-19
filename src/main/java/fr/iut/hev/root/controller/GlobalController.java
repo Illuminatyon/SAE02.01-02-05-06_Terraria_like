@@ -169,6 +169,8 @@ public class GlobalController implements Initializable {
     private void initMap() throws IOException {
         tileMap = new TileMap(3840,1440,itemFactory);
         globalView = new GlobalView(tileMap, landTileMap,backgroundTileMap);
+        System.out.println(landTileMap.getChildren().toString());
+
     }
 
     private void initPlayer() {
