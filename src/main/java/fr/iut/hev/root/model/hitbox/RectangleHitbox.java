@@ -1,14 +1,16 @@
 package fr.iut.hev.root.model.hitbox;
 
 import fr.iut.hev.root.model.enums.HitboxType;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 /**
  * Implementation of a rectangular hitbox.
  * This is useful for most entities in the game.
  */
 public class RectangleHitbox implements Hitbox {
-    private double x;
-    private double y;
+    private DoubleProperty xProperty;
+    private DoubleProperty yProperty;
     private double width;
     private double height;
     private HitboxType type;
@@ -23,8 +25,8 @@ public class RectangleHitbox implements Hitbox {
      * @param type The type of hitbox
      */
     public RectangleHitbox(double x, double y, double width, double height, HitboxType type) {
-        this.x = x;
-        this.y = y;
+        this.xProperty = new SimpleDoubleProperty(x);
+        this.yProperty = new SimpleDoubleProperty(y);
         this.width = width;
         this.height = height;
         this.type = type;
@@ -47,15 +49,15 @@ public class RectangleHitbox implements Hitbox {
      * @return true if the rectangles intersect, false otherwise
      */
     private boolean intersectsRectangle(RectangleHitbox other) {
-        double thisLeft = x - width / 2;
-        double thisRight = x + width / 2;
-        double thisTop = y - height / 2;
-        double thisBottom = y + height / 2;
+        double thisLeft = getCenterX() - width / 2;
+        double thisRight = getCenterX() + width / 2;
+        double thisTop = getCenterY() - height / 2;
+        double thisBottom = getCenterY() + height / 2;
 
-        double otherLeft = other.x - other.width / 2;
-        double otherRight = other.x + other.width / 2;
-        double otherTop = other.y - other.height / 2;
-        double otherBottom = other.y + other.height / 2;
+        double otherLeft = other.getCenterX() - other.width / 2;
+        double otherRight = other.getCenterX() + other.width / 2;
+        double otherTop = other.getCenterY() - other.height / 2;
+        double otherBottom = other.getCenterY() + other.height / 2;
 
         return thisRight > otherLeft &&
                thisLeft < otherRight &&
@@ -65,18 +67,18 @@ public class RectangleHitbox implements Hitbox {
 
     @Override
     public double getCenterX() {
-        return x;
+        return xProperty.getValue();
     }
 
     @Override
     public double getCenterY() {
-        return y;
+        return yProperty.getValue();
     }
 
     @Override
     public void setPosition(double x, double y) {
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
     }
 
     @Override
@@ -101,4 +103,9 @@ public class RectangleHitbox implements Hitbox {
     public double getHeight() {
         return height;
     }
+
+    public void setX(double x) {this.xProperty.setValue(x);}
+    public void setY(double y) {this.yProperty.setValue(y);}
+    public DoubleProperty xProperty() {return this.xProperty;}
+    public DoubleProperty yProperty() {return this.yProperty;}
 }

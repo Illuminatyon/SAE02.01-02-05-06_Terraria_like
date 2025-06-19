@@ -113,6 +113,48 @@ public class HitboxManager {
         
         return hitEntities;
     }
+
+    public Entity checkInteractiveCollision(Entity entity) {
+        // Get all attack hitboxes for the attacker
+        List<Hitbox> attackHitboxes = new ArrayList<>();
+        for (Hitbox hitbox : entityHitboxes.get(attacker)) {
+            if (hitbox.getType() == HitboxType.ATTACK) {
+                attackHitboxes.add(hitbox);
+            }
+        }
+
+        // Check for collisions with vulnerable hitboxes of other entities
+        for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
+            Entity target = entry.getKey();
+
+            // Skip the attacker
+            if (target == attacker) {
+                continue;
+            }
+
+            // Check if any attack hitbox intersects with any vulnerable hitbox
+            boolean hit = false;
+            for (Hitbox attackHitbox : attackHitboxes) {
+                for (Hitbox targetHitbox : entry.getValue()) {
+                    if (targetHitbox.getType() == HitboxType.VULNERABLE && attackHitbox.intersects(targetHitbox)) {
+                        hit = true;
+                        break;
+                    }
+                }
+                if (hit) {
+                    break;
+                }
+            }
+
+            // If a hit was detected, apply damage and add to the list
+            if (hit && target instanceof Actor) {
+                ((Actor) target).receiveDamage(damage);
+                hitEntities.add(target);
+            }
+        }
+
+        return hitEntities;
+    }
     
     /**
      * Creates a default vulnerable hitbox for an entity based on its dimensions.
@@ -128,6 +170,8 @@ public class HitboxManager {
             entity.getHeight(),
                 type
         );
+        hitbox.xProperty().bind(entity.posXProperty());
+        hitbox.yProperty().bind(entity.posYProperty());
         addHitbox(entity, hitbox);
         return hitbox;
     }
@@ -172,5 +216,10 @@ public class HitboxManager {
         );
         addHitbox(attacker, hitbox);
         return hitbox;
+    }
+
+    public Hitbox getInteractiveHitbox(Entity entity) {
+        for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
+
     }
 }

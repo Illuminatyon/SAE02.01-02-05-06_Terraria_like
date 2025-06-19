@@ -1,14 +1,16 @@
 package fr.iut.hev.root.model.hitbox;
 
 import fr.iut.hev.root.model.enums.HitboxType;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 /**
  * Implementation of a circular hitbox.
  * This is useful for certain types of attacks or interactions.
  */
 public class CircleHitbox implements Hitbox {
-    private double x;
-    private double y;
+    private DoubleProperty xProperty;
+    private DoubleProperty yProperty;
     private double radius;
     private HitboxType type;
     
@@ -21,8 +23,8 @@ public class CircleHitbox implements Hitbox {
      * @param type The type of hitbox
      */
     public CircleHitbox(double x, double y, double radius, HitboxType type) {
-        this.x = x;
-        this.y = y;
+        this.xProperty = new SimpleDoubleProperty(x);
+        this.yProperty = new SimpleDoubleProperty(y);
         this.radius = radius;
         this.type = type;
     }
@@ -44,8 +46,8 @@ public class CircleHitbox implements Hitbox {
      * @return true if the circles intersect, false otherwise
      */
     private boolean intersectsCircle(CircleHitbox other) {
-        double dx = this.x - other.x;
-        double dy = this.y - other.y;
+        double dx = getCenterX() - other.getCenterX();
+        double dy = getCenterY() - other.getCenterY();
         double distance = Math.sqrt(dx * dx + dy * dy);
         return distance < (this.radius + other.radius);
     }
@@ -59,13 +61,13 @@ public class CircleHitbox implements Hitbox {
     private boolean intersectsRectangle(RectangleHitbox other) {
         // Find the closest point to the circle within the rectangle
         double closestX = Math.max(other.getCenterX() - other.getWidth() / 2, 
-                         Math.min(x, other.getCenterX() + other.getWidth() / 2));
+                         Math.min(getCenterX(), other.getCenterX() + other.getWidth() / 2));
         double closestY = Math.max(other.getCenterY() - other.getHeight() / 2, 
-                         Math.min(y, other.getCenterY() + other.getHeight() / 2));
+                         Math.min(getCenterY(), other.getCenterY() + other.getHeight() / 2));
         
         // Calculate the distance between the circle's center and this closest point
-        double dx = x - closestX;
-        double dy = y - closestY;
+        double dx = getCenterX() - closestX;
+        double dy = getCenterY() - closestY;
         double distanceSquared = dx * dx + dy * dy;
         
         // If the distance is less than the circle's radius, an intersection occurs
@@ -73,19 +75,9 @@ public class CircleHitbox implements Hitbox {
     }
     
     @Override
-    public double getCenterX() {
-        return x;
-    }
-    
-    @Override
-    public double getCenterY() {
-        return y;
-    }
-    
-    @Override
     public void setPosition(double x, double y) {
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
     }
     
     @Override
@@ -101,4 +93,11 @@ public class CircleHitbox implements Hitbox {
     public double getRadius() {
         return radius;
     }
+
+    public double getCenterX() {return this.xProperty.getValue();}
+    public double getCenterY() {return this.yProperty.getValue();}
+    public void setX(double x) {this.xProperty.setValue(x);}
+    public void setY(double y) {this.yProperty.setValue(y);}
+    public DoubleProperty xProperty() {return this.xProperty;}
+    public DoubleProperty yProperty() {return this.yProperty;}
 }

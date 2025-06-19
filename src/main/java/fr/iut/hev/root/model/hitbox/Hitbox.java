@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model.hitbox;
 
 import fr.iut.hev.root.model.enums.HitboxType;
+import javafx.beans.property.DoubleProperty;
 
 /**
  * Interface for hitboxes used in combat and interaction detection.
@@ -30,6 +31,11 @@ public interface Hitbox {
      * @return The y-coordinate
      */
     double getCenterY();
+
+    void setX(double x);
+    void setY(double y);
+    DoubleProperty xProperty();
+    DoubleProperty yProperty();
     
     /**
      * Sets the position of the hitbox.
