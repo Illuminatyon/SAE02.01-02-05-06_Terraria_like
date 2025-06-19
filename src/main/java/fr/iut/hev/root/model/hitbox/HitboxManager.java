@@ -50,13 +50,6 @@ public class HitboxManager {
      * 
      * @param entity The entity to update hitboxes for
      */
-    public void updateHitboxPositions(Entity entity) {
-        if (entityHitboxes.containsKey(entity)) {
-            for (Hitbox hitbox : entityHitboxes.get(entity)) {
-                hitbox.setPosition(entity.getPosX(), entity.getPosY());
-            }
-        }
-    }
     
     /**
      * Checks for collisions between attack hitboxes and vulnerable hitboxes.
@@ -114,51 +107,9 @@ public class HitboxManager {
         return hitEntities;
     }
 
-    public Entity checkInteractiveCollision(Entity entity) {
-        // Get all attack hitboxes for the attacker
-        List<Hitbox> attackHitboxes = new ArrayList<>();
-        for (Hitbox hitbox : entityHitboxes.get(attacker)) {
-            if (hitbox.getType() == HitboxType.ATTACK) {
-                attackHitboxes.add(hitbox);
-            }
-        }
-
-        // Check for collisions with vulnerable hitboxes of other entities
-        for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
-            Entity target = entry.getKey();
-
-            // Skip the attacker
-            if (target == attacker) {
-                continue;
-            }
-
-            // Check if any attack hitbox intersects with any vulnerable hitbox
-            boolean hit = false;
-            for (Hitbox attackHitbox : attackHitboxes) {
-                for (Hitbox targetHitbox : entry.getValue()) {
-                    if (targetHitbox.getType() == HitboxType.VULNERABLE && attackHitbox.intersects(targetHitbox)) {
-                        hit = true;
-                        break;
-                    }
-                }
-                if (hit) {
-                    break;
-                }
-            }
-
-            // If a hit was detected, apply damage and add to the list
-            if (hit && target instanceof Actor) {
-                ((Actor) target).receiveDamage(damage);
-                hitEntities.add(target);
-            }
-        }
-
-        return hitEntities;
-    }
-    
     /**
      * Creates a default vulnerable hitbox for an entity based on its dimensions.
-     * 
+     *
      * @param entity The entity to create a hitbox for
      * @return The created hitbox
      */
@@ -170,15 +121,13 @@ public class HitboxManager {
             entity.getHeight(),
                 type
         );
-        hitbox.xProperty().bind(entity.posXProperty());
-        hitbox.yProperty().bind(entity.posYProperty());
         addHitbox(entity, hitbox);
         return hitbox;
     }
-    
+
     /**
      * Creates an attack hitbox for a weapon.
-     * 
+     *
      * @param attacker The entity that is attacking
      * @param offsetX The x offset from the entity's position
      * @param offsetY The y offset from the entity's position
@@ -197,10 +146,10 @@ public class HitboxManager {
         addHitbox(attacker, hitbox);
         return hitbox;
     }
-    
+
     /**
      * Creates a circular attack hitbox.
-     * 
+     *
      * @param attacker The entity that is attacking
      * @param offsetX The x offset from the entity's position
      * @param offsetY The y offset from the entity's position
@@ -216,10 +165,5 @@ public class HitboxManager {
         );
         addHitbox(attacker, hitbox);
         return hitbox;
-    }
-
-    public Hitbox getInteractiveHitbox(Entity entity) {
-        for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
-
     }
 }

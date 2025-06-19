@@ -32,18 +32,11 @@ public interface Hitbox {
      */
     double getCenterY();
 
-    void setX(double x);
-    void setY(double y);
+
     DoubleProperty xProperty();
     DoubleProperty yProperty();
     
-    /**
-     * Sets the position of the hitbox.
-     * 
-     * @param x The new x-coordinate
-     * @param y The new y-coordinate
-     */
-    void setPosition(double x, double y);
+
     
     /**
      * Gets the type of the hitbox.

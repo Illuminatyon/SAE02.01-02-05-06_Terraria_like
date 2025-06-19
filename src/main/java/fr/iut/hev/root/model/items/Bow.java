@@ -1,4 +1,4 @@
-package fr.iut.hev.root.model.items;
+/*package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.entities.Arrow;
@@ -116,3 +116,4 @@ public class Bow extends Weapon {
         player.getInventory().remove(ItemsEnum.ARROW, 1);
     }
 }
+*/

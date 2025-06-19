@@ -76,12 +76,6 @@ public class RectangleHitbox implements Hitbox {
     }
 
     @Override
-    public void setPosition(double x, double y) {
-        setX(x);
-        setY(y);
-    }
-
-    @Override
     public HitboxType getType() {
         return type;
     }
@@ -103,9 +97,6 @@ public class RectangleHitbox implements Hitbox {
     public double getHeight() {
         return height;
     }
-
-    public void setX(double x) {this.xProperty.setValue(x);}
-    public void setY(double y) {this.yProperty.setValue(y);}
     public DoubleProperty xProperty() {return this.xProperty;}
     public DoubleProperty yProperty() {return this.yProperty;}
 }

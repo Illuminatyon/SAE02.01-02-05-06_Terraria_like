@@ -124,7 +124,6 @@ public class GlobalController implements Initializable {
                             Actor currentActor = aliveActors.get(i);
                             if (currentActor != null) {
                                 currentActor.updatePosition();
-                                hitboxManager.updateHitboxPositions(currentActor);
                             } else {
                                 aliveActors.remove(i);
                             }
@@ -147,7 +146,7 @@ public class GlobalController implements Initializable {
                     }
 
                     updateCameraPosition();
-                    //checkPnjDialogue();
+                    checkPnjDialogue();
 
                     cooldownManager.allCooldownsTick();
                 })
