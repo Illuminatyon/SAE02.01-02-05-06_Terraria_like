@@ -2,16 +2,12 @@ package fr.iut.hev.root.controller.Listeners;
 
 import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Loot;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.ItemFactory;
-import fr.iut.hev.root.view.ActorView;
-import fr.iut.hev.root.view.HUDView;
+import fr.iut.hev.root.view.actor.ActorView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.Random;
 

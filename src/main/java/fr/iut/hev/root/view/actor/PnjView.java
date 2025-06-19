@@ -1,19 +1,16 @@
-package fr.iut.hev.root.view;
+package fr.iut.hev.root.view.actor;
 
 import fr.iut.hev.root.model.TileMap;
 
 import fr.iut.hev.root.model.entities.Pnj;
 import fr.iut.hev.root.model.enums.DialogueEnum;
 import javafx.animation.PauseTransition;
-import javafx.scene.LightBase;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import java.sql.SQLOutput;
-
-public class PnjView extends ActorView{
+public class PnjView extends ActorView {
     private Label phrase = new Label();
     private int count = 0;
 

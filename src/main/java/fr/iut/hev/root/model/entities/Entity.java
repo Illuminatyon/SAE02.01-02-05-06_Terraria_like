@@ -110,4 +110,8 @@ public class Entity {
     public int getEffectivePosY() {
         return this.getPosY() + (tileMap.getHeight() * TileMap.format) / 2;
     }
+
+    public void setTileMap(TileMap tileMap) {
+        this.tileMap = tileMap;
+    }
 }

@@ -1,4 +1,4 @@
-package fr.iut.hev.root.view;
+package fr.iut.hev.root.view.actor;
 
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.entities.Arrow;
@@ -29,7 +29,7 @@ public class ArrowView extends ActorView {
     /**
      * Loads the arrow sprite
      */
-    @Override
+    /*@Override
     public void load() {
         // Use the arrow.png image for the arrow
         String path = "/fr/iut/hev/root/img/items/arrow.png";
@@ -81,12 +81,12 @@ public class ArrowView extends ActorView {
             System.err.println("Exception while loading arrow image");
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * Updates the arrow sprite's position and rotation
      */
-    public void update() {
+    /*public void update() {
         if (arrowSprite != null && arrow != null) {
             // Debug: Log arrow update
             System.out.println("[DEBUG_LOG] Updating arrow sprite at position: " + arrow.getPosX() + ", " + arrow.getPosY());
@@ -123,21 +123,21 @@ public class ArrowView extends ActorView {
                 System.out.println("[DEBUG_LOG] Arrow update skipped: arrow is null");
             }
         }
-    }
+    }*/
 
     /**
      * Gets the arrow sprite
      * @return the arrow sprite or null if not initialized
      */
-    @Override
+    /*@Override
     public ImageView getActorSprite() {
         return arrowSprite;
-    }
+    }*/
 
     /**
      * Overrides the deleteActorSprite method to set arrowSprite to null after removing it from the AnchorPane
      */
-    @Override
+    /*@Override
     public void deleteActorSprite() {
         // Debug: Log arrow sprite deletion
         System.out.println("[DEBUG_LOG] Deleting arrow sprite");
@@ -167,5 +167,5 @@ public class ArrowView extends ActorView {
             getAnchorPane().requestLayout();
             System.out.println("[DEBUG_LOG] Requested layout refresh for AnchorPane");
         }
-    }
+    }*/
 }

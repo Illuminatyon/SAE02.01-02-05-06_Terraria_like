@@ -3,6 +3,7 @@ package fr.iut.hev.root.view;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.InventorySlot;
 import fr.iut.hev.root.model.items.Item;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -42,8 +43,25 @@ public class InventoryView {
         initHold();
 
         inventory.getSlots().forEach(slot -> {
-            slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
-            slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot)); // TODO: utiliser un bind ici
+            //slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
+            //slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot)); // TODO: utiliser un bind ici
+            for (Node child : ((Pane) findCell(slot.getIndex())).getChildren()) {
+                if (child instanceof ImageView imageView) {
+                    imageView.imageProperty().bind(Bindings.createObjectBinding(
+                            () -> getImageFromSlot(slot),
+                            slot.itemProperty()
+                    ));
+                } else if (child instanceof Label label) {
+                    //label.textProperty().bind(slot.quantityProperty().asString());
+                    label.textProperty().bind(Bindings.createStringBinding(
+                            () -> {
+                                int quantity = slot.getQuantity();
+                                return quantity == 0 ? "" : String.valueOf(quantity);
+                            },
+                            slot.quantityProperty()
+                    ));
+                }
+            }
         });
         hotbar.setMouseTransparent(true);
         expandedInventory.setMouseTransparent(true);
@@ -73,20 +91,6 @@ public class InventoryView {
         pane.setId(Integer.toString(slotIndex));
         pane.getStyleClass().add("pane");
         return pane;
-    }
-
-    private void updateSlot(InventorySlot slot) {
-        Node cell = findCell(slot.getIndex());
-        if (cell instanceof Pane pane) {
-            for (Node child : pane.getChildren()) {
-                if (child instanceof ImageView imageView) {
-                    Image image = getImageFromSlot(slot);
-                    imageView.setImage(image);
-                } else if (child instanceof Label label) {
-                    label.setText(getQuantityTextFromSlot(slot));
-                }
-            }
-        }
     }
 
     private Image getImageFromSlot(InventorySlot slot) {
@@ -123,16 +127,6 @@ public class InventoryView {
             System.err.println("Error loading image: " + path + " - " + e.getMessage());
             return null;
         }
-    }
-
-    private String getQuantityTextFromSlot(InventorySlot slot) {
-        String txt;
-        if (/*slot.getItem().getItem().getMaxQuantity() == 1 ||*/ slot.getItem() == null) {
-            txt = "";
-        } else {
-            txt = Integer.toString(slot.getQuantity());
-        }
-        return txt;
     }
 
     private String getQuantityTextFromHold(HashMap<Item,Integer> onHold) {

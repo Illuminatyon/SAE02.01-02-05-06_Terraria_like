@@ -5,8 +5,7 @@ import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.view.ArrowView;
+import fr.iut.hev.root.view.actor.ArrowView;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Arrow extends Actor {
     private ArrowView arrowView;
     private boolean hasHit = false;
 
-    private GlobalController globalController;
+    //private GlobalController globalController;
 
     public Arrow(int posX, int posY, int width, int height, TileMap tileMap, 
                  double velocityX, double velocityY, int damage, 
@@ -30,7 +29,7 @@ public class Arrow extends Actor {
         this.velocityXInitial = velocityX;
         this.velocityYInitial = velocityY;
         this.damage = damage;
-        this.globalController = globalController;
+        //this.globalController = globalController;
 
         // Set initial velocity
         setVelocityX((int)velocityX);
@@ -40,7 +39,7 @@ public class Arrow extends Actor {
         this.arrowView = new ArrowView(this, tileMap, actorsPane);
 
         // Add death listener to remove arrow when it hits something
-        healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors()));
+        //healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors()));
 
         // Debug: Log arrow creation
         System.out.println("[DEBUG_LOG] Arrow created at position: " + posX + ", " + posY);
@@ -87,7 +86,7 @@ public class Arrow extends Actor {
         }
 
         // Check for collisions with actors
-        ArrayList<Actor> aliveActors = getAliveActors();
+        /*ArrayList<Actor> aliveActors = getAliveActors();
         if (aliveActors != null) {
             for (Actor actor : aliveActors) {
                 // Skip self and player
@@ -119,7 +118,7 @@ public class Arrow extends Actor {
                     return;
                 }
             }
-        }
+        }*/
 
         // Update position
         posXProperty().set(posXProperty().getValue() + getVelocityX());
@@ -129,7 +128,7 @@ public class Arrow extends Actor {
         if (!hasHit) {
             if (arrowView != null) {
                 System.out.println("[DEBUG_LOG] Updating arrow view");
-                arrowView.update();
+                //arrowView.update();
             } else {
                 System.out.println("[DEBUG_LOG] Cannot update arrow view: arrowView is null");
             }
@@ -138,7 +137,7 @@ public class Arrow extends Actor {
         }
     }
 
-    private ArrayList<Actor> getAliveActors() {
+    /*private ArrayList<Actor> getAliveActors() {
         if (globalController != null) {
             return globalController.getAliveActors();
         }
@@ -153,5 +152,5 @@ public class Arrow extends Actor {
     // Get the GlobalController
     public GlobalController getGlobalController() {
         return globalController;
-    }
+    }*/
 }

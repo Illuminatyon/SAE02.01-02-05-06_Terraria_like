@@ -6,10 +6,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class HotbarView {
-
     private GridPane hotbar;
-
-
+    
     public HotbarView(GridPane hotbar) {
         this.hotbar = hotbar;
         initHotbar();

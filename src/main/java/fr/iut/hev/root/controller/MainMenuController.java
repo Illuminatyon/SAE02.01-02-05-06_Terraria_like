@@ -11,6 +11,7 @@ import fr.iut.hev.root.utils.SaveManager;
 import fr.iut.hev.root.view.MainMenuUIComponents;
 import fr.iut.hev.root.view.MainMenuView;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -132,17 +133,22 @@ public class MainMenuController implements Initializable {
         try {
             JsonManager.writeJson("./saves/" + world.getName() + "/world.json", world);
 
-
-
             TileMap tileMap = JsonManager.readJson("./saves/" + world.getName() + "/map.json", TileMap.class);
             Player player = JsonManager.readJson("./saves/" + world.getName() + "/player.json", Player.class);
             player.initAfterDeserialization(tileMap, player.getPosX(), player.getPosY());
             //ArrayList<Actor> actors = JsonManager.readJsonList("./saves/" + world.getName() + "/entities.json", Actor.class);
-            //ArrayList<Mob> mobs = JsonManager.readJsonList()
-            //World w = JsonManager.readJson("./saves/" + world.getName() + "/world.json", World.class);
+            World w = JsonManager.readJson("./saves/" + world.getName() + "/world.json", World.class);
+            w.setItemFactory(new ItemFactory());
+            w.setTileMap(tileMap);
+            w.setPlayer(player);
+            //w.setAliveActors(actors);
+            w.setAliveActors(new ArrayList<>());
+
+            world.setItemFactory(new ItemFactory());
             world.setTileMap(tileMap);
             world.setPlayer(player);
             //world.setAliveActors(actors);
+            world.setAliveActors(new ArrayList<>());
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fr/iut/hev/root/view/globalView.fxml"));
             Parent worldRoot = fxmlLoader.load();
@@ -197,7 +203,9 @@ public class MainMenuController implements Initializable {
         // Peut etre mettre ce code dans save manager ?
         ItemFactory itemFactory = new ItemFactory();
         TileMap tileMap = new TileMap(1920, 1080, itemFactory);
+        //Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
         Player player = new Player(0, -25, 32, 64, tileMap, 2, 10,3, ActorEnum.PLAYER);
+        player.initAfterDeserialization(tileMap, player.getPosX(), player.getPosY());
         ArrayList<Actor> aliveActors = new ArrayList<>();
         World newWorld = new World(worldName, tileMap, player, aliveActors);
         // TODO: Create a JSON World

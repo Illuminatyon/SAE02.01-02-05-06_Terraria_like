@@ -18,10 +18,18 @@ import java.util.Set;
 
 public class Player extends Actor {
     @Expose private Inventory inventory;
-    @Expose private final Set<PlayerMouvementsEnum> playerMouvementEnums;
-    @Expose private ObjectProperty<Item> itemInHandProperty;
+    @Expose private Set<PlayerMouvementsEnum> playerMouvementEnums;
+    private ObjectProperty<Item> itemInHandProperty;
     private IntegerProperty quantityOfItemInHandProperty; // Necessaire ?
     private IntegerProperty indexItemInHand;
+
+    @Override
+    public void initAfterDeserialization(TileMap tileMap, int posX, int posY) {
+        super.initAfterDeserialization(tileMap, posX, posY);
+        itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
+        quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
+        indexItemInHand = new SimpleIntegerProperty(0);
+    }
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor);
@@ -31,6 +39,25 @@ public class Player extends Actor {
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
     }
+
+    /*public void initAfterDeserialization(TileMap tileMap, double x, double y) {
+        System.out.println(">> initAfterDeserialization: start");
+
+        super.setTileMap(tileMap);
+        super.setPosX(x);
+        super.setPosY(y);
+
+        System.out.println(">> setting itemInHandProperty");
+        itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
+
+        System.out.println(">> setting quantityOfItemInHandProperty");
+        quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
+
+        System.out.println(">> setting indexItemInHand");
+        indexItemInHand = new SimpleIntegerProperty(0);
+
+        System.out.println(">> initAfterDeserialization: end");
+    }*/
 
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
         this.playerMouvementEnums.add(playerMouvementsEnum);
@@ -43,6 +70,7 @@ public class Player extends Actor {
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;}
 
     public void update() {
+        System.out.println(super.getPosX());
         updatePosition();
         // Create a copy of the loot collection to avoid ConcurrentModificationException
         Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get());
@@ -171,7 +199,10 @@ public class Player extends Actor {
         this.quantityOfItemInHandProperty.setValue(quantityOfItemInHandProperty.getValue() - 1);
     }
 
-    public Item getItemInHand() {return this.itemInHandProperty.getValue();}
+    public Item getItemInHand() {
+        return this.itemInHandProperty.getValue();
+    }
+
     public void setItemInHandProperty(Item itemInHandProperty) {this.itemInHandProperty.setValue(itemInHandProperty);}
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}

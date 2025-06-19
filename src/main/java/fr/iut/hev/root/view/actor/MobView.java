@@ -1,4 +1,4 @@
-package fr.iut.hev.root.view;
+package fr.iut.hev.root.view.actor;
 
 import fr.iut.hev.root.model.entities.AggressiveMob;
 import fr.iut.hev.root.model.entities.Mob;

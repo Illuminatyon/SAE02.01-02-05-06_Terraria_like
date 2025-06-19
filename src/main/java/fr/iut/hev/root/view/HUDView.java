@@ -2,61 +2,55 @@ package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.entities.Player;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static fr.iut.hev.root.model.TileMap.format;
 
 public class HUDView {
 
-    private HBox heartsHbox;
-    private ArrayList<ImageView> fullHearts;
-    private ImageView halfHeart;
+    private final HBox heartsHbox;
+    private final List<ImageView> fullHearts;
+    private final Image fullHeartImage;
+    private final Image halfHeartImage;
 
-    public HUDView(int health,HBox heartsHbox) {
+    public HUDView(IntegerProperty healthProperty, HBox heartsHbox) {
         this.heartsHbox = heartsHbox;
         this.fullHearts = new ArrayList<>();
-        initFullHearts(health);
-        this.halfHeart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_half.png").toExternalForm()));
-        setFit();
+
+        this.fullHeartImage = new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_full.png").toExternalForm());
+        this.halfHeartImage = new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_half.png").toExternalForm());
+
+        // Bind health to UI
+        healthProperty.addListener((obs, oldVal, newVal) -> updateHearts(newVal.intValue()));
+
+        // Initial draw (if value already > 0)
+        updateHearts(healthProperty.get());
     }
 
-    public void updateHealth(Number playerHealth) {
-        ImageView heart;
-        int health = playerHealth.intValue();
-        double nbHearts = health / 2.0;
-        int loopIteration;
-
+    private void updateHearts(int health) {
         heartsHbox.getChildren().clear();
-        if (health > 0) {
-            loopIteration = (int) nbHearts;
-            if (nbHearts % 1 > 0)
-                loopIteration += 1;
-            for (int i = 0; i < loopIteration; i++) {
-                if (nbHearts % 1 > 0 && i == loopIteration - 1)
-                    heart = halfHeart;
-                else
-                    heart = fullHearts.get(i);
-                heartsHbox.getChildren().add(heart);
-            }
+        int full = health / 2;
+        boolean hasHalf = health % 2 == 1;
+
+        for (int i = 0; i < full; i++) {
+            heartsHbox.getChildren().add(createHeartImage(fullHeartImage));
+        }
+
+        if (hasHalf) {
+            heartsHbox.getChildren().add(createHeartImage(halfHeartImage));
         }
     }
 
-    public void setFit() {
-        halfHeart.setFitHeight(format);
-        halfHeart.setFitWidth(format);
-    }
-
-    public void initFullHearts(int health) {
-        ImageView heart;
-        for (int i = 0 ; i < health/2 ; i++) {
-            heart = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/HUD/heart_full.png").toExternalForm()));
-            heart.setFitHeight(format);
-            heart.setFitWidth(format);
-            fullHearts.add(heart);
-        }
+    private ImageView createHeartImage(Image img) {
+        ImageView view = new ImageView(img);
+        view.setFitWidth(format);
+        view.setFitHeight(format);
+        return view;
     }
 }

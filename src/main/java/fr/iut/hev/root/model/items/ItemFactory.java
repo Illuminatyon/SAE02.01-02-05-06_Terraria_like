@@ -24,9 +24,9 @@ public class ItemFactory {
             case ItemTypesEnum.TOOL -> {
                 return createTool(itemsEnum);
             }
-            case ItemTypesEnum.WEAPON -> {
+            /*case ItemTypesEnum.WEAPON -> {
                 return createWeapon(itemsEnum);
-            }
+            }*/
             case ItemTypesEnum.ARMOR_PIECE -> {
                 return createArmorPiece(itemsEnum);
             }
@@ -56,7 +56,7 @@ public class ItemFactory {
         return new Tool(itemsEnum);
     }
 
-    public Weapon createWeapon(ItemsEnum itemsEnum) {
+    /*public Weapon createWeapon(ItemsEnum itemsEnum) {
         if (itemsEnum == ItemsEnum.DAGGER) {
             return new Dagger(itemsEnum);
         } else if (itemsEnum == ItemsEnum.KATANA) {
@@ -65,7 +65,7 @@ public class ItemFactory {
             return new Bow(itemsEnum);
         }
         return new Weapon(itemsEnum);
-    }
+    }*/
 
     public ArmorPiece createArmorPiece(ItemsEnum itemsEnum) {
         return new ArmorPiece(itemsEnum);

@@ -3,6 +3,7 @@ package fr.iut.hev.root.controller.InputHandling;
 import fr.iut.hev.root.controller.GlobalController;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.utilities.Cooldown;
@@ -17,6 +18,7 @@ import static fr.iut.hev.root.model.TileMap.format;
 public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     private InventoryView inventoryView;
+    private World world;
     private Player player;
     private Cooldown itemUseCooldown;
     private double x;
@@ -26,14 +28,13 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private MouseEvent mouseEvent;
     private GlobalView worldView;
     private TileMap tileMap;
-    private GlobalController globalController;
 
-    public MouseItemActionInputHandler(InventoryView inventoryView, Player player, GlobalView worldView, TileMap tileMap, GlobalController globalController) {
+    public MouseItemActionInputHandler(World world, InventoryView inventoryView, GlobalView worldView) {
+        this.world = world;
         this.inventoryView = inventoryView;
-        this.player = player;
+        this.player = world.getPlayer();
         this.worldView = worldView;
-        this.tileMap = tileMap;
-        this.globalController = globalController;
+        this.tileMap = world.getTileMap();
         this.x = 0;
         this.y = 0;
         this.mouseClickIsPressed = false;
@@ -48,8 +49,8 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public void handle(MouseEvent mouseEvent) {
         if (!inventoryView.getInventoryOpened() && !itemUseCooldown.getOnGoing()) {
             // Adjust mouse coordinates by camera offset
-            x = mouseEvent.getX() - globalController.getCameraOffsetX();
-            y = mouseEvent.getY() - globalController.getCameraOffsetY();
+            //x = mouseEvent.getX() - world.getCamera().getOffsetX();
+            //y = mouseEvent.getY() - world.getCamera().getOffsetY();
 
             if (player.getItemInHand() == null) {
                 // Handle empty hand - no longer allows breaking blocks
@@ -179,5 +180,4 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public TileMap getTileMap() {return this.tileMap;}
     public double getX() {return this.x;}
     public double getY() {return this.y;}
-    public GlobalController getGlobalController() {return this.globalController;}
 }

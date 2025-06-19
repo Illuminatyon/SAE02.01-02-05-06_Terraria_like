@@ -158,4 +158,8 @@ public class TileMap {
     private boolean writeTileMap() {
         return false;
     }
+
+    public void setItemFactory(ItemFactory itemFactory) {
+        this.itemFactory = itemFactory;
+    }
 }

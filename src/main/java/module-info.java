@@ -14,7 +14,9 @@ module fr.iut.hev.root {
     opens fr.iut.hev.root.model to com.google.gson;
     opens fr.iut.hev.root.model.enums to com.google.gson;
     opens fr.iut.hev.root.model.entities to com.google.gson;
+    opens fr.iut.hev.root.model.items to com.google.gson;
     exports fr.iut.hev.root;
     exports fr.iut.hev.root.view;
     opens fr.iut.hev.root.utils to com.google.gson;
+    exports fr.iut.hev.root.view.actor;
 }

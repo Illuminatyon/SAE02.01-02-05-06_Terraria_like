@@ -1,4 +1,4 @@
-package fr.iut.hev.root.view;
+package fr.iut.hev.root.view.actor;
 
 import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.TileMap;
@@ -7,17 +7,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.InputStream;
-import java.util.Objects;
 
 public class ActorView {
-
         private Actor actor;
         private ImageView actorSprite;
         private TileMap tileMap;
         private AnchorPane anchorPane;
 
-
-        public ActorView(Actor actor,TileMap tileMap,AnchorPane anchorPane) {
+        public ActorView(Actor actor, TileMap tileMap, AnchorPane anchorPane) {
             this.actor = actor;
             this.tileMap = tileMap;
             this.anchorPane = anchorPane;
@@ -27,6 +24,7 @@ public class ActorView {
         public Actor getActor() {
             return this.actor;
         }
+
         public AnchorPane getAnchorPane() {
             return this.anchorPane;
         }
@@ -65,6 +63,8 @@ public class ActorView {
                 // Set initial position (will be updated by the camera)
                 actorSprite.setLayoutX(0);
                 actorSprite.setLayoutY(0);
+                /*actorSprite.translateXProperty().bind(actor.posXProperty());
+                actorSprite.translateYProperty().bind(actor.posYProperty());*/
 
                 // Bind only the direction
                 actorSprite.scaleXProperty().bind(actor.lookDirectionProperty());

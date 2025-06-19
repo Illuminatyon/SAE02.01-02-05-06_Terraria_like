@@ -10,14 +10,13 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
-    @Expose private BooleanProperty isAliveProperty;
     @Expose private IntegerProperty healthProperty;
     @Expose private int moveSpeed;
     @Expose private int jumpForce;
     @Expose private boolean isJumping;
     @Expose private int jumpingTestDecay;
     @Expose private int reach;
-    private ActorEnum type;
+    @Expose private ActorEnum type;
 
     @Expose private IntegerProperty lookDirectionProperty;
     public enum LookDirections {

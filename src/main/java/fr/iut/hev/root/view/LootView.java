@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 public class LootView {
     private HashMap<Loot, ImageView> lootImageViews;
-    private Pane pane;
+    private Pane landPane;
 
-    public LootView(Pane pane) {
-        this.pane = pane;
+    public LootView(Pane landPane) {
+        this.landPane = landPane;
         lootImageViews = new HashMap<Loot, ImageView>();
 
         Loot.lootOnMapProperty.get().addListener((SetChangeListener<Loot>) change -> {
@@ -32,7 +32,7 @@ public class LootView {
                         imgv.setLayoutX(change.getElementAdded().getPosX());
                         imgv.setLayoutY(change.getElementAdded().getPosY());
                         lootImageViews.put(change.getElementAdded(), imgv);
-                        pane.getChildren().add(imgv);
+                        landPane.getChildren().add(imgv);
                     } else {
                         Image img = new Image(resourceUrl.toExternalForm());
                         ImageView imgv = new ImageView(img);
@@ -40,7 +40,7 @@ public class LootView {
                         imgv.setLayoutX(change.getElementAdded().getPosX());
                         imgv.setLayoutY(change.getElementAdded().getPosY());
                         lootImageViews.put(change.getElementAdded(), imgv);
-                        pane.getChildren().add(imgv);
+                        landPane.getChildren().add(imgv);
                     }
                 } catch (Exception e) {
                     System.err.println("Error loading image for loot: " + e.getMessage());
@@ -50,7 +50,7 @@ public class LootView {
                     ImageView imgView = lootImageViews.get(change.getElementRemoved());
                     if (imgView != null) {
                         imgView.setImage(null);
-                        pane.getChildren().remove(imgView);
+                        landPane.getChildren().remove(imgView);
                     }
                     lootImageViews.remove(change.getElementRemoved());
                     System.out.println("Loot retiré de la map");

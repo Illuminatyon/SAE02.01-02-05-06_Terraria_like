@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model;
 
+import com.google.gson.annotations.Expose;
 import fr.iut.hev.root.model.exception.InsufficientQuantityException;
 import fr.iut.hev.root.model.items.Item;
 import javafx.beans.property.IntegerProperty;
@@ -8,9 +9,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class InventorySlot {
-    private ObjectProperty<Item> itemProperty;
-    private IntegerProperty quantityProperty;
-    private final int index;
+    @Expose private ObjectProperty<Item> itemProperty;
+    @Expose private IntegerProperty quantityProperty;
+    @Expose private final int index;
 
     public InventorySlot(int index) {
         this.itemProperty = new SimpleObjectProperty<Item>();
