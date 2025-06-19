@@ -160,8 +160,8 @@ public class BowView {
 
         // Calculate the rotation angle based on the direction
         double angle = Math.toDegrees(Math.atan2(dirY, dirX));
-        // Add 180 degrees to rotate the bow sprite
-        bowSprite.setRotate(angle + 180);
+        // Add 135 degrees to rotate the bow 90° to the right from the arrow's orientation
+        bowSprite.setRotate(angle + 135);
 
         // Make the bow visible
         bowSprite.setVisible(true);
