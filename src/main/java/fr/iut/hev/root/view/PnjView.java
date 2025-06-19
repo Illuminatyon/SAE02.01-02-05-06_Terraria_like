@@ -23,13 +23,13 @@ public class PnjView extends ActorView{
         this.phrase.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5;");
         this.phrase.setVisible(false);
         this.getAnchorPane().getChildren().add(phrase);
-        // Don't bind to actor position, we'll update the position manually
+
     }
 
     public void speak() {
         DialogueEnum[] text = DialogueEnum.values();
         if (count >= text.length) {
-            count = 0; // Reset if exceeding bounds
+            count = 0;
         }
 
         this.phrase.setText(text[count].getTexte());
@@ -50,10 +50,9 @@ public class PnjView extends ActorView{
         // Remove the dialogue text from the AnchorPane
         if (phrase != null && getAnchorPane() != null) {
             getAnchorPane().getChildren().remove(phrase);
-            System.out.println("[DEBUG_LOG] PNJ dialogue text removed from AnchorPane");
-        }
+                    }
 
-        // Call the parent method to remove the actor sprite
+
         super.deleteActorSprite();
     }
 }
