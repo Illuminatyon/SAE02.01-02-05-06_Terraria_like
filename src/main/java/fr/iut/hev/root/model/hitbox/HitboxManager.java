@@ -67,7 +67,7 @@ public class HitboxManager {
      * @return A list of entities that were hit
      */
     public List<Entity> checkAttackCollisions(Entity attacker, int damage) {
-        List<Entity> hitEntities = new ArrayList<>();
+            List<Entity> hitEntities = new ArrayList<>();
         
         if (!entityHitboxes.containsKey(attacker)) {
             return hitEntities;
@@ -120,13 +120,13 @@ public class HitboxManager {
      * @param entity The entity to create a hitbox for
      * @return The created hitbox
      */
-    public Hitbox createDefaultVulnerableHitbox(Entity entity) {
+    public Hitbox createHitbox(Entity entity, HitboxType type) {
         Hitbox hitbox = new RectangleHitbox(
             entity.getPosX(),
             entity.getPosY(),
             entity.getWidth(),
             entity.getHeight(),
-            HitboxType.VULNERABLE
+                type
         );
         addHitbox(entity, hitbox);
         return hitbox;

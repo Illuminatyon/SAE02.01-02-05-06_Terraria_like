@@ -5,7 +5,11 @@ import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
+import fr.iut.hev.root.model.hitbox.Hitbox;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -22,13 +26,15 @@ public class Player extends Actor {
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
 
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor) {
-        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor);
+
+    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor, hitboxManager);
         this.inventory = new Inventory();
         this.playerMouvementEnums = new HashSet<>();
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
+        getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
     }
 
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
