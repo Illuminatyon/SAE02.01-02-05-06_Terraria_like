@@ -18,7 +18,7 @@ import java.util.Map;
 public class HitboxManager {
     private Map<Entity, List<Hitbox>> entityHitboxes;
     private HashMap<Interactive,Hitbox> interactiveHitboxes;
-    
+
     /**
      * Creates a new hitbox manager.
      */
@@ -26,7 +26,7 @@ public class HitboxManager {
         this.entityHitboxes = new HashMap<>();
         this.interactiveHitboxes = new HashMap<>();
     }
-    
+
     /**
      * Adds a hitbox to an entity.
      * 
@@ -44,7 +44,7 @@ public class HitboxManager {
             interactiveHitboxes.put((Interactive) entity,hitbox);
         }
     }
-    
+
     /**
      * Removes all hitboxes from an entity.
      * 
@@ -53,7 +53,7 @@ public class HitboxManager {
     public void removeHitboxes(Entity entity) {
         entityHitboxes.remove(entity);
     }
-    
+
     /**
      * Updates the positions of all hitboxes for an entity.
      * 
@@ -67,7 +67,7 @@ public class HitboxManager {
             }
         }
     }*/
-    
+
     /**
      * Checks for collisions between attack hitboxes and vulnerable hitboxes.
      * If a collision is detected, damage is applied to the vulnerable entity.
@@ -78,11 +78,11 @@ public class HitboxManager {
      */
     public List<Entity> checkAttackCollisions(Entity attacker, int damage) {
             List<Entity> hitEntities = new ArrayList<>();
-        
+
         if (!entityHitboxes.containsKey(attacker)) {
             return hitEntities;
         }
-        
+
         // Get all attack hitboxes for the attacker
         List<Hitbox> attackHitboxes = new ArrayList<>();
         for (Hitbox hitbox : entityHitboxes.get(attacker)) {
@@ -90,16 +90,16 @@ public class HitboxManager {
                 attackHitboxes.add(hitbox);
             }
         }
-        
+
         // Check for collisions with vulnerable hitboxes of other entities
         for (Map.Entry<Entity, List<Hitbox>> entry : entityHitboxes.entrySet()) {
             Entity target = entry.getKey();
-            
+
             // Skip the attacker
             if (target == attacker) {
                 continue;
             }
-            
+
             // Check if any attack hitbox intersects with any vulnerable hitbox
             boolean hit = false;
             for (Hitbox attackHitbox : attackHitboxes) {
@@ -113,14 +113,14 @@ public class HitboxManager {
                     break;
                 }
             }
-            
+
             // If a hit was detected, apply damage and add to the list
             if (hit && target instanceof Actor) {
                 ((Actor) target).receiveDamage(damage);
                 hitEntities.add(target);
             }
         }
-        
+
         return hitEntities;
     }
 
@@ -157,19 +157,21 @@ public class HitboxManager {
      * @return The created hitbox
      */
     public Hitbox createHitbox(Entity entity, HitboxType type) {
+        // Calculate the center of the entity
         Hitbox hitbox = new Hitbox(
-            entity.getPosX(),
-            entity.getPosY(),
+            entity.getPosX() + entity.getWidth() / 2,
+            entity.getPosY() + entity.getHeight() / 2,
             entity.getWidth(),
             entity.getHeight(),
                 type
         );
-        hitbox.xProperty().bind(entity.posXProperty());
-        hitbox.yProperty().bind(entity.posYProperty());
+        // Bind to entity position plus half width/height to keep hitbox centered
+        hitbox.xProperty().bind(entity.posXProperty().add(entity.getWidth() / 2));
+        hitbox.yProperty().bind(entity.posYProperty().add(entity.getHeight() / 2));
         addHitbox(entity, hitbox);
         return hitbox;
     }
-    
+
     /**
      * Creates an attack hitbox for a weapon.
      * 
@@ -181,9 +183,10 @@ public class HitboxManager {
      * @return The created hitbox
      */
     public Hitbox createWeaponAttackHitbox(Entity attacker, double offsetX, double offsetY, double width, double height) {
+        // Create attack hitbox with offset from the center of the entity
         Hitbox hitbox = new Hitbox(
-            attacker.getPosX() + offsetX,
-            attacker.getPosY() + offsetY,
+            attacker.getPosX() + attacker.getWidth() / 2 + offsetX,
+            attacker.getPosY() + attacker.getHeight() / 2 + offsetY,
             width,
             height,
             HitboxType.ATTACK

@@ -66,6 +66,7 @@ public class GlobalController implements Initializable {
     private CraftView craftView;
     private Cooldown dialogueCD;
     private LootView lootView;
+    private HitboxView hitboxView;
 
     @FXML
     private TilePane backgroundTileMap;
@@ -110,6 +111,7 @@ public class GlobalController implements Initializable {
         cooldownManager = new CooldownManager();
         hitboxManager = new HitboxManager();
         itemFactory = new ItemFactory(hitboxManager);
+        hitboxView = new HitboxView(hitboxManager, entitiesPane, this);
 
         initItemEnums();
         initMap();
@@ -148,6 +150,9 @@ public class GlobalController implements Initializable {
 
                     updateCameraPosition();
                     checkPnjDialogue();
+
+                    // Update hitbox view
+                    hitboxView.updateHitboxes();
 
                     cooldownManager.allCooldownsTick();
                 })

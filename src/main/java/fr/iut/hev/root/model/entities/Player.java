@@ -38,9 +38,9 @@ public class Player extends Actor {
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-        this.interactiveHitbox = new Hitbox(posX,posY,width,height,HitboxType.INTERACTION);
-        interactiveHitbox.xProperty().bind(this.posXProperty());
-        interactiveHitbox.yProperty().bind(this.posYProperty());
+        this.interactiveHitbox = new Hitbox(posX + width / 2, posY + height / 2, width, height, HitboxType.INTERACTION);
+        interactiveHitbox.xProperty().bind(this.posXProperty().add(width / 2));
+        interactiveHitbox.yProperty().bind(this.posYProperty().add(height / 2));
     }
 
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
