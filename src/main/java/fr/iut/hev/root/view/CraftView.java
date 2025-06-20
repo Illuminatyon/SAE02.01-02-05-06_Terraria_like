@@ -50,22 +50,22 @@ public class CraftView {
             if (selectedRecipe != null) {
                 setSelectedRecipe(selectedRecipe);
                 displayRecipe();
+                System.out.println("Selection changed to: " + selectedRecipe.name());
             }
         });
     }
 
     public void setCraftGUIVisible() {
         opened = !opened;
-        availableRecipesList.setVisible(opened);
-        availableRecipesList.setMouseTransparent(!opened);
-        craftButton.setVisible(opened);
-        craftButton.setMouseTransparent(!opened);
-        recipeDisplay.setVisible(opened);
-        recipeDisplay.setMouseTransparent(!opened);
+        updateCraftGUIVisibility();
     }
 
     public void setCraftGUIVisible(boolean opened) {
         this.opened = opened;
+        updateCraftGUIVisibility();
+    }
+
+    private void updateCraftGUIVisibility() {
         availableRecipesList.setVisible(opened);
         availableRecipesList.setMouseTransparent(!opened);
         craftButton.setVisible(opened);
@@ -84,12 +84,14 @@ public class CraftView {
         recipeDisplay.setPrefWidth((getSelectedRecipe().getIngredients().size() * 2 + 1) * 50);
         recipeDisplay.setLayoutX(960 - (recipeDisplay.getPrefWidth() / 2));
 
+        recipeDisplay.setPrefHeight(50);
+        recipeDisplay.setMinHeight(50);
+
         for (Map.Entry<ItemsEnum, Integer> recipe : getSelectedRecipe().getIngredients().entrySet()) {
             recipeIcone = new ImageView(new Image(getClass().getResource("/fr/iut/hev/root/img/items/" + recipe.getKey().getName() + ".png").toExternalForm()));
             recipeIcone.setFitWidth(50);
             recipeIcone.setFitHeight(50);
             quantity = new Label(Integer.toString(recipe.getValue()));
-            quantity.setTextFill(Color.WHITE);
             cell = new Pane(recipeIcone,quantity);
             recipeDisplay.getChildren().add(cell);
 
@@ -107,7 +109,6 @@ public class CraftView {
         recipeIcone.setFitWidth(50);
         recipeIcone.setFitHeight(50);
         quantity = new Label(Integer.toString(getSelectedRecipe().getItemCraftedQuantity()));
-        quantity.setTextFill(Color.WHITE);
         cell = new Pane(recipeIcone,quantity);
         recipeDisplay.getChildren().add(cell);
     }

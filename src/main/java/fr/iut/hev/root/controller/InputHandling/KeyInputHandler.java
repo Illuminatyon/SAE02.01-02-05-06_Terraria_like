@@ -4,20 +4,22 @@ import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
 import fr.iut.hev.root.view.CraftView;
 import fr.iut.hev.root.view.InventoryView;
+import fr.iut.hev.root.model.World;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import static fr.iut.hev.root.controller.GlobalController.mob;
+import java.io.IOException;
 
 public class KeyInputHandler implements EventHandler<KeyEvent> {
-
+    private World world;
     private Player player;
     private InventoryView inventoryView;
     private CraftView craftView;
 
-    public KeyInputHandler(Player player,InventoryView inventoryView,CraftView craftView) {
-        this.player = player;
+    public KeyInputHandler(World world, InventoryView inventoryView, CraftView craftView) {
+        this.world = world;
+        this.player = world.getPlayer();
         this.inventoryView = inventoryView;
         this.craftView = craftView;
     }
@@ -38,10 +40,6 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                 case KeyCode.Z -> {
                     player.receiveDamage(1);
                     System.out.println("pv = " + player.getHealth());
-                }
-                case KeyCode.Y -> {
-                    mob.receiveDamage(1);
-                    System.out.println("pv = " + mob.getHealth());
                 }
             }
         } else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {

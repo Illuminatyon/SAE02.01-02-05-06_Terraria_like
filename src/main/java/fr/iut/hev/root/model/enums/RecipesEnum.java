@@ -20,6 +20,11 @@ public enum RecipesEnum {
     HAMMER(ItemsEnum.HAMMER,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.STICK,2),new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,3))),RecipeAvailability.INVENTORY),
     DAGGER(ItemsEnum.DAGGER,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.STICK,1),new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,1))),RecipeAvailability.INVENTORY),
 
+    COOKED_CHICKEN(ItemsEnum.COOKED_CHICKEN,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.RAW_CHICKEN,1))),RecipeAvailability.FURNACE),
+
+    KATANA(ItemsEnum.KATANA,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.STICK,2),new AbstractMap.SimpleEntry<>(ItemsEnum.IRON_INGOT,3))),RecipeAvailability.CRAFTING_TABLE),
+    BOW(ItemsEnum.BOW,1,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.STICK,3),new AbstractMap.SimpleEntry<>(ItemsEnum.FEATHER,2))),RecipeAvailability.CRAFTING_TABLE),
+
     CACA(ItemsEnum.CACA,3,new HashMap<>(Map.ofEntries(new AbstractMap.SimpleEntry<>(ItemsEnum.DIRT,2))),RecipeAvailability.INVENTORY);
 
 

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.ToggleSwitch?>
+
+<AnchorPane fx:id="root" prefHeight="700.0" prefWidth="1500.0" style="-fx-background-color: black;" stylesheets="@../menu_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.hev.root.controller.MainMenuController">
+   <children>
+      <VBox fx:id="mainMenuContainer" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/rootlogo1.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="mainBtnPlay" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="PLAY" />
+            <Button fx:id="mainBtnSettings" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="SETTINGS" />
+            <Button fx:id="mainBtnQuit" layoutX="10.0" layoutY="36.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="QUIT" />
+         </children>
+      </VBox>
+      <StackPane fx:id="worldsMenuContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="worldsMenuContainerSelection" alignment="CENTER" spacing="10.0">
+               <children>
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0" maxWidth="700.0" prefWidth="700.0" vbarPolicy="NEVER">
+                     <content>
+                        <VBox fx:id="worldsContainer" alignment="TOP_CENTER" spacing="10.0">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+                  <HBox alignment="CENTER" maxWidth="700.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="worldsBtnBack" mnemonicParsing="false" text="&lt; Back" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="worldsBtnNewWorld" layoutX="74.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="New World" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="worldsMenuContainerCreate" alignment="CENTER" maxWidth="500.0" spacing="10.0" visible="false">
+               <children>
+                  <TextField fx:id="worldsCreateTextField">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </TextField>
+                  <HBox alignment="CENTER" maxWidth="700.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="worldsCreateBtnBack" mnemonicParsing="false" text="&lt; Back" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="worldsCreateBtn" layoutX="74.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Create" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="worldsMenuContainerEdit" alignment="CENTER" layoutX="510.0" layoutY="10.0" maxWidth="500.0" spacing="10.0" visible="false">
+               <children>
+                  <TextField fx:id="worldsEditTextField">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </TextField>
+                  <HBox alignment="CENTER" maxWidth="700.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="worldsEditBtnBack" mnemonicParsing="false" text="&lt; Cancel" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="worldsEditBtn" layoutX="74.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Confirm edit" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+      <VBox fx:id="settingsMenuContainer" alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="10.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0" maxWidth="700.0" prefWidth="700.0">
+               <content>
+                  <VBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label text="Category" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label text="Category" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="20.0" layoutY="230.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label text="Category" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0" style="-fx-border-color: white; -fx-border-width: 3;">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" text="Option" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ToggleSwitch />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+            <HBox alignment="CENTER" maxWidth="700.0" spacing="10.0">
+               <children>
+                  <Button fx:id="settingsBtnBack" mnemonicParsing="false" text="&lt; Back" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="settingsBtnResetDefault" layoutX="74.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Reset to default" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

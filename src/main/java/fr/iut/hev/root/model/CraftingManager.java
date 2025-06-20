@@ -28,8 +28,9 @@ public class CraftingManager {
 
     private void initCraftingManager() {
         for (RecipesEnum recipesEnum : RecipesEnum.values()) {
-            if (recipesEnum.getRecipeAvailability() == RecipeAvailability.INVENTORY)
+            if (recipesEnum.getRecipeAvailability() == RecipeAvailability.INVENTORY) {
                 recipesAvailable.add(recipesEnum);
+            }
         }
     }
 
@@ -62,4 +63,3 @@ public class CraftingManager {
     public void setSelectedRecipe(RecipesEnum recipe) {this.selectedRecipeProperty.setValue(recipe);}
     public ObjectProperty<RecipesEnum> selectedRecipeProperty() {return this.selectedRecipeProperty;}
 }
-

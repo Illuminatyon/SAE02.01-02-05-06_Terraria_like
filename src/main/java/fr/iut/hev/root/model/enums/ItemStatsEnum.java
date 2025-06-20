@@ -80,12 +80,16 @@ public enum ItemStatsEnum {
     HAMMER(1044),
 
     DAGGER(2003),
+    KATANA(2005),
+    BOW(2002),
 
     IRON_HELMET(3001),
     IRON_CHESTPLATE(3001),
     IRON_LEGGINGS(3001),
 
-    RAW_CHICKEN(4003);
+    RAW_CHICKEN(4003),
+    CHICKEN_LEG(4002),
+    COOKED_CHICKEN(4005);
 
     private int statCode;
 

@@ -23,6 +23,10 @@ public class Inventory {
     }
 
     public HashMap<Item, Integer> add(int slotIndex, Item item, int quantity) {
+        // TMP START
+        if (item == null) return null;
+        // TMP END
+
         if (slots.get(slotIndex).getItem() == null) {
             slots.get(slotIndex).setItem(item);
             slots.get(slotIndex).setQuantity(quantity);
@@ -30,6 +34,7 @@ public class Inventory {
             return null;
         }
         else {
+            System.out.println("Item " + item + " is not null");
             HashMap<Item, Integer> replacedItem = new HashMap<>();
 
             if (slots.get(slotIndex).getItem().getItemEnum() != item.getItemEnum()) {

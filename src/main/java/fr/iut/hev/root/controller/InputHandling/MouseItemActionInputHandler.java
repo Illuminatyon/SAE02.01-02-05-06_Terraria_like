@@ -1,10 +1,13 @@
 package fr.iut.hev.root.controller.InputHandling;
 
+import fr.iut.hev.root.controller.GlobalController;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.utilities.Cooldown;
+import fr.iut.hev.root.view.Camera;
 import fr.iut.hev.root.view.GlobalView;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.event.EventHandler;
@@ -16,7 +19,9 @@ import static fr.iut.hev.root.model.TileMap.format;
 public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     private InventoryView inventoryView;
+    private World world;
     private Player player;
+    private Camera camera;
     private Cooldown itemUseCooldown;
     private double x;
     private double y;
@@ -25,12 +30,16 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private MouseEvent mouseEvent;
     private GlobalView worldView;
     private TileMap tileMap;
+    private GlobalController globalController; // Retirer global controller peut etre, enft c un handler alors jsp
 
-    public MouseItemActionInputHandler(InventoryView inventoryView, Player player, GlobalView worldView,TileMap tileMap) {
+    public MouseItemActionInputHandler(World world, Camera camera, InventoryView inventoryView, GlobalView worldView) {
+        this.world = world;
         this.inventoryView = inventoryView;
-        this.player = player;
+        this.player = world.getPlayer();
+        this.camera = camera;
         this.worldView = worldView;
-        this.tileMap = tileMap;
+        this.tileMap = world.getTileMap();
+        this.globalController = globalController;
         this.x = 0;
         this.y = 0;
         this.mouseClickIsPressed = false;
@@ -44,12 +53,14 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent mouseEvent) {
         if (!inventoryView.getInventoryOpened() && !itemUseCooldown.getOnGoing()) {
-            if (player.getItemInHand() == null)
+
+            if (player.getItemInHand() == null) {
                 System.out.println("prout");
-            else  {
-                if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK)) {
-                    x = mouseEvent.getX();
-                    y = mouseEvent.getY();
+            }
+            else {
+                if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY)) {
+                    x = mouseEvent.getX() - camera.getCurrentCamX();
+                    y = mouseEvent.getY() - camera.getCurrentCamY();
                     if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
                         this.mouseClickIsPressed = true;
                         this.mouseEvent = mouseEvent;
@@ -95,7 +106,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickPressedLoop() {
         if (player.usesItemInHand(this)) {
-            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
+            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
     }
@@ -106,7 +117,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     public void onLeftClickReleasedLoop() {
         if (player.usesItemInHand(this)) {
-            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK))
+            if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY))
                 worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
         }
         this.mouseClickIsReleased = false;
@@ -140,4 +151,5 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public TileMap getTileMap() {return this.tileMap;}
     public double getX() {return this.x;}
     public double getY() {return this.y;}
+    public GlobalController getGlobalController() {return this.globalController;}
 }

@@ -28,6 +28,11 @@ public class Entity {
         this.collider = new Collider(tileMap, this);
     }
 
+    public void initAfterDeserialization(TileMap tileMap, int posX, int posY) {
+        this.tileMap = tileMap;
+        this.collider = new Collider(tileMap, this);
+    }
+
     public void updatePosition() {
         applyGravity();
         posXProperty.set(posXProperty.getValue() + velocityX);
@@ -103,5 +108,9 @@ public class Entity {
 
     public int getEffectivePosY() {
         return this.getPosY() + (tileMap.getHeight() * TileMap.format) / 2;
+    }
+
+    public void setTileMap(TileMap tileMap) {
+        this.tileMap = tileMap;
     }
 }

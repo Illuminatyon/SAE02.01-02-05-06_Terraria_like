@@ -7,25 +7,24 @@ import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
 
 public class TileMap {
-    private final int width;
-    private final int height;
-    private final Tile[][] tileMap;
     private ItemFactory itemFactory;
+    private int width, height;
+    private Tile[][] tileMap;
 
     public static final int format = 32;
 
-    public TileMap(int width, int height,ItemFactory itemFactory) {
+    public TileMap(int width, int height, ItemFactory itemFactory) {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
         this.itemFactory = itemFactory;
+        System.out.println("In TileMap: " + this.itemFactory);
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
 
         //génération de la map tests
         this.setTestMap();
-
     }
 
     public Tile getTile(int tileX, int tileY) {
@@ -132,7 +131,6 @@ public class TileMap {
     public void tileGetsMined(int x, int y,int damage) {
         Tile currentTile = this.getTile(x,y);
         if (!(currentTile.getHealth() <= 0)) {
-            System.out.println(currentTile.getHealth());
             currentTile.takesDamage(damage);
         }
         if (currentTile.getHealth() <= 0) {
@@ -158,5 +156,9 @@ public class TileMap {
     // Retourne true si l'operation est reussie, false sinon
     private boolean writeTileMap() {
         return false;
+    }
+
+    public void setItemFactory(ItemFactory itemFactory) {
+        this.itemFactory = itemFactory;
     }
 }

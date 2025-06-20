@@ -3,6 +3,7 @@ package fr.iut.hev.root.view;
 import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.InventorySlot;
 import fr.iut.hev.root.model.items.Item;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -42,8 +43,25 @@ public class InventoryView {
         initHold();
 
         inventory.getSlots().forEach(slot -> {
-            slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
-            slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot)); // TODO: utiliser un bind ici
+            //slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
+            //slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot)); // TODO: utiliser un bind ici
+            for (Node child : ((Pane) findCell(slot.getIndex())).getChildren()) {
+                if (child instanceof ImageView imageView) {
+                    imageView.imageProperty().bind(Bindings.createObjectBinding(
+                            () -> getImageFromSlot(slot),
+                            slot.itemProperty()
+                    ));
+                } else if (child instanceof Label label) {
+                    //label.textProperty().bind(slot.quantityProperty().asString());
+                    label.textProperty().bind(Bindings.createStringBinding(
+                            () -> {
+                                int quantity = slot.getQuantity();
+                                return quantity == 0 ? "" : String.valueOf(quantity);
+                            },
+                            slot.quantityProperty()
+                    ));
+                }
+            }
         });
         hotbar.setMouseTransparent(true);
         expandedInventory.setMouseTransparent(true);
@@ -75,41 +93,40 @@ public class InventoryView {
         return pane;
     }
 
-    private void updateSlot(InventorySlot slot) {
-        Node cell = findCell(slot.getIndex());
-        if (cell instanceof Pane pane) {
-            for (Node child : pane.getChildren()) {
-                if (child instanceof ImageView imageView) {
-                    imageView.setImage(getImageFromSlot(slot));
-                } else if (child instanceof Label label) {
-                    label.setText(getQuantityTextFromSlot(slot));
-                }
-            }
-        }
-    }
-
     private Image getImageFromSlot(InventorySlot slot) {
         if (slot.getItem() == null) return null;
         String name = slot.getItem().getItemEnum().getName();
         String path = "/fr/iut/hev/root/img/items/" + name + ".png";
-        return new Image(getClass().getResource(path).toExternalForm());
+        try {
+            java.net.URL resourceUrl = getClass().getResource(path);
+            if (resourceUrl != null) {
+                return new Image(resourceUrl.toExternalForm());
+            } else {
+                System.err.println("Resource not found: " + path);
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + path + " - " + e.getMessage());
+            return null;
+        }
     }
 
     private Image getImageFromHold(HashMap<Item,Integer> onHold) {
         if (onHold == null)
             return null;
         String path = "/fr/iut/hev/root/img/items/" + onHold.keySet().iterator().next().getItemEnum().getName() + ".png";
-        return new Image(getClass().getResource(path).toExternalForm());
-    }
-
-    private String getQuantityTextFromSlot(InventorySlot slot) {
-        String txt;
-        if (/*slot.getItem().getItem().getMaxQuantity() == 1 ||*/ slot.getItem() == null) {
-            txt = "";
-        } else {
-            txt = Integer.toString(slot.getQuantity());
+        try {
+            java.net.URL resourceUrl = getClass().getResource(path);
+            if (resourceUrl != null) {
+                return new Image(resourceUrl.toExternalForm());
+            } else {
+                System.err.println("Resource not found: " + path);
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + path + " - " + e.getMessage());
+            return null;
         }
-        return txt;
     }
 
     private String getQuantityTextFromHold(HashMap<Item,Integer> onHold) {
@@ -156,10 +173,14 @@ public class InventoryView {
     public void updateOnHoldPane(HashMap<Item,Integer> onHold) {
         Pane pane = (Pane) hudAnchorPane.getChildren().get(5);
         for (Node child : pane.getChildren()) {
-            if (child instanceof Label)
+            if (child instanceof Label) {
                 ((Label) child).setText(getQuantityTextFromHold(onHold));
-            else if (child instanceof ImageView)
-                ((ImageView) child).setImage(getImageFromHold(onHold));
+            } else if (child instanceof ImageView) {
+                Image image = getImageFromHold(onHold);
+                ((ImageView) child).setImage(image);
+                ((ImageView) child).setFitWidth(50);
+                ((ImageView) child).setFitHeight(50);
+            }
         }
     }
 

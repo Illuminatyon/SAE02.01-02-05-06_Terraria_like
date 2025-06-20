@@ -22,15 +22,20 @@ public enum ItemsEnum {
     WOODEN_SHOVEL("wooden_shovel",1,0,ItemTypesEnum.TOOL,ItemStatsEnum.WOODEN_SHOVEL),
     HAMMER("hammer",1,0, ItemTypesEnum.TOOL,ItemStatsEnum.HAMMER),
     CRAFTING_TABLE("crafting_table",1,0, ItemTypesEnum.UTILITY),
-    FURNACE("furnace",100,0, ItemTypesEnum.UTILITY),
+    FURNACE("furnace",100,0, ItemTypesEnum.BLOCK),
 
-    DAGGER("dagger",1,1, ItemTypesEnum.WEAPON,ItemStatsEnum.DAGGER),
+    DAGGER("dagger",1,0.5, ItemTypesEnum.WEAPON,ItemStatsEnum.DAGGER),
+    KATANA("katana",1,0.7, ItemTypesEnum.WEAPON,ItemStatsEnum.KATANA),
+    BOW("bow",1,1.0, ItemTypesEnum.WEAPON,ItemStatsEnum.BOW),
+    ARROW("arrow",64,0, ItemTypesEnum.RESOURCES),
 
     IRON_HELMET("iron_helmet",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_HELMET),
     IRON_CHESTPLATE("iron_chestplate",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_CHESTPLATE),
     IRON_LEGGINGS("iron_leggings",1,0, ItemTypesEnum.ARMOR_PIECE,ItemStatsEnum.IRON_LEGGINGS),
 
     RAW_CHICKEN("raw_chicken",100,1.5, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
+    CHICKEN_LEG("chicken_leg",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.CHICKEN_LEG),
+    COOKED_CHICKEN("cooked_chicken",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.COOKED_CHICKEN),
     CACA("caca",100,1,ItemTypesEnum.RESOURCES);
 
     private String name;

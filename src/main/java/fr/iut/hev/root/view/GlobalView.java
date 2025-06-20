@@ -3,6 +3,7 @@ package fr.iut.hev.root.view;
 import fr.iut.hev.root.model.Tile;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.TileTypesEnum;
+import fr.iut.hev.root.model.enums.TilesEnum;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -14,11 +15,13 @@ public class GlobalView {
     private TileMap tileMap;
     private TilePane tileMapLand;
     private TilePane tileMapBackground;
+    private TileTypesEnum brokenTile;
 
     public GlobalView (TileMap tileMap,TilePane tileMapLand,TilePane tileMapBackground) {
         this.tileMap = tileMap;
         this.tileMapLand = tileMapLand;
         this.tileMapBackground = tileMapBackground;
+        this.brokenTile = null;
         loadWorld();
     }
 
@@ -46,19 +49,40 @@ public class GlobalView {
     }
 
     public void updateTile(Tile tile) {
-        System.out.println(tile.getHealth());
         int textureNumber = 4;
         int tileHealth = tile.getHealth();
-        int tileHealthStep = ((tile.getTileEnum().getMaxHealth()*20) / 4);
-        if (tileHealth > 0) {
-            for (int i = 4 ; i > 0 ; i--) {
+        int maxHealth = tile.getTileEnum().getMaxHealth() * 20;
+        ImageView tileView;
+        if (tileHealth == maxHealth) {
+            textureNumber = 4;
+        }
+        if (brokenTile == null) {
+            brokenTile = tile.getTileEnum().getType();
+        }
+        else if (tileHealth > 0) {
+            int tileHealthStep = (maxHealth / 4);
+            for (int i = 4; i > 0; i--) {
                 if (tileHealth < (tileHealthStep * i) && tileHealth >= (tileHealthStep * (i - 1)))
                     textureNumber = i;
             }
-            tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView(getTexture(tile,textureNumber)));
         }
-        else
-            tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView());
+        if (tileHealth > 0) {
+            tileView = new ImageView(getTexture(tile, textureNumber));
+            if (!(tile.getTileEnum().getType().equals(TileTypesEnum.UTILITIES))) {
+                tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), tileView);
+            } else {
+                tileMapBackground.getChildren().set(tile.getY() * 60 + tile.getX(), tileView);
+            }
+        }
+        else {
+            if (brokenTile.equals(TileTypesEnum.BLOCK)) {
+                tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView());
+            }
+            else {
+                tileMapBackground.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView());
+            }
+            brokenTile = null;
+        }
     }
 
     public Image getTexture(Tile tile, int textureNumber) {

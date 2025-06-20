@@ -1,0 +1,43 @@
+:root {
+}
+
+.button {
+    -fx-font-size: 20px;
+    -fx-padding: 12;
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-width: 3;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: rgb(126, 162, 104);
+    -fx-border-color: rgba(126, 162, 104, 0.75);
+}
+
+.button.selected {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: rgb(126, 162, 104);
+    -fx-border-color: rgba(126, 162, 104, 0.75);
+    -fx-border-style: dashed;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color:transparent;
+    -fx-border-color: white;
+    -fx-border-width: 3;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
+    -fx-border-color: white;
+    -fx-text-fill: white;
+}

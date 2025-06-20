@@ -10,17 +10,9 @@ public enum TilesEnum {
     IRON_BLOCK("iron_block",TileTypesEnum.BLOCK,15,ItemsEnum.IRON_BLOCK,BlockTypesEnum.ROCK_TYPE),
     //WATER("water", TileTypes.LIQUID),
     //LAVA("lava", TileTypes.LIQUID);
-    CRAFTING_TABLE("crafting_table", TileTypesEnum.UTILITIES,15, ItemsEnum.CRAFTING_TABLE, BlockTypesEnum.WOOD_TYPE),
+    CRAFTING_TABLE("crafting_table", TileTypesEnum.UTILITIES,10, ItemsEnum.CRAFTING_TABLE, BlockTypesEnum.WOOD_TYPE),
     TREE("tree", TileTypesEnum.BACKGROUND,15, ItemsEnum.WOOD, BlockTypesEnum.WOOD_TYPE),
-    FURNACE("furnace", TileTypesEnum.UTILITIES,20, ItemsEnum.FURNACE),
-    DARKSTONE("darkstone",TileTypesEnum.BLOCK,12,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
-    PIERRE("pierre",TileTypesEnum.BLOCK,24,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
-    MUR("mur",TileTypesEnum.BLOCK,10,ItemsEnum.MUR,BlockTypesEnum.INDESTRUCTIBLE_TYPE),
-    PIERREFOND("darkstone_background",TileTypesEnum.AIR,0),
-    MURFOND("mur_background",TileTypesEnum.AIR,0),
-    COPIUM("copium",TileTypesEnum.BLOCK,30,ItemsEnum.COPIUM_BLOCK,BlockTypesEnum.ROCK_TYPE);
-
-
+    FURNACE("furnace", TileTypesEnum.UTILITIES,12, ItemsEnum.FURNACE, BlockTypesEnum.ROCK_TYPE);
 
     private final String name;
     private final TileTypesEnum type;

@@ -7,7 +7,7 @@ public class Tile {
     private int health;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
-    private int tileX;
+    private int tileX; // Pas sur d'avoir besoin de les exposer
     private int tileY;
 
     public Tile(TilesEnum tileEnum, int x, int y) {
@@ -40,7 +40,7 @@ public class Tile {
 
     public int getHealth() {return this.health;}
 
-    public void resetHealth() {this.health = this.tileEnum.getMaxHealth()*10;}
+    public void resetHealth() {this.health = this.tileEnum.getMaxHealth()*20;}
 
     /*public String toString() {
         return "{"

@@ -45,14 +45,18 @@ public class Collider {
         double w = entity.getWidth();
         double h = entity.getHeight();
 
-        /*return hasCollision(x - w / 2 + marge, y - h / 2, false, true)
-                || hasCollision(x + w / 2 - marge, y - h / 2, false, true);*/
-
         int lastTrue = -1;
 
         for (int i = n; i > 0; i--) {
-            if (hasCollision(x - w / 2 + marge, y - h / 2 + i, false, true)
-                    || hasCollision(x + w / 2 - marge, y - h / 2 + i, false, true)) {
+            boolean collision = hasCollision(x - w / 2 + marge, y - h / 2 + i, false, true)
+                    || hasCollision(x + w / 2 - marge, y - h / 2 + i, false, true);
+            if (!collision) {
+                for (int checkPoint = TileMap.format; checkPoint < w; i += TileMap.format) {
+                    collision |= hasCollision(x - w / 2 + checkPoint, y - h / 2 + i, false, true);
+                }
+            }
+
+            if (collision) {
                 lastTrue = i;
             } else if (lastTrue >= 0) {
                 entity.setPosY(entity.getPosY() + lastTrue);
@@ -76,8 +80,15 @@ public class Collider {
         int lastTrue = -1;
 
         for (int i = n; i > 0; i--) {
-            if (hasCollision(x - w / 2 + marge, y + h / 2 + i, false, false)
-                    || hasCollision(x + w / 2 - marge, y + h / 2 + i, false, false)) {
+            boolean collision = hasCollision(x - w / 2 + marge, y + h / 2 + i, false, false)
+                    || hasCollision(x + w / 2 - marge, y + h / 2 + i, false, false);
+            if (!collision) {
+                for (int checkPoint = TileMap.format; checkPoint < w; i += TileMap.format) {
+                    collision |= hasCollision(x - w / 2 + checkPoint, y + h / 2 + i, false, false);
+                }
+            }
+
+            if (collision) {
                 lastTrue = i;
             } else if (lastTrue >= 0) {
                 entity.setPosY(entity.getPosY() + lastTrue);
@@ -98,8 +109,15 @@ public class Collider {
         double w = entity.getWidth();
         double h = entity.getHeight();
 
-        return hasCollision(x + w / 2, y + h / 2 - marge, false, false)
+        boolean collision = hasCollision(x + w / 2, y + h / 2 - marge, false, false)
                 || hasCollision(x + w / 2, y - h / 2 + marge, false, false);
+        if (!collision) {
+            for (int checkPoint = TileMap.format; checkPoint < h; checkPoint += TileMap.format) {
+                collision |= hasCollision(x + w / 2, y - h / 2 + checkPoint, false, false);
+            }
+        }
+
+        return collision;
     }
 
     public boolean hasCollisionLeft() {
@@ -108,8 +126,15 @@ public class Collider {
         double w = entity.getWidth();
         double h = entity.getHeight();
 
-        return hasCollision(x - w / 2, y + h / 2 - marge, true, false)
+        boolean collision = hasCollision(x - w / 2, y + h / 2 - marge, true, false)
                 || hasCollision(x - w / 2, y - h / 2 + marge, true, false);
+        if (!collision) {
+            for (int checkPoint = TileMap.format; checkPoint < h; checkPoint += TileMap.format) {
+                collision |= hasCollision(x - w / 2, y - h / 2 + checkPoint, true, false);
+            }
+        }
+
+        return collision;
     }
 
     /*public boolean intersectsWith(Collider other) {
