@@ -24,6 +24,15 @@ public class InteractionHitboxListener implements ChangeListener<Number> {
         System.out.println(interactors);
         if (!(interactors.isEmpty())) {
             for (Interactive interactor : interactors) {
+                // Debug information for NPC interaction
+                if (interactor instanceof fr.iut.hev.root.model.entities.Pnj) {
+                    System.out.println("[DEBUG] Player is touching an NPC!");
+                    System.out.println("[DEBUG] NPC Position: (" + 
+                        ((fr.iut.hev.root.model.entities.Pnj) interactor).getPosX() + ", " + 
+                        ((fr.iut.hev.root.model.entities.Pnj) interactor).getPosY() + ")");
+                    System.out.println("[DEBUG] Player Position: (" + 
+                        player.getPosX() + ", " + player.getPosY() + ")");
+                }
                 interactor.handlerInteraction(player);
             }
         }

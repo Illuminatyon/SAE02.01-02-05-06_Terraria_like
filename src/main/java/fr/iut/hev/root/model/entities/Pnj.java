@@ -37,6 +37,16 @@ public class Pnj extends Mob implements Interactive {
     }
 
     public void handlerInteraction(Player player) {
-        System.out.println("interaction") ;
+        System.out.println("interaction");
+        System.out.println("[DEBUG] NPC interaction handled!");
+        System.out.println("[DEBUG] NPC Type: " + this.getName());
+        System.out.println("[DEBUG] Distance between Player and NPC: " + 
+            Math.sqrt(Math.pow(player.getPosX() - this.getPosX(), 2) + 
+                     Math.pow(player.getPosY() - this.getPosY(), 2)));
+
+        // Check if hitboxes are intersecting
+        boolean hitboxesIntersect = player.getInteractiveHitbox().intersects(
+            player.getHitboxManager().getInteractiveHitboxes().get(this), player);
+        System.out.println("[DEBUG] Hitboxes intersecting: " + hitboxesIntersect);
     }
 }

@@ -62,10 +62,28 @@ public class Hitbox {
         double otherTop = other.getCenterY() - other.height / 2;
         double otherBottom = other.getCenterY() + other.height / 2;
 
-        return thisRight > otherLeft &&
-                thisLeft < otherRight &&
-                thisBottom > otherTop &&
-                thisTop < otherBottom;
+        // Debug information about hitbox boundaries
+        System.out.println("[DEBUG] Hitbox intersection calculation:");
+        System.out.println("[DEBUG] This hitbox boundaries: left=" + thisLeft + ", right=" + thisRight + 
+                          ", top=" + thisTop + ", bottom=" + thisBottom);
+        System.out.println("[DEBUG] Other hitbox boundaries: left=" + otherLeft + ", right=" + otherRight + 
+                          ", top=" + otherTop + ", bottom=" + otherBottom);
+
+        // Check each condition separately for debugging
+        boolean rightOverlapsLeft = thisRight > otherLeft;
+        boolean leftOverlapsRight = thisLeft < otherRight;
+        boolean bottomOverlapsTop = thisBottom > otherTop;
+        boolean topOverlapsBottom = thisTop < otherBottom;
+
+        System.out.println("[DEBUG] Right overlaps left: " + rightOverlapsLeft);
+        System.out.println("[DEBUG] Left overlaps right: " + leftOverlapsRight);
+        System.out.println("[DEBUG] Bottom overlaps top: " + bottomOverlapsTop);
+        System.out.println("[DEBUG] Top overlaps bottom: " + topOverlapsBottom);
+
+        boolean intersects = rightOverlapsLeft && leftOverlapsRight && bottomOverlapsTop && topOverlapsBottom;
+        System.out.println("[DEBUG] Hitboxes intersect: " + intersects);
+
+        return intersects;
     }
 
     public double getCenterX() {

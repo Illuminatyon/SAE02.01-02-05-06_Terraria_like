@@ -138,11 +138,38 @@ public class HitboxManager {
         if (playerHitbox.getType().equals(HitboxType.INTERACTION)) {
             ArrayList<Interactive> interactives = new ArrayList<>();
             System.out.println("all interactive hitboxes : " + getInteractiveHitboxes());
+
+            // Debug information about player hitbox
+            System.out.println("[DEBUG] Player hitbox: centerX=" + playerHitbox.getCenterX() + 
+                ", centerY=" + playerHitbox.getCenterY() + 
+                ", width=" + playerHitbox.getWidth() + 
+                ", height=" + playerHitbox.getHeight());
+
             for (Map.Entry<Interactive, Hitbox> interactiveHitbox : getInteractiveHitboxes().entrySet()) {
-                if (interactiveHitbox.getKey() instanceof RecipeGiver)
+                Interactive interactive = interactiveHitbox.getKey();
+                Hitbox hitbox = interactiveHitbox.getValue();
+
+                // Debug information about entity type
+                String entityType = "Unknown";
+                if (interactive instanceof Pnj) {
+                    entityType = "NPC";
+                } else if (interactive instanceof RecipeGiver) {
+                    entityType = "RecipeGiver";
                     System.out.println("table de craft");
-                if (playerHitbox.intersects(interactiveHitbox.getValue(),player)) {
-                    interactives.add(interactiveHitbox.getKey());
+                }
+
+                // Debug information about entity hitbox
+                System.out.println("[DEBUG] " + entityType + " hitbox: centerX=" + hitbox.getCenterX() + 
+                    ", centerY=" + hitbox.getCenterY() + 
+                    ", width=" + hitbox.getWidth() + 
+                    ", height=" + hitbox.getHeight());
+
+                // Check intersection
+                boolean intersects = playerHitbox.intersects(hitbox, player);
+                System.out.println("[DEBUG] Player hitbox intersects with " + entityType + ": " + intersects);
+
+                if (intersects) {
+                    interactives.add(interactive);
                 }
             }
             return interactives;
