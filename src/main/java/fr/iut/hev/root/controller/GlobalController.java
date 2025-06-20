@@ -121,7 +121,6 @@ public class GlobalController implements Initializable {
                             Actor currentActor = world.getAliveMobs().get(i);
                             if (currentActor != null) {
                                 currentActor.updatePosition();
-                                hitboxManager.updateHitboxPositions(currentActor);
                             } else {
                                 world.getAliveMobs().remove(i);
                             }

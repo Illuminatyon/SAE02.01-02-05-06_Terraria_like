@@ -32,10 +32,14 @@ public class PnjView extends ActorView {
         this.phrase.setText(text[count].getTexte());
         this.phrase.setVisible(true);
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(10));
+        PauseTransition pause = new PauseTransition(Duration.seconds(20));
         pause.setOnFinished(event -> this.phrase.setVisible(false));
         pause.play();
         count++;
+        if (count == (text.length+1)) {
+            this.getActor().receiveDamage(100);
+        }
+
     }
 
     public Label getPhrase() {
