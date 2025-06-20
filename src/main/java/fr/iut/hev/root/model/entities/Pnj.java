@@ -1,12 +1,9 @@
 package fr.iut.hev.root.model.entities;
 
-import com.sun.source.tree.WhileLoopTree;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.HitboxType;
-import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
-import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 
 public class Pnj extends Mob implements Interactive {
 
@@ -39,7 +36,7 @@ public class Pnj extends Mob implements Interactive {
         }
     }
 
-    public void handlerInteraction() {
+    public void handlerInteraction(Player player) {
         System.out.println("interaction") ;
     }
 }

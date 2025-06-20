@@ -3,10 +3,7 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.enums.HitboxType;
-import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
-import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 
 public class Mob extends Actor {
     private long lastDirectionChangeTime = 0;

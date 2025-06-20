@@ -1,10 +1,13 @@
 package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.enums.TilesEnum;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class Tile {
     private TilesEnum tileEnum;
     private int health;
+    private BooleanProperty brokenProperty;
 
     // Coordonnees en Tile Position et non pas en coordonnee reelle
     private int tileX;
@@ -15,6 +18,7 @@ public class Tile {
         this.health = tileEnum.getMaxHealth()*20;
         this.tileX = x;
         this.tileY = y;
+        this.brokenProperty = new SimpleBooleanProperty(false);
 
     }
 
@@ -61,5 +65,10 @@ public class Tile {
 
     public void breaks() {
         this.tileEnum = TilesEnum.AIR;
+        setBorken(true);
     }
+
+    public boolean getBroken() {return this.brokenProperty.getValue();}
+    public void setBorken(boolean bool) {this.brokenProperty.setValue(bool);}
+    public BooleanProperty brokenProperty() {return this.brokenProperty;}
 }

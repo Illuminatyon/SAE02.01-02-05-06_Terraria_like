@@ -108,8 +108,8 @@ public class GlobalController implements Initializable {
 
         lootView = new LootView(entitiesPane);
         cooldownManager = new CooldownManager();
-        itemFactory = new ItemFactory(hitboxManager);
         hitboxManager = new HitboxManager();
+        itemFactory = new ItemFactory(hitboxManager);
 
         initItemEnums();
         initMap();
@@ -167,9 +167,6 @@ public class GlobalController implements Initializable {
         aliveActors.add(player);
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
-
-        hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
-
 
         hudView = new HUDView(player.getHealth(),heartsHbox);
         playerView = new PlayerView(player,tileMap, entitiesPane);
@@ -240,7 +237,6 @@ public class GlobalController implements Initializable {
         this.mobView = new MobView(mob, tileMap, entitiesPane);
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors,itemFactory));
         aliveActors.add(mob);
-        hitboxManager.createHitbox(mob,HitboxType.VULNERABLE);
     }
 
     private void initActors() {

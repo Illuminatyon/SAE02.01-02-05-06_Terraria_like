@@ -2,46 +2,100 @@ package fr.iut.hev.root.model.hitbox;
 
 import fr.iut.hev.root.model.enums.HitboxType;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
- * Interface for hitboxes used in combat and interaction detection.
- * Unlike the Collider class which is used for environmental collision detection,
- * hitboxes are used for entity-entity interactions like combat.
+ * Implementation of a rectangular hitbox.
+ * This is useful for most entities in the game.
  */
-public interface Hitbox {
-    
-    /**
-     * Checks if this hitbox intersects with another hitbox.
-     * 
-     * @param other The other hitbox to check intersection with
-     * @return true if the hitboxes intersect, false otherwise
-     */
-    boolean intersects(Hitbox other);
-    
-    /**
-     * Gets the x-coordinate of the hitbox's center.
-     * 
-     * @return The x-coordinate
-     */
-    double getCenterX();
-    
-    /**
-     * Gets the y-coordinate of the hitbox's center.
-     * 
-     * @return The y-coordinate
-     */
-    double getCenterY();
+public class Hitbox {
+    private DoubleProperty xProperty;
+    private DoubleProperty yProperty;
+    private double width;
+    private double height;
+    private HitboxType type;
 
-
-    DoubleProperty xProperty();
-    DoubleProperty yProperty();
-    
-
-    
     /**
-     * Gets the type of the hitbox.
-     * 
-     * @return The hitbox type
+     * Creates a new rectangular hitbox.
+     *
+     * @param x The x-coordinate of the center
+     * @param y The y-coordinate of the center
+     * @param width The width of the rectangle
+     * @param height The height of the rectangle
+     * @param type The type of hitbox
      */
-    HitboxType getType();
+    public Hitbox(double x, double y, double width, double height, HitboxType type) {
+        this.xProperty = new SimpleDoubleProperty(x);
+        this.yProperty = new SimpleDoubleProperty(y);
+        this.width = width;
+        this.height = height;
+        this.type = type;
+    }
+
+    /*public boolean intersects(Hitbox other) {
+        if (other instanceof RectangleHitbox) {
+            return intersectsRectangle((RectangleHitbox) other);
+        } else if (other instanceof CircleHitbox) {
+            return ((CircleHitbox) other).intersects(this);
+        }
+        return false;
+    }*/
+
+    /**
+     * Checks if this rectangle intersects with another rectangle.
+     *
+     * @param other The other rectangle to check intersection with
+     * @return true if the rectangles intersect, false otherwise
+     */
+    public boolean intersects(Hitbox other) {
+        double thisLeft = getCenterX() - width / 2;
+        double thisRight = getCenterX() + width / 2;
+        double thisTop = getCenterY() - height / 2;
+        double thisBottom = getCenterY() + height / 2;
+
+        double otherLeft = other.getCenterX() - other.width / 2;
+        double otherRight = other.getCenterX() + other.width / 2;
+        double otherTop = other.getCenterY() - other.height / 2;
+        double otherBottom = other.getCenterY() + other.height / 2;
+
+        return thisRight > otherLeft &&
+                thisLeft < otherRight &&
+                thisBottom > otherTop &&
+                thisTop < otherBottom;
+    }
+
+    public double getCenterX() {
+        return xProperty.getValue();
+    }
+
+    public double getCenterY() {
+        return yProperty.getValue();
+    }
+
+    public HitboxType getType() {
+        return type;
+    }
+
+    /**
+     * Gets the width of the rectangle.
+     *
+     * @return The width
+     */
+    public double getWidth() {
+        return width;
+    }
+
+    /**
+     * Gets the height of the rectangle.
+     *
+     * @return The height
+     */
+    public double getHeight() {
+        return height;
+    }
+    public DoubleProperty xProperty() {return this.xProperty;}
+    public DoubleProperty yProperty() {return this.yProperty;}
 }

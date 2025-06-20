@@ -41,7 +41,7 @@ public abstract class Actor extends Entity {
         this.jumpingTestDecay = 0;
         this.reach = reach;
         this.type = type;
-        this.hitboxManager = new HitboxManager();
+        this.hitboxManager = hitboxManager;
         hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
 
     }

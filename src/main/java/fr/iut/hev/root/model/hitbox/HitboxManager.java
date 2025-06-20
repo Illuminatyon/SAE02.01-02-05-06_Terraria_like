@@ -4,6 +4,7 @@ import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Entity;
 import fr.iut.hev.root.model.entities.Interactive;
 import fr.iut.hev.root.model.enums.HitboxType;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,7 +135,21 @@ public class HitboxManager {
         }
         return entities;
     }
-    
+
+    public ArrayList<Interactive> checkInteractiveCollision(Hitbox playerHitbox) {
+        if (playerHitbox.getType().equals(HitboxType.INTERACTION)) {
+            ArrayList<Interactive> interactives = new ArrayList<>();
+
+            for (Map.Entry<Interactive, Hitbox> interactiveHitbox : getInteractiveHitboxes().entrySet()) {
+                if (interactiveHitbox.getValue() != playerHitbox && playerHitbox.intersects(interactiveHitbox.getValue())) {
+                    interactives.add(interactiveHitbox.getKey());
+                }
+            }
+            return interactives;
+        }
+        return null;
+    }
+
     /**
      * Creates a default vulnerable hitbox for an entity based on its dimensions.
      * 
@@ -142,7 +157,7 @@ public class HitboxManager {
      * @return The created hitbox
      */
     public Hitbox createHitbox(Entity entity, HitboxType type) {
-        Hitbox hitbox = new RectangleHitbox(
+        Hitbox hitbox = new Hitbox(
             entity.getPosX(),
             entity.getPosY(),
             entity.getWidth(),
@@ -166,31 +181,11 @@ public class HitboxManager {
      * @return The created hitbox
      */
     public Hitbox createWeaponAttackHitbox(Entity attacker, double offsetX, double offsetY, double width, double height) {
-        Hitbox hitbox = new RectangleHitbox(
+        Hitbox hitbox = new Hitbox(
             attacker.getPosX() + offsetX,
             attacker.getPosY() + offsetY,
             width,
             height,
-            HitboxType.ATTACK
-        );
-        addHitbox(attacker, hitbox);
-        return hitbox;
-    }
-    
-    /**
-     * Creates a circular attack hitbox.
-     * 
-     * @param attacker The entity that is attacking
-     * @param offsetX The x offset from the entity's position
-     * @param offsetY The y offset from the entity's position
-     * @param radius The radius of the attack hitbox
-     * @return The created hitbox
-     */
-    public Hitbox createCircularAttackHitbox(Entity attacker, double offsetX, double offsetY, double radius) {
-        Hitbox hitbox = new CircleHitbox(
-            attacker.getPosX() + offsetX,
-            attacker.getPosY() + offsetY,
-            radius,
             HitboxType.ATTACK
         );
         addHitbox(attacker, hitbox);

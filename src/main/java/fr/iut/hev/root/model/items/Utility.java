@@ -38,6 +38,10 @@ public class Utility extends Item {
         if (tileMap.isTileEmpty(x,y)) {
             Tile newTile = new Tile(player.getItemInHand().getItemEnum().getRelatedTile(),x,y);
             this.recipeGiver = new RecipeGiver(x * format + 16,y * format + 16,format,format, RecipeAvailability.CRAFTING_TABLE,hitboxManager);
+            newTile.brokenProperty().addListener((observableValue, aBoolean, t1) -> {
+                if (t1)
+                    this.recipeGiver = null;
+            });
             tileMap.addTile(newTile);
             player.getInventory().remove(player.getIndexItemInHand(),1);
             player.consumeOneItem();

@@ -10,13 +10,13 @@ import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
 import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
-import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +28,7 @@ public class Player extends Actor {
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
     private CraftingManager craftingManager;
+    private Hitbox interactiveHitbox;
 
     public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager, ItemFactory itemFactory) {
         super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor, hitboxManager);
@@ -37,7 +38,9 @@ public class Player extends Actor {
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-        getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
+        this.interactiveHitbox = new Hitbox(posX,posY,width,height,HitboxType.INTERACTION);
+        interactiveHitbox.xProperty().bind(this.posXProperty());
+        interactiveHitbox.yProperty().bind(this.posYProperty());
     }
 
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
@@ -188,4 +191,5 @@ public class Player extends Actor {
     public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
     public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
     public CraftingManager getCraftingManager() {return craftingManager;}
+    public Hitbox getInteractiveHitbox() {return this.interactiveHitbox;}
 }

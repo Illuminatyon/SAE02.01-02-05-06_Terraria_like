@@ -9,19 +9,19 @@ import fr.iut.hev.root.model.hitbox.HitboxManager;
 
 import java.util.ArrayList;
 
-public class RecipeGiver extends Entity {
+public class RecipeGiver extends Entity implements Interactive {
 
     private ArrayList<RecipesEnum> recipesEnums;
     private RecipeAvailability recipeAvailability;
     private HitboxManager hitboxManager;
 
-    public RecipeGiver(int posX, int posY, int width, int height, RecipeAvailability recipeAvailability, HitboxManager hitboxManager, Tile listenedTile) {
+    public RecipeGiver(int posX, int posY, int width, int height, RecipeAvailability recipeAvailability, HitboxManager hitboxManager) {
         super(posX,posY,width,height,null);
         this.recipeAvailability = recipeAvailability;
         this.hitboxManager = hitboxManager;
+        this.recipesEnums = new ArrayList<>();
         initRecipes();
         this.hitboxManager.createHitbox(this, HitboxType.INTERACTION);
-        listenedTile.
     }
 
     private void initRecipes() {
@@ -36,5 +36,10 @@ public class RecipeGiver extends Entity {
         for (RecipesEnum recipe : recipesEnums) {
             player.getCraftingManager().addRecipe(recipe);
         }
+    }
+
+    @Override
+    public void handlerInteraction(Player player) {
+        givesRecipe(player);
     }
 }
