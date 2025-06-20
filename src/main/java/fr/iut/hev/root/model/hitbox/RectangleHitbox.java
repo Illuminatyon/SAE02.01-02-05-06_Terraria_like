@@ -75,7 +75,6 @@ public class RectangleHitbox implements Hitbox {
         return yProperty.getValue();
     }
 
-    @Override
     public void setPosition(double x, double y) {
         xProperty.unbind(); // Jsp pk mais ca marche donc je laisse
         yProperty.unbind();

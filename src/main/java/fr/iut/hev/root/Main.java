@@ -18,7 +18,7 @@ public class Main extends Application {
         //scene = new Scene(root, 1400, 600);
         Pane root = FXMLLoader.load(Main.class.getResource("view/main_menu.fxml"));
         //Pane root = FXMLLoader.load(Main.class.getResource("view/globalView.fxml"));
-        scene = new Scene(root, 1920, 1056);
+        scene = new Scene(root, 1400, 600);
         stage.setTitle("ROOT");
         stage.setScene(scene);
         stage.show();

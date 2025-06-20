@@ -26,7 +26,7 @@ public class Arrow extends Actor {
 
     public Arrow(int posX, int posY, int width, int height, TileMap tileMap,
                  double velocityX, double velocityY, int damage,
-                 AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory, HitboxManager hitboxManager) {
+                 AnchorPane actorsPane, GlobalController globalController,ItemFactory itemFactory, HitboxManager hitboxManager ) {
         // Use the ARROW ActorEnum
         super(posX, posY, width, height, tileMap, 1, 0, 0, 0, ActorEnum.ARROW, hitboxManager);
 

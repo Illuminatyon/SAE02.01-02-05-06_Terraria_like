@@ -114,7 +114,6 @@ public class GlobalController implements Initializable {
                 Duration.seconds(0.017),
                 (ev -> {
                     world.getPlayer().update();
-                    hitboxManager.updateHitboxPositions(world.getPlayer());
 
                     for (int i = world.getAliveMobs().size() - 1; i >= 0; i--) {
                         if (i < world.getAliveMobs().size()) { // Check if index is still valid
@@ -147,7 +146,7 @@ public class GlobalController implements Initializable {
                     }
 
                     camera.update();
-                    //checkPnjDialogue();
+                    checkPnjDialogue();
 
                     cooldownManager.allCooldownsTick();
                 })
