@@ -171,20 +171,32 @@ public class AggressiveMob extends Mob {
             }
         } else {
             // Direct movement if no path is found
-            if ((target.getPosX() < getPosX())) {
-                setLookDirection(LookDirections.LEFT);
-                if (!getCollider().hasCollisionLeft()) {
-                    setVelocityX(-getMoveSpeed());
+
+            // Check if the mob is directly above or below the player (with a small tolerance)
+            int verticalDiff = target.getPosY() - getPosY();
+            int horizontalDiff = target.getPosX() - getPosX();
+            boolean isDirectlyAboveOrBelow = Math.abs(horizontalDiff) < getWidth() / 2;
+
+            // Only change direction if not directly above/below the player or if on the ground
+            if (!isDirectlyAboveOrBelow || super.getCollider().hasCollisionBottom(1)) {
+                if ((target.getPosX() < getPosX())) {
+                    setLookDirection(LookDirections.LEFT);
+                    if (!getCollider().hasCollisionLeft()) {
+                        setVelocityX(-getMoveSpeed());
+                    }
+                } else if (target.getPosX() > getPosX()) {
+                    setLookDirection(LookDirections.RIGHT);
+                    if (!getCollider().hasCollisionRight()) {
+                        setVelocityX(getMoveSpeed());
+                    }
                 }
-            } else if (target.getPosX() > getPosX()) {
-                setLookDirection(LookDirections.RIGHT);
-                if (!getCollider().hasCollisionRight()) {
-                    setVelocityX(getMoveSpeed());
-                }
+            } else {
+                // If directly above/below and in the air, maintain current velocity
+                setVelocityX(0);
             }
 
             // Check if player is above and jump if needed
-            int verticalDiff = target.getPosY() - getPosY();
+            // Reuse the verticalDiff variable declared above
             if (verticalDiff < -TileMap.format && super.getCollider().hasCollisionBottom(1)) {
                 updateVerticalMovement(); // Jump to try to reach the player
             }

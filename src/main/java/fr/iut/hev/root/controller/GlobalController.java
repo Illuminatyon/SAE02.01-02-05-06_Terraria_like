@@ -264,9 +264,9 @@ public class GlobalController implements Initializable {
     }
 
     private void initBossMob(Player player) {
-        // Create a larger AggressiveMob with a bigger hitbox
-        AggressiveMob bossMob = new AggressiveMob(
-                10, 0, 80, 108, tileMap, 20, 1, 15, 15, ActorEnum.BOSS, player, 25, 2000, aliveActors, entitiesPane, 2, this.hitboxManager
+        // Create a Boss instance with exactly the same properties as AggressiveMob
+        Boss bossMob = new Boss(
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.BOSS, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager
         );
         // Create a view for the boss mob
         MobView bossMobView = new MobView(bossMob, tileMap, entitiesPane);
