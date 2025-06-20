@@ -15,7 +15,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import static fr.iut.hev.root.model.TileMap.format;
-
+/**
+ * Gestionnaire des actions de la souris liées aux objets.
+ * Cette classe est responsable de la capture et du traitement des événements souris
+ * pour l'utilisation des objets dans le jeu (minage, placement de blocs, utilisation d'armes, etc.).
+ */
 public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     private InventoryView inventoryView;
