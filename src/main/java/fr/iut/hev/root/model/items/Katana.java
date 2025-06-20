@@ -1,4 +1,4 @@
-package fr.iut.hev.root.model.items;
+/*package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Collider;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Katana weapon class
- */
+ *//*
 public class Katana extends Weapon {
     private static final int KNOCKBACK_STRENGTH = 8;
     private boolean isAnimating = false;
@@ -134,7 +134,7 @@ public class Katana extends Weapon {
 
                         System.out.println("Katana hit " + actor.getName() + "! Remaining health: " + actor.getHealth());
                     }
-                }*/
+                }*//*
             }),
             new KeyFrame(Duration.seconds(2.0), e -> {
                 // End animation and reset after 2 seconds (increased cooldown)
@@ -156,3 +156,4 @@ public class Katana extends Weapon {
         mob.setVelocityY((int)(dirY * KNOCKBACK_STRENGTH));
     }
 }
+*/

@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 public class GlobalController implements Initializable {
-    private ObjectProperty<World> worldProperty;
+    private World world;
     private Camera camera;
     private Timeline gameLoop;
     private Player player; // dans world
@@ -88,16 +88,17 @@ public class GlobalController implements Initializable {
     @FXML private Button craftButton;
     @FXML private HBox recipeDisplay;
 
-    public void setWorld(World world) {
-        this.worldProperty.set(world);
-        //this.world = world;
-    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        world = [/*monde du main*/];
 
-    private World getWorld() {
-        return worldProperty.get();
-    }
+        initItemEnums();
 
-    private void lateInit(World world) {
+        gameLoop = new Timeline();
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
+
+        cooldownManager = new CooldownManager();
+        hitboxManager = new HitboxManager();
         globalView = new GlobalView(world.getTileMap(), landTileMap, backgroundTileMap);
         lootView = new LootView(landTileMap);
 
@@ -107,8 +108,6 @@ public class GlobalController implements Initializable {
         //aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         //initMap();
         initPlayer();
-
-        //world.getTileMap().setItemFactory(new ItemFactory()); // Pas le choix
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
@@ -156,28 +155,7 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        worldProperty = new SimpleObjectProperty<>();
-        initItemEnums();
-
-        gameLoop = new Timeline();
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
-
-        cooldownManager = new CooldownManager();
-        hitboxManager = new HitboxManager();
-
-        worldProperty.addListener((obs, oldWorld, newWorld) -> {
-            if (newWorld != null) {
-                lateInit(newWorld);
-            } else {
-                // Retour au menu principal
-            }
-        });
-    }
-
     private void initPlayer() {
-        World world = getWorld();
         ItemFactory itemFactory = world.getItemFactory();
         player = world.getPlayer();
         inventory = player.getInventory();
@@ -252,7 +230,7 @@ public class GlobalController implements Initializable {
     private void createMob(ActorEnum mobActorEnum) {
         Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
         mobView = new MobView(mob, tileMap, entitiesPane);
-        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, getWorld().getItemFactory()));
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
         aliveActors.add(mob);
     }
@@ -263,7 +241,7 @@ public class GlobalController implements Initializable {
                 0, 0, 40, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
-        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,getWorld().getItemFactory()));
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
         aliveActors.add(aggressiveMob);
     }
 
@@ -271,7 +249,7 @@ public class GlobalController implements Initializable {
     private void createNPC(ActorEnum npcActorEnum) {
         Pnj npc = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
         this.pnjView = new PnjView(npc, tileMap, entitiesPane);
-        npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,getWorld().getItemFactory()));
+        npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,world.getItemFactory()));
         dialogueCD = new Cooldown(0);
         aliveActors.add(npc);
     }
@@ -297,25 +275,6 @@ public class GlobalController implements Initializable {
                 itemsEnum.itemEnumInit();
             }
         }
-    }
-
-    /**
-     * Gets the list of alive actors
-     * @return the list of alive actors
-     */
-    /*public ArrayList<Actor> getAliveActors() {
-        return aliveActors;
-    }*/
-
-    /**
-     * Gets the actors pane
-     * @return the actors pane
-     */
-    /*public AnchorPane getActorsPane() {
-        return actorsPane;
-    }*/
-    public AnchorPane getEntitiesPane() {
-        return entitiesPane;
     }
 
     /**
