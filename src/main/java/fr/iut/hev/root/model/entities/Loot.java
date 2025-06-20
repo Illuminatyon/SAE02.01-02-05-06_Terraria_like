@@ -20,6 +20,7 @@ public class Loot extends Entity {
         super(posX, posY, width, height, tileMap);
         this.item = item;
         this.quantity = quantity;
+        System.out.println("loot model x = " + posX + " y = " + posY);
         lootOnMapProperty.get().add(this);
     }
 

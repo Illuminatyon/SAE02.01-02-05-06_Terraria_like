@@ -56,6 +56,7 @@ public class GlobalController implements Initializable {
     private HitboxManager hitboxManager; // world ou controller
     //public static Mob mob ;
     private static Set<Mob> mobs;
+    private ItemFactory itemFactory;
 
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
     private HUDView hudView;
@@ -90,17 +91,15 @@ public class GlobalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        world = [/*monde du main*/];
-
+        initWorld();
         initItemEnums();
 
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         cooldownManager = new CooldownManager();
-        hitboxManager = new HitboxManager();
         globalView = new GlobalView(world.getTileMap(), landTileMap, backgroundTileMap);
-        lootView = new LootView(landTileMap);
+        lootView = new LootView(entitiesPane);
 
         // Set the hitbox manager for all weapons
         //Weapon.setHitboxManager(hitboxManager);
@@ -108,6 +107,11 @@ public class GlobalController implements Initializable {
         //aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         //initMap();
         initPlayer();
+        System.out.println("crashed ?");
+        //createAggressiveMob(ActorEnum.ZOMBIE);
+        //createMob(ActorEnum.POULET);
+        createNPC(ActorEnum.HOMPS);
+        System.out.println("recrashed .");
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
@@ -153,6 +157,15 @@ public class GlobalController implements Initializable {
 
         gameLoop.getKeyFrames().add(kf);
         gameLoop.play();
+    }
+
+    private void initWorld() {
+        hitboxManager = new HitboxManager();
+        itemFactory = new ItemFactory(hitboxManager);
+        tileMap = new TileMap(1920, 1056, itemFactory);
+        player = new Player(0, -25, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER, hitboxManager);
+        aliveActors = new ArrayList<>();
+        world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
     }
 
     private void initPlayer() {
@@ -232,7 +245,7 @@ public class GlobalController implements Initializable {
         mobView = new MobView(mob, tileMap, entitiesPane);
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
-        aliveActors.add(mob);
+        world.getAliveMobs().add(mob);
     }
 
     // Methode en com dans world
@@ -242,7 +255,7 @@ public class GlobalController implements Initializable {
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
-        aliveActors.add(aggressiveMob);
+        world.getAliveMobs().add(aggressiveMob);
     }
 
     // Methode en com dans world

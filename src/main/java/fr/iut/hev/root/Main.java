@@ -28,12 +28,6 @@ public class Main extends Application {
         GlobalController globalController = fxmlLoader.getController();
 
         // Create a default world
-        ItemFactory itemFactory = new ItemFactory();
-        HitboxManager hitboxManager = new HitboxManager();
-        TileMap tileMap = new TileMap(1920, 1056, itemFactory);
-        Player player = new Player(0, -25, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER, hitboxManager);
-        ArrayList<Actor> aliveActors = new ArrayList<>();
-        World defaultWorld = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
 
         scene = new Scene(root, 1400, 600);
         stage.setTitle("ROOT - Playing on Default World");

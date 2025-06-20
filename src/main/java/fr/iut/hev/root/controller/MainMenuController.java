@@ -1,4 +1,4 @@
-package fr.iut.hev.root.controller;
+/*package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.model.entities.Actor;
@@ -221,3 +221,4 @@ public class MainMenuController implements Initializable {
         return proposedName;
     }
 }
+*/
