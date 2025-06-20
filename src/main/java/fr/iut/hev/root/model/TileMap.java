@@ -23,7 +23,7 @@ public class TileMap {
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
 
-        //génération de la map test
+        //génération de la map tests
         this.setTestMap();
 
     }
@@ -40,7 +40,7 @@ public class TileMap {
 
     public void setTestMap() {
         /**
-         * crée une map en 1920p avec 60*33 tile de test
+         * crée une map en 1920p avec 60*33 tile de tests
          */
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
