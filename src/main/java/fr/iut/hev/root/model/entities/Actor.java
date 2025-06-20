@@ -5,6 +5,7 @@ import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.view.actor.ActorView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -18,6 +19,7 @@ public abstract class Actor extends Entity {
     private ActorEnum type;
     private HitboxManager hitboxManager;
     private IntegerProperty lookDirectionProperty;
+    private ActorView actorView;
     public enum LookDirections {
         RIGHT(1),
         LEFT(-1);
@@ -29,7 +31,7 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type, HitboxManager hitboxManager) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type, HitboxManager hitboxManager, ActorView actorView) {
         super(posX, posY, width, height, tileMap);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
@@ -41,6 +43,7 @@ public abstract class Actor extends Entity {
         this.type = type;
         this.hitboxManager = new HitboxManager();
         hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
+        this.actorView = actorView;
     }
 
     @Override

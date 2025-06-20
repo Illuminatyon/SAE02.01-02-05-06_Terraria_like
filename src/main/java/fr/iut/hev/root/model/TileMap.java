@@ -125,8 +125,10 @@ public class TileMap {
 
         for (int i = 16; i > 0; i--) {
             this.getTile(40, i).setTile(Tiles.DIRT);
-        }*/
-    }
+        }
+    }    */
+
+
 
     public void addTile(Tile tile) {
         /**

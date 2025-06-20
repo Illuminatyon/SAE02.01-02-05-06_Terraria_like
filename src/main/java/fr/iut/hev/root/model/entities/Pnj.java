@@ -7,11 +7,12 @@ import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
+import fr.iut.hev.root.view.actor.PnjView;
 
 public class Pnj extends Mob{
 
-    public Pnj(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
-        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager);
+    public Pnj(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager, PnjView pnjView) {
+        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager, pnjView);
         getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
     }
 

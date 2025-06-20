@@ -57,17 +57,14 @@ public class GlobalController implements Initializable {
     private Camera camera;
     private Timeline gameLoop;
     private Player player; // dans world
-    private TileMap tileMap; // dans world
     private MouseInventoryInputHandler mouseInventoryHandler;
     private ScrollInputHandler scrollHotbarHandler;
     private KeyInputHandler keyboardHandler;
     private MouseItemActionInputHandler mouseItemActionHandler;
-    private ArrayList<Actor> aliveActors; // dans world
     private Inventory inventory; // dans player
     private CooldownManager cooldownManager; // controller
     private CraftingManager craftingManager; // peut etre dans le joueur
     private HitboxManager hitboxManager; // world ou controller
-    //public static Mob mob ;
     private static Set<Mob> mobs;
 
     private GlobalView globalView;
@@ -117,9 +114,12 @@ public class GlobalController implements Initializable {
         // Set the hitbox manager for all weapons
         //Weapon.setHitboxManager(hitboxManager);
 
-        //aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
+       // aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         //initMap();
         initPlayer();
+        createMob(ActorEnum.POULET);
+        createAggressiveMob(ActorEnum.ZOMBIE);
+        createAggressiveMob(ActorEnum.HOMPS);
 
         //world.getTileMap().setItemFactory(new ItemFactory()); // Pas le choix
 
@@ -211,7 +211,7 @@ public class GlobalController implements Initializable {
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
 
-        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
+        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1, world.getAliveMobs());
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
         inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
@@ -271,30 +271,28 @@ public class GlobalController implements Initializable {
     }
 
     private void createMob(ActorEnum mobActorEnum) {
-        Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
-        mobView = new MobView(mob, tileMap, entitiesPane);
-        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, getWorld().getItemFactory()));
+        Mob mob = new Mob(0, 0, 32, 32, getWorld().getTileMap(), 2, 2, 15, 3, mobActorEnum, hitboxManager);
+        mobView = new MobView(mob, getWorld().getTileMap(), entitiesPane);
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, getWorld().getAliveMobs(), getWorld().getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
-        aliveActors.add(mob);
+        getWorld().getAliveMobs().add(mob);
     }
 
     // Methode en com dans world
     private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
-        AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
-        );
-        this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
-        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,getWorld().getItemFactory()));
-        aliveActors.add(aggressiveMob);
+        AggressiveMob aggressiveMob = new AggressiveMob(0, 0, 40, 54, getWorld().getTileMap(), 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, getWorld().getAliveMobs(), globalPane, 1, hitboxManager);
+        this.aggressiveMobView = new MobView(aggressiveMob, getWorld().getTileMap(), entitiesPane);
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, getWorld().getAliveMobs(),getWorld().getItemFactory()));
+        getWorld().getAliveMobs().add(aggressiveMob);
     }
 
     // Methode en com dans world
     private void createNPC(ActorEnum npcActorEnum) {
-        Pnj npc = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
-        this.pnjView = new PnjView(npc, tileMap, entitiesPane);
-        npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,getWorld().getItemFactory()));
+        Pnj npc = new Pnj(100, 0,32, 64, getWorld().getTileMap(), 2, 2, 10, 3, npcActorEnum, this.hitboxManager, pnjView);
+        this.pnjView = new PnjView(npc, getWorld().getTileMap(), entitiesPane);
+        npc.healthProperty().addListener(new DeathListener(npc, pnjView, getWorld().getAliveMobs(),getWorld().getItemFactory()));
         dialogueCD = new Cooldown(0);
-        aliveActors.add(npc);
+        getWorld().getAliveMobs().add(npc);
     }
 
     /**
