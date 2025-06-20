@@ -2,6 +2,8 @@ package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.view.actor.PlayerView;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 
@@ -15,8 +17,8 @@ public class Camera {
 
     private final double smoothFactor;
 
-    private double currentCamX = 0;
-    private double currentCamY = 0;
+    private DoubleProperty currentCamXProperty = new SimpleDoubleProperty(0);
+    private DoubleProperty currentCamYProperty = new SimpleDoubleProperty(0);
 
     public Camera(Player player, TilePane landTileMap, TilePane backgroundTileMap,
                         Pane globalPane, PlayerView playerView, LootView lootView, double smoothFactor) {
@@ -43,29 +45,37 @@ public class Camera {
         double targetCamX = (screenWidth / 2) - playerCenterX;
         double targetCamY = (screenHeight / 2) - playerCenterY;
 
-        currentCamX += (targetCamX - currentCamX) * smoothFactor;
-        currentCamY += (targetCamY - currentCamY) * smoothFactor;
+//        currentCamXProperty += (targetCamX - currentCamXProperty) * smoothFactor;
+//        currentCamYProperty += (targetCamY - currentCamYProperty) * smoothFactor;
 
-        landTileMap.setTranslateX(currentCamX);
-        landTileMap.setTranslateY(currentCamY);
-        backgroundTileMap.setTranslateX(currentCamX);
-        backgroundTileMap.setTranslateY(currentCamY);
+        setCurrentCamX(getCurrentCamX() + (targetCamX - getCurrentCamX()) * smoothFactor);
+        setCurrentCamY(getCurrentCamY() + (targetCamY - getCurrentCamY()) * smoothFactor);
 
-        if (playerView != null) {
-            playerView.getActorSprite().setLayoutX(player.getPosX() + currentCamX);
-            playerView.getActorSprite().setLayoutY(player.getPosY() + currentCamY);
-        }
+
+//        landTileMap.setTranslateX(currentCamXProperty);
+//        landTileMap.setTranslateY(currentCamYProperty);
+//        backgroundTileMap.setTranslateX(currentCamXProperty);
+//        backgroundTileMap.setTranslateY(currentCamYProperty);
+
+        landTileMap.setTranslateX(getCurrentCamX());
+        landTileMap.setTranslateY(getCurrentCamY());
+        backgroundTileMap.setTranslateX(getCurrentCamX());
+        backgroundTileMap.setTranslateY(getCurrentCamY());
 
         if (lootView != null) {
-            lootView.updateLootPositions(currentCamX, currentCamY);
+            lootView.updateLootPositions(getCurrentCamX(), getCurrentCamY());
         }
     }
 
     public double getCurrentCamX() {
-        return currentCamX;
+        return currentCamXProperty.getValue();
     }
 
     public double getCurrentCamY() {
-        return currentCamY;
+        return currentCamYProperty.getValue();
     }
+    public void setCurrentCamX(double offset) {this.currentCamXProperty.setValue(offset);}
+    public void setCurrentCamY(double offset) {this.currentCamYProperty.setValue(offset);}
+    public DoubleProperty currentCamXProperty() {return this.currentCamXProperty;}
+    public DoubleProperty currentCamYProperty() {return  this.currentCamYProperty;}
 }

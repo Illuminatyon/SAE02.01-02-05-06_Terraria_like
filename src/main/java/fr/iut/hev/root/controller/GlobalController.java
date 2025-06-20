@@ -175,13 +175,13 @@ public class GlobalController implements Initializable {
         craftingManager = new CraftingManager(inventory,itemFactory);
         hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
 
+        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
+
         hudView = new HUDView(player.healthProperty(), heartsHbox);
         playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
-
-        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
         inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
@@ -213,6 +213,8 @@ public class GlobalController implements Initializable {
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
+        playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
         player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
         player.indexItemInHandProperty().bind(scrollHotbarHandler.IndexHotbarProperty());
@@ -243,6 +245,8 @@ public class GlobalController implements Initializable {
     private void createMob(ActorEnum mobActorEnum) {
         Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
         mobView = new MobView(mob, tileMap, entitiesPane);
+        mobView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        mobView.camOffsetYProperty().bind(camera.currentCamYProperty());
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
         world.getAliveMobs().add(mob);
@@ -262,6 +266,8 @@ public class GlobalController implements Initializable {
     private void createNPC(ActorEnum npcActorEnum) {
         Pnj npc = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
         this.pnjView = new PnjView(npc, tileMap, entitiesPane);
+        pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
         npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,world.getItemFactory()));
         dialogueCD = new Cooldown(0);
         aliveActors.add(npc);

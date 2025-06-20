@@ -23,7 +23,6 @@ public class TileMap {
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
 
-        //génération de la map test
         this.setTestMap();
     }
 

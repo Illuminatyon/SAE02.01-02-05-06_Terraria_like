@@ -1,3 +1,4 @@
+/*
 package fr.iut.hev.root.view.actor;
 
 import fr.iut.hev.root.model.TileMap;
@@ -10,7 +11,7 @@ import java.io.InputStream;
 
 /**
  * View class for the arrow projectile
- */
+ *//*
 public class ArrowView extends ActorView {
     private Arrow arrow;
     private ImageView arrowSprite;
@@ -20,15 +21,15 @@ public class ArrowView extends ActorView {
      * @param arrow the arrow entity
      * @param tileMap the tile map
      * @param anchorPane the anchor pane to add the arrow sprite to
-     */
-    public ArrowView(Arrow arrow, TileMap tileMap, AnchorPane anchorPane) {
-        super(arrow, tileMap, anchorPane);
+     *//*
+    public ArrowView(Arrow arrow, TileMap tileMap, AnchorPane anchorPane,double camOffsetX, double camOffsetY) {
+        super(arrow, tileMap, anchorPane,camOffsetX,camOffsetY);
         this.arrow = arrow;
     }
 
     /**
      * Loads the arrow sprite
-     */
+     *//*
     @Override
     public void load() {
         // Use the arrow.png image for the arrow
@@ -85,7 +86,7 @@ public class ArrowView extends ActorView {
 
     /**
      * Updates the arrow sprite's position and rotation
-     */
+     *//*
     public void update() {
         if (arrowSprite != null && arrow != null) {
             // Debug: Log arrow update
@@ -167,5 +168,5 @@ public class ArrowView extends ActorView {
             getAnchorPane().requestLayout();
             System.out.println("[DEBUG_LOG] Requested layout refresh for AnchorPane");
         }
-    }*/
-}
+    }
+}*/
