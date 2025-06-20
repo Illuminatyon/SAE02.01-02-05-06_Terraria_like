@@ -1,6 +1,7 @@
 package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.AggressiveMob;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.view.actor.PlayerView;
 import javafx.scene.layout.Pane;
@@ -59,32 +60,24 @@ public class Camera {
 
             if (actor.equals(player)) {
                 if (playerView != null && playerView.getActorSprite() != null) {
-                    playerView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    playerView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
+                    playerView.getActorSprite().setLayoutX(actor.getPosX() + currentCamX);
+                    playerView.getActorSprite().setLayoutY(actor.getPosY() + currentCamY);
                 }
             } else {
-                if (actor == mob && mobView != null && mobView.getActorSprite() != null) {
-                    mobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    mobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                } else if (actor instanceof AggressiveMob && aggressiveMobView != null && aggressiveMobView.getActorSprite() != null) {
-                    aggressiveMobView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    aggressiveMobView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                } else if (pnjView != null && pnjView.getActorSprite() != null && actor.getName().equals("homps")) {
-                    pnjView.getActorSprite().setLayoutX(actor.getPosX() + cameraOffsetX);
-                    pnjView.getActorSprite().setLayoutY(actor.getPosY() + cameraOffsetY);
-                }
+                actor.getActorView().getActorSprite().setLayoutX(actor.getPosX()+currentCamX );
+                actor.getActorView().getActorSprite().setLayoutX(actor.getPosX()+currentCamY );
             }
         }
         if (lootView != null) {
-            lootView.updateLootPositions(cameraOffsetX, cameraOffsetY);
+            lootView.updateLootPositions(currentCamX, currentCamY);
         }
 
-        if (pnjView != null && pnjView.getActorSprite() != null && pnjView.getPhrase() != null) {
+        /*if (pnjView != null && pnjView.getActorSprite() != null && pnjView.getPhrase() != null) {
             double pnjX = pnjView.getActorSprite().getLayoutX();
             double pnjY = pnjView.getActorSprite().getLayoutY();
             pnjView.getPhrase().setLayoutX(pnjX + 30);
             pnjView.getPhrase().setLayoutY(pnjY - 30);
-        }
+        }*/
     }
 
     public void update() {

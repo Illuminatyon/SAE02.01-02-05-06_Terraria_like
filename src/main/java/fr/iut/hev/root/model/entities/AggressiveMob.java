@@ -43,10 +43,10 @@ public class AggressiveMob extends Mob {
             int aggroDistance, int attackCooldown,
             List<Actor> aliveActors, Pane globalPane,
             int damage,
-            HitboxManager hitboxManager,
-            AggressiveMob aggressiveMob
+            HitboxManager hitboxManager
+
     ) {
-        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type, hitboxManager, aggressiveMob);
+        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type, hitboxManager);
         this.target = player;
         this.aggroDistance = aggroDistance;
         this.attackCooldown = attackCooldown;

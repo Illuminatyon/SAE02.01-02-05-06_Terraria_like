@@ -31,7 +31,7 @@ public abstract class Actor extends Entity {
         }
     };
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type, HitboxManager hitboxManager, ActorView actorView) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
@@ -43,6 +43,9 @@ public abstract class Actor extends Entity {
         this.type = type;
         this.hitboxManager = new HitboxManager();
         hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
+    }
+
+    public void setActorView(ActorView actorView) {
         this.actorView = actorView;
     }
 
@@ -126,5 +129,9 @@ public abstract class Actor extends Entity {
 
     public IntegerProperty lookDirectionProperty() {
         return this.lookDirectionProperty;
+    }
+
+    public ActorView getActorView() {
+        return this.actorView;
     }
 }

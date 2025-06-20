@@ -73,9 +73,8 @@ public class GlobalController implements Initializable {
     private MouseCursorCircleView playerLightCircle;
     private InventoryView inventoryView;
     private HotbarView hotbarView;
-    private MobView mobView;
-    private MobView aggressiveMobView;
-    private PnjView pnjView;
+
+
     private CraftView craftView;
     private Cooldown dialogueCD;
     private LootView lootView;
@@ -159,15 +158,9 @@ public class GlobalController implements Initializable {
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
                     }
-                    if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
-                        pnjView.speak();
-                        this.dialogueCD.setLimit(2);
-                        this.dialogueCD.start();
-                        System.out.println(pnjView.getPhrase());
-                    }
 
                     camera.update();
-                    //checkPnjDialogue();
+
 
                     cooldownManager.allCooldownsTick();
                 })
@@ -272,7 +265,8 @@ public class GlobalController implements Initializable {
 
     private void createMob(ActorEnum mobActorEnum) {
         Mob mob = new Mob(0, 0, 32, 32, getWorld().getTileMap(), 2, 2, 15, 3, mobActorEnum, hitboxManager);
-        mobView = new MobView(mob, getWorld().getTileMap(), entitiesPane);
+        MobView mobView = new MobView(mob, getWorld().getTileMap(), entitiesPane);
+        mob.setActorView(mobView);
         mob.healthProperty().addListener(new DeathListener(mob, mobView, getWorld().getAliveMobs(), getWorld().getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
         getWorld().getAliveMobs().add(mob);
@@ -281,15 +275,17 @@ public class GlobalController implements Initializable {
     // Methode en com dans world
     private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
         AggressiveMob aggressiveMob = new AggressiveMob(0, 0, 40, 54, getWorld().getTileMap(), 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, getWorld().getAliveMobs(), globalPane, 1, hitboxManager);
-        this.aggressiveMobView = new MobView(aggressiveMob, getWorld().getTileMap(), entitiesPane);
+        MobView aggressiveMobView = new MobView(aggressiveMob, getWorld().getTileMap(), entitiesPane);
+        aggressiveMob.setActorView(aggressiveMobView);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, getWorld().getAliveMobs(),getWorld().getItemFactory()));
         getWorld().getAliveMobs().add(aggressiveMob);
     }
 
     // Methode en com dans world
     private void createNPC(ActorEnum npcActorEnum) {
-        Pnj npc = new Pnj(100, 0,32, 64, getWorld().getTileMap(), 2, 2, 10, 3, npcActorEnum, this.hitboxManager, pnjView);
-        this.pnjView = new PnjView(npc, getWorld().getTileMap(), entitiesPane);
+        Pnj npc = new Pnj(100, 0,32, 64, getWorld().getTileMap(), 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
+        PnjView pnjView = new PnjView(npc, getWorld().getTileMap(), entitiesPane);
+        npc.setActorView(pnjView);
         npc.healthProperty().addListener(new DeathListener(npc, pnjView, getWorld().getAliveMobs(),getWorld().getItemFactory()));
         dialogueCD = new Cooldown(0);
         getWorld().getAliveMobs().add(npc);
@@ -298,17 +294,7 @@ public class GlobalController implements Initializable {
     /**
      * Checks if the player is near a PNJ and triggers dialogue if needed
      */
-    private void checkPnjDialogue() {
-        if (player == null || pnjView == null || dialogueCD == null) {
-            return;
-        }
 
-        if ((player.getCollider().hasCollisionRight() || player.getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
-            pnjView.speak();
-            dialogueCD.setLimit(2);
-            dialogueCD.start();
-        }
-    }
 
     private void initItemEnums() {
         for (ItemsEnum itemsEnum : ItemsEnum.values()) {
