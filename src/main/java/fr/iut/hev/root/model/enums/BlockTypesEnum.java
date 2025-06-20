@@ -5,5 +5,7 @@ public enum BlockTypesEnum {
     GROUND_TYPE,
     ROCK_TYPE,
     WOOD_TYPE,
-    BACKGROUND_CUSTOM
+    BACKGROUND_CUSTOM,
+    INDESTRUCTIBLE_TYPE
+
 }

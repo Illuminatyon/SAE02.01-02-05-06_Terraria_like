@@ -9,8 +9,20 @@ import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.enums.*;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.controller.InputHandling.*;
+import fr.iut.hev.root.model.enums.ItemTypesEnum;
+import fr.iut.hev.root.model.enums.ItemsEnum;
+//import fr.iut.hev.root.model.enums.ConsumableStats;
+import fr.iut.hev.root.model.enums.DialogueEnum;
+import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.enums.ActorEnum;
+import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.enums.RecipesEnum;
+import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.Cooldown;
+import fr.iut.hev.root.model.items.Weapon;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import fr.iut.hev.root.view.actor.MobView;
@@ -34,6 +46,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -57,7 +70,7 @@ public class GlobalController implements Initializable {
     //public static Mob mob ;
     private static Set<Mob> mobs;
 
-    private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
+    private GlobalView globalView;
     private HUDView hudView;
     private PlayerView playerView;
     private MouseCursorCircleView playerLightCircle;
@@ -145,6 +158,12 @@ public class GlobalController implements Initializable {
                         double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
+                    }
+                    if ((this.player.getCollider().hasCollisionRight() ||this.player.getCollider().hasCollisionLeft() ) && !dialogueCD.getOnGoing()) {
+                        pnjView.speak();
+                        this.dialogueCD.setLimit(2);
+                        this.dialogueCD.start();
+                        System.out.println(pnjView.getPhrase());
                     }
 
                     camera.update();
@@ -262,7 +281,7 @@ public class GlobalController implements Initializable {
     // Methode en com dans world
     private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
+                0, 0, 40, 54, tileMap, 5, 1, 15, 10, ActorEnum.ZOMBIE, player, 20, 1500, aliveActors, globalPane, 1
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,getWorld().getItemFactory()));

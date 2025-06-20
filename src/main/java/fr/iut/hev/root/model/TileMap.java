@@ -5,6 +5,11 @@ import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
+import fr.iut.hev.root.utilities.CreateHashmap;
+import fr.iut.hev.root.utilities.SaveReader;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class TileMap {
     private ItemFactory itemFactory;
@@ -13,18 +18,18 @@ public class TileMap {
 
     public static final int format = 32;
 
-    public TileMap(int width, int height, ItemFactory itemFactory) {
+    public TileMap(int width, int height,ItemFactory itemFactory) throws IOException {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
         this.itemFactory = itemFactory;
-        System.out.println("In TileMap: " + this.itemFactory);
         this.width = width/format;
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
 
         //génération de la map test
-        this.setTestMap();
+        //this.setTestMap();
+        this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
     }
 
     public Tile getTile(int tileX, int tileY) {
@@ -37,10 +42,23 @@ public class TileMap {
             return null;
     }
 
-    public void setTestMap() {
-        /**
-         * crée une map en 1920p avec 60*33 tile de test
-         */
+    public void setMap(String Path) throws IOException {
+        HashMap<Integer, TilesEnum> index = CreateHashmap.hashMapReader();
+        int[][] save = SaveReader.map(Path);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int tileIndex = save[y][x];
+                TilesEnum tileEnum = index.get(tileIndex);
+                Tile tile = new Tile(tileEnum, x, y);
+                this.addTile(tile);
+                System.out.println("Added Tile: " + tile);
+            }
+        }
+    }
+
+
+   /* public void setTestMap() {
+        /
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
@@ -131,6 +149,7 @@ public class TileMap {
     public void tileGetsMined(int x, int y,int damage) {
         Tile currentTile = this.getTile(x,y);
         if (!(currentTile.getHealth() <= 0)) {
+            System.out.println(currentTile.getHealth());
             currentTile.takesDamage(damage);
         }
         if (currentTile.getHealth() <= 0) {

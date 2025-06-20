@@ -92,6 +92,7 @@ public class GlobalView {
         if (tile.getTileEnum().getType() == TileTypesEnum.AIR)
             return null;
         String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTileEnum().getName()).concat("_").concat(Integer.toString(textureNumber)).concat(".png");
+        
         return new Image(getClass().getResource(path).toExternalForm());
     }
 
@@ -99,9 +100,9 @@ public class GlobalView {
         /**
          * Retourne le sprite background de la Tile
          */
-        if (tile.getTileEnum().getType() == TileTypesEnum.AIR)
-            return null;
+
         String path = "/fr/iut/hev/root/img/tile/".concat(tile.getTileEnum().getName()).concat("_background.png");
+
         return new Image(getClass().getResource(path).toExternalForm());
     }
 }
