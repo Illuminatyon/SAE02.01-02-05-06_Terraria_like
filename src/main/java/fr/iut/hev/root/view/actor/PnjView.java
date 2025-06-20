@@ -31,6 +31,8 @@ public class PnjView extends ActorView {
 
         this.phrase.setText(text[count].getTexte());
         this.phrase.setVisible(true);
+        this.phrase.layoutXProperty().bind(super.getActor().posXProperty().add(super.getActor().getWidth() / 2 - this.phrase.getWidth() / 2));
+        this.phrase.layoutYProperty().bind(super.getActor().posYProperty().subtract(super.getActor().getHeight() + this.phrase.getHeight() / 2));
 
         PauseTransition pause = new PauseTransition(Duration.seconds(20));
         pause.setOnFinished(event -> this.phrase.setVisible(false));
@@ -51,9 +53,13 @@ public class PnjView extends ActorView {
         // Remove the dialogue text from the AnchorPane
         if (phrase != null && getAnchorPane() != null) {
             getAnchorPane().getChildren().remove(phrase);
-                    }
+        }
 
 
         super.deleteActorSprite();
+    }
+
+    public Label getLabel() {
+        return phrase;
     }
 }

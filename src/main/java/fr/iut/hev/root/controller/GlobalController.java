@@ -286,6 +286,7 @@ public class GlobalController implements Initializable {
         npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,world.getItemFactory()));
         dialogueCD = new Cooldown(0);
         aliveActors.add(npc);
+        camera.setPnjView(pnjView);
     }
 
     /**
