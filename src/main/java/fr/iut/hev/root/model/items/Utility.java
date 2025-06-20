@@ -37,6 +37,9 @@ public class Utility extends Item {
 
         if (tileMap.isTileEmpty(x,y)) {
             Tile newTile = new Tile(player.getItemInHand().getItemEnum().getRelatedTile(),x,y);
+            System.out.println("coo tile : " + x + " y = " + y);
+            System.out.println("coo player : " + x*format + " y = " + y*format);
+            System.out.println("coo entity : " + (x * format + 16) + " y = " + (y * format + 16));
             this.recipeGiver = new RecipeGiver(x * format + 16,y * format + 16,format,format, RecipeAvailability.CRAFTING_TABLE,hitboxManager);
             newTile.brokenProperty().addListener((observableValue, aBoolean, t1) -> {
                 if (t1)

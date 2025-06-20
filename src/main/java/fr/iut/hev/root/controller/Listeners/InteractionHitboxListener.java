@@ -20,7 +20,7 @@ public class InteractionHitboxListener implements ChangeListener<Number> {
     @Override
     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
         System.out.println("triggered");
-        ArrayList<Interactive> interactors = hitboxManager.checkInteractiveCollision(player.getInteractiveHitbox());
+        ArrayList<Interactive> interactors = hitboxManager.checkInteractiveCollision(player.getInteractiveHitbox(),player);
         System.out.println(interactors);
         if (!(interactors.isEmpty())) {
             for (Interactive interactor : interactors) {

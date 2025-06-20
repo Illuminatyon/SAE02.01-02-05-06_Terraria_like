@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model.hitbox;
 
+import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.HitboxType;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -50,7 +51,7 @@ public class Hitbox {
      * @param other The other rectangle to check intersection with
      * @return true if the rectangles intersect, false otherwise
      */
-    public boolean intersects(Hitbox other) {
+    public boolean intersects(Hitbox other, Player player) {
         double thisLeft = getCenterX() - width / 2;
         double thisRight = getCenterX() + width / 2;
         double thisTop = getCenterY() - height / 2;

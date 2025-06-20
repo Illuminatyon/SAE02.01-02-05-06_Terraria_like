@@ -1,8 +1,6 @@
 package fr.iut.hev.root.model.hitbox;
 
-import fr.iut.hev.root.model.entities.Actor;
-import fr.iut.hev.root.model.entities.Entity;
-import fr.iut.hev.root.model.entities.Interactive;
+import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.enums.HitboxType;
 import javafx.scene.layout.AnchorPane;
 
@@ -72,11 +70,11 @@ public class HitboxManager {
      * Checks for collisions between attack hitboxes and vulnerable hitboxes.
      * If a collision is detected, damage is applied to the vulnerable entity.
      * 
-     * @param attacker The entity that is attacking
-     * @param damage The amount of damage to apply
-     * @return A list of entities that were hit
+     * //@param attacker The entity that is attacking
+     * //@param damage The amount of damage to apply
+     * //@return A list of entities that were hit
      */
-    public List<Entity> checkAttackCollisions(Entity attacker, int damage) {
+    /*public List<Entity> checkAttackCollisions(Entity attacker, int damage) {
             List<Entity> hitEntities = new ArrayList<>();
 
         if (!entityHitboxes.containsKey(attacker)) {
@@ -134,14 +132,16 @@ public class HitboxManager {
             }
         }
         return entities;
-    }
+    }*/
 
-    public ArrayList<Interactive> checkInteractiveCollision(Hitbox playerHitbox) {
+    public ArrayList<Interactive> checkInteractiveCollision(Hitbox playerHitbox, Player player) {
         if (playerHitbox.getType().equals(HitboxType.INTERACTION)) {
             ArrayList<Interactive> interactives = new ArrayList<>();
-
+            System.out.println("all interactive hitboxes : " + getInteractiveHitboxes());
             for (Map.Entry<Interactive, Hitbox> interactiveHitbox : getInteractiveHitboxes().entrySet()) {
-                if (interactiveHitbox.getValue() != playerHitbox && playerHitbox.intersects(interactiveHitbox.getValue())) {
+                if (interactiveHitbox.getKey() instanceof RecipeGiver)
+                    System.out.println("table de craft");
+                if (playerHitbox.intersects(interactiveHitbox.getValue(),player)) {
                     interactives.add(interactiveHitbox.getKey());
                 }
             }
