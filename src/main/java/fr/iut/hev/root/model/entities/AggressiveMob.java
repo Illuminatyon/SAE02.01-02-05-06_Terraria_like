@@ -211,7 +211,7 @@ public class AggressiveMob extends Mob {
         }
     }
 
-    private void attackPlayer() {
+    public void attackPlayer() {
         long currentTime = System.currentTimeMillis();
 
         if (currentTime - lastAttackTime >= attackCooldown) {

@@ -115,9 +115,9 @@ public class GlobalController implements Initializable {
         //initMap();
         initPlayer();
         System.out.println("crashed ?");
-        createAggressiveMob(ActorEnum.ZOMBIE);
-        createMob(ActorEnum.POULET);
-        createNPC(ActorEnum.HOMPS);
+        createAggressiveMob(ActorEnum.ZOMBIE, 10,0);
+        createMob(ActorEnum.POULET,20,0);
+        createNPC(ActorEnum.HOMPS,10,0);
         System.out.println("recrashed .");
 
         KeyFrame kf = new KeyFrame(
@@ -255,34 +255,34 @@ public class GlobalController implements Initializable {
         });
     }
 
-    private void createMob(ActorEnum mobActorEnum) {
-        Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
+    private void createMob(ActorEnum mobActorEnum, int x , int y) {
+        Mob mob = new Mob(x, y, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
         mobView = new MobView(mob, tileMap, entitiesPane);
-        mobView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        mobView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        mobView.camOffsetXProperty().bind(camera.currentCamXProperty().add(-x));
+        mobView.camOffsetYProperty().bind(camera.currentCamYProperty().add(-y));
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
         world.getAliveMobs().add(mob);
     }
 
     // Methode en com dans world
-    private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
+    private void createAggressiveMob(ActorEnum aggressiveMobActorEnum, int x , int y) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 32, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
+                x, y, 32, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
-        aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty().add(-x));
+        aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty().add(-y));
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
         world.getAliveMobs().add(aggressiveMob);
     }
 
     // Methode en com dans world
-    private void createNPC(ActorEnum npcActorEnum) {
-        Pnj npc = new Pnj(0, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
+    private void createNPC(ActorEnum npcActorEnum , int x, int y) {
+        Pnj npc = new Pnj(x, y,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
         this.pnjView = new PnjView(npc, tileMap, entitiesPane);
-        pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        pnjView.camOffsetXProperty().bind(camera.currentCamXProperty().add(-x));
+        pnjView.camOffsetYProperty().bind(camera.currentCamYProperty().add(-y));
         npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,world.getItemFactory()));
         dialogueCD = new Cooldown(0);
         aliveActors.add(npc);

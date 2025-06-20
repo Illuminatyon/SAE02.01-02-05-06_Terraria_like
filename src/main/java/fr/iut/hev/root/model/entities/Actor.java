@@ -124,4 +124,7 @@ public abstract class Actor extends Entity {
     public IntegerProperty lookDirectionProperty() {
         return this.lookDirectionProperty;
     }
+    public void setMoveSpeed(int moveSpeed) {
+        this.moveSpeed = moveSpeed;
+    }
 }

@@ -27,12 +27,17 @@ public class Boss extends AggressiveMob {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type, player, aggroDistance, attackCooldown, aliveActors, globalPane, damage, hitboxManager);
     }
 
-//     @Override
-//    public void attackPlayer(){
-//        if ((super.getPlayer().getEffectivePosX()- super.getEffectivePosX()) < 75){
-//            super.
- //       }
-   // }
+     @Override
+    public void attackPlayer(){
+        if ((super.getPlayer().getEffectivePosX()- super.getEffectivePosX()) < 75){
+            super.setMoveSpeed(1);
+            super.attackPlayer();
+        }
+        else {
+            setMoveSpeed(2);
+            attackPlayer();
+        }
+    }
 
 
 }
