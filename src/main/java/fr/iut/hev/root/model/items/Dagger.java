@@ -1,4 +1,4 @@
-package fr.iut.hev.root.model.items;
+/*package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.Collider;
@@ -105,7 +105,7 @@ public class Dagger extends Weapon {
                             applyKnockback((Mob) actor, normalizedDirX, normalizedDirY);
                         }
                     }
-                }*/
+                }*//*
             }),
             new KeyFrame(Duration.seconds(0.4), e -> {
                 // End animation
@@ -127,3 +127,4 @@ public class Dagger extends Weapon {
         mob.setVelocityY((int)(dirY * KNOCKBACK_STRENGTH));
     }
 }
+*/

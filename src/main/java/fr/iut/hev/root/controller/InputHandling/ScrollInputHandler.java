@@ -10,7 +10,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
-
+/**
+ * Gestionnaire des entrées de défilement (molette de souris).
+ * Cette classe est responsable de la capture et du traitement des événements de défilement,
+ * permettant au joueur de naviguer dans sa barre d'accès rapide (hotbar).
+ */
 public class ScrollInputHandler implements EventHandler<ScrollEvent> {
 
     private InventoryView inventoryView;

@@ -1,4 +1,4 @@
-package fr.iut.hev.root.model.entities;
+/*package fr.iut.hev.root.model.entities;
 
 import fr.iut.hev.root.controller.GlobalController;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
@@ -40,7 +40,7 @@ public class Arrow extends Actor {
         setVelocityY((int)velocityY);
 
         // Create arrow view
-        this.arrowView = new ArrowView(this, tileMap, actorsPane);
+        this.arrowView = new ArrowView(this, tileMap, actorsPane,camera.getCurrentCamX(),camera.getCurrentCamY());
 
         // Add death listener to remove arrow when it hits something
         //healthProperty().addListener(new DeathListener(this, arrowView, globalController.getAliveActors(),itemFactory)); // En commentaire dans world a cause de gloalcontroller
@@ -146,7 +146,7 @@ public class Arrow extends Actor {
     private ArrayList<Actor> getAliveActors() {
         /*if (globalController != null) {
             return globalController.getAliveActors();
-        }*/
+        }*//*
         return null;
     } // JUSQU ICI en com a cause du globalcontroller
 
@@ -160,3 +160,4 @@ public class Arrow extends Actor {
         return globalController;
     }
 }
+*/

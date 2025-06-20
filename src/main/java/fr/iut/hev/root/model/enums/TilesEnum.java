@@ -2,9 +2,10 @@ package fr.iut.hev.root.model.enums;
 
 // Ca ou deux enums ?
 public enum TilesEnum {
-    AIR("air", TileTypesEnum.AIR,0),
+    AIR("ciel", TileTypesEnum.AIR,0),
     GRASS("grass", TileTypesEnum.BLOCK,8, ItemsEnum.DIRT, BlockTypesEnum.GROUND_TYPE),
     DIRT("dirt", TileTypesEnum.BLOCK,16, ItemsEnum.DIRT, BlockTypesEnum.GROUND_TYPE),
+    PIERRE("pierre",TileTypesEnum.BLOCK,24,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
     STONE("stone", TileTypesEnum.BLOCK,12, ItemsEnum.STONE, BlockTypesEnum.ROCK_TYPE),
     IRON_ORE("iron_ore",TileTypesEnum.BLOCK,14,ItemsEnum.IRON_ORE,BlockTypesEnum.ROCK_TYPE),
     IRON_BLOCK("iron_block",TileTypesEnum.BLOCK,15,ItemsEnum.IRON_BLOCK,BlockTypesEnum.ROCK_TYPE),
@@ -12,7 +13,12 @@ public enum TilesEnum {
     //LAVA("lava", TileTypes.LIQUID);
     CRAFTING_TABLE("crafting_table", TileTypesEnum.UTILITIES,10, ItemsEnum.CRAFTING_TABLE, BlockTypesEnum.WOOD_TYPE),
     TREE("tree", TileTypesEnum.BACKGROUND,15, ItemsEnum.WOOD, BlockTypesEnum.WOOD_TYPE),
-    FURNACE("furnace", TileTypesEnum.UTILITIES,12, ItemsEnum.FURNACE, BlockTypesEnum.ROCK_TYPE);
+    FURNACE("furnace", TileTypesEnum.UTILITIES,12, ItemsEnum.FURNACE, BlockTypesEnum.ROCK_TYPE),
+    DARKSTONE("darkstone",TileTypesEnum.BLOCK,12,ItemsEnum.HARD_STONE, BlockTypesEnum.ROCK_TYPE),
+    MUR("mur",TileTypesEnum.BLOCK,10,ItemsEnum.MUR,BlockTypesEnum.INDESTRUCTIBLE_TYPE),
+    PIERREFOND("darkstone",TileTypesEnum.AIR,0),
+    MURFOND("mur",TileTypesEnum.AIR,0),
+    COPIUM("copium",TileTypesEnum.BLOCK,30,ItemsEnum.COPIUM_BLOCK,BlockTypesEnum.ROCK_TYPE);
 
     private final String name;
     private final TileTypesEnum type;

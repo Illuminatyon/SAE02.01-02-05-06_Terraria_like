@@ -1,5 +1,11 @@
 package fr.iut.hev.root.model.enums;
 
+/**
+ * Énumération des différents objets disponibles dans le jeu.
+ * Chaque objet possède des propriétés spécifiques comme son nom,
+ * sa limite d'empilement, son type, et éventuellement des statistiques
+ * et une tuile associée.
+ */
 public enum ItemsEnum {
     WOOD("wood",100,0, ItemTypesEnum.RESOURCES),
     STONE("stone",100,0.2, ItemTypesEnum.BLOCK),
@@ -14,7 +20,6 @@ public enum ItemsEnum {
     COPIUM_INGOT("copium_ingot",100,0.2, ItemTypesEnum.RESOURCES),
     COPIUM_BLOCK("copium_block",100,0.2, ItemTypesEnum.BLOCK),
     MUR("mur",100,0.2, ItemTypesEnum.BLOCK),
-
 
 
     WOODEN_PICKAXE("wooden_pickaxe",1,0, ItemTypesEnum.TOOL,ItemStatsEnum.WOODEN_PICKAXE),

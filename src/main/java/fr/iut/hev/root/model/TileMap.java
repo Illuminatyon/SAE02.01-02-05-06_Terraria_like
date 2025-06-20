@@ -5,6 +5,11 @@ import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
+import fr.iut.hev.root.model.utilities.CreateHashmap;
+import fr.iut.hev.root.model.utilities.SaveReader;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class TileMap {
     private ItemFactory itemFactory;
@@ -13,7 +18,7 @@ public class TileMap {
 
     public static final int format = 32;
 
-    public TileMap(int width, int height, ItemFactory itemFactory) {
+    public TileMap(int width, int height, ItemFactory itemFactory) throws IOException {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
          */
@@ -23,8 +28,16 @@ public class TileMap {
         this.height = height/format;
         this.tileMap = new Tile[height/format][width/format];
 
-        //génération de la map tests
-        this.setTestMap();
+        // Initialize all tiles with AIR
+        for (int i = 0; i < this.getHeight(); i++) {
+            for (int j = 0; j < this.getWidth(); j++) {
+                this.addTile(new Tile(TilesEnum.AIR, j, i));
+            }
+        }
+
+        // Call setTestMap after initializing all tiles with AIR
+        //this.setTestMap();
+        this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
     }
 
     public Tile getTile(int tileX, int tileY) {
@@ -36,10 +49,23 @@ public class TileMap {
         else
             return null;
     }
+    public void setMap(String Path) throws IOException {
+        HashMap<Integer, TilesEnum> index = CreateHashmap.hashMapReader();
+        int[][] save = SaveReader.map(Path);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int tileIndex = save[y][x];
+                TilesEnum tileEnum = index.get(tileIndex);
+                Tile tile = new Tile(tileEnum, x, y);
+                this.addTile(tile);
+            }
+        }
+    }
 
     public void setTestMap() {
         /**
-         * crée une map en 1920p avec 60*33 tile de tests
+         * crée une map en 1920p avec 60*33 tile de test
+         * Avec vérification des limites pour éviter les erreurs dans les tests
          */
         int index = 0;
         for (int i = 0; i < this.getHeight(); i++) {
@@ -60,44 +86,73 @@ public class TileMap {
             }
         }
 
-        for (int i = 0; i < 15; i++) {
-            this.getTile(i, 18).setTileEnum(TilesEnum.DIRT);
-            if (i < 14) {
-                this.getTile(i, 17).setTileEnum(TilesEnum.DIRT);
+        // Vérification des limites pour chaque opération
+        if (this.getHeight() > 18) {
+            for (int i = 0; i < Math.min(15, this.getWidth()); i++) {
+                this.getTile(i, 18).setTileEnum(TilesEnum.DIRT);
+                if (i < 14 && this.getHeight() > 17) {
+                    this.getTile(i, 17).setTileEnum(TilesEnum.DIRT);
+                }
+                if (i < 13 && this.getHeight() > 16) {
+                    this.getTile(i, 16).setTileEnum(TilesEnum.DIRT);
+                }
+                if (i < 12 && this.getHeight() > 15) {
+                    this.getTile(i, 15).setTileEnum(TilesEnum.DIRT);
+                }
             }
-            if (i < 13) {
-                this.getTile(i, 16).setTileEnum(TilesEnum.DIRT);
+        }
+
+        if (this.getWidth() > 14 && this.getHeight() > 17) {
+            for (int i = 0; i < 3; i++) {
+                if (14 - i >= 0 && 14 - i < this.getWidth() && 17 - i >= 0 && 17 - i < this.getHeight()) {
+                    this.getTile(14 - i, 17 - i).setTileEnum(TilesEnum.GRASS);
+                }
             }
-            if (i < 12) {
-                this.getTile(i, 15).setTileEnum(TilesEnum.DIRT);
+        }
+
+        if (this.getHeight() > 14) {
+            for (int i = 0; i < 11; i++) {
+                if (11 - i >= 0 && 11 - i < this.getWidth()) {
+                    this.getTile(11 - i, 14).setTileEnum(TilesEnum.GRASS);
+                }
             }
         }
 
-        for (int i = 0; i < 3; i++) {
-            this.getTile(14 - i, 17 - i).setTileEnum(TilesEnum.GRASS);
+        if (this.getHeight() > 14) {
+            for (int i = 0; i < 5; i++) {
+                if (14 - i >= 0 && 14 - i < this.getHeight()) {
+                    this.getTile(0, 14 - i).setTileEnum(TilesEnum.DIRT);
+                }
+            }
         }
 
-        for (int i = 0; i < 11; i++) {
-            this.getTile(11 - i, 14).setTileEnum(TilesEnum.GRASS);
+        if (this.getWidth() > 27 && this.getHeight() > 14) {
+            for (int i = 0; i < 3; i++) {
+                if (25 + i < this.getWidth()) {
+                    this.getTile(25 + i, 14).setTileEnum(TilesEnum.GRASS);
+                }
+            }
         }
 
-        for (int i = 0; i < 5; i++) {
-            this.getTile(0, 14 - i).setTileEnum(TilesEnum.DIRT);
+        if (this.getWidth() > 27 && this.getHeight() > 15) {
+            this.getTile(27, 15).setTileEnum(TilesEnum.DIRT);
         }
 
-        for (int i = 0; i < 3; i++) {
-            this.getTile(25 + i, 14).setTileEnum(TilesEnum.GRASS);
+        if (this.getWidth() > 35 && this.getHeight() > 17) {
+            for (int i = 0; i < 5; i++) {
+                if (17 - i >= 0 && 17 - i < this.getHeight()) {
+                    this.getTile(35, 17 - i).setTileEnum(TilesEnum.DIRT);
+                }
+            }
         }
 
-        this.getTile(27, 15).setTileEnum(TilesEnum.DIRT);
-
-        for (int i = 0; i < 5; i++) {
-            this.getTile(35, 17 - i).setTileEnum(TilesEnum.DIRT);
+        if (this.getWidth() > 40 && this.getHeight() > 15) {
+            this.getTile(40, 15).setTileEnum(TilesEnum.DIRT);
         }
 
-        this.getTile(40, 15).setTileEnum(TilesEnum.DIRT);
-
-        this.getTile(57, 31).setTileEnum(TilesEnum.STONE);
+        if (this.getWidth() > 57 && this.getHeight() > 31) {
+            this.getTile(57, 31).setTileEnum(TilesEnum.STONE);
+        }
 
         //this.getTile(57, 31).setTile(Tiles.DIRT);
 

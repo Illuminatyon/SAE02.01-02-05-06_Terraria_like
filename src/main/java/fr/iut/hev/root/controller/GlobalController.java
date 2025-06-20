@@ -34,13 +34,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import static fr.iut.hev.root.model.TileMap.format;
+
 public class GlobalController implements Initializable {
-    private ObjectProperty<World> worldProperty;
+    private World world;
     private Camera camera;
     private Timeline gameLoop;
     private Player player; // dans world
@@ -56,6 +59,7 @@ public class GlobalController implements Initializable {
     private HitboxManager hitboxManager; // world ou controller
     //public static Mob mob ;
     private static Set<Mob> mobs;
+    private ItemFactory itemFactory;
 
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
     private HUDView hudView;
@@ -88,18 +92,21 @@ public class GlobalController implements Initializable {
     @FXML private Button craftButton;
     @FXML private HBox recipeDisplay;
 
-    public void setWorld(World world) {
-        this.worldProperty.set(world);
-        //this.world = world;
-    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            initWorld();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        initItemEnums();
 
-    private World getWorld() {
-        return worldProperty.get();
-    }
+        gameLoop = new Timeline();
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
 
-    private void lateInit(World world) {
+        cooldownManager = new CooldownManager();
         globalView = new GlobalView(world.getTileMap(), landTileMap, backgroundTileMap);
-        lootView = new LootView(landTileMap);
+        lootView = new LootView(entitiesPane);
 
         // Set the hitbox manager for all weapons
         //Weapon.setHitboxManager(hitboxManager);
@@ -107,8 +114,11 @@ public class GlobalController implements Initializable {
         //aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         //initMap();
         initPlayer();
-
-        //world.getTileMap().setItemFactory(new ItemFactory()); // Pas le choix
+        System.out.println("crashed ?");
+        createAggressiveMob(ActorEnum.ZOMBIE);
+        createMob(ActorEnum.POULET);
+        createNPC(ActorEnum.HOMPS);
+        System.out.println("recrashed .");
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
@@ -162,41 +172,29 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        worldProperty = new SimpleObjectProperty<>();
-        initItemEnums();
-
-        gameLoop = new Timeline();
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
-
-        cooldownManager = new CooldownManager();
+    private void initWorld() throws IOException {
         hitboxManager = new HitboxManager();
-
-        worldProperty.addListener((obs, oldWorld, newWorld) -> {
-            if (newWorld != null) {
-                lateInit(newWorld);
-            } else {
-                // Retour au menu principal
-            }
-        });
+        itemFactory = new ItemFactory(hitboxManager);
+        tileMap = new TileMap(3840, 1440, itemFactory);
+        player = new Player(0, 0, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER, hitboxManager);
+        aliveActors = new ArrayList<>();
+        world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
     }
 
     private void initPlayer() {
-        World world = getWorld();
         ItemFactory itemFactory = world.getItemFactory();
         player = world.getPlayer();
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
         hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
 
+        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
+
         hudView = new HUDView(player.healthProperty(), heartsHbox);
         playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
-
-        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
 
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
         inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
@@ -228,6 +226,8 @@ public class GlobalController implements Initializable {
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
+        playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
         player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
         player.indexItemInHandProperty().bind(scrollHotbarHandler.IndexHotbarProperty());
@@ -258,26 +258,32 @@ public class GlobalController implements Initializable {
     private void createMob(ActorEnum mobActorEnum) {
         Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
         mobView = new MobView(mob, tileMap, entitiesPane);
-        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, getWorld().getItemFactory()));
+        mobView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        mobView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
-        aliveActors.add(mob);
+        world.getAliveMobs().add(mob);
     }
 
     // Methode en com dans world
     private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
+                0, 0, 32, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
-        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,getWorld().getItemFactory()));
-        aliveActors.add(aggressiveMob);
+        aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
+        world.getAliveMobs().add(aggressiveMob);
     }
 
     // Methode en com dans world
     private void createNPC(ActorEnum npcActorEnum) {
-        Pnj npc = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
+        Pnj npc = new Pnj(0, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
         this.pnjView = new PnjView(npc, tileMap, entitiesPane);
-        npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,getWorld().getItemFactory()));
+        pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,world.getItemFactory()));
         dialogueCD = new Cooldown(0);
         aliveActors.add(npc);
     }
@@ -303,25 +309,6 @@ public class GlobalController implements Initializable {
                 itemsEnum.itemEnumInit();
             }
         }
-    }
-
-    /**
-     * Gets the list of alive actors
-     * @return the list of alive actors
-     */
-    /*public ArrayList<Actor> getAliveActors() {
-        return aliveActors;
-    }*/
-
-    /**
-     * Gets the actors pane
-     * @return the actors pane
-     */
-    /*public AnchorPane getActorsPane() {
-        return actorsPane;
-    }*/
-    public AnchorPane getEntitiesPane() {
-        return entitiesPane;
     }
 
     /**

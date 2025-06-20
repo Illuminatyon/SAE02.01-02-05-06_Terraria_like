@@ -19,7 +19,7 @@ public class World {
     private ArrayList<Actor> aliveMobs;
     private HitboxManager hitboxManager;
 
-    public World(String name, TileMap tileMap, Player player, ArrayList<Actor> aliveMobs, HitboxManager hitboxManager, ItemFactory itemFactory) throws IOException {
+    public World(String name, TileMap tileMap, Player player, ArrayList<Actor> aliveMobs, HitboxManager hitboxManager, ItemFactory itemFactory) {
         this.nameProperty = new SimpleStringProperty();
         this.nameProperty.set(name);
         this.lastPlayed = System.currentTimeMillis();

@@ -15,7 +15,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import static fr.iut.hev.root.model.TileMap.format;
-
+/**
+ * Gestionnaire des actions de la souris liées aux objets.
+ * Cette classe est responsable de la capture et du traitement des événements souris
+ * pour l'utilisation des objets dans le jeu (minage, placement de blocs, utilisation d'armes, etc.).
+ */
 public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     private InventoryView inventoryView;
@@ -32,6 +36,15 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private TileMap tileMap;
     private GlobalController globalController; // Retirer global controller peut etre, enft c un handler alors jsp
 
+    /**
+     * Constructeur du gestionnaire d'actions souris liées aux objets.
+     * Initialise les références aux composants du jeu et configure l'état initial.
+     *
+     * @param world Référence au monde du jeu
+     * @param camera Caméra du jeu
+     * @param inventoryView Vue de l'inventaire du joueur
+     * @param worldView Vue globale du monde
+     */
     public MouseItemActionInputHandler(World world, Camera camera, InventoryView inventoryView, GlobalView worldView) {
         this.world = world;
         this.inventoryView = inventoryView;
@@ -50,6 +63,13 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
             this.itemUseCooldown.setLimit(player.getItemInHand().getCooldown());
     }
 
+    /**
+     * Gère les événements souris.
+     * Cette méthode traite les événements de clic et de déplacement de la souris,
+     * et déclenche les actions correspondantes en fonction du type d'objet tenu par le joueur.
+     *
+     * @param mouseEvent L'événement souris à traiter
+     */
     @Override
     public void handle(MouseEvent mouseEvent) {
         if (!inventoryView.getInventoryOpened() && !itemUseCooldown.getOnGoing()) {
@@ -86,6 +106,10 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Traite les clics de souris maintenus.
+     * Redirige vers la méthode appropriée en fonction du bouton de souris utilisé.
+     */
     public void onClickPressedLoop() {
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             onLeftClickPressedLoop();
@@ -95,6 +119,10 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Traite les relâchements de clics de souris.
+     * Redirige vers la méthode appropriée en fonction du bouton de souris utilisé.
+     */
     public void onClickReleasedLoop() {
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             onLeftClickReleasedLoop();
@@ -104,6 +132,10 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Traite les clics gauches maintenus.
+     * Utilise l'objet tenu par le joueur et met à jour la tuile ciblée si nécessaire.
+     */
     public void onLeftClickPressedLoop() {
         if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY))
@@ -111,10 +143,15 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         }
     }
 
+
     public void onRightClickPressedLoop() {
 
     }
-
+    /**
+     * Traite les relâchements de clics gauches.
+     * Utilise l'objet tenu par le joueur, met à jour la tuile ciblée si nécessaire,
+     * et réinitialise l'état du clic.
+     */
     public void onLeftClickReleasedLoop() {
         if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY))

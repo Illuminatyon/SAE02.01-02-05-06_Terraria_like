@@ -14,6 +14,9 @@ import javafx.scene.input.MouseEvent;
 import java.util.HashMap;
 
 public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
+    /**
+     *Gestionnaire d'événement permettant la prise en charge des événements de type souris
+     */
 
     private Inventory inventory;
     private InventoryView inventoryView;
@@ -22,6 +25,14 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
     private DoubleProperty xProperty;
     private DoubleProperty yProperty;
 
+    /**
+     * Constructeur du gestionnaire d'entrées souris pour l'inventaire.
+     * Initialise les références à l'inventaire et sa vue, et configure les propriétés
+     * pour suivre la position du curseur et les objets tenus.
+     *
+     * @param inventory Référence à l'inventaire du joueur
+     * @param inventoryView Vue de l'inventaire du joueur
+     */
     public MouseInventoryInputHandler(Inventory inventory,InventoryView inventoryView) {
         this.inventory = inventory;
         this.inventoryView = inventoryView;
@@ -30,6 +41,13 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         this.yProperty = new SimpleDoubleProperty(0);
     }
 
+    /**
+     * Gère les événements souris pour l'inventaire.
+     * Cette méthode traite les clics et les mouvements de la souris lorsque l'inventaire est ouvert,
+     * permettant au joueur d'interagir avec les objets de son inventaire.
+     *
+     * @param mouseEvent L'événement souris à traiter
+     */
     @Override
     public void handle(MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
@@ -49,6 +67,13 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Traite un clic gauche sur l'inventaire.
+     * Si un emplacement d'inventaire est cliqué:
+     * - Si aucun objet n'est tenu, prend tout le contenu de l'emplacement
+     * - Si un objet est déjà tenu, tente de le placer dans l'emplacement cliqué
+     * Si aucun emplacement n'est cliqué, l'objet tenu est abandonné.
+     */
     public void onLeftClickPressed() {
         int slotIndex = fromTargetStringToInd(mouseEvent.getTarget().toString());
         if (slotIndex != -1) {
@@ -63,6 +88,11 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Traite un clic droit sur l'inventaire.
+     * Si un emplacement d'inventaire est cliqué et qu'aucun objet n'est tenu,
+     * prend la moitié du contenu de l'emplacement.
+     */
     public void onRightClickPressed() {
         int slotIndex = fromTargetStringToInd(mouseEvent.getTarget().toString());
         if (slotIndex != -1) {
@@ -71,7 +101,14 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
             }
         }
     }
-
+    /**
+     * Convertit une chaîne de caractères cible en indice d'emplacement d'inventaire.
+     * Cette méthode analyse la chaîne fournie par l'événement souris pour déterminer
+     * quel emplacement d'inventaire a été cliqué.
+     *
+     * @param target Chaîne de caractères représentant la cible du clic
+     * @return Indice de l'emplacement d'inventaire, ou -1 si aucun emplacement valide n'a été cliqué
+     */
     public int fromTargetStringToInd(String target) {
         String slotString = "";
         int i,slotInd;

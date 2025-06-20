@@ -16,6 +16,6 @@ public class MobView extends ActorView {
 
     public MobView(AggressiveMob mob, TileMap tileMap, AnchorPane anchorPane) {
         super(mob, tileMap,anchorPane);
-}
+    }
 }
 
