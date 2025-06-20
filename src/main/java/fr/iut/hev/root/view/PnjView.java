@@ -39,7 +39,7 @@ public class PnjView extends ActorView{
         pause.setOnFinished(event -> this.phrase.setVisible(false));
         pause.play();
         count++;
-        if (count == (text.length+1)) {
+        if (count == (text.length)) {
             this.getActor().receiveDamage(100);
         }
 

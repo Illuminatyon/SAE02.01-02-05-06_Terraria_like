@@ -149,7 +149,7 @@ public class GlobalController implements Initializable {
                     }
 
                     updateCameraPosition();
-                    checkPnjDialogue();
+                    //checkPnjDialogue();
 
                     // Update hitbox view
                     hitboxView.updateHitboxes();
@@ -248,7 +248,7 @@ public class GlobalController implements Initializable {
         aliveActors = new ArrayList<>();
         initPlayer();
         initmob();
-        initAggressiveMob(player);
+        //initAggressiveMob(player);
         initPnj();
     }
 
@@ -261,11 +261,18 @@ public class GlobalController implements Initializable {
         aliveActors.add(aggressiveMob);
     }
     private void initPnj() {
-        Pnj homps = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS, this.hitboxManager);
+        Pnj homps = new Pnj(1750, 0,32, 64, tileMap, 2, 2, 10, 3, ActorEnum.HOMPS, this.hitboxManager);
         this.pnjView = new PnjView(homps, tileMap, entitiesPane);
         homps.healthProperty().addListener(new DeathListener(homps, pnjView, aliveActors,itemFactory));
         aliveActors.add(homps);
         dialogueCD = new Cooldown(0);
+        homps.speaksProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (t1) {
+                pnjView.speak();
+                dialogueCD.setLimit(2);
+                dialogueCD.start();
+            }
+        });
     }
 
     /**

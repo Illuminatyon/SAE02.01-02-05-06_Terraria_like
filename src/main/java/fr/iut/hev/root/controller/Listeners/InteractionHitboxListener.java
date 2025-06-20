@@ -3,6 +3,7 @@ package fr.iut.hev.root.controller.Listeners;
 import fr.iut.hev.root.model.entities.Interactive;
 import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.utilities.Cooldown;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

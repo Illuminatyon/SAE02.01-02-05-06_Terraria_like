@@ -4,16 +4,24 @@ import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.utilities.Cooldown;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class Pnj extends Mob implements Interactive {
+
+    Cooldown dialogueCooldown = new Cooldown(2);
+    private BooleanProperty speaks;
 
     public Pnj(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager);
         getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
+        this.speaks = new SimpleBooleanProperty(false);
     }
 
     @Override
     public void updateHorizontalMovement (){
+        /*
         int currentDirection=super.Changement();
 
         // Appliquer la direction actuelle
@@ -33,20 +41,40 @@ public class Pnj extends Mob implements Interactive {
             }
         } else {
             super.setVelocityX(0);
-        }
+        }*/
+        this.stop();
+    }
+
+    public void stop(){
+        setVelocityX(0);
     }
 
     public void handlerInteraction(Player player) {
-        System.out.println("interaction");
-        System.out.println("[DEBUG] NPC interaction handled!");
-        System.out.println("[DEBUG] NPC Type: " + this.getName());
-        System.out.println("[DEBUG] Distance between Player and NPC: " + 
-            Math.sqrt(Math.pow(player.getPosX() - this.getPosX(), 2) + 
-                     Math.pow(player.getPosY() - this.getPosY(), 2)));
+//        System.out.println("interaction");
+//        System.out.println("[DEBUG] NPC interaction handled!");
+//        System.out.println("[DEBUG] NPC Type: " + this.getName());
+//        System.out.println("[DEBUG] Distance between Player and NPC: " +
+//            Math.sqrt(Math.pow(player.getPosX() - this.getPosX(), 2) +
+//                     Math.pow(player.getPosY() - this.getPosY(), 2)));
+//
+//        // Check if hitboxes are intersecting
+//        boolean hitboxesIntersect = player.getInteractiveHitbox().intersects(
+//            player.getHitboxManager().getInteractiveHitboxes().get(this), player);
+//        System.out.println("[DEBUG] Hitboxes intersecting: " + hitboxesIntersect);
+        if (!dialogueCooldown.getOnGoing())
+            setSpeaks(!getSpeaks());
+        dialogueCooldown.start();
 
-        // Check if hitboxes are intersecting
-        boolean hitboxesIntersect = player.getInteractiveHitbox().intersects(
-            player.getHitboxManager().getInteractiveHitboxes().get(this), player);
-        System.out.println("[DEBUG] Hitboxes intersecting: " + hitboxesIntersect);
+
+    }
+
+    public boolean getSpeaks() {
+        return speaks.getValue();
+    }
+    public void setSpeaks(boolean speaks) {
+        this.speaks.setValue(speaks);
+    }
+    public BooleanProperty speaksProperty() {
+        return speaks;
     }
 }

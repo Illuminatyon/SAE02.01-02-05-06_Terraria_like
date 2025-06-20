@@ -9,7 +9,8 @@ public enum DialogueEnum {
             "la science qui n’est jamais plus productive que lorsqu’elle est mise au service de la violence.\n" +
             "Et de là naissent ces ignobles machines. Elle commence par donner du code exécrable, puis elle supplante l’humanité.\n" +
             "Tout ça à cause de Marine. "),
-    DED("Vas Jhon, ne cesse jamais d'etre libre face a ces monstres")
+    DED("Vas Jhon, ne cesse jamais d'etre libre face a ces monstres \n et n'oublie pas, clique gauche pour taper"),
+    FIN("")
     ;
     private String text;
 
