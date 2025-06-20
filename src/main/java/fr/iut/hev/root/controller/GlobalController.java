@@ -114,11 +114,11 @@ public class GlobalController implements Initializable {
         //aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         //initMap();
         initPlayer();
-        System.out.println("crashed ?");
-        createAggressiveMob(ActorEnum.ZOMBIE, 10,0);
-        createMob(ActorEnum.POULET,20,0);
+
+        createAggressiveMob(ActorEnum.ZOMBIE, 0,0);
+        createMob(ActorEnum.POULET,0,0);
         createNPC(ActorEnum.HOMPS,10,0);
-        System.out.println("recrashed .");
+        createBoss(ActorEnum.MARINE,0,0);
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
@@ -130,6 +130,9 @@ public class GlobalController implements Initializable {
                             Actor currentActor = world.getAliveMobs().get(i);
                             if (currentActor != null) {
                                 currentActor.updatePosition();
+                                if (currentActor == player){
+                                    System.out.println(player.getPosX());
+                                }
                             } else {
                                 world.getAliveMobs().remove(i);
                             }
@@ -275,6 +278,16 @@ public class GlobalController implements Initializable {
         aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty().add(-y));
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
         world.getAliveMobs().add(aggressiveMob);
+    }
+    private void createBoss(ActorEnum aggressiveMobActorEnum, int x , int y) {
+        Boss boss = new Boss(
+                x, y, 32, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
+        );
+        MobView bossView = new MobView(boss, tileMap, entitiesPane);
+        aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty().add(-x));
+        aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty().add(-y));
+        boss.healthProperty().addListener(new DeathListener(boss, aggressiveMobView, aliveActors,world.getItemFactory()));
+        world.getAliveMobs().add(boss);
     }
 
     // Methode en com dans world
