@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +33,7 @@ public class AStarTest {
      * Crée une carte de test et initialise l'algorithme A*
      */
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         // Création d'une carte de test
         HitboxManager hitboxManager = new HitboxManager();
         ItemFactory itemFactory = new ItemFactory(hitboxManager);

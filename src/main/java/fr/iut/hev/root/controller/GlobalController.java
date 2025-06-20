@@ -34,10 +34,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Set;
+
+import static fr.iut.hev.root.model.TileMap.format;
 
 public class GlobalController implements Initializable {
     private World world;
@@ -91,7 +94,11 @@ public class GlobalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initWorld();
+        try {
+            initWorld();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         initItemEnums();
 
         gameLoop = new Timeline();
@@ -108,8 +115,8 @@ public class GlobalController implements Initializable {
         //initMap();
         initPlayer();
         System.out.println("crashed ?");
-        //createAggressiveMob(ActorEnum.ZOMBIE);
-        //createMob(ActorEnum.POULET);
+        createAggressiveMob(ActorEnum.ZOMBIE);
+        createMob(ActorEnum.POULET);
         createNPC(ActorEnum.HOMPS);
         System.out.println("recrashed .");
 
@@ -159,11 +166,11 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
-    private void initWorld() {
+    private void initWorld() throws IOException {
         hitboxManager = new HitboxManager();
         itemFactory = new ItemFactory(hitboxManager);
-        tileMap = new TileMap(1920, 1056, itemFactory);
-        player = new Player(0, -25, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER, hitboxManager);
+        tileMap = new TileMap(3840, 1440, itemFactory);
+        player = new Player(0, 0, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER, hitboxManager);
         aliveActors = new ArrayList<>();
         world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
     }
@@ -255,16 +262,18 @@ public class GlobalController implements Initializable {
     // Methode en com dans world
     private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
         AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 40, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
+                0, 0, 32, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
         );
         this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
+        aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty());
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
         world.getAliveMobs().add(aggressiveMob);
     }
 
     // Methode en com dans world
     private void createNPC(ActorEnum npcActorEnum) {
-        Pnj npc = new Pnj(100, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
+        Pnj npc = new Pnj(0, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
         this.pnjView = new PnjView(npc, tileMap, entitiesPane);
         pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
         pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());

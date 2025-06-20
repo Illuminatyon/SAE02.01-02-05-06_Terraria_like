@@ -338,4 +338,8 @@ public class AggressiveMob extends Mob {
             }
         }
     }
+
+    public Player getPlayer(){
+        return this.target;
+    }
 }

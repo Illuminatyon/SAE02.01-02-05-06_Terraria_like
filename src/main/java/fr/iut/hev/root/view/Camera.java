@@ -77,5 +77,5 @@ public class Camera {
     public void setCurrentCamX(double offset) {this.currentCamXProperty.setValue(offset);}
     public void setCurrentCamY(double offset) {this.currentCamYProperty.setValue(offset);}
     public DoubleProperty currentCamXProperty() {return this.currentCamXProperty;}
-    public DoubleProperty currentCamYProperty() {return  this.currentCamYProperty;}
+    public DoubleProperty currentCamYProperty() {return this.currentCamYProperty;}
 }

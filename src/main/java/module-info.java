@@ -6,6 +6,7 @@ module fr.iut.hev.root {
     requires java.sql;
     requires org.controlsfx.controls;
     requires org.junit.jupiter.api;
+    requires org.json;
 
 
     opens fr.iut.hev.root.controller to javafx.fxml;
