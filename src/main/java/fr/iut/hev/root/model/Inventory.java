@@ -40,12 +40,23 @@ public class Inventory {
                 replacedItem.put(slots.get(slotIndex).getItem(), slots.get(slotIndex).getQuantity());
                 slots.get(slotIndex).setItem(item);
                 slots.get(slotIndex).setQuantity(quantity);
+                return replacedItem;
             }
             else if (slots.get(slotIndex).getQuantity() < item.getItemEnum().getLimitStacking()) {
                 if ((slots.get(slotIndex).getQuantity() + quantity) > item.getItemEnum().getLimitStacking()) {
                     int excess = (slots.get(slotIndex).getQuantity() + quantity) - item.getItemEnum().getLimitStacking();
-                    replacedItem.put(slots.get(slotIndex).getItem(), excess);
                     slots.get(slotIndex).setQuantity(item.getItemEnum().getLimitStacking());
+
+                    // Find the next empty slot to put the excess
+                    for (int i = 0; i < size; i++) {
+                        if (i != slotIndex && slots.get(i).getItem() == null) {
+                            slots.get(i).setItem(item);
+                            slots.get(i).setQuantity(excess);
+                            slotsOccupied++;
+                            break;
+                        }
+                    }
+                    return null;
                 }
                 else {
                     slots.get(slotIndex).setQuantity(slots.get(slotIndex).getQuantity() + quantity);
@@ -54,9 +65,8 @@ public class Inventory {
             }
             else {
                 replacedItem.put(item, quantity);
+                return replacedItem;
             }
-
-            return replacedItem;
         }
     }
 
@@ -126,13 +136,21 @@ public class Inventory {
     }
 
     public int getAvailableRoomForItem(Item item) {
-        int quantityAvailableForItem = 0;
-
+        // Count how much of this item we already have in the inventory
+        int totalQuantity = 0;
         for (InventorySlot slot : slots) {
-            if (slot.getItem() != null && slot.getItem().getItemEnum() == item.getItemEnum())
-                quantityAvailableForItem += item.getItemEnum().getLimitStacking() - slot.getQuantity();
+            if (slot.getItem() != null && slot.getItem().getItemEnum() == item.getItemEnum()) {
+                totalQuantity += slot.getQuantity();
+            }
         }
-        return quantityAvailableForItem;
+
+        // If we don't have any of this item, return the stacking limit
+        if (totalQuantity == 0) {
+            return item.getItemEnum().getLimitStacking();
+        }
+
+        // Otherwise, return how much more we can add before hitting the limit
+        return item.getItemEnum().getLimitStacking() - totalQuantity;
     }
 
     public ArrayList<InventorySlot> getSlots() {
@@ -148,9 +166,30 @@ public class Inventory {
     }
 
     public HashMap<Item, Integer> remove(int slotIndex, int quantity) {
+        // Check if the slot is empty
         if (slots.get(slotIndex).getItem() == null) {
             return null;
         }
+
+        // Check if the quantity is valid
+        if (quantity <= 0) {
+            return null;
+        }
+
+        // Check if the quantity is more than what's available
+        int availableQuantity = slots.get(slotIndex).getQuantity();
+        if (quantity > availableQuantity) {
+            // Only remove what's available
+            HashMap<Item, Integer> removedItem = new HashMap<>();
+            removedItem.put(slots.get(slotIndex).getItem(), availableQuantity);
+            slots.get(slotIndex).remove(availableQuantity);
+            if (slots.get(slotIndex).getQuantity() == 0) {
+                slotsOccupied--;
+            }
+            return removedItem;
+        }
+
+        // Normal case: remove the requested quantity
         HashMap<Item, Integer> removedItem = new HashMap<>();
         removedItem.put(slots.get(slotIndex).getItem(), quantity);
         slots.get(slotIndex).remove(quantity);

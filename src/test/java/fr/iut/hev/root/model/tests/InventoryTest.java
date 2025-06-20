@@ -4,16 +4,25 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.InventorySlot;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.Item;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-class InventoryTest {
-    private final Inventory inventory = new Inventory();
-    private final int slotIndex = 0;
-    private final Item dirt = new Item(ItemsEnum.DIRT);
-    private final Item stone = new Item(ItemsEnum.STONE);
+public class InventoryTest {
+    private Inventory inventory;
+    private int slotIndex;
+    private Item dirt;
+    private Item stone;
+
+    @BeforeEach
+    void setUp() {
+        inventory = new Inventory();
+        slotIndex = 0;
+        dirt = new Item(ItemsEnum.DIRT);
+        stone = new Item(ItemsEnum.STONE);
+    }
 
     @Test
     void addToEmptySlot() {
@@ -65,7 +74,7 @@ class InventoryTest {
         assertEquals(dirt.getItemEnum().getLimitStacking(), inventory.getInventorySlot(slotIndex).getQuantity(),
                 "Expected the quantity in the slot to be capped at the limit after stacking");
         assertEquals(dirt, inventory.getInventorySlot(slotIndex + 1).getItem());
-        assertEquals(64, inventory.getInventorySlot(0).getQuantity());
+        assertEquals(100, inventory.getInventorySlot(0).getQuantity());
     }
 
     @Test
@@ -111,11 +120,11 @@ class InventoryTest {
     void testGetAvailableRoomForItem() {
         inventory.add(slotIndex, dirt, 10);
         int availableRoom = inventory.getAvailableRoomForItem(dirt);
-        assertEquals(54, availableRoom, "Expected 54 slots available for dirt after adding 10 (64 - 10)");
+        assertEquals(90, availableRoom, "Expected 90 slots available for dirt after adding 10 (100 - 10)");
 
         inventory.add(1, new Item(ItemsEnum.DIRT), 50);
         availableRoom = inventory.getAvailableRoomForItem(dirt);
-        assertEquals(4, availableRoom, "Expected only 4 slots available for dirt after adding 50 (64 - 50 - 10)");
+        assertEquals(40, availableRoom, "Expected only 40 slots available for dirt after adding 50 (100 - 50 - 10)");
     }
 
     @Test
@@ -140,7 +149,7 @@ class InventoryTest {
     void testGetAvailableRoomForItemInvalidItem() {
         Item invalidItem = new Item(ItemsEnum.WOOD); // Assuming WOOD is not in the inventory
         int availableRoom = inventory.getAvailableRoomForItem(invalidItem);
-        assertEquals(64, availableRoom, "Expected 64 slots available for an item not in the inventory");
+        assertEquals(100, availableRoom, "Expected 100 slots available for an item not in the inventory");
     }
 
     @Test
@@ -164,6 +173,6 @@ class InventoryTest {
     void testGetAvailableRoomForItemWithInvalidItem() {
         Item invalidItem = new Item(ItemsEnum.WOOD); // Assuming WOOD is not in the inventory
         int availableRoom = inventory.getAvailableRoomForItem(invalidItem);
-        assertEquals(64, availableRoom, "Expected 64 slots available for an item not in the inventory");
+        assertEquals(100, availableRoom, "Expected 100 slots available for an item not in the inventory");
     }
 }
