@@ -33,6 +33,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -101,6 +103,9 @@ public class GlobalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Media media = new Media(getClass().getResource("/fr/iut/hev/root/audio/menu.mp3").toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+
         aliveActors = new ArrayList<>();
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);

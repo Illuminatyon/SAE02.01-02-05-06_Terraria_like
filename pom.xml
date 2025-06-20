@@ -43,6 +43,11 @@
             <artifactId>jamepad</artifactId>
             <version>2.30.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>24.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
