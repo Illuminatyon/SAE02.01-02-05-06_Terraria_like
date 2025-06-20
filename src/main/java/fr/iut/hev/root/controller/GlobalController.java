@@ -33,8 +33,11 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
@@ -252,7 +255,9 @@ public class GlobalController implements Initializable {
         });
 
 
-        Platform.runLater(() -> {
+        System.out.println("avant le runlater");
+        /*Platform.runLater(() -> {
+            System.out.println("dans le runlater");
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseItemActionHandler);
@@ -260,7 +265,27 @@ public class GlobalController implements Initializable {
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
             hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
             landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
+        });*/
+        landTileMap.sceneProperty().addListener(new ChangeListener<Scene>() {
+            @Override
+            public void changed(ObservableValue<? extends Scene> observable, Scene oldScene, Scene newScene) {
+                if (newScene != null) {
+                    System.out.println("Scène détectée, ajout des handlers...");
+
+                    newScene.addEventHandler(KeyEvent.ANY, keyboardHandler);
+                    newScene.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseItemActionHandler);
+                    newScene.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseItemActionHandler);
+                    newScene.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseItemActionHandler);
+                    hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseInventoryHandler);
+                    hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED, mouseInventoryHandler);
+                    newScene.addEventHandler(ScrollEvent.SCROLL, scrollHotbarHandler);
+
+                    // Supprimer le listener pour ne pas le déclencher à nouveau inutilement
+                    landTileMap.sceneProperty().removeListener(this);
+                }
+            }
         });
+        System.out.println("après le runlater");
     }
 
     private void createMob(ActorEnum mobActorEnum) {

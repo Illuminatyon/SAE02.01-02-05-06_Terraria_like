@@ -129,12 +129,12 @@ public class MainMenuController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fr/iut/hev/root/view/globalView.fxml"));
             Parent worldRoot = fxmlLoader.load();
-            GlobalController globalController = fxmlLoader.getController();
-            globalController.setWorld(world);
             Stage stage = (Stage) root.getScene().getWindow();
             Scene scene = new Scene(worldRoot, stage.getWidth(), stage.getHeight());
             double x = stage.getX();
             double y = stage.getY();
+            GlobalController globalController = fxmlLoader.getController();
+            globalController.setWorld(world);
             stage.setScene(scene);
             stage.setX(x);
             stage.setY(y);
