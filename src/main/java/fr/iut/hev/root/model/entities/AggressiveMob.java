@@ -126,6 +126,18 @@ public class AggressiveMob extends Mob {
     }
 
     private void followPlayer() {
+        // Check if player is in attack range
+        int attackRange = getReach();
+        int dx = Math.abs(target.getPosX() - getPosX());
+        int dy = Math.abs(target.getPosY() - getPosY());
+
+        // If in attack range, stop moving and just attack
+        if (dx <= attackRange && dy <= attackRange) {
+            setVelocityX(0); // Stop horizontal movement when in attack range
+            attackPlayer(); // Attack the player
+            return; // Skip the rest of the movement logic
+        }
+
         // If we have a path, follow it
         if (!path.isEmpty()) {
             // Get the next point in the path
