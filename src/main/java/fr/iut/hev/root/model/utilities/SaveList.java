@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SaveList {
+public class SaveList { // Encore une class pour la save on peut aussi delete
 
     public static ArrayList<File> listJsonFiles(String directoryPath) {
         ArrayList<File> jsonFiles = new ArrayList<>();

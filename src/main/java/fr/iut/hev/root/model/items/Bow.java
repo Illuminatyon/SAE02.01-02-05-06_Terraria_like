@@ -119,4 +119,4 @@ public class Bow extends Weapon {
         player.getInventory().remove(ItemsEnum.ARROW, 1);
     }
 }
-*/
+*/ // TODO : delete on le finira pas
