@@ -16,12 +16,12 @@ public abstract class Actor extends Entity {
     private boolean isJumping;
     private int jumpingTestDecay; // TODO : faire un renommage pour que ce soit plus explicite
     private int reach;
-    private ActorEnum type;
+    private ActorEnum type; //TODO: réfléchir à l'utilité de cette enum ptet demander à un prof
     private HitboxManager hitboxManager;
     private IntegerProperty lookDirectionProperty;
 
-    // TODO : refactor avec healProperty comme un Enum, pour faciliter et mettre les guetteurs / setteurs autre part
-    // TODO : Même chose pour les autres attributs qui sont des Enums, parce que finalement la classe Actor elle est chargé de malade
+    // TODO : refactor avec healProperty comme un Enum, pour faciliter et mettre les guetteurs / setteurs autre part | (Lino) imaginer une classe barre de vie
+    // TODO : Même chose pour les autres attributs qui sont des Enums, parce que finalement la classe Actor elle est chargé de malade | (Lino) une classe potentielle pour le mouvement
 
     public enum LookDirections {
         RIGHT(1),
@@ -55,7 +55,7 @@ public abstract class Actor extends Entity {
         updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * moveSpeed);
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
-    } // TODO : Potentiellement faire un refactoring ? Parce que dans la classe Entity, y'a déjà une fonction qui a le même nom
+    } // TODO : Potentiellement faire un refactoring ? Parce que dans la classe Entity, y'a déjà une fonction qui a le même nom | ptet essayer d'économiser le plus de code entre les deux fonctionnements (ateurs et entité comme looot par exemple
 
     @Override
     public void applyGravity() {
