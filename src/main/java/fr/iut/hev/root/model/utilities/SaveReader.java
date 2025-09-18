@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class SaveReader {
+public class SaveReader { //Nom plus adapté puisqu'on a plus de save
 
     public static int[][] map(String filePath) throws IOException {
 
@@ -48,7 +48,7 @@ public class SaveReader {
         return map;
     }
 
-    public static int[][] newgame() throws IOException {
+    public static int[][] newgame() throws IOException { // A delete parcque c'est lié la save
         int[][] map = SaveReader.map("fr/iut/hev/root/data/spawn.json");
         return map;
 

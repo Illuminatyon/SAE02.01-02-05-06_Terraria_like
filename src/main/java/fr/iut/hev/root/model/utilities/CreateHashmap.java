@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 public class CreateHashmap {
 
-    public static HashMap<Integer, TilesEnum> hashMapReader() throws IOException {
+    public static HashMap<Integer, TilesEnum> hashMapReader() throws IOException { //Pareils Rename et meme si ducoup elle sert que la map faire en sorte qu'elle sois plus general
 
 
         String filePath = "src/main/resources/fr/iut/hev/root/data/MapSave.json";
