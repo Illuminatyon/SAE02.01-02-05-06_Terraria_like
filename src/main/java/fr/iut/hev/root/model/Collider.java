@@ -9,6 +9,9 @@ public class Collider {
     private int offsetY;
     private int marge;
 
+    // TODO : On pourrait potentiellement la découpé un peu de façon à ne pas avoir des fonctions qui font 100 lignes
+    // TODO : ce serait plus facile à modifier donc bon
+
     public Collider(TileMap tileMap, Entity entity) {
         this.tileMap = tileMap;
         this.entity = entity;

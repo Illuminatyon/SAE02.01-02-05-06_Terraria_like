@@ -11,13 +11,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {
+
     private StringProperty nameProperty;
     private long lastPlayed;
     private ItemFactory itemFactory;
     private TileMap tileMap;
     private Player player;
     private ArrayList<Actor> aliveMobs;
-    private HitboxManager hitboxManager;
+    private HitboxManager hitboxManager; // TODO : ??
 
     public World(String name, TileMap tileMap, Player player, ArrayList<Actor> aliveMobs, HitboxManager hitboxManager, ItemFactory itemFactory) {
         this.nameProperty = new SimpleStringProperty();
@@ -44,11 +45,11 @@ public class World {
 
     public long getLastPlayed() {
         return lastPlayed;
-    }
+    } // TODO : retirer les setters et guetters qui ne servent pas
 
     public void setLastPlayed(long lastPlayed) {
         this.lastPlayed = lastPlayed;
-    }
+    } // TODO : retirer les setters et guetters qui ne servent pas
 
     public TileMap getTileMap() {
         return this.tileMap;
@@ -72,7 +73,7 @@ public class World {
 
     public void setAliveMobs(ArrayList<Actor> aliveMobs) {
         this.aliveMobs = aliveMobs;
-    }
+    } // TODO : retirer les setters et guetters qui ne servent pas
 
     public ItemFactory getItemFactory() {
         return itemFactory;

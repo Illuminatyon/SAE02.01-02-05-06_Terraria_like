@@ -1,3 +1,4 @@
+// TODO : probablement delete aussi
 /*package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;

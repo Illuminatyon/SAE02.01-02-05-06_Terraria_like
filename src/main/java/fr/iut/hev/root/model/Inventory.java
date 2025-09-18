@@ -63,6 +63,7 @@ public class Inventory {
     }
 
     public void add(Item item, int quantity) {
+        // TODO : Refactorer un peu tout ça, une méthode ne doit que faire max 15 lignes de code
         // ATTENTION: faire en sorte que les stack de loot au sol soit egalement limité pour éviter de deregler l'inventaire lors d'un ramassage
         if (slotsOccupied == size) return;
 
@@ -89,6 +90,7 @@ public class Inventory {
     }
 
     public void addFromCraft(Item item, int quantity) {
+        // TODO : on peut aussi la refactor
         int i = 0;
         InventorySlot slot;
 
@@ -163,6 +165,7 @@ public class Inventory {
     }
 
     public void remove(ItemsEnum removedItem, int removedQuantity) {
+        // TODO : Refactor tout ça
         int i = 0;
         int totalAvailable = getItemIteration(removedItem);
 

@@ -3,6 +3,7 @@ package fr.iut.hev.root.model;
 import fr.iut.hev.root.model.enums.TilesEnum;
 
 public class Tile {
+
     private TilesEnum tileEnum;
     private int health;
 

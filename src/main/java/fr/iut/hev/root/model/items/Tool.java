@@ -21,7 +21,7 @@ public class Tool extends Item {
     }
 
     @Override
-    public boolean isUsed(MouseItemActionInputHandler eventHandler) {
+    public boolean isUsed(MouseItemActionInputHandler eventHandler) { // TODO : a split en plusieurs methode trop long
         int x = (int)eventHandler.getX() / format;
         int y = (int)eventHandler.getY() / format;
         TileMap tileMap = eventHandler.getTileMap();
