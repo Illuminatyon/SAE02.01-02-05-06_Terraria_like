@@ -8,15 +8,17 @@ public enum ActorEnum {
     ARROW("arrow","projectile",1),
     MARINE("marine","mob",100);
 
+    // Corriger toute la classe
+
     private String name;
-    private String Type;
+    private String Type; // a retirer
     private int maxHealth;
 
     ActorEnum(String name, String type, int maxHealth) {
         this.name = name;
         Type = type;
         this.maxHealth = maxHealth;
-    }
+    } // a modifier tout ça
 
     public String getName() {
         return name;

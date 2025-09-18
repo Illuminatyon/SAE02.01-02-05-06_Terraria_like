@@ -4,7 +4,7 @@ import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.HitboxType;
-import fr.iut.hev.root.model.enums.TileTypesEnum;
+import fr.iut.hev.root.model.enums.TileTypesEnum; // TODO : Retirer les imports qui ne servent à rien
 import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.pathfinding.AStar;
@@ -20,7 +20,8 @@ public class AggressiveMob extends Mob {
     private final int damage; // Dégâts infligés à chaque attaque
     private boolean isAggroed;
     private long lastAttackTime = 0;
-    private List<Point> path; // Path to follow
+    private List<Point> path; // TODO : Path to follow, faire aussi la même chose, parce que ça j'ai l'impression que c'est
+                            // TODO : plus de l'ordre de la position, donc je pense que je pourrais déplacer ceci
     private long lastInRangeTime = 0; // Time when player was last in range
     private static final long AGGRO_TIMEOUT = 5000; // 5 seconds timeout
     private int jumpCooldown = 1000; // 1 second cooldown between jumps
@@ -29,6 +30,9 @@ public class AggressiveMob extends Mob {
     private int currentDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour stationnaire
     private long lastDirectionChangeTime = 0;
     private AStar pathfinder; // A* pathfinding algorithm
+
+    // TODO : Faire un refactoring par exemple avec tout ce qui concerne l'aggro, les dommages, enfin tout ce qui concerne
+    // TODO : les interactions aggressives entres les entitées
 
     @Override
     public void updatePosition() {
@@ -57,7 +61,7 @@ public class AggressiveMob extends Mob {
         this.aliveActors = aliveActors; // Store the list of alive actors
         this.pathfinder = new AStar(tileMap); // Initialize the pathfinder
         getHitboxManager().createHitbox(this, HitboxType.ATTACK);
-    }
+    } // TODO : Du coup à modifier selon les modifications
 
     /**
      * Finds the shortest path from the mob to the player using A* algorithm
@@ -152,7 +156,7 @@ public class AggressiveMob extends Mob {
             int verticalDiff = nextY - getPosY();
 
             // If the next point is above us and we're on the ground, jump
-            if (verticalDiff < -TileMap.format/2 && super.getCollider().hasCollisionBottom(1)) {
+            if (verticalDiff < -TileMap.format / 2 && super.getCollider().hasCollisionBottom(1)) {
                 updateVerticalMovement(); // Jump to reach higher points
             }
 
@@ -163,9 +167,9 @@ public class AggressiveMob extends Mob {
             }
 
             // Jump if blocked horizontally or if there's an entity in front, but only if the obstacle is one tile high
-            if ((((super.getCollider().hasCollisionLeft() || super.getCollider().hasCollisionRight()) 
-                    && super.getCollider().hasCollisionBottom(1)) || 
-                    (isEntityInFront() && super.getCollider().hasCollisionBottom(1))) 
+            if ((((super.getCollider().hasCollisionLeft() || super.getCollider().hasCollisionRight())
+                    && super.getCollider().hasCollisionBottom(1)) ||
+                    (isEntityInFront() && super.getCollider().hasCollisionBottom(1)))
                     && isObstacleOneTileHigh()) {
                 updateVerticalMovement(); // saute si bloqué ou si un obstacle (entité) est devant et que l'obstacle fait exactement une tile de hauteur
             }
@@ -190,9 +194,9 @@ public class AggressiveMob extends Mob {
             }
 
             // Jump if blocked horizontally or if there's an entity in front, but only if the obstacle is one tile high
-            if ((((super.getCollider().hasCollisionLeft() || super.getCollider().hasCollisionRight()) 
-                    && super.getCollider().hasCollisionBottom(1)) || 
-                    (isEntityInFront() && super.getCollider().hasCollisionBottom(1))) 
+            if ((((super.getCollider().hasCollisionLeft() || super.getCollider().hasCollisionRight())
+                    && super.getCollider().hasCollisionBottom(1)) ||
+                    (isEntityInFront() && super.getCollider().hasCollisionBottom(1)))
                     && isObstacleOneTileHigh()) {
                 updateVerticalMovement(); // saute si bloqué ou si un obstacle (entité) est devant et que l'obstacle fait exactement une tile de hauteur
             }
@@ -226,9 +230,10 @@ public class AggressiveMob extends Mob {
 
     /**
      * Checks if there is an entity in front of the mob in the direction it's moving
+     *
      * @return true if there is an entity in front of the mob, false otherwise
      */
-    public int Changement(){
+    public int Changement() {
         long currentTime = System.currentTimeMillis();
         int DIRECTION_CHANGE_INTERVAL = 2000;
         // Changement aléatoire de direction
@@ -260,11 +265,11 @@ public class AggressiveMob extends Mob {
             // Check if the actor is in front of the mob
             boolean isInFront = false;
             if (direction > 0) { // Moving right
-                isInFront = actor.getPosX() > getPosX() && 
-                           Math.abs(actor.getPosX() - getPosX()) < getWidth() * 2;
+                isInFront = actor.getPosX() > getPosX() &&
+                        Math.abs(actor.getPosX() - getPosX()) < getWidth() * 2;
             } else { // Moving left
-                isInFront = actor.getPosX() < getPosX() && 
-                           Math.abs(actor.getPosX() - getPosX()) < getWidth() * 2;
+                isInFront = actor.getPosX() < getPosX() &&
+                        Math.abs(actor.getPosX() - getPosX()) < getWidth() * 2;
             }
 
             // Check if the actor is at the same height
@@ -281,6 +286,7 @@ public class AggressiveMob extends Mob {
     /**
      * Checks if the obstacle in front of the mob is exactly one tile high and has air above it
      * or if there's air beside the obstacle to navigate around it
+     *
      * @return true if the obstacle is exactly one tile high and has air above it or beside it, false otherwise
      */
     private boolean isObstacleOneTileHigh() {
@@ -304,8 +310,8 @@ public class AggressiveMob extends Mob {
         boolean hasAirTwoAbove = pathfinder.isValidPosition(frontTileX, mobTileY - 2);
 
         // Check if there's air beside the obstacle (to the left or right)
-        boolean hasAirBeside = pathfinder.isValidPosition(frontTileX + 1, mobTileY) || 
-                              pathfinder.isValidPosition(frontTileX - 1, mobTileY);
+        boolean hasAirBeside = pathfinder.isValidPosition(frontTileX + 1, mobTileY) ||
+                pathfinder.isValidPosition(frontTileX - 1, mobTileY);
 
         // The obstacle is navigable if:
         // 1. It's exactly one tile high and has air above it, or
@@ -331,7 +337,7 @@ public class AggressiveMob extends Mob {
                 super.setIsJumping(false);
             } else if (!super.getCollider().hasCollisionTop(super.getVelocityY() + 1)) {
                 // Apply a multiplier to make the jump higher (2.5x higher)
-                super.setVelocityY((int)(-super.getJumpForce() * 2.5) + super.getJumpingTestDecay());
+                super.setVelocityY((int) (-super.getJumpForce() * 2.5) + super.getJumpingTestDecay());
                 super.setJumpingTestDecay(super.getJumpingTestDecay() + 1);
             } else {
                 super.setIsJumping(false);
@@ -339,7 +345,7 @@ public class AggressiveMob extends Mob {
         }
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return this.target;
     }
 }

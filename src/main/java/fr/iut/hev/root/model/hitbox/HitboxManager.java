@@ -14,8 +14,8 @@ import java.util.Map;
  * This class is responsible for creating, updating, and checking collisions between hitboxes.
  */
 public class HitboxManager {
+
     private Map<Entity, List<Hitbox>> entityHitboxes;
-    
     /**
      * Creates a new hitbox manager.
      */
@@ -43,13 +43,13 @@ public class HitboxManager {
      */
     public void removeHitboxes(Entity entity) {
         entityHitboxes.remove(entity);
-    }
+    } // on peut la retirer
     
     /**
      * Updates the positions of all hitboxes for an entity.
      * 
      * @param entity The entity to update hitboxes for
-     */
+     */ // Commentaire à retirer
     
     /**
      * Checks for collisions between attack hitboxes and vulnerable hitboxes.
@@ -105,7 +105,7 @@ public class HitboxManager {
         }
         
         return hitEntities;
-    }
+    } // Surement le refactor
 
     /**
      * Creates a default vulnerable hitbox for an entity based on its dimensions.
@@ -123,7 +123,7 @@ public class HitboxManager {
         );
         addHitbox(entity, hitbox);
         return hitbox;
-    }
+    } // On peut le refactor
 
     /**
      * Creates an attack hitbox for a weapon.
@@ -145,7 +145,7 @@ public class HitboxManager {
         );
         addHitbox(attacker, hitbox);
         return hitbox;
-    }
+    } // On peut refactor
 
     /**
      * Creates a circular attack hitbox.
@@ -165,5 +165,5 @@ public class HitboxManager {
         );
         addHitbox(attacker, hitbox);
         return hitbox;
-    }
+    } // refactor tout de suite
 }

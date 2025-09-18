@@ -35,9 +35,7 @@ public interface Hitbox {
 
     DoubleProperty xProperty();
     DoubleProperty yProperty();
-    
 
-    
     /**
      * Gets the type of the hitbox.
      * 

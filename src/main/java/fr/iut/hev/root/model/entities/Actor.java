@@ -9,15 +9,20 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Actor extends Entity {
+
     private IntegerProperty healthProperty;
     private int moveSpeed;
     private int jumpForce;
     private boolean isJumping;
-    private int jumpingTestDecay;
+    private int jumpingTestDecay; // TODO : faire un renommage pour que ce soit plus explicite
     private int reach;
     private ActorEnum type;
     private HitboxManager hitboxManager;
     private IntegerProperty lookDirectionProperty;
+
+    // TODO : refactor avec healProperty comme un Enum, pour faciliter et mettre les guetteurs / setteurs autre part
+    // TODO : Même chose pour les autres attributs qui sont des Enums, parce que finalement la classe Actor elle est chargé de malade
+
     public enum LookDirections {
         RIGHT(1),
         LEFT(-1);
@@ -27,16 +32,16 @@ public abstract class Actor extends Entity {
         LookDirections(int value) {
             this.value = value;
         }
-    };
+    }; // TODO : faire un refactoring pour que les directions soient des enum
 
     public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;
-        this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value);
+        this.lookDirectionProperty = new SimpleIntegerProperty(LookDirections.RIGHT.value); // TODO : changer ça aussi
         this.isJumping = false;
-        this.jumpingTestDecay = 0;
+        this.jumpingTestDecay = 0; // TODO : renommer aussi
         this.reach = reach;
         this.type = type;
         this.hitboxManager = new HitboxManager();
@@ -50,7 +55,7 @@ public abstract class Actor extends Entity {
         updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * moveSpeed);
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
-    }
+    } // TODO : Potentiellement faire un refactoring ? Parce que dans la classe Entity, y'a déjà une fonction qui a le même nom
 
     @Override
     public void applyGravity() {
@@ -60,19 +65,16 @@ public abstract class Actor extends Entity {
         } else {
             super.setVelocityY(0);
         }
-    }
+    } // TODO : Même chose ici je pense, on retrouve le même problème
 
     public HitboxManager getHitboxManager() {
         return hitboxManager;
     }
 
-    public void updateHorizontalMovement() {
+    public void updateHorizontalMovement() {}
 
-    }
+    public void updateVerticalMovement(){}
 
-    public void updateVerticalMovement() {
-
-    }
     public String getName(){return this.type.getName();}
 
     public int getReach() {return this.reach;}
@@ -113,9 +115,12 @@ public abstract class Actor extends Entity {
         this.setHealth(getHealth() - damage);
     }
 
-    /*public LookDirections getLookDirection() { // TODO: fix
+    /*public LookDirections getLookDirection() { // TODO: fix ou directement retirer
         return this.lookDirectionProperty;
     }*/
+
+    // TODO : faire un refactoring des guetteurs et des setters en fonction des différentes modifications qui vont
+    // TODO : êtres apportés au sein du code.
 
     public void setLookDirection(LookDirections newLookDirection) {
         this.lookDirectionProperty.setValue(newLookDirection.value);
