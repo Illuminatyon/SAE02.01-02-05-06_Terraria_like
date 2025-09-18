@@ -69,17 +69,17 @@ public class GlobalView {
         if (tileHealth > 0) {
             tileView = new ImageView(getTexture(tile, textureNumber));
             if (!(tile.getTileEnum().getType().equals(TileTypesEnum.UTILITIES))) {
-                tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), tileView);
+                tileMapLand.getChildren().set(tile.getY() * 120 + tile.getX(), tileView);
             } else {
-                tileMapBackground.getChildren().set(tile.getY() * 60 + tile.getX(), tileView);
+                tileMapBackground.getChildren().set(tile.getY() * 120 + tile.getX(), tileView);
             }
         }
         else {
             if (brokenTile.equals(TileTypesEnum.BLOCK)) {
-                tileMapLand.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView());
+                tileMapLand.getChildren().set(tile.getY() * 120 + tile.getX(), new ImageView());
             }
             else {
-                tileMapBackground.getChildren().set(tile.getY() * 60 + tile.getX(), new ImageView());
+                tileMapBackground.getChildren().set(tile.getY() * 120 + tile.getX(), new ImageView());
             }
             brokenTile = null;
         }

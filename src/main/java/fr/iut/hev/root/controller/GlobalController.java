@@ -126,13 +126,11 @@ public class GlobalController implements Initializable {
                     world.getPlayer().update();
 
                     for (int i = world.getAliveMobs().size() - 1; i >= 0; i--) {
-                        if (i < world.getAliveMobs().size()) { // Check if index is still valid
-                            Actor currentActor = world.getAliveMobs().get(i);
-                            if (currentActor != null) {
-                                currentActor.updatePosition();
-                            } else {
-                                world.getAliveMobs().remove(i);
-                            }
+                        Actor currentActor = world.getAliveMobs().get(i);
+                        if (currentActor != null) {
+                            currentActor.updatePosition();
+                        } else {
+                            world.getAliveMobs().remove(i);
                         }
                     }
 
@@ -156,7 +154,7 @@ public class GlobalController implements Initializable {
                     }
 
                     camera.update();
-                    checkPnjDialogue();
+                    //checkPnjDialogue();
 
                     cooldownManager.allCooldownsTick();
                 })
