@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class TileMap {
+
     private ItemFactory itemFactory;
     private int width, height;
     private Tile[][] tileMap;
@@ -32,7 +33,7 @@ public class TileMap {
             for (int j = 0; j < this.getWidth(); j++) {
                 this.addTile(new Tile(TilesEnum.AIR, j, i));
             }
-        }
+        } // TODO : Faire un refactoring de ça
 
         // Call setTestMap after initializing all tiles with AIR
         //this.setTestMap();
@@ -62,6 +63,7 @@ public class TileMap {
     }
 
     public void setTestMap() {
+        // TODO : Faire un refactor de ça
         /**
          * crée une map en 1920p avec 60*33 tile de test
          * Avec vérification des limites pour éviter les erreurs dans les tests

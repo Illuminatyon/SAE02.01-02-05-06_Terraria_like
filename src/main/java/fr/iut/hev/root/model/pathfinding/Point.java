@@ -6,6 +6,7 @@ import java.util.Objects;
  * Class to represent a position in the grid for pathfinding algorithms
  */
 public class Point {
+
     public int x, y;
 
     public Point(int x, int y) {
