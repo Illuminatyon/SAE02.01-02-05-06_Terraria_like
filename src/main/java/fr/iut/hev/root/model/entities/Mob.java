@@ -19,7 +19,7 @@ public class Mob extends Actor {
     }
 
     @Override
-    public void updatePosition() {
+    public void updatePosition() { //TODO: toujours la même idée derrière
         // Gravité
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !super.getIsJumping()) {
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
