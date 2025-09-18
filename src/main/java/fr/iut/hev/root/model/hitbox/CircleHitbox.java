@@ -86,7 +86,7 @@ public class CircleHitbox implements Hitbox {
      */
     public double getRadius() {
         return radius;
-    }
+    } // TODO : a retirer parce que bon ça ne sert à rien
 
     public double getCenterX() {return this.xProperty.getValue();}
     public double getCenterY() {return this.yProperty.getValue();}

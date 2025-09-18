@@ -19,5 +19,4 @@ public enum DialogueEnum {
         return text;
     }
 
-
 }

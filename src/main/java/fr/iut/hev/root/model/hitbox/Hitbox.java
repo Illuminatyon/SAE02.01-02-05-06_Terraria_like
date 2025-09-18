@@ -9,6 +9,24 @@ import javafx.beans.property.DoubleProperty;
  * hitboxes are used for entity-entity interactions like combat.
  */
 public interface Hitbox {
+
+
+    /*
+    * Pour le refactoring, ce qu'on peut faire :
+    * Centraliser la création ainsi que l'attachement des hitbox pour éviter les duplications
+    * On peut utiliser un coputeIfAbstent pour gérer la map entity -> hitbox
+    * On pourrait aussi exposer de petits utilitaires getHitboxes(entity) et getHitboxsesOfType(entity, type)
+    * On pourrait nettoyer checkAttackCollisions
+    * Et donne des méthodes génériques createOffsetRectHitbox() et createOffsetCircleHitbox()
+    * pour remplacer createWeaponAttackHitbox() et createCircleAttackHitbox()
+    *
+    * 1) Éviter instanceof : ajouter intersectsAvecCercle(...) et intersectsAvecRectangle(...)
+    * 2) AABB rapide : ajouter aabb() et filtrer avec aabb.overlaps(...) avant un vrai test
+    * 3) API plus propre : retirer xProperty()/yProperty() de l’interface; garder getCenterX/Y()
+    * 4) Création unifiée : createOffsetRectHitbox(...) et createOffsetCircleHitbox(...) dans le manager
+    * 5) Utilitaires manager : computeIfAbsent(...) + getHitboxesOfType(entity, type)
+    * 6) Petites perfs : comparer distance² (pas de Math.sqrt) pour les cercles
+    * */
     
     /**
      * Checks if this hitbox intersects with another hitbox.

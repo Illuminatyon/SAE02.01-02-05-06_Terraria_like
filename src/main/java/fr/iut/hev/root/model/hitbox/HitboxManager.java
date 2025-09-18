@@ -123,7 +123,7 @@ public class HitboxManager {
         );
         addHitbox(entity, hitbox);
         return hitbox;
-    } // On peut le refactor
+    } // On peut le refactor, je me dit qu'on pourrait le mettre directement dans la classe Hitbox ?
 
     /**
      * Creates an attack hitbox for a weapon.
