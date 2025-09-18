@@ -158,6 +158,6 @@ public class Arrow extends Actor {
     // Get the GlobalController
     public GlobalController getGlobalController() {
         return globalController;
-    }
+    } // TODO : Retirer toute cette classe finalement, parce que bon
 }
 */

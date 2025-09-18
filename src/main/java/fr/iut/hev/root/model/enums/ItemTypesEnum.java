@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model.enums;
 
 public enum ItemTypesEnum {
+
     TOOL("tool",false),
     WEAPON("weapon",false),
     CONSUMABLE("consumable",true),
@@ -19,6 +20,6 @@ public enum ItemTypesEnum {
 
     public boolean getIsConsumable() {
         return this.isConsumable;
-    }
+    } // TODO : A retirer mais ce sert à rien
     public String getName() {return this.name;}
 }

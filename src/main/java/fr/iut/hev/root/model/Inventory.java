@@ -3,7 +3,7 @@ package fr.iut.hev.root.model;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.Item;
 
-import java.util.AbstractMap;
+import java.util.AbstractMap; // TODO : Modifier les imports
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +21,8 @@ public class Inventory {
             slots.add(new InventorySlot(i));
         }
     }
+
+    // TODO : Voire un
 
     public HashMap<Item, Integer> add(int slotIndex, Item item, int quantity) {
         // TMP START

@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model.entities;
 
-import fr.iut.hev.root.model.Collider;
+import fr.iut.hev.root.model.Collider; // TODO : à retirer
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.TileMap;
@@ -21,8 +21,10 @@ public class Loot extends Entity {
         this.item = item;
         this.quantity = quantity;
         System.out.println("loot model x = " + posX + " y = " + posY);
-        lootOnMapProperty.get().add(this);
+        lootOnMapProperty.get().add(this); // TODO : enlever le sout
     }
+
+    // TODO : faire un refactor pour que les directions soient des enum
 
     public void removeSelf() {
         lootOnMapProperty.get().remove(this);

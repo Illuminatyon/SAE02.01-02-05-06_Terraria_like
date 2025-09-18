@@ -3,7 +3,7 @@ package fr.iut.hev.root.model.entities;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.enums.HitboxType;
+import fr.iut.hev.root.model.enums.HitboxType; // TODO : Enlever les imports qui ne servent à rien
 import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
@@ -16,7 +16,6 @@ public class Mob extends Actor {
 
     public Mob(int posX, int posY, int width, int height, TileMap tileMap, int health, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor, hitboxManager );
-
     }
 
     @Override
@@ -65,8 +64,7 @@ public class Mob extends Actor {
             remainingY -= 1;
         }
         updateVerticalMovement();
-        // Jump automatique si bloqué
-
+        // Jump automatique si bloque
     }
 
     public int Changement(){

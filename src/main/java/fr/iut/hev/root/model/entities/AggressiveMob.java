@@ -79,7 +79,7 @@ public class AggressiveMob extends Mob {
         // Update the path
         path.clear();
         path.addAll(newPath);
-    }
+    } // TODO : Potentiellement, les méthodes qui sont à l'intérieur de la classe, on pourrait les mettres autre part
 
 
     @Override
@@ -203,7 +203,8 @@ public class AggressiveMob extends Mob {
         }
 
         checkAttackRange();
-    }
+    } // TODO : je pense que cette fonction, on pourrait la modifier, même d'ailleurs comme toutes les autres, la fonction
+      // TODO : est vraiment énorme, donc bon
 
     private void checkAttackRange() {
         int attackRange = getReach();

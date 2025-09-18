@@ -1,12 +1,12 @@
 package fr.iut.hev.root.model.entities;
 
-import com.sun.source.tree.WhileLoopTree;
+import com.sun.source.tree.WhileLoopTree; // TODO : retirer les imports
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.enums.HitboxType;
-import fr.iut.hev.root.model.hitbox.Hitbox;
+import fr.iut.hev.root.model.hitbox.Hitbox; // TODO : modifier les imports
 import fr.iut.hev.root.model.hitbox.HitboxManager;
-import fr.iut.hev.root.model.hitbox.RectangleHitbox;
+import fr.iut.hev.root.model.hitbox.RectangleHitbox; // TODO : modifier les imports
 
 public class Pnj extends Mob{
 
@@ -38,6 +38,4 @@ public class Pnj extends Mob{
             super.setVelocityX(0);
         }
     }
-
-
 }

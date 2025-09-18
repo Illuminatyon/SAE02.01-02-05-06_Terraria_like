@@ -13,11 +13,11 @@ public class Entity {
     private int height;
     private int velocityX;
     private int velocityY;
-    private int velocityMultiplier; // a retirer
+    private int velocityMultiplier; // TODO : a retirer
     private TileMap tileMap;
     private Collider collider;
-    // Potentiellement faire d'autres classes pour les attributs, afin d'alléger le constructeur et même la classe
-    // en général
+    // TODO : Potentiellement faire d'autres classes pour les attributs, afin d'alléger le constructeur et même la classe
+    // TODO : en général
 
     public Entity(int posX, int posY, int width, int height, TileMap tileMap) {
         this.posXProperty = new SimpleIntegerProperty(posX);
@@ -33,7 +33,7 @@ public class Entity {
     public void initAfterDeserialization(TileMap tileMap, int posX, int posY) {
         this.tileMap = tileMap;
         this.collider = new Collider(tileMap, this);
-    } // A retirer
+    } // TODO : A retirer
 
     public void updatePosition() {
         applyGravity();
@@ -47,7 +47,7 @@ public class Entity {
             velocityY += Gravity.getGravityForce();
         } else {
             velocityY = 0;
-        } // peut être le refactor ? (enlever les if)
+        } // TODO : peut être le refactor ? (enlever les if)
     }
 
     public final int getPosX() {
@@ -106,11 +106,11 @@ public class Entity {
 
     public int getEffectivePosX() {
         return this.getPosX() + (tileMap.getWidth() * TileMap.format) / 2;
-    }// a retirer
+    }// TODO : a retirer
 
     public int getEffectivePosY() {
         return this.getPosY() + (tileMap.getHeight() * TileMap.format) / 2;
-    } // a retirer
+    } // TODO : a retirer
 
     public void setTileMap(TileMap tileMap) {
         this.tileMap = tileMap;

@@ -7,6 +7,7 @@ package fr.iut.hev.root.model.enums;
  * et une tuile associée.
  */
 public enum ItemsEnum {
+
     WOOD("wood",100,0, ItemTypesEnum.RESOURCES),
     STONE("stone",100,0.2, ItemTypesEnum.BLOCK),
     IRON_INGOT("iron_ingot",100,0, ItemTypesEnum.RESOURCES),
@@ -41,7 +42,7 @@ public enum ItemsEnum {
     RAW_CHICKEN("raw_chicken",100,1.5, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.RAW_CHICKEN),
     CHICKEN_LEG("chicken_leg",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.CHICKEN_LEG),
     COOKED_CHICKEN("cooked_chicken",100,1.0, ItemTypesEnum.CONSUMABLE,ItemStatsEnum.COOKED_CHICKEN),
-    CACA("caca",100,1,ItemTypesEnum.RESOURCES);
+    CACA("caca",100,1,ItemTypesEnum.RESOURCES); // TODO : RETIRER AS FAST AS POSSIBLE
 
     private String name;
     private int limitStacking;

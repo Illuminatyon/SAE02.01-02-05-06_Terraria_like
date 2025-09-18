@@ -34,5 +34,5 @@ public class Boss extends AggressiveMob {
  //       }
    // }
 
-
+// TODO : Elle va partir aussi cette classe parce que la ça ne sert à rien
 }

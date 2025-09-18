@@ -7,7 +7,7 @@ import fr.iut.hev.root.model.Inventory;
 import fr.iut.hev.root.model.TileMap;
 import fr.iut.hev.root.model.enums.HitboxType;
 import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
-import fr.iut.hev.root.model.hitbox.Hitbox;
+import fr.iut.hev.root.model.hitbox.Hitbox; // TODO : Modifier les imports
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.Item;
@@ -44,7 +44,7 @@ public class Player extends Actor {
         this.playerMouvementEnums.remove(playerMouvementsEnum);
     }
 
-    public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;}
+    public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO : retirer le getter
 
     public void update() {
         updatePosition();
@@ -181,10 +181,10 @@ public class Player extends Actor {
         return this.itemInHandProperty.getValue();
     }
 
-    public void setItemInHandProperty(Item itemInHandProperty) {this.itemInHandProperty.setValue(itemInHandProperty);}
+    public void setItemInHandProperty(Item itemInHandProperty) {this.itemInHandProperty.setValue(itemInHandProperty);} // TODO : retirer ce setter
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}
-    public void setQuantityOfItemInHand(int quantity) {this.quantityOfItemInHandProperty.setValue(quantity);}
+    public void setQuantityOfItemInHand(int quantity) {this.quantityOfItemInHandProperty.setValue(quantity);} // TODO : retirer ce setter
     public IntegerProperty quantityOfItemInHandProperty() {return this.quantityOfItemInHandProperty;}
     public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
     public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
