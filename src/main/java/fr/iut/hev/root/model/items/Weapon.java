@@ -7,7 +7,7 @@ import fr.iut.hev.root.model.hitbox.HitboxManager;
 
 import static fr.iut.hev.root.model.TileMap.format;
 
-public class Weapon extends Item {
+public class Weapon extends Item { // Todo : tres probablement a delete aussi
 
     private int damage;
     private HitboxManager hitboxManager;

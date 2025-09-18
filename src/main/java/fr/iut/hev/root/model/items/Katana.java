@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Katana weapon class
- *//*
+ *//* // TODO : comme la dague a delete
 public class Katana extends Weapon {
     private static final int KNOCKBACK_STRENGTH = 8;
     private boolean isAnimating = false;
