@@ -99,7 +99,7 @@ public class GlobalController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        initItemEnums();
+        initItemEnums(); //TODO: essayer de trouver une autre solution si possible (problème d'initialisation des enums)
 
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
@@ -122,7 +122,7 @@ public class GlobalController implements Initializable {
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
-                (ev -> {
+                (ev -> { //TODO: ptet regrouper les maj lié au monde dans une méthode etc
                     world.getPlayer().update();
 
                     for (int i = world.getAliveMobs().size() - 1; i >= 0; i--) {
@@ -147,7 +147,7 @@ public class GlobalController implements Initializable {
                     }
 
                     // Mise à jour de la position de la lumière autour du joueur
-                    if (playerLightCircle != null) {
+                    if (playerLightCircle != null) {//TODO: toujours l'histoire du cercle inutile
                         double playerCenterX = playerView.getActorSprite().getLayoutX() + playerView.getActorSprite().getTranslateX() + playerView.getActorSprite().getFitWidth() / 2;
                         double playerCenterY = playerView.getActorSprite().getLayoutY() + playerView.getActorSprite().getTranslateY() + playerView.getActorSprite().getFitHeight() / 2;
                         playerLightCircle.updateCenter(playerCenterX, playerCenterY);
@@ -175,20 +175,20 @@ public class GlobalController implements Initializable {
 
     private void initPlayer() {
         ItemFactory itemFactory = world.getItemFactory();
-        player = world.getPlayer();
+        player = world.getPlayer(); //TODO: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
         hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
 
-        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
+        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1); //TODO: ptet aller chercher le joueur par la variable player
 
-        hudView = new HUDView(player.healthProperty(), heartsHbox);
+        hudView = new HUDView(player.healthProperty(), heartsHbox); //TODO: regreouper l'initialisation des vues dans une seule méthode
         playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
 
-        inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100);
+        inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100); //TODO: injection par défaut à terme potentiellement retirer si le jeu devient complet
         inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
@@ -200,7 +200,7 @@ public class GlobalController implements Initializable {
         inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
 
         //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        player.healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory));
+        player.healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
         // Utiliser un bind pour le deathlistener
 
         craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
@@ -208,12 +208,12 @@ public class GlobalController implements Initializable {
             craftingManager.crafts();
         });
 
-        keyboardHandler = new KeyInputHandler(world, inventoryView,craftView);
+        keyboardHandler = new KeyInputHandler(world, inventoryView,craftView); //TODO: ptet réorganiser aussi les input handler
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
         mouseItemActionHandler = new MouseItemActionInputHandler(world, camera, inventoryView, globalView);
 
-        double playerCenterX = 0;
+        double playerCenterX = 0; //TODO; par pitié se débarrasser de ce cercle de reach (vérif si la reach est viable sans avant bien sur)
         double playerCenterY = 0;
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
@@ -236,7 +236,7 @@ public class GlobalController implements Initializable {
         });
 
 
-        Platform.runLater(() -> {
+        Platform.runLater(() -> { //TODO: même chose dans la réorganisation des input handler
             landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
             landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseItemActionHandler);
@@ -247,7 +247,7 @@ public class GlobalController implements Initializable {
         });
     }
 
-    private void createMob(ActorEnum mobActorEnum) {
+    private void createMob(ActorEnum mobActorEnum) { //TODO: essayer ptet de regrouper tous les créateur de mob/pnj en une méthode pour éviter la duplication
         Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
         mobView = new MobView(mob, tileMap, entitiesPane);
         mobView.camOffsetXProperty().bind(camera.currentCamXProperty());
@@ -283,7 +283,7 @@ public class GlobalController implements Initializable {
     /**
      * Checks if the player is near a PNJ and triggers dialogue if needed
      */
-    private void checkPnjDialogue() {
+    private void checkPnjDialogue() { //TODO: fix les dialogues avec Old Marc (problème de collision et de manière de trigger le dialogue si je dis pas de conneries)
         if (player == null || pnjView == null || dialogueCD == null) {
             return;
         }
