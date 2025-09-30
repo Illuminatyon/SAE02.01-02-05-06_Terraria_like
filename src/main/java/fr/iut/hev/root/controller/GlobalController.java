@@ -46,20 +46,20 @@ public class GlobalController implements Initializable {
     private World world;
     private Camera camera;
     private Timeline gameLoop;
-    private Player player; // dans world
-    private TileMap tileMap; // dans world
+    // private Player player; // dans world
+    // private TileMap tileMap; // dans world
     private MouseInventoryInputHandler mouseInventoryHandler;
     private ScrollInputHandler scrollHotbarHandler;
     private KeyInputHandler keyboardHandler;
     private MouseItemActionInputHandler mouseItemActionHandler;
-    private ArrayList<Actor> aliveActors; // dans world
-    private Inventory inventory; // dans player
+    // private ArrayList<Actor> aliveActors; // dans world
+    //private Inventory inventory; // dans player
     private CooldownManager cooldownManager; // controller
     private CraftingManager craftingManager; // peut etre dans le joueur
-    private HitboxManager hitboxManager; // world ou controller
+   // private HitboxManager hitboxManager; // world ou controller
     //public static Mob mob ;
     private static Set<Mob> mobs;
-    private ItemFactory itemFactory;
+    //private ItemFactory itemFactory;
 
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
     private HUDView hudView;
@@ -95,9 +95,11 @@ public class GlobalController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            world = World.getInstance();
+            world.initWorld(3840,1440);
             initWorld();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); // modifier le throw
         }
         initItemEnums(); //TODO: essayer de trouver une autre solution si possible (problème d'initialisation des enums)
 
@@ -107,9 +109,6 @@ public class GlobalController implements Initializable {
         cooldownManager = new CooldownManager();
         globalView = new GlobalView(world.getTileMap(), landTileMap, backgroundTileMap);
         lootView = new LootView(entitiesPane);
-
-        // Set the hitbox manager for all weapons
-        //Weapon.setHitboxManager(hitboxManager);
 
         //aliveActors = world.getAliveActors() != null ? world.getAliveActors() : new ArrayList<>();
         //initMap();
@@ -166,28 +165,40 @@ public class GlobalController implements Initializable {
 
     private void initWorld() throws IOException {
         hitboxManager = new HitboxManager();
-        itemFactory = new ItemFactory(hitboxManager);
+        itemFactory = ItemFactory.getInstance();
+        itemFactory.setHitboxManager(hitboxManager);
         tileMap = new TileMap(3840, 1440, itemFactory);
         player = new Player(0, 0, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER, hitboxManager);
         aliveActors = new ArrayList<>();
         world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
     }
 
-    private void initPlayer() {
+    private void initPlayer() { // creer un init player view
+        //TODO: déplacer ça dans une initialisation de player dans Word
         ItemFactory itemFactory = world.getItemFactory();
         player = world.getPlayer(); //TODO: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
         inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);
         hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
+        //TODO: ptet aller chercher le joueur par la variable player
 
-        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1); //TODO: ptet aller chercher le joueur par la variable player
-
-        hudView = new HUDView(player.healthProperty(), heartsHbox); //TODO: regreouper l'initialisation des vues dans une seule méthode
+        //TODO: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
+        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
+        hudView = new HUDView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
         playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
+        playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
 
+        craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
+        craftButton.setOnAction(actionEvent -> {
+            craftingManager.crafts();
+        });
+
+
+        // TODO : Peut être déplacer dans le joueur directement
         inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100); //TODO: injection par défaut à terme potentiellement retirer si le jeu devient complet
         inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
@@ -199,37 +210,36 @@ public class GlobalController implements Initializable {
         inventory.add(9,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
         inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
 
+        //TODO: on le bouge pas tant qu'il est pas fix
         //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         player.healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
         // Utiliser un bind pour le deathlistener
 
-        craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
-        craftButton.setOnAction(actionEvent -> {
-            craftingManager.crafts();
-        });
-
+        // TODO : On les gardes ici, mais on va essayer de décomposer la création des Handlers avec des méthodes
         keyboardHandler = new KeyInputHandler(world, inventoryView,craftView); //TODO: ptet réorganiser aussi les input handler
         mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
         mouseItemActionHandler = new MouseItemActionInputHandler(world, camera, inventoryView, globalView);
 
-        double playerCenterX = 0; //TODO; par pitié se débarrasser de ce cercle de reach (vérif si la reach est viable sans avant bien sur)
-        double playerCenterY = 0;
+        double playerCenterX = 0;
+        double playerCenterY = 0; // TODO : A revoir parce que je ne sais pas si y'a encore des problèmes avec la reach
+                                    // TODO : mais normalement tout était good je pense
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
-        playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        //TODO: il faut essayer de fix cet histoire d'item in hand mais ptet à bouger dans une méthode
         player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
         player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
         player.indexItemInHandProperty().bind(scrollHotbarHandler.IndexHotbarProperty());
         player.itemInHandProperty().addListener((observableValue, item, t1) -> mouseItemActionHandler.updateCooldown());
+
         mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
-            inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
+                inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
         mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
                 inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
         mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) ->
                 inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
+
         scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) -> {
             if (scrollHotbarHandler.getDirection() != 0)
                 scrollHotbarHandler.updateHotbar();
@@ -254,7 +264,7 @@ public class GlobalController implements Initializable {
         mobView.camOffsetYProperty().bind(camera.currentCamYProperty());
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
         hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
-        world.getAliveMobs().add(mob);
+        world.getAliveMobs().add(mob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
     }
 
     // Methode en com dans world
@@ -266,7 +276,7 @@ public class GlobalController implements Initializable {
         aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty());
         aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty());
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
-        world.getAliveMobs().add(aggressiveMob);
+        world.getAliveMobs().add(aggressiveMob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
     }
 
     // Methode en com dans world
@@ -277,7 +287,7 @@ public class GlobalController implements Initializable {
         pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
         npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,world.getItemFactory()));
         dialogueCD = new Cooldown(0);
-        aliveActors.add(npc);
+        aliveActors.add(npc); // TODO : même bordel ici
     }
 
     /**

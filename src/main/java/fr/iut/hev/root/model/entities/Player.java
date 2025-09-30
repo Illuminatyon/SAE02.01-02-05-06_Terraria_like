@@ -20,28 +20,34 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends Actor {
+
+    private static Player player; // Singleton
+
     private Inventory inventory;
     private Set<PlayerMouvementsEnum> playerMouvementEnums;
     private ObjectProperty<Item> itemInHandProperty;
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
 
-    public Player(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
-        super(posX, posY, width, height, tileMap,10, moveSpeed, jumpForce,reach, actor, hitboxManager);
+    // Constructeur privé
+    private Player(int posX, int posY, int width, int height, TileMap tileMap,
+                   int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+        super(posX, posY, width, height, tileMap, 10, moveSpeed, jumpForce, reach, actor, hitboxManager);
         this.inventory = new Inventory();
         this.playerMouvementEnums = new HashSet<>();
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-        getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
+        getHitboxManager().createHitbox(this, HitboxType.INTERACTION);
     }
 
-    public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
-        this.playerMouvementEnums.add(playerMouvementsEnum);
-    }
-
-    public void removePlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
-        this.playerMouvementEnums.remove(playerMouvementsEnum);
+    // Méthode d’accès Singleton
+    public static Player getInstance(int posX, int posY, int width, int height, TileMap tileMap,
+                                     int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+        if (player == null) {
+            player = new Player(posX, posY, width, height, tileMap, moveSpeed, jumpForce, reach, actor, hitboxManager);
+        }
+        return player;
     }
 
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO : retirer le getter

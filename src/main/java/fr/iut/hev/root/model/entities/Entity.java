@@ -10,7 +10,7 @@ public class Entity {
     private IntegerProperty posXProperty;
     private IntegerProperty posYProperty;
     private int width;
-    private int height;
+    private int height; // TODO : passer height et width dans collider
     private int velocityX;
     private int velocityY;
     private int velocityMultiplier; // TODO : a retirer

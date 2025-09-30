@@ -36,7 +36,8 @@ public class AStarTest {
     public void setUp() throws IOException {
         // Création d'une carte de test
         HitboxManager hitboxManager = new HitboxManager();
-        ItemFactory itemFactory = new ItemFactory(hitboxManager);
+        ItemFactory itemFactory = ItemFactory.getInstance();
+        itemFactory.setHitboxManager(hitboxManager);
         tileMap = new TileMap(MAP_WIDTH * TileMap.format, MAP_HEIGHT * TileMap.format, itemFactory);
 
         // Réinitialisation de la carte avec des tuiles d'air (passables)

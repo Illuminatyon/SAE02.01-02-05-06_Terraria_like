@@ -5,12 +5,20 @@ import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 
 public class ItemFactory {
-
+    private static ItemFactory itemFactory = null;
     private HitboxManager hitboxManager;
 
-    public ItemFactory(HitboxManager hitboxManager) {
-        this.hitboxManager = hitboxManager;
+    private ItemFactory() {
+        this.hitboxManager = null;
     }
+
+    public static ItemFactory getInstance() {
+        if (itemFactory == null)
+            itemFactory = new ItemFactory();
+        return itemFactory;
+    }
+
+    public void setHitboxManager(HitboxManager hitboxManager) {this.hitboxManager = hitboxManager;}
 
     public Item createItem(ItemsEnum itemsEnum) {
         switch (itemsEnum.getItemType()) {

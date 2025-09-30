@@ -2,6 +2,7 @@ package fr.iut.hev.root.model.hitbox;
 
 import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Entity;
+import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.HitboxType;
 
 import java.util.ArrayList;
@@ -14,12 +15,21 @@ import java.util.Map;
  * This class is responsible for creating, updating, and checking collisions between hitboxes.
  */
 public class HitboxManager {
+    private static HitboxManager hitboxManager = null;
 
     private Map<Entity, List<Hitbox>> entityHitboxes;
+
+    public static HitboxManager getInstance(){
+        if(hitboxManager == null){
+            hitboxManager = new HitboxManager();
+        }
+        return hitboxManager;
+    }
+
     /**
      * Creates a new hitbox manager.
      */
-    public HitboxManager() {
+    private HitboxManager() {
         this.entityHitboxes = new HashMap<>();
     }
     

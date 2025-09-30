@@ -12,30 +12,47 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class TileMap {
+    private static TileMap tileMap;
+
     private ItemFactory itemFactory;
     private int width, height;
-    private Tile[][] tileMap;
+    private Tile[][] tileArray;
 
     public static final int format = 32;
 
-    public TileMap(int width, int height, ItemFactory itemFactory) throws IOException {
+    private TileMap() {
         /**
          * Constructeur de TileMap. "width" et "height" en pixel.
+         */
+        this.itemFactory = null;
+        this.width = 0;
+        this.height = 0;
+        this.tileArray = null;
+    }
+
+    public static TileMap getInstance() {
+        if (tileMap == null)
+            tileMap = new TileMap();
+        return tileMap;
+    }
+
+    public void initTileMap(ItemFactory itemFactory, int width, int height) throws IOException {
+        /**
+         * TileMap's initializer
          */
         this.itemFactory = itemFactory;
         this.width = width/format;
         this.height = height/format;
-        this.tileMap = new Tile[height/format][width/format];
+        this.tileArray = new Tile[height/format][width/format];
 
-        // Initialize all tiles with AIR
+        //Initialize all tiles with air
         for (int i = 0; i < this.getHeight(); i++) {
             for (int j = 0; j < this.getWidth(); j++) {
                 this.addTile(new Tile(TilesEnum.AIR, j, i));
             }
         }
 
-        // Call setTestMap after initializing all tiles with AIR
-        //this.setTestMap();
+        //Initialize land
         this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
     }
 
@@ -44,7 +61,7 @@ public class TileMap {
          * Retourne la Tile de position tileX et tileY dans la TileMap
          */
         if (!(tileX < 0 || tileY < 0 || tileX >= width || tileY >= height))
-            return tileMap[tileY][tileX];
+            return tileArray[tileY][tileX];
         else
             return null;
     }
@@ -171,7 +188,7 @@ public class TileMap {
         int x = tile.getX();
         int y = tile.getY();
         if (getTile(x,y) == null || getTile(x,y).getTileEnum().getType() == TileTypesEnum.AIR)
-            this.tileMap[y][x] = tile;
+            this.tileArray[y][x] = tile;
     }
 
     public int getWidth() {

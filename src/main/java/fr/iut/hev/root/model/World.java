@@ -2,53 +2,52 @@ package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Actor;
 import fr.iut.hev.root.model.entities.Player;
+import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {
-    private StringProperty nameProperty;
-    private long lastPlayed;
+    private static World world = null;
+
     private ItemFactory itemFactory;
     private TileMap tileMap;
     private Player player;
-    private ArrayList<Actor> aliveMobs;
     private HitboxManager hitboxManager;
+    private ArrayList<Actor> aliveMobs;
 
-    public World(String name, TileMap tileMap, Player player, ArrayList<Actor> aliveMobs, HitboxManager hitboxManager, ItemFactory itemFactory) {
-        this.nameProperty = new SimpleStringProperty();
-        this.nameProperty.set(name);
-        this.lastPlayed = System.currentTimeMillis();
-        this.tileMap = tileMap;
-        this.player = player;
-        this.aliveMobs = aliveMobs;
-        this.hitboxManager = hitboxManager;
-        this.itemFactory = itemFactory;
+    private World() {
+        this.itemFactory = null;
+        this.tileMap = null;
+        this.player = null;
+        this.hitboxManager = null;
+        this.aliveMobs = null;
     }
 
-    public StringProperty nameProperty() {
-        return nameProperty;
+
+    public static World getInstance() {
+        if(world==null) {
+            world= new World();
+        }
+        return world;
     }
 
-    public String getName() {
-        return this.nameProperty.get();
+    public void initWorld(int width, int height) throws IOException {
+        this.hitboxManager = HitboxManager.getInstance();
+        this.aliveMobs=new ArrayList<>();
+        this.tileMap = TileMap.getInstance();
+        this.itemFactory = ItemFactory.getInstance();
+        this.player = Player.getInstance(100, 100, 32, 48, this.tileMap, 5, 10,  3, ActorEnum.PLAYER, this.hitboxManager);
+        this.tileMap.initTileMap(itemFactory,width,height);
     }
 
-    public void setName(String name) {
-        this.nameProperty.set(name);
+    public void mobAdd(Actor actor) {
+        this.aliveMobs.add(actor);
     }
 
-    public long getLastPlayed() {
-        return lastPlayed;
-    }
-
-    public void setLastPlayed(long lastPlayed) {
-        this.lastPlayed = lastPlayed;
-    }
 
     public TileMap getTileMap() {
         return this.tileMap;
