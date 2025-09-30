@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {
+<<<<<<< HEAD
     private static World world = null;
 
     private ItemFactory itemFactory;
@@ -18,6 +19,16 @@ public class World {
     private Player player;
     private HitboxManager hitboxManager;
     private ArrayList<Actor> aliveMobs;
+=======
+
+    private StringProperty nameProperty;
+    private long lastPlayed;
+    private ItemFactory itemFactory;
+    private TileMap tileMap;
+    private Player player;
+    private ArrayList<Actor> aliveMobs;
+    private HitboxManager hitboxManager; // TODO : ??
+>>>>>>> 90a010a1c5d23d965d450b48eff6a6ce3712befe
 
     private World() {
         this.itemFactory = null;
@@ -48,6 +59,16 @@ public class World {
         this.aliveMobs.add(actor);
     }
 
+<<<<<<< HEAD
+=======
+    public long getLastPlayed() {
+        return lastPlayed;
+    } // TODO : retirer les setters et guetters qui ne servent pas
+
+    public void setLastPlayed(long lastPlayed) {
+        this.lastPlayed = lastPlayed;
+    } // TODO : retirer les setters et guetters qui ne servent pas
+>>>>>>> 90a010a1c5d23d965d450b48eff6a6ce3712befe
 
     public TileMap getTileMap() {
         return this.tileMap;
@@ -71,7 +92,7 @@ public class World {
 
     public void setAliveMobs(ArrayList<Actor> aliveMobs) {
         this.aliveMobs = aliveMobs;
-    }
+    } // TODO : retirer les setters et guetters qui ne servent pas
 
     public ItemFactory getItemFactory() {
         return itemFactory;

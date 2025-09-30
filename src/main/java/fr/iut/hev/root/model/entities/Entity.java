@@ -6,6 +6,9 @@ import fr.iut.hev.root.model.TileMap;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+/*
+
+ */
 public class Entity {
     private IntegerProperty posXProperty;
     private IntegerProperty posYProperty;
@@ -14,6 +17,8 @@ public class Entity {
     private int velocityX;
     private int velocityY;
     private int velocityMultiplier; // TODO : a retirer
+
+
     private TileMap tileMap;
     private Collider collider;
     // TODO : Potentiellement faire d'autres classes pour les attributs, afin d'alléger le constructeur et même la classe

@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class TileMap {
+<<<<<<< HEAD
     private static TileMap tileMap;
+=======
+>>>>>>> 90a010a1c5d23d965d450b48eff6a6ce3712befe
 
     private ItemFactory itemFactory;
     private int width, height;
@@ -50,7 +53,7 @@ public class TileMap {
             for (int j = 0; j < this.getWidth(); j++) {
                 this.addTile(new Tile(TilesEnum.AIR, j, i));
             }
-        }
+        } // TODO : Faire un refactoring de ça
 
         //Initialize land
         this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
@@ -79,6 +82,7 @@ public class TileMap {
     }
 
     public void setTestMap() {
+        // TODO : Faire un refactor de ça
         /**
          * crée une map en 1920p avec 60*33 tile de test
          * Avec vérification des limites pour éviter les erreurs dans les tests

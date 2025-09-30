@@ -22,7 +22,7 @@ public class InventorySlot {
         if (quantity > quantityProperty.get()) {
             StringBuilder sb = new StringBuilder();
             sb.append("Cannot remove ");
-            sb.append(Integer.toString(quantity));
+            sb.append(quantity);
             sb.append(" from ");
             sb.append(this.itemProperty.get().getItemEnum());
             sb.append(" at slot ");

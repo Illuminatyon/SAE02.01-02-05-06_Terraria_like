@@ -162,7 +162,8 @@ public class AStar {
         }
 
         return path;
-    }
+    } // Je pense que je pourrais refactorer un peu tout ça, y'en a vraiment beaucoup, peut être en faire d'autres
+    // classes, ce serait pas mal
 
     /**
      * Calculates the heuristic (estimated distance) between two points

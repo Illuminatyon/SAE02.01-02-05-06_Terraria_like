@@ -25,7 +25,7 @@ public class Player extends Actor {
 
     private Inventory inventory;
     private Set<PlayerMouvementsEnum> playerMouvementEnums;
-    private ObjectProperty<Item> itemInHandProperty;
+    private ObjectProperty<Item> itemInHandProperty; //TODO: (Lino) repenser le système de hotbar et d'item sélectionné ce suppot du diable
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
 
@@ -50,7 +50,7 @@ public class Player extends Actor {
         return player;
     }
 
-    public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO : retirer le getter
+    public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO: retirer le getter
 
     public void update() {
         updatePosition();
@@ -64,7 +64,7 @@ public class Player extends Actor {
     }
 
     @Override
-    public void updatePosition() {
+    public void updatePosition() { //TODO: (Lino) toujours la continuité de la réforme sur le mouvement dans actor et entity (à voir)
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !super.getIsJumping()) {
             //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());

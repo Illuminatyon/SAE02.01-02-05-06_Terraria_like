@@ -46,7 +46,7 @@ public class ItemFactory {
             default -> {
                 return null;
             }
-        }
+        } // TODO : a reflechir, à méditer, et à médipieds
     }
 
     public Block createBlock(ItemsEnum itemsEnum) {
