@@ -3,6 +3,8 @@ package fr.iut.hev.root.model;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.exception.GameInitException;
+import fr.iut.hev.root.model.exception.MapLoadingException;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.utilities.CreateHashmap;
@@ -12,10 +14,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class TileMap {
-<<<<<<< HEAD
+
     private static TileMap tileMap;
-=======
->>>>>>> 90a010a1c5d23d965d450b48eff6a6ce3712befe
 
     private ItemFactory itemFactory;
     private int width, height;
@@ -56,7 +56,11 @@ public class TileMap {
         } // TODO : Faire un refactoring de ça
 
         //Initialize land
-        this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
+        try {
+            this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
+        } catch (IOException e) {
+            throw new MapLoadingException()
+        }
     }
 
     public Tile getTile(int tileX, int tileY) {
