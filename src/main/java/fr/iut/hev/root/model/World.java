@@ -41,7 +41,7 @@ public class World {
         this.aliveMobs=new ArrayList<>();
         this.tileMap = TileMap.getInstance();
         this.itemFactory = ItemFactory.getInstance();
-        this.player = Player.getInstance(100, 100, 32, 48, this.tileMap, 5, 10,  3, ActorEnum.PLAYER, this.hitboxManager);
+        this.player = Player.getInstance(100, 100, 32, 48, this.tileMap, 5, 10,  3, this.hitboxManager);
         this.tileMap.initTileMap(itemFactory,width,height);
     }
 

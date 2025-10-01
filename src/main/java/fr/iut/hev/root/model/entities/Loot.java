@@ -13,8 +13,8 @@ import java.util.HashSet;
 public class Loot extends Entity {
     private Item item;
     private int quantity;
-    public static final SetProperty<Loot> lootOnMapProperty =
-            new SimpleSetProperty<>(FXCollections.observableSet(new HashSet<>()));
+    public static final SetProperty<Loot> lootOnMapProperty = // OULALA
+            new SimpleSetProperty<>(FXCollections.observableSet(new HashSet<>())); // TODO : Pas propre, à réparer
 
     public Loot(Item item, int quantity, int posX, int posY, int width, int height, TileMap tileMap) {
         super(posX, posY, width, height, tileMap);
@@ -25,6 +25,10 @@ public class Loot extends Entity {
     }
 
     // TODO : faire un refactor pour que les directions soient des enum
+    /* Demander a Fabio pourquoi faire le truc d'au dessus.
+     * Plus serieusement, en vrai je vois pas l'utilité. Pour les acteurs oui mais le loot
+     * peu importe la direction
+     */
 
     public void removeSelf() {
         lootOnMapProperty.get().remove(this);

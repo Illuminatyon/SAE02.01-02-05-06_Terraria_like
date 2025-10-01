@@ -68,8 +68,7 @@ public class GlobalController implements Initializable {
     private MouseCursorCircleView playerLightCircle;
     private InventoryView inventoryView;
     private HotbarView hotbarView;
-    private MobView mobView;
-    private MobView aggressiveMobView;
+    private ArrayList<MobView> mobView;
     private PnjView pnjView;
     private CraftView craftView;
     private Cooldown dialogueCD;
@@ -95,11 +94,12 @@ public class GlobalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            initWorld();
+        /*try {
+            //initWorld();
         } catch (IOException e) {
             handleInitializeError(e);
-        }
+        }*/
+        world = World.getInstance();
         initItemEnums();
         initGameLoop();
         initViews();
@@ -128,8 +128,8 @@ public class GlobalController implements Initializable {
         lootView = new LootView(entitiesPane);
     }
 
-    private void initPlayerViewsAndMobs(){
-        initPlayer();
+    private void initPlayerViewsAndMobs(){ // Les mobs crée sont des tests
+        initPlayer(); //
         System.out.println("crashed ?");
         createAggressiveMob(ActorEnum.ZOMBIE);
         createMob(ActorEnum.POULET);
@@ -140,7 +140,7 @@ public class GlobalController implements Initializable {
 
     private void updateGameLoop() {
         world.getPlayer().update();
-        updateAliveMobs();
+        updateAliveMobs(); // TODO : C'est le world qui est censé gérer ca
         updateLoots();
         handleMouseInput();
         updatePlayerLight();
@@ -149,8 +149,9 @@ public class GlobalController implements Initializable {
     }
 
 
+    // TODO : Mettre dans World
     private void updateAliveMobs() {
-        for (int i = world.getAliveMobs().size() - 1; i >= 0; i--) {
+        for (int i = world.getAliveMobs().size() - 1; i >= 0; i--) { // TODO : Chercher pourquoi on a choisi de faire le parcours à l'envers
             Actor currentActor = world.getAliveMobs().get(i);
             if (currentActor != null) {
                 currentActor.updatePosition();
@@ -188,7 +189,7 @@ public class GlobalController implements Initializable {
         }
     }
 
-    private void initWorld() throws IOException {
+    /*private void initWorld() throws IOException {
         hitboxManager = new HitboxManager();
         itemFactory = ItemFactory.getInstance();
         itemFactory.setHitboxManager(hitboxManager);
@@ -196,7 +197,7 @@ public class GlobalController implements Initializable {
         player = new Player(0, 0, 32, 64, tileMap, 2, 10, 3, ActorEnum.PLAYER, hitboxManager);
         aliveActors = new ArrayList<>();
         world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
-    }
+    }*/
 
     private void initPlayer() { // creer un init player view
         //TODO: déplacer ça dans une initialisation de player dans Word
@@ -281,13 +282,19 @@ public class GlobalController implements Initializable {
         });
     }
 
-    private void creteMobView(Mob mob) {
 
+
+    private void createNPCView(Mob mob) {
+
+        this.mobView.add(new MobView(mob,world.getTileMap(), entitiesPane));
+        mobView.getLast().camOffsetXProperty().bind(camera.currentCamXProperty());
+        mobView.getLast().camOffsetYProperty().bind(camera.currentCamYProperty());
+        mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), world.getItemFactory()));
     }
-
+/*
     private void createMob(ActorEnum mobActorEnum) { //TODO: essayer ptet de regrouper tous les créateur de mob/pnj en une méthode pour éviter la duplication
         Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
-        mobView = new MobView(mob, tileMap, entitiesPane);
+        mobView = new MobView(mob, tileMap, );
         mobView.camOffsetXProperty().bind(camera.currentCamXProperty());
         mobView.camOffsetYProperty().bind(camera.currentCamYProperty());
         mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
@@ -306,9 +313,9 @@ public class GlobalController implements Initializable {
         aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
         world.getAliveMobs().add(aggressiveMob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
     }
-
+*/
     // Methode en com dans world
-    private void createNPC(ActorEnum npcActorEnum) {
+    private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstruct/world quand on aura reparé les dialogues
         Pnj npc = new Pnj(0, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
         this.pnjView = new PnjView(npc, tileMap, entitiesPane);
         pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());

@@ -44,8 +44,8 @@ public abstract class Actor extends Entity {
         this.jumpingTestDecay = 0; // TODO : renommer aussi
         this.reach = reach;
         this.type = type;
-        this.hitboxManager = new HitboxManager();
-        hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
+        this.hitboxManager = hitboxManager;
+        this.hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
     }
 
     @Override
@@ -106,6 +106,16 @@ public abstract class Actor extends Entity {
     public final int getHealth() {return this.healthProperty.getValue();}
 
     public final void setHealth(int halfHeart) {this.healthProperty.setValue(halfHeart);}
+
+    public void setMoveSpeed(int moveSpeed) {this.moveSpeed = moveSpeed;}
+
+    public void setJumpForce(int jumpForce) {this.jumpForce = jumpForce;}
+
+    public void setReach(int reach) {this.reach = reach;}
+
+    public void setHitboxManager(HitboxManager hitboxManager) {this.hitboxManager = hitboxManager;}
+
+    public void setType(ActorEnum type) {this.type = type;}
 
     public final IntegerProperty healthProperty() {return this.healthProperty;}
 

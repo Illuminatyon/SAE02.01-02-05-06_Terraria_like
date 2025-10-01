@@ -31,8 +31,8 @@ public class Player extends Actor {
 
     // Constructeur privé
     private Player(int posX, int posY, int width, int height, TileMap tileMap,
-                   int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
-        super(posX, posY, width, height, tileMap, 10, moveSpeed, jumpForce, reach, actor, hitboxManager);
+                   int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager) {
+        super(posX, posY, width, height, tileMap, 10, moveSpeed, jumpForce, reach, ActorEnum.PLAYER, hitboxManager);
         this.inventory = new Inventory();
         this.playerMouvementEnums = new HashSet<>();
         this.indexItemInHand = new SimpleIntegerProperty(0);
@@ -43,11 +43,32 @@ public class Player extends Actor {
 
     // Méthode d’accès Singleton
     public static Player getInstance(int posX, int posY, int width, int height, TileMap tileMap,
-                                     int moveSpeed, int jumpForce, int reach, ActorEnum actor, HitboxManager hitboxManager) {
+                                     int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager) {
         if (player == null) {
-            player = new Player(posX, posY, width, height, tileMap, moveSpeed, jumpForce, reach, actor, hitboxManager);
+            player = new Player(posX, posY, width, height, tileMap, moveSpeed, jumpForce, reach, hitboxManager);
         }
         return player;
+    }
+
+    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager) {
+        setPosX(posX);
+        setPosY(posY);
+        setWidth(width);
+        setHeight(height);
+        this.setTileMap(tileMap);
+        setMoveSpeed(moveSpeed);
+        setJumpForce(jumpForce);
+        setReach(reach);
+        setHitboxManager(hitboxManager);
+        setType(ActorEnum.PLAYER);
+        setHealth(10);
+
+        this.inventory = new Inventory();
+        this.playerMouvementEnums = new HashSet<>();
+        this.indexItemInHand = new SimpleIntegerProperty(0);
+        this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
+        this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
+        getHitboxManager().createHitbox(this, HitboxType.INTERACTION);
     }
 
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO: retirer le getter
@@ -55,7 +76,7 @@ public class Player extends Actor {
     public void update() {
         updatePosition();
         // Create a copy of the loot collection to avoid ConcurrentModificationException
-        Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get());
+        Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get()); // TODO Akram : analyser le fonctionnement en détail
         for (Loot loot : lootCopy) {
             if (getCollider().intersectsWith(loot.getCollider())) {
                 pickUp(loot);

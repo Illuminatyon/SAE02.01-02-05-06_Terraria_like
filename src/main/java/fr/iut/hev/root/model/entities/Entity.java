@@ -13,7 +13,7 @@ public class Entity {
     private IntegerProperty posXProperty;
     private IntegerProperty posYProperty;
     private int width;
-    private int height; // TODO : passer height et width dans collider
+    private int height; // TODO : passer height et width dans collider (vérifier les conséquences dans player)
     private int velocityX;
     private int velocityY;
     private int velocityMultiplier; // TODO : a retirer
@@ -86,6 +86,10 @@ public class Entity {
     public int getHeight() {
         return this.height;
     }
+
+    public void setWidth(int width) {this.width = width;}
+
+    public void setHeight(int height) {this.height = height;}
 
     public int getVelocityX() {
         return this.velocityX;
