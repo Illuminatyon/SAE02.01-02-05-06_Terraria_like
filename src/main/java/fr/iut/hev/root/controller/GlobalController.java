@@ -204,7 +204,7 @@ public class GlobalController implements Initializable {
         ItemFactory itemFactory = world.getItemFactory();
         player = world.getPlayer(); //TODO: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
         inventory = player.getInventory();
-        craftingManager = new CraftingManager(inventory,itemFactory);
+        craftingManager = new CraftingManager(inventory,itemFactory);//TODO: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
         hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
         //TODO: ptet aller chercher le joueur par la variable player
 
