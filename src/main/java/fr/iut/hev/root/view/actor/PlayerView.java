@@ -10,10 +10,5 @@ public class PlayerView extends ActorView {
         super(player,tileMap,anchorPane);
     }
 
-    /*@Override
 
-
-    public void deletePlayerSprite() {
-        playerSprite.setVisible(false);
-    }*/
 }
