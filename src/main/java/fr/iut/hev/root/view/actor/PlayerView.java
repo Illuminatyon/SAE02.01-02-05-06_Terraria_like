@@ -30,4 +30,6 @@ public class PlayerView extends ActorView {
     }
 
     public HeartsView getHeartsView() {return this.heartsView;}
+    public CraftView getCraftView() {return this.craftView;}
+    public InventoryView getInventoryView() {return this.inventoryView;}
 }

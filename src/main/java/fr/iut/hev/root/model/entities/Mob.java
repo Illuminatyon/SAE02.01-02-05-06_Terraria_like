@@ -8,7 +8,7 @@ import fr.iut.hev.root.model.hitbox.Hitbox;
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 
-public abstract class Mob extends Actor {
+public  class Mob extends Actor {
     private long lastDirectionChangeTime = 0;
     private int currentDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour stationnaire
     private int jumpCooldown= 1000;

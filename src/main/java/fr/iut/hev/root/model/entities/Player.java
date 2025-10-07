@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model.entities;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
+import fr.iut.hev.root.model.CraftingManager;
 import fr.iut.hev.root.model.enums.ActorEnum;
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.Inventory;
@@ -28,12 +29,14 @@ public class Player extends Actor {
     private ObjectProperty<Item> itemInHandProperty; //TODO: (Lino) repenser le système de hotbar et d'item sélectionné ce suppot du diable
     private IntegerProperty quantityOfItemInHandProperty;
     private IntegerProperty indexItemInHand;
+    private CraftingManager craftingManager;
 
     // Constructeur privé
     private Player(int posX, int posY, int width, int height, TileMap tileMap,
                    int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager) {
         super(posX, posY, width, height, tileMap, 10, moveSpeed, jumpForce, reach, ActorEnum.PLAYER, hitboxManager);
         this.inventory = new Inventory();
+        this.craftingManager = null;
         this.playerMouvementEnums = new HashSet<>();
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
@@ -50,7 +53,7 @@ public class Player extends Actor {
         return player;
     }
 
-    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager) {
+    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager, CraftingManager craftingManager) {
         setPosX(posX);
         setPosY(posY);
         setWidth(width);
@@ -64,6 +67,7 @@ public class Player extends Actor {
         setHealth(10);
 
         this.inventory = new Inventory();
+        this.craftingManager = craftingManager;
         this.playerMouvementEnums = new HashSet<>();
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());

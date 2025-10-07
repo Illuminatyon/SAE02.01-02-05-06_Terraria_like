@@ -234,23 +234,7 @@ public class AggressiveMob extends Mob {
      *
      * @return true if there is an entity in front of the mob, false otherwise
      */
-    public int Changement() {
-        long currentTime = System.currentTimeMillis();
-        int DIRECTION_CHANGE_INTERVAL = 2000;
-        // Changement aléatoire de direction
-        if (currentTime - lastDirectionChangeTime > DIRECTION_CHANGE_INTERVAL && !getIsJumping()) {
-            double direction = Math.random();
-            if (direction < 0.33) {
-                currentDirection = -1;
-            } else if (direction < 0.66) {
-                currentDirection = 1;
-            } else {
-                currentDirection = 0;
-            }
-            lastDirectionChangeTime = currentTime;
-        }
-        return currentDirection;
-    }
+
 
     private boolean isEntityInFront() {
         // Get the direction the mob is moving
@@ -320,31 +304,7 @@ public class AggressiveMob extends Mob {
         return (hasObstacleAtHeight && hasObstacleAbove && hasAirTwoAbove) || hasAirBeside;
     }
 
-    @Override
-    public void updateVerticalMovement() {
-        long currentTime = System.currentTimeMillis();
 
-        if (super.getCollider().hasCollisionBottom(super.getVelocityY() - Gravity.getGravityForce()) && !super.getIsJumping() && (!super.getCollider().hasCollisionLeft() || !super.getCollider().hasCollisionRight())) {
-
-            // Vérifiez si le temps de recharge est écoulé
-            if (currentTime - lastJumpTime >= jumpCooldown) {
-                super.setIsJumping(true);
-                super.setJumpingTestDecay(0);
-                lastJumpTime = currentTime; // Mettre à jour le dernier temps de saut
-            }
-        } else if (super.getIsJumping()) {
-            if (super.getJumpingTestDecay() == super.getJumpForce()) {
-                super.setVelocityY(0);
-                super.setIsJumping(false);
-            } else if (!super.getCollider().hasCollisionTop(super.getVelocityY() + 1)) {
-                // Apply a multiplier to make the jump higher (2.5x higher)
-                super.setVelocityY((int) (-super.getJumpForce() * 2.5) + super.getJumpingTestDecay());
-                super.setJumpingTestDecay(super.getJumpingTestDecay() + 1);
-            } else {
-                super.setIsJumping(false);
-            }
-        }
-    }
 
     public Player getPlayer() {
         return this.target;
