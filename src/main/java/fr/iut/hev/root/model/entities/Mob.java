@@ -19,7 +19,7 @@ public abstract class Mob extends Actor {
     }
 
     @Override
-    public void updatePosition() { //TODO: toujours la même idée derrière et séparer l'histoire de mob passif pour rendre la classe plus cohérente
+    public void updatePosition() {//TODO: toujours la même idée derrière et séparer l'histoire de mob passif pour rendre la classe plus cohérente
         // Gravité
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !super.getIsJumping()) {
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());

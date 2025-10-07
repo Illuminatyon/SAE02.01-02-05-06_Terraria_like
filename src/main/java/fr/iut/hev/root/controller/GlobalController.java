@@ -54,17 +54,17 @@ public class GlobalController implements Initializable {
     private CraftingManager craftingManager; // peut etre dans le joueur
    // private HitboxManager hitboxManager; // world ou controller
     //public static Mob mob ;
-    private static Set<Mob> mobs;
+    private static Set<Mob> mobs; // N'a rien a faire dans le controller
     //private ItemFactory itemFactory;
 
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
     private HeartsView hudView;
-    private PlayerView playerView;
-    private MouseCursorCircleView playerLightCircle;
+    private PlayerView playerView; // A voir si on modifie
+    private MouseCursorCircleView playerLightCircle; // hmmmm
     private InventoryView inventoryView;
     private HotbarView hotbarView;
-    private ArrayList<MobView> mobView;
-    private PnjView pnjView;
+    private ArrayList<MobView> mobView; // A voir si on modifie
+    private PnjView pnjView; // A voir si on modifie
     private CraftView craftView;
     private Cooldown dialogueCD;
     private LootView lootView;
