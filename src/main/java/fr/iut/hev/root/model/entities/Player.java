@@ -69,6 +69,7 @@ public class Player extends Actor {
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
         getHitboxManager().createHitbox(this, HitboxType.INTERACTION);
+        getHitboxManager().createHitbox(player,HitboxType.VULNERABLE);
     }
 
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO: retirer le getter

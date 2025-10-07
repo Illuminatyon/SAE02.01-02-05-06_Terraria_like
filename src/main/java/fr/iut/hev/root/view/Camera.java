@@ -12,7 +12,6 @@ public class Camera {
     private final TilePane landTileMap;
     private final TilePane backgroundTileMap;
     private final Pane globalPane;
-    private final PlayerView playerView;
     private final LootView lootView;
 
     private final double smoothFactor;
@@ -21,12 +20,11 @@ public class Camera {
     private DoubleProperty currentCamYProperty = new SimpleDoubleProperty(0);
 
     public Camera(Player player, TilePane landTileMap, TilePane backgroundTileMap,
-                        Pane globalPane, PlayerView playerView, LootView lootView, double smoothFactor) {
+                        Pane globalPane, LootView lootView, double smoothFactor) {
         this.player = player;
         this.landTileMap = landTileMap;
         this.backgroundTileMap = backgroundTileMap;
         this.globalPane = globalPane;
-        this.playerView = playerView;
         this.lootView = lootView;
         this.smoothFactor = smoothFactor;
     }

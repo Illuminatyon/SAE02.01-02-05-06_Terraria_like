@@ -202,21 +202,24 @@ public class GlobalController implements Initializable {
     private void initPlayer() { // creer un init player view
         //TODO: déplacer ça dans une initialisation de player dans Word
         ItemFactory itemFactory = world.getItemFactory();
-        player = world.getPlayer(); //TODO: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
-        inventory = player.getInventory();
         craftingManager = new CraftingManager(inventory,itemFactory);//TODO: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
-        hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
+        //player = world.getPlayer(); //TODO: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
+        //inventory = player.getInventory();
+        //hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
         //TODO: ptet aller chercher le joueur par la variable player
 
         //TODO: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
-        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, playerView, lootView, 0.1);
-        hudView = new HUDView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
         playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
+
+        camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, lootView, 0.1);
         playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
         playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
+
+        hudView = new HUDView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);
+
         //TODO: de la vue aussi
         craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
         craftButton.setOnAction(actionEvent -> {
