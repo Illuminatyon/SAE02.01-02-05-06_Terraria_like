@@ -1,63 +1,38 @@
 package fr.iut.hev.root.model.entities;
 
-import fr.iut.hev.root.model.Collider; // TODO : à retirer
 import fr.iut.hev.root.model.Gravity;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.TileMap;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.collections.FXCollections;
-
-import java.util.HashSet;
 
 public class Loot extends Entity {
-    private Item item;
-    private int quantity;
-    public static final SetProperty<Loot> lootOnMapProperty = // OULALA
-            new SimpleSetProperty<>(FXCollections.observableSet(new HashSet<>())); // TODO : Pas propre, à réparer
+    private final Item item;
+    private final int quantity;
 
     public Loot(Item item, int quantity, int posX, int posY, int width, int height, TileMap tileMap) {
         super(posX, posY, width, height, tileMap);
         this.item = item;
         this.quantity = quantity;
-        System.out.println("loot model x = " + posX + " y = " + posY);
-        lootOnMapProperty.get().add(this); // TODO : enlever le sout
     }
 
-    // TODO : faire un refactor pour que les directions soient des enum
-    /* Demander a Fabio pourquoi faire le truc d'au dessus.
-     * Plus serieusement, en vrai je vois pas l'utilité. Pour les acteurs oui mais le loot
-     * peu importe la direction
-     */
-
-    public void removeSelf() {
-        lootOnMapProperty.get().remove(this);
+    public Item getItem() {
+        return item;
     }
 
-    public void updatePosition() {
-        applyGravity();
-        super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
+    public int getQuantity() {
+        return quantity;
     }
 
     @Override
     public void applyGravity() {
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1)) {
-            //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
         } else {
             super.setVelocityY(0);
         }
     }
 
-    public static void remove(Loot loot) {
-        lootOnMapProperty.get().remove(loot);
-    }
-
-    public Item getItem() {
-        return this.item;
-    }
-
-    public int getQuantity() {
-        return this.quantity;
+    public void updatePosition() {
+        applyGravity();
+        super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
     }
 }

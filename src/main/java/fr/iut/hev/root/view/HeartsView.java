@@ -1,8 +1,6 @@
 package fr.iut.hev.root.view;
 
-import fr.iut.hev.root.model.entities.Player;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -12,14 +10,14 @@ import java.util.List;
 
 import static fr.iut.hev.root.model.TileMap.format;
 
-public class HUDView {
+public class HeartsView {
 
     private final HBox heartsHbox;
     private final List<ImageView> fullHearts;
     private final Image fullHeartImage;
     private final Image halfHeartImage;
 
-    public HUDView(IntegerProperty healthProperty, HBox heartsHbox) {
+    public HeartsView(IntegerProperty healthProperty, HBox heartsHbox) {
         this.heartsHbox = heartsHbox;
         this.fullHearts = new ArrayList<>();
 
