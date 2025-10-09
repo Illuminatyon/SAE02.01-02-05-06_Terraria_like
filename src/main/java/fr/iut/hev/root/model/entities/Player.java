@@ -12,6 +12,7 @@ import fr.iut.hev.root.model.hitbox.Hitbox; // TODO : Modifier les imports
 import fr.iut.hev.root.model.hitbox.HitboxManager;
 import fr.iut.hev.root.model.hitbox.RectangleHitbox;
 import fr.iut.hev.root.model.items.Item;
+import fr.iut.hev.root.model.items.ItemFactory;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -32,28 +33,25 @@ public class Player extends Actor {
     private CraftingManager craftingManager;
 
     // Constructeur privé
-    private Player(int posX, int posY, int width, int height, TileMap tileMap,
-                   int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager) {
-        super(posX, posY, width, height, tileMap, 10, moveSpeed, jumpForce, reach, ActorEnum.PLAYER, hitboxManager);
-        this.inventory = new Inventory();
+    private Player() {
+        super(0, 0, 0, 0, null, 0, 0, 0, 0, null);
+        this.inventory = null;
         this.craftingManager = null;
-        this.playerMouvementEnums = new HashSet<>();
-        this.indexItemInHand = new SimpleIntegerProperty(0);
-        this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
-        this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
-        getHitboxManager().createHitbox(this, HitboxType.INTERACTION);
+        this.playerMouvementEnums = null;
+        this.indexItemInHand = null;
+        this.itemInHandProperty = null;
+        this.quantityOfItemInHandProperty = null;
     }
 
     // Méthode d’accès Singleton
-    public static Player getInstance(int posX, int posY, int width, int height, TileMap tileMap,
-                                     int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager) {
+    public static Player getInstance() {
         if (player == null) {
-            player = new Player(posX, posY, width, height, tileMap, moveSpeed, jumpForce, reach, hitboxManager);
+            player = new Player();
         }
         return player;
     }
 
-    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, HitboxManager hitboxManager, CraftingManager craftingManager) {
+    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ItemFactory itemFactory) {
         setPosX(posX);
         setPosY(posY);
         setWidth(width);
@@ -62,18 +60,17 @@ public class Player extends Actor {
         setMoveSpeed(moveSpeed);
         setJumpForce(jumpForce);
         setReach(reach);
-        setHitboxManager(hitboxManager);
+        setHitboxManager(HitboxManager.getInstance());
         setType(ActorEnum.PLAYER);
         setHealth(10);
 
         this.inventory = new Inventory();
-        this.craftingManager = craftingManager;
+        this.craftingManager = new CraftingManager(this.inventory,itemFactory);
         this.playerMouvementEnums = new HashSet<>();
         this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
         getHitboxManager().createHitbox(this, HitboxType.INTERACTION);
-        getHitboxManager().createHitbox(player,HitboxType.VULNERABLE);
     }
 
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO: retirer le getter
@@ -220,4 +217,5 @@ public class Player extends Actor {
     public IntegerProperty quantityOfItemInHandProperty() {return this.quantityOfItemInHandProperty;}
     public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
     public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
+    public CraftingManager getCraftingManager() {return this.craftingManager;}
 }

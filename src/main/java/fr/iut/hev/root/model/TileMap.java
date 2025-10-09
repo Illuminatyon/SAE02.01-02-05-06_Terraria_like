@@ -39,7 +39,7 @@ public class TileMap {
         return tileMap;
     }
 
-    public void initTileMap(ItemFactory itemFactory, int width, int height) throws IOException {
+    public void initTileMap(ItemFactory itemFactory, int width, int height) {
         /**
          * TileMap's initializer
          */
@@ -59,7 +59,7 @@ public class TileMap {
         try {
             this.setMap("src/main/resources/fr/iut/hev/root/data/map.json");
         } catch (IOException e) {
-            throw new MapLoadingException()
+            throw new MapLoadingException("échec du chargement de la map");
         }
     }
 

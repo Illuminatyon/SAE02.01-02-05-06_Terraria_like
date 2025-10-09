@@ -58,7 +58,7 @@ public class GlobalController implements Initializable {
     //private ItemFactory itemFactory;
 
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
-    private HeartsView hudView;
+    private HeartsView heartsView;
     private PlayerView playerView; // A voir si on modifie
     private MouseCursorCircleView playerLightCircle; // hmmmm
     private InventoryView inventoryView;
@@ -211,7 +211,7 @@ public class GlobalController implements Initializable {
         //TODO: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
         playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
 
-        hudView = new HeartsView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
+        heartsView = new HeartsView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
         craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         hotbarView = new HotbarView(hotbarInventory);

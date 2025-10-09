@@ -34,7 +34,7 @@ public abstract class Actor extends Entity {
         }
     }; // TODO : faire un refactoring pour que les directions soient des enum
 
-    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type, HitboxManager hitboxManager) {
+    public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type) {
         super(posX, posY, width, height, tileMap);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
@@ -44,7 +44,7 @@ public abstract class Actor extends Entity {
         this.jumpingTestDecay = 0; // TODO : renommer aussi
         this.reach = reach;
         this.type = type;
-        this.hitboxManager = hitboxManager;
+        this.hitboxManager = HitboxManager.getInstance(); //TODO: voir pour remonter le HitboxManager dans Entity étant donné que chaque entité aura une hitbox
         this.hitboxManager.createHitbox(this, HitboxType.VULNERABLE);
     }
 
@@ -67,7 +67,7 @@ public abstract class Actor extends Entity {
         }
     } // TODO : Même chose ici je pense, on retrouve le même problème
 
-    public abstract Actor NpcCreator(int posX, int posY);
+    public abstract Actor NpcCreator(int posX, int posY); //TODO: revoir l'utilité de ce refactor parce que ça doit être foutu dans Player ce qui n'est pas souhaité
 
     public HitboxManager getHitboxManager() {
         return hitboxManager;
