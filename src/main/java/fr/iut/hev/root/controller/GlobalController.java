@@ -197,8 +197,8 @@ public class GlobalController implements Initializable {
 
     private void initPlayer() { // creer un init player view
         //TODO: déplacer ça dans une initialisation de player dans Word
-        ItemFactory itemFactory = world.getItemFactory(); // TODO: A deplacer
-        craftingManager = new CraftingManager(inventory,itemFactory);//TODO: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
+        //ItemFactory itemFactory = world.getItemFactory(); // TODO: A deplacer
+        //craftingManager = new CraftingManager(inventory,itemFactory);//TODO: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
         //player = world.getPlayer(); //TODO: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
         //inventory = player.getInventory();
         //hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
@@ -211,10 +211,10 @@ public class GlobalController implements Initializable {
         //TODO: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
         playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
 
-        heartsView = new HeartsView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
-        craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
-        inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
-        hotbarView = new HotbarView(hotbarInventory);
+        //heartsView = new HeartsView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
+        //craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
+        //inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
+        //hotbarView = new HotbarView(hotbarInventory);
 
         //TODO: de la vue aussi
         craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
@@ -230,7 +230,7 @@ public class GlobalController implements Initializable {
                 inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
 
         // TODO : Peut être déplacer dans le joueur directement
-        inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100); //TODO: injection par défaut à terme potentiellement retirer si le jeu devient complet
+        /*inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100); //TODO: injection par défaut à terme potentiellement retirer si le jeu devient complet
         inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
@@ -239,7 +239,7 @@ public class GlobalController implements Initializable {
         inventory.add(7,itemFactory.createItem(ItemsEnum.BOW), 1);
         inventory.add(8,itemFactory.createItem(ItemsEnum.ARROW), 64);
         inventory.add(9,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
-        inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);
+        inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);*/
 
         //TODO: on le bouge pas tant qu'il est pas fix
         //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));

@@ -3,7 +3,6 @@ package fr.iut.hev.root.model;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.enums.TileTypesEnum;
 import fr.iut.hev.root.model.enums.TilesEnum;
-import fr.iut.hev.root.model.exception.GameInitException;
 import fr.iut.hev.root.model.exception.MapLoadingException;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.ItemFactory;
