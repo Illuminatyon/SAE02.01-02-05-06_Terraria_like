@@ -208,28 +208,28 @@ public class GlobalController implements Initializable {
         playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
 
         //DONE: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
-        playerView = new PlayerView(world.getTileMap(), entitiesPane, heartsHbox, craftListView, craftButton, recipeDisplay, hotbarInventory, expandedInventory, hudAnchorPane);
+        playerView = new PlayerView(world.getTileMap(), entitiesPane, heartsHbox, craftListView, craftButton, recipeDisplay, hotbarInventory, expandedInventory, hudAnchorPane,inputHandler);
 
         //heartsView = new HeartsView(player.healthProperty(), heartsHbox); //DONE: regrouper l'initialisation des vues dans une seule méthode
         //craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         //inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         //hotbarView = new HotbarView(hotbarInventory);
 
-        //TODO: de la vue aussi
-        craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
-        craftButton.setOnAction(actionEvent -> {
-            craftingManager.crafts();
-        });
-        //TODO: de la vue aussi mais qui a besoin que les eventshandler soient initialisé | à foutre dans l'inventoryView
-        inputHandler.getMouseInventoryInputHandler().onHoldProperty().addListener((observableValue, o, t1) ->
-                inventoryView.updateOnHoldPane(inputHandler.getMouseInventoryInputHandler().getOnHold()));
-        inputHandler.getMouseInventoryInputHandler().xProperty().addListener((observableValue, number, t1) ->
-                inventoryView.updateOnHoldPosition(inputHandler.getMouseInventoryInputHandler().getX(), inputHandler.getMouseInventoryInputHandler().getY()));
-        inputHandler.getMouseInventoryInputHandler().yProperty().addListener((observableValue, number, t1) ->
-                inventoryView.updateOnHoldPosition(inputHandler.getMouseInventoryInputHandler().getX(), inputHandler.getMouseInventoryInputHandler().getY()));
+        //DONE: de la vue aussi
+//        craftingManager.selectedRecipeProperty().bind(craftView.selectedRecipeProperty());
+//        craftButton.setOnAction(actionEvent -> {
+//            craftingManager.crafts();
+//        });
+        //DONE: de la vue aussi mais qui a besoin que les eventshandler soient initialisé | à foutre dans l'inventoryView
+//        inputHandler.getMouseInventoryInputHandler().onHoldProperty().addListener((observableValue, o, t1) ->
+//                inventoryView.updateOnHoldPane(inputHandler.getMouseInventoryInputHandler().getOnHold()));
+//        inputHandler.getMouseInventoryInputHandler().xProperty().addListener((observableValue, number, t1) ->
+//                inventoryView.updateOnHoldPosition(inputHandler.getMouseInventoryInputHandler().getX(), inputHandler.getMouseInventoryInputHandler().getY()));
+//        inputHandler.getMouseInventoryInputHandler().yProperty().addListener((observableValue, number, t1) ->
+//                inventoryView.updateOnHoldPosition(inputHandler.getMouseInventoryInputHandler().getX(), inputHandler.getMouseInventoryInputHandler().getY()));
 
-        // TODO : Peut être déplacer dans le joueur directement
-        /*inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100); //TODO: injection par défaut à terme potentiellement retirer si le jeu devient complet
+        // DONE : Peut être déplacer dans le joueur directement
+        /*inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100); //DONE: injection par défaut à terme potentiellement retirer si le jeu devient complet
         inventory.add(1,itemFactory.createItem(ItemsEnum.WOOD),100);
         inventory.add(3,itemFactory.createItem(ItemsEnum.DIRT),100);
         inventory.add(4,itemFactory.createItem(ItemsEnum.FURNACE),100);
@@ -242,8 +242,8 @@ public class GlobalController implements Initializable {
 
         //TODO: on le bouge pas tant qu'il est pas fix
         //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        player.healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
-        // Utiliser un bind pour le deathlistener
+        world.getPlayer().healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
+        // Utiliser un bind spécial pour le deathlistener
 
         // DONE : On les gardes ici, mais on va essayer de décomposer la création des Handlers avec des méthodes voir une classe à part entière
         inputHandler = new InputHandler(inventoryView,craftView,camera,globalView,hotbarView);
@@ -271,7 +271,7 @@ public class GlobalController implements Initializable {
         //});
 
         //DONE: potentiellement y mettre dans la classe des eventhandler
-//        Platform.runLater(() -> { //TODO: même chose dans la réorganisation des input handler
+//        Platform.runLater(() -> { //DONE: même chose dans la réorganisation des input handler
 //            landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
 //            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
 //            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseItemActionHandler);

@@ -1,5 +1,6 @@
 package fr.iut.hev.root.view;
 
+import fr.iut.hev.root.model.entities.Player;
 import fr.iut.hev.root.model.enums.ItemsEnum;
 import fr.iut.hev.root.model.enums.RecipesEnum;
 import javafx.beans.property.ObjectProperty;
@@ -52,6 +53,11 @@ public class CraftView {
                 displayRecipe();
                 System.out.println("Selection changed to: " + selectedRecipe.name());
             }
+        });
+
+        Player.getInstance().getCraftingManager().selectedRecipeProperty().bind(this.selectedRecipeProperty);
+        craftButton.setOnAction(actionEvent -> {
+            Player.getInstance().getCraftingManager().crafts();
         });
     }
 
