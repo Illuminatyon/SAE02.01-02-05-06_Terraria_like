@@ -16,7 +16,6 @@ import java.io.IOException;
  * permettant au joueur d'interagir avec le jeu via le clavier.
  */
 public class KeyInputHandler implements EventHandler<KeyEvent> {
-    private World world;
     private Player player;
     private InventoryView inventoryView;
     private CraftView craftView;
@@ -24,13 +23,11 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
     /**
      * Constructeur du gestionnaire d'entrées clavier.
      *
-     * @param world Référence au monde du jeu
-     * @param inventoryView Vue de l'inventaire du joueur
+     *@param inventoryView Vue de l'inventaire du joueur
      * @param craftView Vue de l'interface de fabrication
      */
-    public KeyInputHandler(World world, InventoryView inventoryView, CraftView craftView) {
-        this.world = world;
-        this.player = world.getPlayer();
+    public KeyInputHandler(InventoryView inventoryView, CraftView craftView) {
+        this.player = Player.getInstance();
         this.inventoryView = inventoryView;
         this.craftView = craftView;
     }

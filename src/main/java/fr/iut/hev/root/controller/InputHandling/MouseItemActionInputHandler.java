@@ -23,7 +23,6 @@ import static fr.iut.hev.root.model.TileMap.format;
 public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
 
     private InventoryView inventoryView;
-    private World world;
     private Player player;
     private Camera camera;
     private Cooldown itemUseCooldown;
@@ -34,25 +33,21 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private MouseEvent mouseEvent;
     private GlobalView worldView;
     private TileMap tileMap;
-    private GlobalController globalController; // Retirer global controller peut etre, enft c un handler alors jsp
 
     /**
      * Constructeur du gestionnaire d'actions souris liées aux objets.
      * Initialise les références aux composants du jeu et configure l'état initial.
      *
-     * @param world Référence au monde du jeu
      * @param camera Caméra du jeu
      * @param inventoryView Vue de l'inventaire du joueur
      * @param worldView Vue globale du monde
      */
-    public MouseItemActionInputHandler(World world, Camera camera, InventoryView inventoryView, GlobalView worldView) {
-        this.world = world;
+    public MouseItemActionInputHandler(Camera camera, InventoryView inventoryView, GlobalView worldView) {
         this.inventoryView = inventoryView;
-        this.player = world.getPlayer();
+        this.player = Player.getInstance();
         this.camera = camera;
         this.worldView = worldView;
-        this.tileMap = world.getTileMap();
-        this.globalController = globalController;
+        this.tileMap = TileMap.getInstance();
         this.x = 0;
         this.y = 0;
         this.mouseClickIsPressed = false;
@@ -188,5 +183,4 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public TileMap getTileMap() {return this.tileMap;}
     public double getX() {return this.x;}
     public double getY() {return this.y;}
-    public GlobalController getGlobalController() {return this.globalController;}
 }

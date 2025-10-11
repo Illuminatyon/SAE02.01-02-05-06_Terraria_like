@@ -1,9 +1,6 @@
 package fr.iut.hev.root.controller;
 
-import fr.iut.hev.root.controller.InputHandling.KeyInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
-import fr.iut.hev.root.controller.InputHandling.ScrollInputHandler;
-import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
+import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.*;
 import fr.iut.hev.root.model.entities.*;
@@ -44,15 +41,16 @@ public class GlobalController implements Initializable {
     private Timeline gameLoop;
     // private Player player; // dans world
     // private TileMap tileMap; // dans world
-    private MouseInventoryInputHandler mouseInventoryHandler;
-    private ScrollInputHandler scrollHotbarHandler;
-    private KeyInputHandler keyboardHandler;
-    private MouseItemActionInputHandler mouseItemActionHandler;
+    //private MouseInventoryInputHandler mouseInventoryHandler;
+    //private ScrollInputHandler scrollHotbarHandler;
+    //private KeyInputHandler keyboardHandler;
+    //private MouseItemActionInputHandler mouseItemActionHandler;
+    private InputHandler inputHandler;
     // private ArrayList<Actor> aliveActors; // dans world
     //private Inventory inventory; // dans player
     private CooldownManager cooldownManager; // controller
-    private CraftingManager craftingManager; // peut etre dans le joueur
-   // private HitboxManager hitboxManager; // world ou controller
+    //private CraftingManager craftingManager; // peut etre dans le joueur
+    //private HitboxManager hitboxManager; // world ou controller
     //public static Mob mob ;
     private static Set<Mob> mobs; // N'a rien a faire dans le controller
     //private ItemFactory itemFactory;
@@ -124,7 +122,7 @@ public class GlobalController implements Initializable {
         lootView = new LootView(entitiesPane);
     }
 
-    private void initPlayerViewsAndMobs(){ // Les mobs crée sont des tests
+    private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
         initPlayer();
         System.out.println("crashed ?");
         createAggressiveMob(ActorEnum.ZOMBIE);
@@ -164,11 +162,11 @@ public class GlobalController implements Initializable {
     }
 
     private void handleMouseInput() {
-        if (mouseItemActionHandler.getMouseClickIsPressed()) {
-            mouseItemActionHandler.onClickPressedLoop();
+        if (inputHandler.getMouseItemActionInputHandler().getMouseClickIsPressed()) {
+            inputHandler.getMouseItemActionInputHandler().onClickPressedLoop();
         }
-        if (mouseItemActionHandler.getMouseClickIsReleased()) {
-            mouseItemActionHandler.onClickReleasedLoop();
+        if (inputHandler.getMouseItemActionInputHandler().getMouseClickIsReleased()) {
+            inputHandler.getMouseItemActionInputHandler().onClickReleasedLoop();
         }
     }
 
@@ -176,6 +174,7 @@ public class GlobalController implements Initializable {
         if (playerLightCircle != null) {
             double playerCenterX = playerView.getActorSprite().getLayoutX()
                     + playerView.getActorSprite().getTranslateX()
+-
                     + playerView.getActorSprite().getFitWidth() / 2;
 
             double playerCenterY = playerView.getActorSprite().getLayoutY()
@@ -195,23 +194,23 @@ public class GlobalController implements Initializable {
         world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
     }*/
 
-    private void initPlayer() { // creer un init player view
-        //TODO: déplacer ça dans une initialisation de player dans Word
-        //ItemFactory itemFactory = world.getItemFactory(); // TODO: A deplacer
-        //craftingManager = new CraftingManager(inventory,itemFactory);//TODO: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
-        //player = world.getPlayer(); //TODO: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
+    private void initPlayer() {
+        //DONE: déplacer ça dans une initialisation de player dans Word
+        //ItemFactory itemFactory = world.getItemFactory(); // DONE: A deplacer
+        //craftingManager = new CraftingManager(inventory,itemFactory);//DONE: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
+        //player = world.getPlayer(); //DONE: bizarre j'ai l'impression qu'on l'a déjà initialisé dans initWorld()
         //inventory = player.getInventory();
         //hitboxManager.createHitbox(player, HitboxType.VULNERABLE);
-        //TODO: ptet aller chercher le joueur par la variable player
+        //DONE: ptet aller chercher le joueur par la variable player
 
         camera = new Camera(world.getPlayer(), landTileMap, backgroundTileMap, globalPane, lootView, 0.1);
         playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
         playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
 
-        //TODO: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
-        playerView = new PlayerView(player, world.getTileMap(), entitiesPane);
+        //DONE: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
+        playerView = new PlayerView(world.getTileMap(), entitiesPane, heartsHbox, craftListView, craftButton, recipeDisplay, hotbarInventory, expandedInventory, hudAnchorPane);
 
-        //heartsView = new HeartsView(player.healthProperty(), heartsHbox); //TODO: regrouper l'initialisation des vues dans une seule méthode
+        //heartsView = new HeartsView(player.healthProperty(), heartsHbox); //DONE: regrouper l'initialisation des vues dans une seule méthode
         //craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
         //inventoryView = new InventoryView(inventory, hotbarInventory, expandedInventory,hudAnchorPane,craftView);
         //hotbarView = new HotbarView(hotbarInventory);
@@ -221,13 +220,13 @@ public class GlobalController implements Initializable {
         craftButton.setOnAction(actionEvent -> {
             craftingManager.crafts();
         });
-        //TODO: de la vue aussi mais qui a besoin que les eventshandler soient initialisé
-        mouseInventoryHandler.onHoldProperty().addListener((observableValue, o, t1) ->
-                inventoryView.updateOnHoldPane(mouseInventoryHandler.getOnHold()));
-        mouseInventoryHandler.xProperty().addListener((observableValue, number, t1) ->
-                inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
-        mouseInventoryHandler.yProperty().addListener((observableValue, number, t1) ->
-                inventoryView.updateOnHoldPosition(mouseInventoryHandler.getX(), mouseInventoryHandler.getY()));
+        //TODO: de la vue aussi mais qui a besoin que les eventshandler soient initialisé | à foutre dans l'inventoryView
+        inputHandler.getMouseInventoryInputHandler().onHoldProperty().addListener((observableValue, o, t1) ->
+                inventoryView.updateOnHoldPane(inputHandler.getMouseInventoryInputHandler().getOnHold()));
+        inputHandler.getMouseInventoryInputHandler().xProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(inputHandler.getMouseInventoryInputHandler().getX(), inputHandler.getMouseInventoryInputHandler().getY()));
+        inputHandler.getMouseInventoryInputHandler().yProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(inputHandler.getMouseInventoryInputHandler().getX(), inputHandler.getMouseInventoryInputHandler().getY()));
 
         // TODO : Peut être déplacer dans le joueur directement
         /*inventory.add(0,itemFactory.createItem(ItemsEnum.RAW_CHICKEN),100); //TODO: injection par défaut à terme potentiellement retirer si le jeu devient complet
@@ -246,11 +245,13 @@ public class GlobalController implements Initializable {
         player.healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
         // Utiliser un bind pour le deathlistener
 
-        // TODO : On les gardes ici, mais on va essayer de décomposer la création des Handlers avec des méthodes voir une classe à part entière
-        keyboardHandler = new KeyInputHandler(world, inventoryView,craftView); //TODO: ptet réorganiser aussi les input handler
-        mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
-        scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
-        mouseItemActionHandler = new MouseItemActionInputHandler(world, camera, inventoryView, globalView);
+        // DONE : On les gardes ici, mais on va essayer de décomposer la création des Handlers avec des méthodes voir une classe à part entière
+        inputHandler = new InputHandler(inventoryView,craftView,camera,globalView,hotbarView);
+        inputHandler.initInputHandler(landTileMap,hudAnchorPane);
+        //keyboardHandler = new KeyInputHandler(inventoryView,craftView); //DONE: ptet réorganiser aussi les input handler
+        //mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
+        //scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
+        //mouseItemActionHandler = new MouseItemActionInputHandler(world, camera, inventoryView, globalView);
 
         double playerCenterX = 0;
         double playerCenterY = 0; // TODO : A revoir parce que je ne sais pas si y'a encore des problèmes avec la reach
@@ -258,27 +259,27 @@ public class GlobalController implements Initializable {
         playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
         playerLightCircle.setCursorVisible(false);
 
-        //TODO: il faut essayer de fix cet histoire d'item in hand mais ptet à bouger dans une méthode
-        player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
-        player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
-        player.indexItemInHandProperty().bind(scrollHotbarHandler.IndexHotbarProperty());
-        player.itemInHandProperty().addListener((observableValue, item, t1) -> mouseItemActionHandler.updateCooldown());
+        //DONE: il faut essayer de fix cet histoire d'item in hand mais ptet à bouger dans une méthode
+        //player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
+        //player.quantityOfItemInHandProperty().bindBidirectional(scrollHotbarHandler.quantityProperty());
+        //player.indexItemInHandProperty().bind(scrollHotbarHandler.IndexHotbarProperty());
+        //player.itemInHandProperty().addListener((observableValue, item, t1) -> mouseItemActionHandler.updateCooldown());
 
-        scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) -> {
-            if (scrollHotbarHandler.getDirection() != 0)
-                scrollHotbarHandler.updateHotbar();
-        });
+        //scrollHotbarHandler.directionProperty().addListener((observableValue, number, t1) -> {
+        //    if (scrollHotbarHandler.getDirection() != 0)
+        //        scrollHotbarHandler.updateHotbar();
+        //});
 
-        //TODO: potentiellement y mettre dans la classe des eventhandler
-        Platform.runLater(() -> { //TODO: même chose dans la réorganisation des input handler
-            landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseItemActionHandler);
-            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseItemActionHandler);
-            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
-            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
-            landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
-        });
+        //DONE: potentiellement y mettre dans la classe des eventhandler
+//        Platform.runLater(() -> { //TODO: même chose dans la réorganisation des input handler
+//            landTileMap.getScene().addEventHandler(KeyEvent.ANY,keyboardHandler);
+//            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED,mouseItemActionHandler);
+//            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_RELEASED,mouseItemActionHandler);
+//            landTileMap.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED,mouseItemActionHandler);
+//            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_PRESSED,mouseInventoryHandler);
+//            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
+//            landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
+//        });
     }
 
 

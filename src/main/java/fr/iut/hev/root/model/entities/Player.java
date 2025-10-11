@@ -218,4 +218,6 @@ public class Player extends Actor {
     public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
     public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
     public CraftingManager getCraftingManager() {return this.craftingManager;}
+    public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {this.playerMouvementEnums.add(playerMouvementsEnum);}
+    public void removePlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {this.playerMouvementEnums.remove(playerMouvementsEnum);}
 }
