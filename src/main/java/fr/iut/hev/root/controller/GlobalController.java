@@ -243,7 +243,8 @@ public class GlobalController implements Initializable {
         //TODO: on le bouge pas tant qu'il est pas fix
         //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
         world.getPlayer().healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
-        // Utiliser un bind spécial pour le deathlistener
+        // Utiliser un bind spécial pour le deathlistener (potentiellement)
+        //TODO: ptet à déplacer dans actor ou actor view, demander à Rety son avis sur la question
 
         // DONE : On les gardes ici, mais on va essayer de décomposer la création des Handlers avec des méthodes voir une classe à part entière
         inputHandler = new InputHandler(inventoryView,craftView,camera,globalView,hotbarView);
