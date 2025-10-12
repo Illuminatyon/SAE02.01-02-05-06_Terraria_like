@@ -7,6 +7,7 @@ import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.craft.RecipesEnum;
 import fr.iut.hev.root.model.entities.actor.Actor;
 import fr.iut.hev.root.model.entities.actor.ActorEnum;
+import fr.iut.hev.root.model.entities.actor.Player;
 import fr.iut.hev.root.model.entities.actor.mobs.Mob;
 import fr.iut.hev.root.model.entities.actor.mobs.Pnj;
 import fr.iut.hev.root.model.exception.MapLoadingException;
@@ -59,7 +60,6 @@ public class GlobalController implements Initializable {
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
     private HeartsView heartsView;
     private PlayerView playerView; // A voir si on modifie
-    private MouseCursorCircleView playerLightCircle; // hmmmm
     private InventoryView inventoryView;
     private HotbarView hotbarView;
     private ArrayList<MobView> mobView; // A voir si on modifie
@@ -103,7 +103,8 @@ public class GlobalController implements Initializable {
 
     private void handleInitializeError(IOException e){
         throw new MapLoadingException("Erreur lors de l'initialisation du jeu", e);
-    }
+    } // TODO : WTF ALLER VOUS FAIRE FOUTRE XDD
+    // todo : faut retirer ça les mecs c'est pas beau :sob:
 
     private void initGameLoop(){
         gameLoop = new Timeline();
@@ -138,7 +139,6 @@ public class GlobalController implements Initializable {
         updateAliveMobs(); // TODO : C'est le world qui est censé gérer ca
         updateLoots();
         handleMouseInput();
-        updatePlayerLight();
         camera.update();
         cooldownManager.allCooldownsTick();
     }
@@ -170,21 +170,6 @@ public class GlobalController implements Initializable {
             inputHandler.getMouseItemActionInputHandler().onClickReleasedLoop();
         }
     }
-
-    private void updatePlayerLight() {
-        if (playerLightCircle != null) {
-            double playerCenterX = playerView.getActorSprite().getLayoutX()
-                    + playerView.getActorSprite().getTranslateX()
--
-                    + playerView.getActorSprite().getFitWidth() / 2;
-
-            double playerCenterY = playerView.getActorSprite().getLayoutY()
-                    + playerView.getActorSprite().getTranslateY()
-                    + playerView.getActorSprite().getFitHeight() / 2;
-            playerLightCircle.updateCenter(playerCenterX, playerCenterY);
-        }
-    }
-
     /*private void initWorld() throws IOException {
         hitboxManager = new HitboxManager();
         itemFactory = ItemFactory.getInstance();
@@ -243,7 +228,7 @@ public class GlobalController implements Initializable {
 
         //TODO: on le bouge pas tant qu'il est pas fix
         //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        world.getPlayer().healthProperty().addListener(new DeathListener(player, playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
+        world.getPlayer().healthProperty().addListener(new DeathListener(Player.getInstance(), playerView, world.getAliveMobs(), itemFactory)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
         // Utiliser un bind spécial pour le deathlistener (potentiellement)
         //TODO: ptet à déplacer dans actor ou actor view, demander à Rety son avis sur la question
 
@@ -254,12 +239,6 @@ public class GlobalController implements Initializable {
         //mouseInventoryHandler = new MouseInventoryInputHandler(inventory,inventoryView);
         //scrollHotbarHandler = new ScrollInputHandler(inventory,hotbarView,inventoryView);
         //mouseItemActionHandler = new MouseItemActionInputHandler(world, camera, inventoryView, globalView);
-
-        double playerCenterX = 0;
-        double playerCenterY = 0; // TODO : A revoir parce que je ne sais pas si y'a encore des problèmes avec la reach
-        // TODO : mais normalement tout était good je pense
-        playerLightCircle = new MouseCursorCircleView(globalPane, playerCenterX, playerCenterY, player.getReach()*32, 10);
-        playerLightCircle.setCursorVisible(false);
 
         //DONE: il faut essayer de fix cet histoire d'item in hand mais ptet à bouger dans une méthode
         //player.itemInHandProperty().bindBidirectional(scrollHotbarHandler.onHandItemProperty());
@@ -318,8 +297,8 @@ public class GlobalController implements Initializable {
 */
     // Methode en com dans world
     private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstruct/world quand on aura reparé les dialogues
-        Pnj npc = new Pnj(0, 0,32, 64, tileMap, 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
-        this.pnjView = new PnjView(npc, tileMap, entitiesPane);
+        Pnj npc = new Pnj(0, 0,32, 64, Player.getInstance().getTileMap(), 2, 2, 10, 3, npcActorEnum, this.hitboxManager);
+        this.pnjView = new PnjView(npc, Player.getInstance().getTileMap(), entitiesPane);
         pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
         pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
         npc.healthProperty().addListener(new DeathListener(npc, pnjView, aliveActors,world.getItemFactory()));
@@ -331,11 +310,10 @@ public class GlobalController implements Initializable {
      * Checks if the player is near a PNJ and triggers dialogue if needed
      */
     private void checkPnjDialogue() { //TODO: fix les dialogues avec Old Marc (problème de collision et de manière de trigger le dialogue si je dis pas de conneries)
-        if (player == null || pnjView == null || dialogueCD == null) {
+        if (Player.getInstance() == null || pnjView == null || dialogueCD == null) {
             return;
         }
-
-        if ((player.getCollider().hasCollisionRight() || player.getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
+        if ((Player.getInstance().getCollider().hasCollisionRight() || Player.getInstance().getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
             pnjView.speak();
             dialogueCD.setLimit(2);
             dialogueCD.start();

@@ -6,7 +6,7 @@ import fr.iut.hev.root.model.items.Item;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Inventory {
+public class Inventory{
     private ArrayList<InventorySlot> slots;
     private final int size;
     private int slotsOccupied;

@@ -1,10 +1,10 @@
 package fr.iut.hev.root.model.entities.actor;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import CraftingManager;
+import fr.iut.hev.root.model.craft.CraftingManager;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.physics.Gravity;
-import Inventory;
+import fr.iut.hev.root.model.inventory.Inventory;
 import fr.iut.hev.root.model.land.TileMap;
 import fr.iut.hev.root.model.physics.hitbox.HitboxType;
 import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
@@ -206,11 +206,8 @@ public class Player extends Actor {
         System.out.println(itemInHandProperty.getValue());
         return this.itemInHandProperty.getValue();
     }
-
-    public void setItemInHandProperty(Item itemInHandProperty) {this.itemInHandProperty.setValue(itemInHandProperty);} // TODO : retirer ce setter
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}
-    public void setQuantityOfItemInHand(int quantity) {this.quantityOfItemInHandProperty.setValue(quantity);} // TODO : retirer ce setter
     public IntegerProperty quantityOfItemInHandProperty() {return this.quantityOfItemInHandProperty;}
     public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
     public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}

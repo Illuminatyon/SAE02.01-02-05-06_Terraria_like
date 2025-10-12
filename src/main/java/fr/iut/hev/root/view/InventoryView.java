@@ -2,8 +2,8 @@ package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.controller.InputHandling.InputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
-import Inventory;
-import InventorySlot;
+import fr.iut.hev.root.model.inventory.Inventory;
+import fr.iut.hev.root.model.inventory.InventorySlot;
 import fr.iut.hev.root.model.items.Item;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;

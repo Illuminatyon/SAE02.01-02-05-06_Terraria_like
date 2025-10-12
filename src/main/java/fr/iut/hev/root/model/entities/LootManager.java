@@ -25,20 +25,20 @@ public class LootManager {
         }
         // TODO : On ajoute ici les trucs avec les autres méthodes
         // Par exemple, on pourrait faire ça :
-        else if (actor.getName().equals("vache")) {
+        /*else if (actor.getName().equals("vache")) {
             dropCowLoot(actor);
-        }
+        }*/
     }
 
     // Voici un exemple pour le fonctionnement du loot sur une vache ( même si on a pas de vache dans le jeu )
-    private void dropCowLoot(Actor actor) {
+    /*private void dropCowLoot(Actor actor) {
         int numBeef = random.nextInt(2) + 1;
         for (int i = 0; i < numBeef; i++) {
             Loot loot = createLoot(ItemsEnum.RAW_MEAT, 1, ...); // Bien évidemment, à modifier pour le code fonctionne
             // Mais sur le papier, et si on avait plus de trucs dans l'Enum
             lootsOnMap.add(loot);
         }
-    }
+    }*/
 
 
     private void dropChickenLoot(Actor actor) {
