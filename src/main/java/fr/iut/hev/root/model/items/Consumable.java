@@ -1,9 +1,9 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ItemsEnum;
+import Inventory;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
 
 public class Consumable extends Item{
 

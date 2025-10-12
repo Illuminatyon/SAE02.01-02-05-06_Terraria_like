@@ -1,7 +1,6 @@
 package fr.iut.hev.root.view;
 
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.view.actor.PlayerView;
+import fr.iut.hev.root.model.entities.actor.Player;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.Pane;

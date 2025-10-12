@@ -1,7 +1,7 @@
 /*
 package fr.iut.hev.root.view.actor;
 
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.Environment.TileMap;
 import fr.iut.hev.root.model.entities.Arrow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

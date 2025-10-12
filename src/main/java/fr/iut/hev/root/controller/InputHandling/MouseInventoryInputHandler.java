@@ -1,6 +1,6 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import fr.iut.hev.root.model.Inventory;
+import Inventory;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.beans.property.DoubleProperty;
@@ -33,7 +33,7 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
      * @param inventory Référence à l'inventaire du joueur
      * @param inventoryView Vue de l'inventaire du joueur
      */
-    public MouseInventoryInputHandler(Inventory inventory,InventoryView inventoryView) {
+    public MouseInventoryInputHandler(Inventory inventory, InventoryView inventoryView) {
         this.inventory = inventory;
         this.inventoryView = inventoryView;
         this.onHoldProperty = new SimpleObjectProperty<>(null);

@@ -1,13 +1,13 @@
 package fr.iut.hev.root.model.tests;
 
-import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.enums.ItemTypesEnum;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
+import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.items.Weapon;
 import fr.iut.hev.root.model.items.Tool;
 import fr.iut.hev.root.model.items.Resource;
 import fr.iut.hev.root.model.items.Block;
-import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;

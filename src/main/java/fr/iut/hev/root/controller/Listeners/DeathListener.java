@@ -1,6 +1,6 @@
 package fr.iut.hev.root.controller.Listeners;
 
-import fr.iut.hev.root.model.entities.Actor;
+import fr.iut.hev.root.model.entities.actor.Actor;
 import fr.iut.hev.root.model.entities.LootManager;
 import fr.iut.hev.root.view.actor.ActorView;
 import javafx.beans.value.ChangeListener;

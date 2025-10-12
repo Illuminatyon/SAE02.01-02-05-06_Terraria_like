@@ -1,9 +1,9 @@
 package fr.iut.hev.root.view.actor;
 
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.land.TileMap;
 
-import fr.iut.hev.root.model.entities.Pnj;
-import fr.iut.hev.root.model.enums.DialogueEnum;
+import fr.iut.hev.root.model.entities.actor.mobs.Pnj;
+import fr.iut.hev.root.model.entities.actor.mobs.DialogueEnum;
 import javafx.animation.PauseTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;

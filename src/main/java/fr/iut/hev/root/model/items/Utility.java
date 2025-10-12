@@ -1,20 +1,20 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import fr.iut.hev.root.model.Tile;
-import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.enums.TilesEnum;
-import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
+import fr.iut.hev.root.model.land.Tile;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.land.TilesEnum;
+import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 
-import static fr.iut.hev.root.model.TileMap.format;
+import static fr.iut.hev.root.model.land.TileMap.format;
 
 public class Utility extends Item {
 
     private HitboxManager hitboxManager;
 
-    public Utility(ItemsEnum itemsEnum,HitboxManager hitboxManager) {
+    public Utility(ItemsEnum itemsEnum, HitboxManager hitboxManager) {
         super(itemsEnum);
         this.hitboxManager = hitboxManager;
     }

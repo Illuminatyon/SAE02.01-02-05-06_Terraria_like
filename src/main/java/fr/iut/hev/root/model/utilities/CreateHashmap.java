@@ -1,6 +1,6 @@
 package fr.iut.hev.root.model.utilities;
 
-import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.land.TilesEnum;
 import org.json.JSONObject;
 
 

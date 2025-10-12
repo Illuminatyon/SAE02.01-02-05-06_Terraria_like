@@ -1,18 +1,18 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
+import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 
-import static fr.iut.hev.root.model.TileMap.format;
+import static fr.iut.hev.root.model.land.TileMap.format;
 
 public class Weapon extends Item { // Todo : tres probablement a delete aussi
 
     private int damage;
     private HitboxManager hitboxManager;
 
-    public Weapon(ItemsEnum itemsEnum,HitboxManager hitboxManager) {
+    public Weapon(ItemsEnum itemsEnum, HitboxManager hitboxManager) {
         super(itemsEnum);
         this.hitboxManager = hitboxManager;
         this.damage = getStats().getItemMainStat();

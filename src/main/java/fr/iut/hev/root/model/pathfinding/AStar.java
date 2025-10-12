@@ -1,7 +1,7 @@
 package fr.iut.hev.root.model.pathfinding;
 
-import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.TileTypesEnum;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.land.TileTypesEnum;
 
 import java.util.*;
 

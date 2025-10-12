@@ -1,8 +1,8 @@
 package fr.iut.hev.root.model.entities;
 
-import fr.iut.hev.root.model.Gravity;
+import fr.iut.hev.root.model.physics.Gravity;
 import fr.iut.hev.root.model.items.Item;
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.land.TileMap;
 
 public class Loot extends Entity {
     private final Item item;

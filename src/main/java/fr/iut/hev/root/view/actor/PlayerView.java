@@ -1,9 +1,9 @@
 package fr.iut.hev.root.view.actor;
 
 import fr.iut.hev.root.controller.InputHandling.InputHandler;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.RecipesEnum;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.craft.RecipesEnum;
 import fr.iut.hev.root.view.CraftView;
 import fr.iut.hev.root.view.HeartsView;
 import fr.iut.hev.root.view.HotbarView;

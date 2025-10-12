@@ -1,15 +1,13 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.PlayerMouvementsEnum;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.entities.actor.PlayerMouvementsEnum;
 import fr.iut.hev.root.view.CraftView;
 import fr.iut.hev.root.view.InventoryView;
-import fr.iut.hev.root.model.World;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import java.io.IOException;
 /**
  * Gestionnaire des entrées clavier pour le jeu.
  * Cette classe est responsable de la capture et du traitement des événements clavier,

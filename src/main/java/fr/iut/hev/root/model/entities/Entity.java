@@ -1,8 +1,8 @@
 package fr.iut.hev.root.model.entities;
 
-import fr.iut.hev.root.model.Collider;
-import fr.iut.hev.root.model.Gravity;
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.physics.Collider;
+import fr.iut.hev.root.model.physics.Gravity;
+import fr.iut.hev.root.model.land.TileMap;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 

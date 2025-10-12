@@ -1,11 +1,8 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import fr.iut.hev.root.controller.GlobalController;
-import fr.iut.hev.root.model.Tile;
-import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.World;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ItemTypesEnum;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.utilities.Cooldown;
 import fr.iut.hev.root.view.Camera;
 import fr.iut.hev.root.view.GlobalView;
@@ -14,7 +11,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-import static fr.iut.hev.root.model.TileMap.format;
+import static fr.iut.hev.root.model.land.TileMap.format;
 /**
  * Gestionnaire des actions de la souris liées aux objets.
  * Cette classe est responsable de la capture et du traitement des événements souris

@@ -1,14 +1,13 @@
 package fr.iut.hev.root.view;
 
-import fr.iut.hev.root.model.Tile;
-import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.TileTypesEnum;
-import fr.iut.hev.root.model.enums.TilesEnum;
+import fr.iut.hev.root.model.land.Tile;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.land.TileTypesEnum;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 
-import static fr.iut.hev.root.model.TileMap.format;
+import static fr.iut.hev.root.model.land.TileMap.format;
 
 public class GlobalView {
 

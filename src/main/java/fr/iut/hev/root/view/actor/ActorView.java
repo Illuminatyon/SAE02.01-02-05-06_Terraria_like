@@ -1,7 +1,7 @@
 package fr.iut.hev.root.view.actor;
 
-import fr.iut.hev.root.model.entities.Actor;
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.entities.actor.Actor;
+import fr.iut.hev.root.model.land.TileMap;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.Image;

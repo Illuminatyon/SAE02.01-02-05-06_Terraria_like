@@ -1,8 +1,8 @@
 package fr.iut.hev.root.model.items;
 
-import fr.iut.hev.root.model.enums.ItemTypesEnum;
-import fr.iut.hev.root.model.enums.ItemsEnum;
-import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
+import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 
 public class ItemFactory {
     private static ItemFactory itemFactory = null;

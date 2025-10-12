@@ -1,13 +1,13 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.BlockTypesEnum;
-import fr.iut.hev.root.model.enums.ItemStatsEnum;
-import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.items.enums.ItemStatsEnum;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.land.BlockTypesEnum;
 
-import static fr.iut.hev.root.model.TileMap.format;
+import static fr.iut.hev.root.model.land.TileMap.format;
 
 public class Tool extends Item {
 

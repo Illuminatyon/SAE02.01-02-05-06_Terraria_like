@@ -1,13 +1,11 @@
 package fr.iut.hev.root.model;
 
-import fr.iut.hev.root.model.entities.Actor;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.entities.actor.Actor;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
-import javafx.beans.property.StringProperty;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {

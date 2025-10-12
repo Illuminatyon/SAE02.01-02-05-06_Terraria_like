@@ -1,7 +1,7 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
 
 public class Resource extends Item {
 

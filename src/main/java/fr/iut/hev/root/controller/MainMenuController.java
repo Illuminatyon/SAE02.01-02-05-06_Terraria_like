@@ -1,11 +1,11 @@
 /*package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.model.*;
-import fr.iut.hev.root.model.entities.Actor;
-import fr.iut.hev.root.model.entities.Mob;
-import fr.iut.hev.root.model.entities.Player;
-import fr.iut.hev.root.model.enums.ActorEnum;
-import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.entities.actor.Actor;
+import fr.iut.hev.root.model.entities.actor.mobs.Mob;
+import fr.iut.hev.root.model.entities.actor.Player;
+import fr.iut.hev.root.model.entities.actor.ActorEnum;
+import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.view.MainMenuUIComponents;
 import fr.iut.hev.root.view.MainMenuView;

@@ -1,8 +1,8 @@
 package fr.iut.hev.root.model.tests;
 
-import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.InventorySlot;
-import fr.iut.hev.root.model.enums.ItemsEnum;
+import Inventory;
+import InventorySlot;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

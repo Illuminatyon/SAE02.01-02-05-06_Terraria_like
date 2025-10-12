@@ -1,6 +1,5 @@
 package fr.iut.hev.root.model.utilities;
 
-import fr.iut.hev.root.model.TileMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

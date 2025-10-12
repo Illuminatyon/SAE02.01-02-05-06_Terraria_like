@@ -1,6 +1,6 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import fr.iut.hev.root.model.entities.Player;
+import fr.iut.hev.root.model.entities.actor.Player;
 import fr.iut.hev.root.view.*;
 import javafx.application.Platform;
 import javafx.scene.input.KeyEvent;

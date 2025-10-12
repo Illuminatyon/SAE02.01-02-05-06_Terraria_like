@@ -1,8 +1,9 @@
 package fr.iut.hev.root.model.entities;
 
-import fr.iut.hev.root.model.enums.ItemsEnum;
+import fr.iut.hev.root.model.entities.actor.Actor;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.ItemFactory;
-import fr.iut.hev.root.model.TileMap;
+import fr.iut.hev.root.model.land.TileMap;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import java.util.Random;

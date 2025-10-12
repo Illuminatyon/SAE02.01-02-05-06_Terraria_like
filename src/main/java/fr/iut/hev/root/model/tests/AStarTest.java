@@ -1,10 +1,9 @@
 package fr.iut.hev.root.model.tests;
 
-import fr.iut.hev.root.model.Tile;
-import fr.iut.hev.root.model.TileMap;
-import fr.iut.hev.root.model.enums.TileTypesEnum;
-import fr.iut.hev.root.model.enums.TilesEnum;
-import fr.iut.hev.root.model.hitbox.HitboxManager;
+import fr.iut.hev.root.model.land.Tile;
+import fr.iut.hev.root.model.land.TileMap;
+import fr.iut.hev.root.model.land.TilesEnum;
+import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.pathfinding.AStar;
 import fr.iut.hev.root.model.pathfinding.Point;

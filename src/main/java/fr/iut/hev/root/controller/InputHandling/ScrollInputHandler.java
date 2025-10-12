@@ -1,6 +1,6 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import fr.iut.hev.root.model.Inventory;
+import Inventory;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.HotbarView;
 import fr.iut.hev.root.view.InventoryView;
@@ -25,7 +25,7 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
     private IntegerProperty quantityProperty;
     private IntegerProperty indexHotbarProperty;
 
-    public ScrollInputHandler(Inventory inventory,HotbarView hotbarView,InventoryView inventoryView) {
+    public ScrollInputHandler(Inventory inventory, HotbarView hotbarView, InventoryView inventoryView) {
         this.inventory = inventory;
         this.hotbarView = hotbarView;
         this.inventoryView = inventoryView;

@@ -2,8 +2,8 @@ package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.controller.InputHandling.InputHandler;
 import fr.iut.hev.root.controller.InputHandling.MouseInventoryInputHandler;
-import fr.iut.hev.root.model.Inventory;
-import fr.iut.hev.root.model.InventorySlot;
+import Inventory;
+import InventorySlot;
 import fr.iut.hev.root.model.items.Item;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
@@ -11,10 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 
 import java.util.HashMap;
@@ -29,7 +27,7 @@ public class InventoryView {
     private Pane backgroundMousePane;
     private CraftView craftView;
 
-    public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory,AnchorPane hudAnchorPane,CraftView craftView, InputHandler inputHandler) {
+    public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory, AnchorPane hudAnchorPane, CraftView craftView, InputHandler inputHandler) {
         this.inventory = inventory;
         this.hotbar = hotbar;
         this.expandedInventory = expandedInventory;
