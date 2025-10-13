@@ -1,16 +1,11 @@
-package fr.iut.hev.root.model.tests;
+package fr.iut.hev.root.model.items;
 
-import fr.iut.hev.root.model.items.enums.ItemsEnum;
 import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
-import fr.iut.hev.root.model.items.Item;
-import fr.iut.hev.root.model.items.Weapon;
-import fr.iut.hev.root.model.items.Tool;
-import fr.iut.hev.root.model.items.Resource;
-import fr.iut.hev.root.model.items.Block;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
 import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +28,7 @@ public class ItemTest {
     @BeforeEach
     public void setUp() {
         // Création du gestionnaire de hitboxes pour les armes
-        hitboxManager = new HitboxManager();
+        hitboxManager = new HitboxManager(); // A modifier pour fonctionne avec le singleton
 
         // Création d'items de base
         woodItem = new Item(ItemsEnum.WOOD);

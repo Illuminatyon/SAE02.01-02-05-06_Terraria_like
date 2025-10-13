@@ -1,15 +1,13 @@
-package fr.iut.hev.root.model.tests;
+package fr.iut.hev.root.model.pathfinding;
 
+import fr.iut.hev.root.model.items.ItemFactory;
 import fr.iut.hev.root.model.land.Tile;
 import fr.iut.hev.root.model.land.TileMap;
 import fr.iut.hev.root.model.land.TilesEnum;
 import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
-import fr.iut.hev.root.model.items.ItemFactory;
-import fr.iut.hev.root.model.pathfinding.AStar;
-import fr.iut.hev.root.model.pathfinding.Point;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
