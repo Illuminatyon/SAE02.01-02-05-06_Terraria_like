@@ -26,7 +26,6 @@ public class Player extends Actor {
     private Set<PlayerMouvementsEnum> playerMouvementEnums;
     private ObjectProperty<Item> itemInHandProperty; //TODO: (Lino) repenser le système de hotbar et d'item sélectionné ce suppot du diable
     private IntegerProperty quantityOfItemInHandProperty;
-    private IntegerProperty indexItemInHand;
     private CraftingManager craftingManager;
 
     // Constructeur privé
@@ -35,7 +34,6 @@ public class Player extends Actor {
         this.inventory = null;
         this.craftingManager = null;
         this.playerMouvementEnums = null;
-        this.indexItemInHand = null;
         this.itemInHandProperty = null;
         this.quantityOfItemInHandProperty = null;
     }
@@ -64,7 +62,6 @@ public class Player extends Actor {
         this.inventory = new Inventory();
         this.craftingManager = new CraftingManager(this.inventory,itemFactory);
         this.playerMouvementEnums = new HashSet<>();
-        this.indexItemInHand = new SimpleIntegerProperty(0);
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
         getHitboxManager().createHitbox(this, HitboxType.INTERACTION);
@@ -209,8 +206,6 @@ public class Player extends Actor {
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}
     public IntegerProperty quantityOfItemInHandProperty() {return this.quantityOfItemInHandProperty;}
-    public int getIndexItemInHand() {return this.indexItemInHand.getValue();}
-    public IntegerProperty indexItemInHandProperty() {return this.indexItemInHand;}
     public CraftingManager getCraftingManager() {return this.craftingManager;}
     public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {this.playerMouvementEnums.add(playerMouvementsEnum);}
     public void removePlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {this.playerMouvementEnums.remove(playerMouvementsEnum);}

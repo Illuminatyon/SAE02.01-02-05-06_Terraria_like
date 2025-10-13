@@ -1,6 +1,6 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import Inventory;
+import fr.iut.hev.root.model.inventory.Inventory;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.HotbarView;
 import fr.iut.hev.root.view.InventoryView;
@@ -23,16 +23,16 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
     private IntegerProperty directionProperty;
     private ObjectProperty<Item> onHandItemProperty;
     private IntegerProperty quantityProperty;
-    private IntegerProperty indexHotbarProperty;
+    private int indexHotbar;
 
     public ScrollInputHandler(Inventory inventory, HotbarView hotbarView, InventoryView inventoryView) {
         this.inventory = inventory;
         this.hotbarView = hotbarView;
         this.inventoryView = inventoryView;
         this.directionProperty = new SimpleIntegerProperty(0);
-        this.indexHotbarProperty = new SimpleIntegerProperty(0);
-        this.onHandItemProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(getIndexHotbar()).getItem());
-        this.quantityProperty = new SimpleIntegerProperty(inventory.getInventorySlot(getIndexHotbar()).getQuantity());
+        this.indexHotbar = 0;
+        this.onHandItemProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(indexHotbar).getItem());
+        this.quantityProperty = new SimpleIntegerProperty(inventory.getInventorySlot(indexHotbar).getQuantity());
     }
 
     @Override
@@ -49,41 +49,41 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
         else if (getDirection() < 0)
             increment = 1;
 
-        hotbarView.resetHighlight(getIndexHotbar());
-        setIndexHotbar(indexHotbarIncrementation(increment));
+        hotbarView.resetHighlight(indexHotbar);
+        this.indexHotbar = indexHotbarIncrementation(increment);
         updateOnHandItem();
         updateQuantity();
-        hotbarView.setHighlight(getIndexHotbar());
+        hotbarView.setHighlight(indexHotbar);
     }
 
     public int getDirection() {return this.directionProperty.getValue();}
     public void setDirection(int directionProperty) {this.directionProperty.setValue(directionProperty);}
     public IntegerProperty directionProperty() {return this.directionProperty;}
     private int indexHotbarIncrementation(int increment) {
-        int indexValue;
-        if (getIndexHotbar() != 9 && getIndexHotbar() != 0)
-            indexValue = getIndexHotbar() + increment;
-        else if (getIndexHotbar() == 9) {
+        int newIndex;
+        if (indexHotbar != 9 && indexHotbar != 0)
+            newIndex = indexHotbar + increment;
+        else if (indexHotbar == 9) {
             if (increment < 0)
-                indexValue = getIndexHotbar() + increment;
+                newIndex = indexHotbar + increment;
             else
-                indexValue = 0;
+                newIndex = 0;
         }
         else {
             if (increment > 0)
-                indexValue = getIndexHotbar() + increment;
+                newIndex = indexHotbar + increment;
             else
-                indexValue = 9;
+                newIndex = 9;
         }
-        return indexValue;
+        return newIndex;
     }
 
     public void updateOnHandItem() {
-        setOnHandItem(inventory.getInventorySlot(getIndexHotbar()).getItem());
+        setOnHandItem(inventory.getInventorySlot(indexHotbar).getItem());
     }
 
     public void updateQuantity() {
-        setQuantity(inventory.getInventorySlot(getIndexHotbar()).getQuantity());
+        setQuantity(inventory.getInventorySlot(indexHotbar).getQuantity());
     }
 
     public Item getOnHandItem() {return this.onHandItemProperty.getValue();}
@@ -93,8 +93,4 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
     public int getQuantity() {return this.quantityProperty.getValue();}
     public void setQuantity(int quantity) {this.quantityProperty.setValue(quantity);}
     public IntegerProperty quantityProperty() {return this.quantityProperty;}
-
-    public int getIndexHotbar() {return this.indexHotbarProperty.getValue();}
-    public void setIndexHotbar(int indexHotbar) {this.indexHotbarProperty.setValue(indexHotbar);}
-    public IntegerProperty IndexHotbarProperty() {return this.indexHotbarProperty;}
 }

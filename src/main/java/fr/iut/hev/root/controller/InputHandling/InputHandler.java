@@ -27,7 +27,6 @@ public class InputHandler {
         Player player = Player.getInstance();
         player.itemInHandProperty().bindBidirectional(scrollInputHandler.onHandItemProperty());
         player.quantityOfItemInHandProperty().bindBidirectional(scrollInputHandler.quantityProperty());
-        player.indexItemInHandProperty().bind(scrollInputHandler.IndexHotbarProperty());
         player.itemInHandProperty().addListener((observableValue, item, t1) -> mouseItemActionInputHandler.updateCooldown());
 
         scrollInputHandler.directionProperty().addListener((observableValue, number, t1) -> {
