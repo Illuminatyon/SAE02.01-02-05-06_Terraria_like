@@ -20,8 +20,12 @@ public class Inventory{
         }
     }
 
-    // TODO : Voire un
 
+    // TODO : faudrait le renommer
+    // TODO : donc le truc c'est que comme on aimerais bien refaire inventory, il faudrait qu'on regarde un peu
+    // TODO : comment on pourrait agencer les différentes fonctions qui sont utilisés.
+    // TODO : Par ailleurs ( je sais j'aime bien maxer avec ça), on pourrait utiliser un DPS.
+    // TODO : faire un environnement test pour pouvoir faire nos tests.
     public HashMap<Item, Integer> add(int slotIndex, Item item, int quantity) {
         // TMP START
         if (item == null) return null;
