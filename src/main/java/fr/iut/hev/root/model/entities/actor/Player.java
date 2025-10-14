@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class Player extends Actor {
 
-    private static Player player; // Singleton
+    private static Player player = null; // Singleton
 
     private Inventory inventory;
     private Set<PlayerMouvementsEnum> playerMouvementEnums;

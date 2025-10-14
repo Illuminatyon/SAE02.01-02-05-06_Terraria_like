@@ -17,6 +17,13 @@ public class HitboxManager {
 
     private Map<Entity, List<Hitbox>> entityHitboxes;
 
+    /**
+     * Creates a new hitbox manager.
+     */
+    private HitboxManager() {
+        this.entityHitboxes = new HashMap<>();
+    }
+
     public static HitboxManager getInstance(){
         if(hitboxManager == null){
             hitboxManager = new HitboxManager();
@@ -25,15 +32,8 @@ public class HitboxManager {
     }
 
     /**
-     * Creates a new hitbox manager.
-     */
-    private HitboxManager() {
-        this.entityHitboxes = new HashMap<>();
-    }
-    
-    /**
      * Adds a hitbox to an entity.
-     * 
+     *
      * @param entity The entity to add the hitbox to
      * @param hitbox The hitbox to add
      */
@@ -43,7 +43,7 @@ public class HitboxManager {
         }
         entityHitboxes.get(entity).add(hitbox);
     }
-    
+
     /**
      * Removes all hitboxes from an entity.
      * 

@@ -19,6 +19,7 @@ public class LootManager {
         this.random = new Random();
     }
 
+    //TODO: pourquoi pas laisser la responsabilité du drop du loot à l'actor ? Dans ce cas, le lootManager servirait uniquement à stocker tous les loots et faire attention à leur aspiration
     public void dropLootForActor(Actor actor) {
         if (actor.getName().equals("poulet")) {
             dropChickenLoot(actor);

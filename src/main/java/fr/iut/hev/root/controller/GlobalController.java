@@ -101,11 +101,6 @@ public class GlobalController implements Initializable {
         initPlayerViewsAndMobs(); // A changer absolument
     }
 
-    private void handleInitializeError(IOException e){
-        throw new MapLoadingException("Erreur lors de l'initialisation du jeu", e);
-    } // TODO : WTF ALLER VOUS FAIRE FOUTRE XDD
-    // todo : faut retirer ça les mecs c'est pas beau :sob:
-
     private void initGameLoop(){
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);

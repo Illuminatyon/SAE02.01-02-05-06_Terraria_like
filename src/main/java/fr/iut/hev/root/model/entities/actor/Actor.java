@@ -67,8 +67,6 @@ public abstract class Actor extends Entity {
         }
     } // TODO : Même chose ici je pense, on retrouve le même problème
 
-    public abstract Actor NpcCreator(int posX, int posY); //TODO: revoir l'utilité de ce refactor parce que ça doit être foutu dans Player ce qui n'est pas souhaité
-
     public HitboxManager getHitboxManager() {
         return hitboxManager;
     }

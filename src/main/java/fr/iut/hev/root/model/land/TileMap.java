@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class TileMap {
 
-    private static TileMap tileMap;
+    private static TileMap tileMap = null;
 
     private ItemFactory itemFactory;
     private int width, height;
