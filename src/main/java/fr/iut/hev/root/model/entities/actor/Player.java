@@ -46,7 +46,7 @@ public class Player extends Actor {
         return player;
     }
 
-    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach, ItemFactory itemFactory) {
+    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach) {
         setPosX(posX);
         setPosY(posY);
         setWidth(width);
@@ -60,7 +60,7 @@ public class Player extends Actor {
         setHealth(10);
 
         this.inventory = new Inventory();
-        this.craftingManager = new CraftingManager(this.inventory,itemFactory);
+        this.craftingManager = new CraftingManager(this.inventory);
         this.playerMouvementEnums = new HashSet<>();
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());

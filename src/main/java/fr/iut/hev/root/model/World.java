@@ -36,11 +36,11 @@ public class World {
 
     public void initWorld(int width, int height) {
         this.hitboxManager = HitboxManager.getInstance();
-        this.aliveMobs=new ArrayList<>();
+        this.aliveMobs = new ArrayList<>();
         this.tileMap = TileMap.getInstance();
         this.itemFactory = ItemFactory.getInstance();
         this.player = Player.getInstance();
-        this.player.initPlayer(100,100,32,48,this.tileMap,5,10,3,this.itemFactory);
+        this.player.initPlayer(100,100,32,48,this.tileMap,5,10,3);
         this.tileMap.initTileMap(itemFactory,width,height);
     }
 
