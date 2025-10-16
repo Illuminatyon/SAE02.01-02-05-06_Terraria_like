@@ -1,7 +1,6 @@
 package fr.iut.hev.root.model.items;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
-import Inventory;
 import fr.iut.hev.root.model.entities.actor.Player;
 import fr.iut.hev.root.model.items.enums.ItemsEnum;
 

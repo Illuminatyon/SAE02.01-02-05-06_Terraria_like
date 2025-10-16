@@ -9,6 +9,7 @@ import javafx.collections.ObservableSet;
 import java.util.Random;
 
 public class LootManager {
+
     private final ObservableSet<Loot> lootsOnMap;
     private final ItemFactory itemFactory;
     private final Random random;

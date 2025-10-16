@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model.entities;
 
+import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.physics.Gravity;
 import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.model.land.TileMap;
@@ -34,5 +35,9 @@ public class Loot extends Entity {
     public void updatePosition() {
         applyGravity();
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
+    }
+
+    public void removeSelf() {
+        World.getInstance().getLootManager().getLootOnMap().remove(this);
     }
 }

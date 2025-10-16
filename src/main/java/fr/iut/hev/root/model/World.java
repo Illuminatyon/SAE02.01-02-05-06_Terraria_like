@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.entities.LootManager;
 import fr.iut.hev.root.model.land.TileMap;
 import fr.iut.hev.root.model.entities.actor.Actor;
 import fr.iut.hev.root.model.entities.actor.Player;
@@ -17,6 +18,7 @@ public class World {
     private Player player;
     private HitboxManager hitboxManager;
     private ArrayList<Actor> aliveMobs;
+    private LootManager lootManager;
 
     private World() {
         this.itemFactory = null;
@@ -24,8 +26,8 @@ public class World {
         this.player = null;
         this.hitboxManager = null;
         this.aliveMobs = null;
+        this.lootManager = null;
     }
-
 
     public static World getInstance() {
         if(world==null) {
@@ -39,15 +41,11 @@ public class World {
         this.aliveMobs=new ArrayList<>();
         this.tileMap = TileMap.getInstance();
         this.itemFactory = ItemFactory.getInstance();
+        this.lootManager = new LootManager(this.itemFactory);
         this.player = Player.getInstance();
         this.player.initPlayer(100,100,32,48,this.tileMap,5,10,3,this.itemFactory);
         this.tileMap.initTileMap(itemFactory,width,height);
     }
-
-    public void mobAdd(Actor actor) {
-        this.aliveMobs.add(actor);
-    }
-
 
     public TileMap getTileMap() {
         return this.tileMap;
@@ -69,9 +67,9 @@ public class World {
         return this.aliveMobs;
     }
 
-    public void setAliveMobs(ArrayList<Actor> aliveMobs) {
-        this.aliveMobs = aliveMobs;
-    } // TODO : retirer les setters et guetters qui ne servent pas
+    public LootManager getLootManager() {
+        return this.lootManager;
+    }
 
     public ItemFactory getItemFactory() {
         return itemFactory;

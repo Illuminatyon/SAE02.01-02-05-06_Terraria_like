@@ -1,5 +1,6 @@
 package fr.iut.hev.root.view;
 
+import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.entities.Loot;
 import javafx.collections.SetChangeListener;
 import javafx.scene.image.Image;
@@ -15,7 +16,7 @@ public class LootView {
     public LootView(AnchorPane entitiesPane) {
         lootImageViews = new HashMap<Loot, ImageView>();
 
-        Loot.lootOnMapProperty.get().addListener((SetChangeListener<Loot>) change -> {
+        World.getInstance().getLootManager().getLootOnMap().addListener((SetChangeListener<Loot>) change -> {
             if (change.wasAdded()) {
                 System.out.println("Loot ajouté sur la map");
                 String path = "/fr/iut/hev/root/img/items/" + change.getElementAdded().getItem().getItemEnum().getName() + ".png";

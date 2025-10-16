@@ -6,9 +6,6 @@ import fr.iut.hev.root.model.land.TileMap;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-/*
-
- */
 public class Entity {
     private IntegerProperty posXProperty;
     private IntegerProperty posYProperty;
@@ -16,9 +13,6 @@ public class Entity {
     private int height; // TODO : passer height et width dans collider (vérifier les conséquences dans player)
     private int velocityX;
     private int velocityY;
-    private int velocityMultiplier; // TODO : a retirer
-
-
     private TileMap tileMap;
     private Collider collider;
     // TODO : Potentiellement faire d'autres classes pour les attributs, afin d'alléger le constructeur et même la classe
@@ -35,10 +29,6 @@ public class Entity {
         this.collider = new Collider(tileMap, this);
     }
 
-    public void initAfterDeserialization(TileMap tileMap, int posX, int posY) {
-        this.tileMap = tileMap;
-        this.collider = new Collider(tileMap, this);
-    } // TODO : A retirer
 
     public void updatePosition() {
         applyGravity();
@@ -112,14 +102,6 @@ public class Entity {
     }
 
     public TileMap getTileMap() {return this.tileMap;}
-
-    public int getEffectivePosX() {
-        return this.getPosX() + (tileMap.getWidth() * TileMap.format) / 2;
-    }// TODO : a retirer
-
-    public int getEffectivePosY() {
-        return this.getPosY() + (tileMap.getHeight() * TileMap.format) / 2;
-    } // TODO : a retirer
 
     public void setTileMap(TileMap tileMap) {
         this.tileMap = tileMap;

@@ -1,6 +1,7 @@
 package fr.iut.hev.root.model.entities.actor;
 
 import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
+import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.craft.CraftingManager;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.physics.Gravity;
@@ -28,7 +29,6 @@ public class Player extends Actor {
     private IntegerProperty quantityOfItemInHandProperty;
     private CraftingManager craftingManager;
 
-    // Constructeur privé
     private Player() {
         super(0, 0, 0, 0, null, 0, 0, 0, 0, null);
         this.inventory = null;
@@ -38,7 +38,6 @@ public class Player extends Actor {
         this.quantityOfItemInHandProperty = null;
     }
 
-    // Méthode d’accès Singleton
     public static Player getInstance() {
         if (player == null) {
             player = new Player();
@@ -69,10 +68,10 @@ public class Player extends Actor {
 
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO: retirer le getter
 
+
     public void update() {
         updatePosition();
-        // Create a copy of the loot collection to avoid ConcurrentModificationException
-        Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get()); // TODO Akram : analyser le fonctionnement en détail
+        Set<Loot> lootCopy = new HashSet<>(World.getInstance().getLootManager().getLootOnMap());
         for (Loot loot : lootCopy) {
             if (getCollider().intersectsWith(loot.getCollider())) {
                 pickUp(loot);
@@ -81,7 +80,7 @@ public class Player extends Actor {
     }
 
     @Override
-    public void updatePosition() { //TODO: (Lino) toujours la continuité de la réforme sur le mouvement dans actor et entity (à voir)
+    public void updatePosition() {
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !super.getIsJumping()) {
             //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
@@ -94,8 +93,7 @@ public class Player extends Actor {
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * super.getMoveSpeed());
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
 
-        // Create a copy of the loot collection to avoid ConcurrentModificationException
-        Set<Loot> lootCopy = new HashSet<>(Loot.lootOnMapProperty.get());
+        Set<Loot> lootCopy = new HashSet<>(World.getInstance().getLootManager().getLootOnMap());
         for (Loot loot : lootCopy) {
             if (getCollider().intersectsWith(loot.getCollider())) {
                 pickUp(loot);
@@ -106,6 +104,7 @@ public class Player extends Actor {
     @Override
     public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
+        // TODO : Utiliser un Design Pattern Stratégie pour ça
         if (playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_RIGHT)
                 && playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_LEFT)) {
             super.setVelocityX(0);

@@ -152,7 +152,7 @@ public class GlobalController implements Initializable {
     }
 
     private void updateLoots() {
-        for (Loot loot : Loot.lootOnMapProperty) {
+        for (Loot loot : world.getLootManager().getLootOnMap()) {
             loot.updatePosition();
         }
     }

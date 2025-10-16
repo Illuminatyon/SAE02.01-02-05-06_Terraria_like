@@ -29,7 +29,6 @@ public class InventoryTest {
     public void setUp() {
         // Création d'un nouvel inventaire pour chaque test
         inventory = new Inventory();
-
         // Création de quelques items pour les tests
         woodItem = new Item(ItemsEnum.WOOD);
         stoneItem = new Item(ItemsEnum.STONE);
