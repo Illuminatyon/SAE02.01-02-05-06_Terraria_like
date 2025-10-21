@@ -81,16 +81,11 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
     public void updateOnHandItem() {
         setOnHandItem(inventory.getInventorySlot(indexHotbar).getItem());
     }
-
     public void updateQuantity() {
         setQuantity(inventory.getInventorySlot(indexHotbar).getQuantity());
     }
-
-    public Item getOnHandItem() {return this.onHandItemProperty.getValue();}
     public void setOnHandItem(Item item) {this.onHandItemProperty.setValue(item);}
     public ObjectProperty<Item> onHandItemProperty() {return this.onHandItemProperty;}
-
-    public int getQuantity() {return this.quantityProperty.getValue();}
     public void setQuantity(int quantity) {this.quantityProperty.setValue(quantity);}
     public IntegerProperty quantityProperty() {return this.quantityProperty;}
 }

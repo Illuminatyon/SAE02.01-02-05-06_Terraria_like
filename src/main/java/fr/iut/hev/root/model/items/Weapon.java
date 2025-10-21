@@ -8,7 +8,7 @@ import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 import static fr.iut.hev.root.model.land.TileMap.format;
 
 public class Weapon extends Item { // Todo : tres probablement a delete aussi
-
+    // TODO : Bah non ???
     private int damage;
     private HitboxManager hitboxManager;
 

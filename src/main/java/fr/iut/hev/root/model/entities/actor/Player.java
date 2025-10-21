@@ -105,6 +105,7 @@ public class Player extends Actor {
     public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
         // TODO : Utiliser un Design Pattern Stratégie pour ça
+        // TODO : je vais le faire maintenant.
         if (playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_RIGHT)
                 && playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_LEFT)) {
             super.setVelocityX(0);

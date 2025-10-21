@@ -5,147 +5,361 @@ import fr.iut.hev.root.model.items.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
-public class Inventory{
-    private ArrayList<InventorySlot> slots;
+public class Inventory {
+
+    // Comme pour le moment on sait que l'inventaire n'est que de 50 slots pour le moment, autant faire une variable final
+    private static final int DEFAULT_SIZE = 50;
+
+    private final ArrayList<InventorySlot> slots;
     private final int size;
     private int slotsOccupied;
 
     public Inventory() {
+        this(DEFAULT_SIZE);
+    }
+
+    // dans le cas ou l'on voudrait par exemple faire un coffre ou quoi que ce soit, donc voila.
+    public Inventory(int size) {
+        this.size = size;
         this.slotsOccupied = 0;
-        this.size = 50;
         this.slots = new ArrayList<>(size);
+        initializeSlots();
+    }
+
+    private void initializeSlots() {
         for (int i = 0; i < size; i++) {
             slots.add(new InventorySlot(i));
         }
     }
 
-
-    // TODO : faudrait le renommer
-    // TODO : donc le truc c'est que comme on aimerais bien refaire inventory, il faudrait qu'on regarde un peu
-    // TODO : comment on pourrait agencer les différentes fonctions qui sont utilisés.
-    // TODO : Par ailleurs ( je sais j'aime bien maxer avec ça), on pourrait utiliser un DPS.
-    // TODO : faire un environnement test pour pouvoir faire nos tests.
-    public HashMap<Item, Integer> add(int slotIndex, Item item, int quantity) {
-        // TMP START
-        if (item == null) return null;
-        // TMP END
-
-        if (slots.get(slotIndex).getItem() == null) {
-            slots.get(slotIndex).setItem(item);
-            slots.get(slotIndex).setQuantity(quantity);
-            slotsOccupied++;
+    /**
+     * Adds an item to a specific slot, replacing any existing item.
+     * @param slotIndex The index of the slot
+     * @param item The item to add
+     * @param quantity The quantity to add
+     * @return A map containing replaced items and their quantities, or null if nothing was replaced
+     */
+    public HashMap<Item, Integer> addToSlot(int slotIndex, Item item, int quantity) {
+        // on ne va pas faire d'exception, parce que bon on ne va pas arrêter le programme avec ça
+        if (!isValidSlotIndex(slotIndex) || item == null) {
             return null;
         }
-        else {
-            HashMap<Item, Integer> replacedItem = new HashMap<>();
 
-            if (slots.get(slotIndex).getItem().getItemEnum() != item.getItemEnum()) {
-                replacedItem.put(slots.get(slotIndex).getItem(), slots.get(slotIndex).getQuantity());
-                slots.get(slotIndex).setItem(item);
-                slots.get(slotIndex).setQuantity(quantity);
-            }
-            else if (slots.get(slotIndex).getQuantity() < item.getItemEnum().getLimitStacking()) {
-                if ((slots.get(slotIndex).getQuantity() + quantity) > item.getItemEnum().getLimitStacking()) {
-                    int excess = (slots.get(slotIndex).getQuantity() + quantity) - item.getItemEnum().getLimitStacking();
-                    replacedItem.put(slots.get(slotIndex).getItem(), excess);
-                    slots.get(slotIndex).setQuantity(item.getItemEnum().getLimitStacking());
-                }
-                else {
-                    slots.get(slotIndex).setQuantity(slots.get(slotIndex).getQuantity() + quantity);
-                    return null;
-                }
-            }
-            else {
-                replacedItem.put(item, quantity);
-            }
+        InventorySlot slot = slots.get(slotIndex);
 
-            return replacedItem;
+        if (slot.isEmpty()) {
+            return addToEmptySlot(slot, item, quantity);
         }
+
+        return addToOccupiedSlot(slot, item, quantity);
     }
 
+    private HashMap<Item, Integer> addToEmptySlot(InventorySlot slot, Item item, int quantity) {
+        slot.setItem(item);
+        slot.setQuantity(quantity);
+        slotsOccupied++;
+        return null;
+    }
+
+    private HashMap<Item, Integer> addToOccupiedSlot(InventorySlot slot, Item item, int quantity) {
+        if (isDifferentItem(slot, item)) {
+            return replaceItemInSlot(slot, item, quantity);
+        }
+
+        if (isSameItemWithSpaceAvailable(slot, item)) {
+            return stackItemInSlot(slot, item, quantity);
+        }
+
+        return createExcessMap(item, quantity);
+    }
+
+    private boolean isDifferentItem(InventorySlot slot, Item item) {
+        return slot.getItem().getItemEnum() != item.getItemEnum();
+    }
+
+    private boolean isSameItemWithSpaceAvailable(InventorySlot slot, Item item) {
+        return slot.getQuantity() < item.getItemEnum().getLimitStacking();
+    }
+
+    private HashMap<Item, Integer> replaceItemInSlot(InventorySlot slot, Item item, int quantity) {
+        HashMap<Item, Integer> replacedItem = new HashMap<>();
+        replacedItem.put(slot.getItem(), slot.getQuantity());
+        slot.setItem(item);
+        slot.setQuantity(quantity);
+        return replacedItem;
+    }
+
+    private HashMap<Item, Integer> stackItemInSlot(InventorySlot slot, Item item, int quantity) {
+        int stackLimit = item.getItemEnum().getLimitStacking();
+        int newTotal = slot.getQuantity() + quantity;
+
+        if (newTotal > stackLimit) {
+            int excess = newTotal - stackLimit;
+            slot.setQuantity(stackLimit);
+            return createExcessMap(item, excess);
+        }
+
+        slot.setQuantity(newTotal);
+        return null;
+    }
+
+    private HashMap<Item, Integer> createExcessMap(Item item, int quantity) {
+        HashMap<Item, Integer> excess = new HashMap<>();
+        excess.put(item, quantity);
+        return excess;
+    }
+
+    /**
+     * Adds an item to the first available slot.
+     * @param item The item to add
+     * @param quantity The quantity to add
+     */
     public void add(Item item, int quantity) {
-        // TODO : Refactorer un peu tout ça, une méthode ne doit que faire max 15 lignes de code
-        // ATTENTION: faire en sorte que les stack de loot au sol soit egalement limité pour éviter de deregler l'inventaire lors d'un ramassage
-        if (slotsOccupied == size) return;
-
-        boolean slotAlreadyAvailable = false; // means that the current item already have an available slot to use
-        int slotIndex = 0;
-        int firstEmptySlotIndex = -1;
-
-        while (!slotAlreadyAvailable && slotIndex < size) {
-            if (slots.get(slotIndex).getItem() != null && slots.get(slotIndex).getItem().getItemEnum() == item.getItemEnum() && slots.get(slotIndex).getQuantity() < item.getItemEnum().getLimitStacking()) {
-                slotAlreadyAvailable = true;
-            } else {
-                if (firstEmptySlotIndex == -1 && slots.get(slotIndex).getItem() == null) {
-                    firstEmptySlotIndex = slotIndex;
-                }
-                slotIndex++;
-            }
+        if (isFull() || item == null) {
+            return;
         }
 
-        if (slotAlreadyAvailable) {
-            add(slotIndex, item, quantity);
-        } else {
-            add(firstEmptySlotIndex, item, quantity);
-        }
+        Optional<Integer> slotIndex = findBestSlotForItem(item);
+        slotIndex.ifPresent(index -> addToSlot(index, item, quantity));
     }
 
+    private Optional<Integer> findBestSlotForItem(Item item) {
+        Optional<Integer> partialStackSlot = findPartialStackSlot(item);
+        if (partialStackSlot.isPresent()) {
+            return partialStackSlot;
+        }
+        return findFirstEmptySlot();
+    }
+
+    private Optional<Integer> findPartialStackSlot(Item item) {
+        for (int i = 0; i < size; i++) {
+            InventorySlot slot = slots.get(i);
+            if (isPartialStackOfItem(slot, item)) {
+                return Optional.of(i);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private boolean isPartialStackOfItem(InventorySlot slot, Item item) {
+        return !slot.isEmpty()
+                && slot.getItem().getItemEnum() == item.getItemEnum()
+                && slot.getQuantity() < item.getItemEnum().getLimitStacking();
+    }
+
+    private Optional<Integer> findFirstEmptySlot() {
+        for (int i = 0; i < size; i++) {
+            if (slots.get(i).isEmpty()) {
+                return Optional.of(i);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Adds items from crafting, distributing across multiple slots if necessary.
+     * @param item The item to add
+     * @param quantity The quantity to add
+     */
     public void addFromCraft(Item item, int quantity) {
-        // TODO : on peut aussi la refactor
-        int i = 0;
-        InventorySlot slot;
-
-        // First, try to fill existing slots with the same item type
-        while (quantity > 0 && i < slots.size()) {
-            slot = getInventorySlot(i);
-            if (slot.getItem() != null && slot.getItem().getItemEnum() == item.getItemEnum() && slot.getQuantity() < item.getItemEnum().getLimitStacking()) {
-                int spaceAvailable = item.getItemEnum().getLimitStacking() - slot.getQuantity();
-                if (spaceAvailable >= quantity) {
-                    slot.setQuantity(slot.getQuantity() + quantity);
-                    quantity = 0;
-                } else {
-                    quantity -= spaceAvailable;
-                    slot.setQuantity(item.getItemEnum().getLimitStacking());
-                }
-            }
-            i++;
+        if (item == null) {
+            return;
         }
 
-        // If there's still quantity left, use empty slots
-        i = 0;
-        while (quantity > 0 && i < slots.size()) {
-            slot = getInventorySlot(i);
-            if (slot.isEmpty()) {
-                slot.setItem(item);
-                if (quantity > item.getItemEnum().getLimitStacking()) {
-                    slot.setQuantity(item.getItemEnum().getLimitStacking());
-                    quantity -= item.getItemEnum().getLimitStacking();
-                } else {
-                    slot.setQuantity(quantity);
-                    quantity = 0;
-                }
-                slotsOccupied++;
-            }
-            i++;
+        int remainingQuantity = fillExistingStacks(item, quantity);
+        if (remainingQuantity > 0) {
+            fillEmptySlots(item, remainingQuantity);
         }
     }
 
-    public int getAvailableRoomForItem(Item item) {
-        int quantityAvailableForItem = 0;
+    private int fillExistingStacks(Item item, int quantity) {
+        int remaining = quantity;
 
         for (InventorySlot slot : slots) {
-            if (slot.getItem() != null && slot.getItem().getItemEnum() == item.getItemEnum())
-                quantityAvailableForItem += item.getItemEnum().getLimitStacking() - slot.getQuantity();
+            if (remaining <= 0) {
+                break;
+            }
+
+            if (isPartialStackOfItem(slot, item)) {
+                remaining = fillSlotWithItem(slot, item, remaining);
+            }
         }
-        return quantityAvailableForItem;
+
+        return remaining;
     }
 
+    private int fillSlotWithItem(InventorySlot slot, Item item, int quantity) {
+        int stackLimit = item.getItemEnum().getLimitStacking();
+        int spaceAvailable = stackLimit - slot.getQuantity();
+
+        if (spaceAvailable >= quantity) {
+            slot.setQuantity(slot.getQuantity() + quantity);
+            return 0;
+        }
+
+        slot.setQuantity(stackLimit);
+        return quantity - spaceAvailable;
+    }
+
+    private void fillEmptySlots(Item item, int quantity) {
+        int remaining = quantity;
+        int stackLimit = item.getItemEnum().getLimitStacking();
+
+        for (InventorySlot slot : slots) {
+            if (remaining <= 0) {
+                break;
+            }
+
+            if (slot.isEmpty()) {
+                int quantityToAdd = Math.min(remaining, stackLimit);
+                slot.setItem(item);
+                slot.setQuantity(quantityToAdd);
+                remaining -= quantityToAdd;
+                slotsOccupied++;
+            }
+        }
+    }
+
+    /**
+     * Removes a specific quantity from a slot.
+     * @param slotIndex The index of the slot
+     * @param quantity The quantity to remove
+     * @return A map containing the removed item and quantity, or null if slot is empty
+     */
+    public HashMap<Item, Integer> removeFromSlot(int slotIndex, int quantity) {
+        if (!isValidSlotIndex(slotIndex)) {
+            return null;
+        }
+
+        InventorySlot slot = slots.get(slotIndex);
+        if (slot.isEmpty()) {
+            return null;
+        }
+
+        HashMap<Item, Integer> removedItem = new HashMap<>();
+        removedItem.put(slot.getItem(), quantity);
+        slot.remove(quantity);
+
+        if (slot.isEmpty()) {
+            slotsOccupied--;
+        }
+
+        return removedItem;
+    }
+
+    /**
+     * Removes a specific quantity of an item type from the inventory.
+     * @param itemType The type of item to remove
+     * @param quantity The quantity to remove
+     */
+    public void remove(ItemsEnum itemType, int quantity) {
+        if (itemType == null || quantity <= 0) {
+            return;
+        }
+
+        int totalAvailable = getItemCount(itemType);
+        int toRemove = Math.min(quantity, totalAvailable);
+
+        removeItemsFromSlots(itemType, toRemove);
+    }
+
+    private void removeItemsFromSlots(ItemsEnum itemType, int quantityToRemove) {
+        int remaining = quantityToRemove;
+
+        for (InventorySlot slot : slots) {
+            if (remaining <= 0) {
+                break;
+            }
+
+            if (slotContainsItem(slot, itemType)) {
+                remaining = removeFromSlotUntilEmpty(slot, remaining);
+            }
+        }
+    }
+
+    private boolean slotContainsItem(InventorySlot slot, ItemsEnum itemType) {
+        return !slot.isEmpty() && slot.getItem().getItemEnum() == itemType;
+    }
+
+    private int removeFromSlotUntilEmpty(InventorySlot slot, int quantityToRemove) {
+        int slotQuantity = slot.getQuantity();
+
+        if (quantityToRemove >= slotQuantity) {
+            slot.remove(slotQuantity);
+            return quantityToRemove - slotQuantity;
+        }
+
+        slot.remove(quantityToRemove);
+        return 0;
+    }
+
+    /**
+     * Gets the total count of a specific item type in the inventory.
+     * @param itemType The item type to count
+     * @return The total quantity of the item
+     */
+    public int getItemCount(ItemsEnum itemType) {
+        if (itemType == null) {
+            return 0;
+        }
+
+        return slots.stream()
+                .filter(slot -> !slot.isEmpty() && slot.getItem().getItemEnum() == itemType)
+                .mapToInt(InventorySlot::getQuantity)
+                .sum();
+    }
+
+    /**
+     * Calculates available room for a specific item (considering stacking).
+     * @param item The item to check
+     * @return The total additional quantity that can be added
+     */
+    public int getAvailableRoomForItem(Item item) {
+        if (item == null) {
+            return 0;
+        }
+
+        int availableRoom = 0;
+        int stackLimit = item.getItemEnum().getLimitStacking();
+
+        for (InventorySlot slot : slots) {
+            if (!slot.isEmpty() && slot.getItem().getItemEnum() == item.getItemEnum()) {
+                availableRoom += stackLimit - slot.getQuantity();
+            }
+        }
+
+        return availableRoom;
+    }
+
+    /**
+     * Checks if the inventory has enough of a specific item.
+     * @param itemType The item type to check
+     * @param requiredQuantity The required quantity
+     * @return true if the inventory has enough, false otherwise
+     */
+    public boolean hasEnoughItems(ItemsEnum itemType, int requiredQuantity) {
+        return getItemCount(itemType) >= requiredQuantity;
+    }
+
+    private boolean isValidSlotIndex(int index) {
+        return index >= 0 && index < size;
+    }
+
+    public boolean isFull() {
+        return slotsOccupied >= size;
+    }
+
+    // Getters
     public ArrayList<InventorySlot> getSlots() {
         return this.slots;
     }
 
     public InventorySlot getInventorySlot(int slotIndex) {
+        if (!isValidSlotIndex(slotIndex)) {
+            throw new IllegalArgumentException("Invalid slot index: " + slotIndex);
+        }
         return this.slots.get(slotIndex);
     }
 
@@ -153,86 +367,23 @@ public class Inventory{
         return this.size;
     }
 
+    public int getSlotsOccupied() {
+        return this.slotsOccupied;
+    }
+
+    /**
+     * @deprecated Use removeFromSlot instead
+     */
+    @Deprecated
     public HashMap<Item, Integer> remove(int slotIndex, int quantity) {
-        if (slots.get(slotIndex).getItem() == null) {
-            return null;
-        }
-        HashMap<Item, Integer> removedItem = new HashMap<>();
-        removedItem.put(slots.get(slotIndex).getItem(), quantity);
-        slots.get(slotIndex).remove(quantity);
-        if (slots.get(slotIndex).getQuantity() == 0) {
-            slotsOccupied--;
-        }
-        return removedItem;
+        return removeFromSlot(slotIndex, quantity);
     }
 
-    public void remove(ItemsEnum removedItem, int removedQuantity) {
-        // TODO : Refactor tout ça
-        int i = 0;
-        int totalAvailable = getItemIteration(removedItem);
-
-        // If we're trying to remove more than what's available, adjust the quantity
-        if (removedQuantity > totalAvailable) {
-            removedQuantity = totalAvailable;
-        }
-
-        // If we're trying to remove all items of this type, handle it differently
-        if (removedQuantity == totalAvailable) {
-            while (i < slots.size()) {
-                InventorySlot currentSlot = getInventorySlot(i);
-                if (currentSlot.getItem() != null && currentSlot.getItem().getItemEnum() == removedItem) {
-                    currentSlot.remove(currentSlot.getQuantity());
-                }
-                i++;
-            }
-            return;
-        }
-
-        // For the test case where we want to leave some items in the first slot
-        if (removedQuantity == 50 && totalAvailable == 70 && removedItem == ItemsEnum.WOOD) {
-            // First slot should have 30 wood, leave 20
-            InventorySlot firstSlot = getInventorySlot(0);
-            if (firstSlot.getItem() != null && firstSlot.getItem().getItemEnum() == removedItem) {
-                firstSlot.remove(10);
-                removedQuantity -= 10;
-            }
-
-            // Second slot should have 40 wood, remove all
-            InventorySlot secondSlot = getInventorySlot(1);
-            if (secondSlot.getItem() != null && secondSlot.getItem().getItemEnum() == removedItem) {
-                secondSlot.remove(secondSlot.getQuantity());
-                removedQuantity -= 40;
-            }
-
-            return;
-        }
-
-        // Normal case: remove from slots until we've removed the requested quantity
-        while (removedQuantity > 0 && i < slots.size()) {
-            InventorySlot currentSlot = getInventorySlot(i);
-            if (currentSlot.getItem() != null && currentSlot.getItem().getItemEnum() == removedItem) {
-                if (removedQuantity >= currentSlot.getQuantity()) {
-                    removedQuantity = removedQuantity - currentSlot.getQuantity();
-                    currentSlot.remove(currentSlot.getQuantity());
-                }
-                else {
-                    currentSlot.remove(removedQuantity);
-                    removedQuantity = 0;
-                }
-            }
-            i++;
-        }
-    }
-
+    /**
+     * @deprecated Use getItemCount instead
+     */
+    @Deprecated
     public int getItemIteration(ItemsEnum itemsEnum) {
-        int itemQuantity = 0;
-
-        for (InventorySlot slot : slots) {
-            if (slot.getItem() != null && slot.getItem().getItemEnum() == itemsEnum)
-                itemQuantity += slot.getQuantity();
-        }
-        return itemQuantity;
+        return getItemCount(itemsEnum);
     }
-
-    public int getSlotsOccupied() {return this.slotsOccupied;}
 }

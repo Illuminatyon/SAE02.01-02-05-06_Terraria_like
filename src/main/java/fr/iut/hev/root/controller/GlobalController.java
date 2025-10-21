@@ -343,7 +343,4 @@ public class GlobalController implements Initializable {
         return itemFactory;
     }*/
 
-    public Camera getCamera() {
-        return camera;
-    }
 }
