@@ -17,13 +17,11 @@ public class ChestInventory extends AbstractInventory {
 
     @Override
     protected boolean canAcceptItem(Item item) {
-        // Un coffre accepte tous les items
         return true;
     }
 
     @Override
     protected void onItemAdded(Item item, int quantity) {
-        // Possibilité d'auto-sauvegarde
         System.out.println("Item ajouté au coffre " + chestId);
     }
 

@@ -15,13 +15,11 @@ public class PlayerInventory extends AbstractInventory {
 
     @Override
     protected boolean canAcceptItem(Item item) {
-        // Le joueur peut ramasser n'importe quel item
         return true;
     }
 
     @Override
     protected void onInventoryFull() {
-        // Tu peux ajouter ici une notification, un son, etc.
         System.out.println("Inventaire du joueur plein !");
     }
 }

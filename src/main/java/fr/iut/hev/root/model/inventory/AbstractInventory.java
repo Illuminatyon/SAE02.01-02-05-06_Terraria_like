@@ -30,13 +30,6 @@ public abstract class AbstractInventory {
         }
     }
 
-    // ========== TEMPLATE METHODS ==========
-    // Ces méthodes définissent le squelette des algorithmes
-
-    /**
-     * Template method : Ajoute un item à un slot spécifique.
-     * Vérifie si l'item peut être accepté avant de l'ajouter.
-     */
     public final HashMap<Item, Integer> addToSlot(int slotIndex, Item item, int quantity) {
         if (!isValidSlotIndex(slotIndex) || item == null) {
             return null;
@@ -63,9 +56,6 @@ public abstract class AbstractInventory {
         return result;
     }
 
-    /**
-     * Template method : Ajoute un item au premier slot disponible.
-     */
     public final void add(Item item, int quantity) {
         if (isFull() || item == null) {
             return;
@@ -80,9 +70,6 @@ public abstract class AbstractInventory {
         slotIndex.ifPresent(index -> addToSlot(index, item, quantity));
     }
 
-    /**
-     * Template method : Ajoute des items depuis le crafting.
-     */
     public final void addFromCraft(Item item, int quantity) {
         if (item == null || !canAcceptItem(item)) {
             return;
@@ -94,9 +81,6 @@ public abstract class AbstractInventory {
         }
     }
 
-    /**
-     * Template method : Retire un item d'un slot spécifique.
-     */
     public final HashMap<Item, Integer> removeFromSlot(int slotIndex, int quantity) {
         if (!isValidSlotIndex(slotIndex)) {
             return null;
@@ -119,9 +103,6 @@ public abstract class AbstractInventory {
         return removedItem;
     }
 
-    /**
-     * Template method : Retire une quantité d'un type d'item.
-     */
     public final void remove(ItemsEnum itemType, int quantity) {
         if (itemType == null || quantity <= 0) {
             return;
@@ -133,45 +114,19 @@ public abstract class AbstractInventory {
         removeItemsFromSlots(itemType, toRemove);
     }
 
-    // ========== HOOK METHODS ==========
-    // Ces méthodes peuvent être surchargées par les sous-classes
-
-    /**
-     * Hook : Détermine si cet inventaire peut accepter l'item donné.
-     * DOIT être implémenté par les sous-classes.
-     */
     protected abstract boolean canAcceptItem(Item item);
 
-    /**
-     * Hook : Appelé quand un item est ajouté avec succès.
-     */
     protected void onItemAdded(Item item, int quantity) {
-        // Implémentation par défaut vide
     }
 
-    /**
-     * Hook : Appelé quand un item est retiré.
-     */
     protected void onItemRemoved(Item item, int quantity) {
-        // Implémentation par défaut vide
     }
 
-    /**
-     * Hook : Appelé quand un item est refusé.
-     */
     protected void onItemRejected(Item item, int quantity) {
-        // Implémentation par défaut vide
     }
 
-    /**
-     * Hook : Appelé quand l'inventaire devient plein.
-     */
     protected void onInventoryFull() {
-        // Implémentation par défaut vide
     }
-
-    // ========== MÉTHODES COMMUNES ==========
-    // Ces méthodes sont partagées par toutes les sous-classes
 
     private HashMap<Item, Integer> addToEmptySlot(InventorySlot slot, Item item, int quantity) {
         slot.setItem(item);
@@ -271,7 +226,7 @@ public abstract class AbstractInventory {
 
         for (InventorySlot slot : slots) {
             if (remaining <= 0) {
-                break;
+                return 0;
             }
 
             if (isPartialStackOfItem(slot, item)) {
@@ -301,7 +256,7 @@ public abstract class AbstractInventory {
 
         for (InventorySlot slot : slots) {
             if (remaining <= 0) {
-                break;
+                return;
             }
 
             if (slot.isEmpty()) {
@@ -319,7 +274,7 @@ public abstract class AbstractInventory {
 
         for (InventorySlot slot : slots) {
             if (remaining <= 0) {
-                break;
+                return;
             }
 
             if (slotContainsItem(slot, itemType)) {
@@ -334,17 +289,13 @@ public abstract class AbstractInventory {
 
     private int removeFromSlotUntilEmpty(InventorySlot slot, int quantityToRemove) {
         int slotQuantity = slot.getQuantity();
-
         if (quantityToRemove >= slotQuantity) {
             slot.remove(slotQuantity);
             return quantityToRemove - slotQuantity;
         }
-
         slot.remove(quantityToRemove);
         return 0;
     }
-
-    // ========== MÉTHODES UTILITAIRES ==========
 
     public int getItemCount(ItemsEnum itemType) {
         if (itemType == null) {
@@ -361,7 +312,6 @@ public abstract class AbstractInventory {
         if (item == null) {
             return 0;
         }
-
         int availableRoom = 0;
         int stackLimit = item.getItemEnum().getLimitStacking();
 
@@ -381,8 +331,6 @@ public abstract class AbstractInventory {
     protected boolean isValidSlotIndex(int index) {
         return index >= 0 && index < size;
     }
-
-    // ========== GETTERS ==========
 
     public ArrayList<InventorySlot> getSlots() {
         return this.slots;
@@ -406,8 +354,6 @@ public abstract class AbstractInventory {
     public boolean isFull() {
         return slotsOccupied >= size;
     }
-
-    // ========== MÉTHODES DÉPRÉCIÉES (pour compatibilité) ==========
 
     @Deprecated
     public HashMap<Item, Integer> remove(int slotIndex, int quantity) {
