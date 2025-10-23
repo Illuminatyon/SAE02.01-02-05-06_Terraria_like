@@ -34,7 +34,7 @@ public class Utility extends Item {
         if (tileMap.isTileEmpty(x,y)) {
             TilesEnum currentItem = player.getItemInHand().getItemEnum().getRelatedTile();
             tileMap.addTile(new Tile(currentItem,x,y));
-            player.getInventory().remove(player.getIndexItemInHand(),1);
+            //player.getInventory().remove(player.getIndexItemInHand(),1); //TODO:ta mère x2
             player.consumeOneItem();
             return true;
         }

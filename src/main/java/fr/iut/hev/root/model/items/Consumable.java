@@ -21,7 +21,7 @@ public class Consumable extends Item{
                 player.setHealth(10);
             else
                 player.setHealth(player.getHealth() + getRestoredHealth());
-            player.getInventory().remove(player.getIndexItemInHand(),1);
+            //player.getInventory().remove(player.getIndexItemInHand(),1);//TODO: ta mere x3
             player.consumeOneItem();
             return true;
         }

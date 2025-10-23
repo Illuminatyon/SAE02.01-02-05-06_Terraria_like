@@ -29,7 +29,7 @@ public class Block extends Item {
             TilesEnum currentItem = player.getItemInHand().getItemEnum().getRelatedTile();
             System.out.println(currentItem);
             tileMap.addTile(new Tile(currentItem,x,y));
-            player.getInventory().remove(player.getIndexItemInHand(),1);
+            //player.getInventory().remove(player.getIndexItemInHand(),1);//TODO: ta mère
             player.consumeOneItem();
             return true;
         }
