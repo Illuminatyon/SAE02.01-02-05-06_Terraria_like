@@ -29,6 +29,10 @@ public class Entity {
         this.collider = new Collider(tileMap, this);
     }
 
+    public Entity() {
+
+    }
+
 
     public void updatePosition() {
         applyGravity();

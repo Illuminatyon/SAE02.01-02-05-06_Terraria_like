@@ -15,6 +15,10 @@ public  class Mob extends Actor {
         super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, actor);
     }
 
+    public Mob() {
+        super();
+    }
+
     @Override
     public void updatePosition() {//TODO: toujours la même idée derrière et séparer l'histoire de mob passif pour rendre la classe plus cohérente
         // Gravité

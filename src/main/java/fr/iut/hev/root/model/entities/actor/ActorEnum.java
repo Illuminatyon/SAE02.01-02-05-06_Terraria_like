@@ -1,26 +1,77 @@
 package fr.iut.hev.root.model.entities.actor;
 
 public enum ActorEnum {
-    PLAYER("jhon_fallout","Player",10),
-    ZOMBIE("evil and intimidating codsworth","mob",5),
-    POULET("poulet","mob",4),
-    HOMPS("homps","pnj",10),
-    ARROW("arrow","projectile",1),
-    MARINE("marine","mob",100);
+  ZOMBIE("evil and intimidating codsworth",32,54,2,15,3,5,1,1500,20),
+    PLAYER("jhon_fallout",32,64,3,10,3,10),
+    POULET("poulet",32,32,2,15,3,4),
+    HOMPS("homps",32,64,3,10,3,10);
 
-    // Corriger toute la classe
+
 
     private String name;
-    private String Type; // a retirer
     private int maxHealth;
+    private int width;
+    private int height;
+    private int moveSpeed;
+    private int jumpForce;
+    private int reach;
+    private int damage;
+    private int aggrodistance;
+    private int attackcooldown;
 
-    ActorEnum(String name, String type, int maxHealth) {
+    ActorEnum(String name, int width, int height, int moveSpeed, int jumpForce, int reach, int maxHealth) {
         this.name = name;
-        Type = type;
         this.maxHealth = maxHealth;
-    } // a modifier tout ça
+        this.width = width;
+        this.height = height;
+        this.moveSpeed = moveSpeed;
+        this.jumpForce = jumpForce;
+        this.reach = reach;
+    }
+    ActorEnum(String name, int width, int height, int moveSpeed, int jumpForce, int reach, int maxHealth, int damage, int attackcooldown, int aggrodistance) {
+        this.name = name;
+        this.maxHealth = maxHealth;
+        this.width = width;
+        this.height = height;
+        this.moveSpeed = moveSpeed;
+        this.jumpForce = jumpForce;
+        this.reach = reach;
+        this.damage = damage;
+        this.attackcooldown = attackcooldown;
+        this.aggrodistance = aggrodistance;
+    }
+
+
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
+    public int getMoveSpeed() {
+        return moveSpeed;
+    }
+    public int getJumpForce() {
+        return jumpForce;
+    }
+    public int getReach() {
+        return reach;
+    }
 
     public String getName() {
         return name;
+    }
+    public int getDamage() {
+        return damage;
+    }
+    public int getAggrodistance() {
+        return aggrodistance;
+    }
+    public int getAttackcooldown() {
+        return attackcooldown;
     }
 }

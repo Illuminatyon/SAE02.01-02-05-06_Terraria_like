@@ -1,4 +1,4 @@
-package fr.iut.hev.root.view;
+/*package fr.iut.hev.root.view;
 
 import fr.iut.hev.root.model.World;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +31,7 @@ public class MainMenuView {
                 World removedWorld = change.getElementRemoved();
                 deleteWorldHBox(removedWorld);
             }
-        });*/
+        });
 
         // Either load worlds here or in the controller
         //loadWorlds();
@@ -150,7 +150,7 @@ public class MainMenuView {
      * @param world The world for which to create the HBox
      * @return A set of buttons created for the world management
      * @author Akram BARRA
-     */
+
     public Set<Button> createWorldHBox(World world) {
         Set<Button> buttons = new HashSet<>();
         HBox clone = (HBox) cloneNode(worldsSelectHBoxTemplate, this.uiComponents.worldsContainer.getChildren().size() + 1); // Id count pas necessaire je pense
@@ -177,3 +177,4 @@ public class MainMenuView {
         worldsHBox.remove(world);
     }
 }
+*/

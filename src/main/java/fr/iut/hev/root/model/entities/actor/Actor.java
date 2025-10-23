@@ -20,6 +20,10 @@ public abstract class Actor extends Entity {
     private HitboxManager hitboxManager;
     private IntegerProperty lookDirectionProperty;
 
+    public Actor() {
+        super();
+    }
+
     // TODO : refactor avec healProperty comme un Enum, pour faciliter et mettre les guetteurs / setteurs autre part | (Lino) imaginer une classe barre de vie
     // TODO : Même chose pour les autres attributs qui sont des Enums, parce que finalement la classe Actor elle est chargé de malade | (Lino) une classe potentielle pour le mouvement
 

@@ -13,10 +13,10 @@ import javafx.scene.layout.Pane;
 import java.util.*;
 
 public class AggressiveMob extends Mob {
-    private final Player target;
-    private final int aggroDistance;
-    private final int attackCooldown;
-    private final int damage; // Dégâts infligés à chaque attaque
+    private  Player target;
+    private  int aggroDistance;
+    private  int attackCooldown;
+    private  int damage; // Dégâts infligés à chaque attaque
     private boolean isAggroed;
     private long lastAttackTime = 0;
     private List<Point> path; // TODO : Path to follow, faire aussi la même chose, parce que ça j'ai l'impression que c'est
@@ -29,6 +29,11 @@ public class AggressiveMob extends Mob {
     private int currentDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour stationnaire
     private long lastDirectionChangeTime = 0;
     private AStar pathfinder; // A* pathfinding algorithm
+
+    public AggressiveMob() {
+        super();
+        this.target=Player.getInstance();
+    }
 
     // TODO : Faire un refactoring par exemple avec tout ce qui concerne l'aggro, les dommages, enfin tout ce qui concerne
     // TODO : les interactions aggressives entres les entitées
@@ -48,7 +53,7 @@ public class AggressiveMob extends Mob {
             int damage,
             HitboxManager hitboxManager
     ) {
-        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type, hitboxManager);
+        super(posX, posY, width, height, tileMap, health, moveSpeed, jumpForce, reach, type);
         this.target = player;
         this.aggroDistance = aggroDistance;
         this.attackCooldown = attackCooldown;
@@ -307,5 +312,17 @@ public class AggressiveMob extends Mob {
 
     public Player getPlayer() {
         return this.target;
+    }
+
+    public void setDamage(int damage) {
+        this.damage=damage;
+    }
+
+    public void setAttackCooldown(int cooldown) {
+        this.attackCooldown=cooldown;
+    }
+
+    public void setAggroDistance(int distance) {
+        this.aggroDistance=distance;
     }
 }

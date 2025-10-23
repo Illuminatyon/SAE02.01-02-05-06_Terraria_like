@@ -1,7 +1,6 @@
 package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.*;
-import fr.iut.hev.root.controller.Listeners.DeathListener;
 import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.craft.RecipesEnum;
@@ -10,7 +9,6 @@ import fr.iut.hev.root.model.entities.actor.ActorEnum;
 import fr.iut.hev.root.model.entities.actor.Player;
 import fr.iut.hev.root.model.entities.actor.mobs.Mob;
 import fr.iut.hev.root.model.entities.actor.mobs.Pnj;
-import fr.iut.hev.root.model.exception.MapLoadingException;
 import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.items.enums.ItemsEnum;
 import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
@@ -32,7 +30,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -121,13 +118,13 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
+        initInputHandler();
         initPlayer();
         initCamera();
-        initInputHandler();
         System.out.println("crashed ?");
 //        createAggressiveMob(ActorEnum.ZOMBIE);
 //        createMob(ActorEnum.POULET);
-        createNPC(ActorEnum.HOMPS);
+        //createNPC(ActorEnum.HOMPS);
         System.out.println("recrashed .");
     }
 
@@ -226,7 +223,7 @@ public class GlobalController implements Initializable {
 
         //TODO: on le bouge pas tant qu'il est pas fix
         //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        world.getPlayer().healthProperty().addListener(new DeathListener(Player.getInstance(), playerView, world.getAliveMobs(), lootManager)); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
+        //world.getPlayer().healthProperty().addListener(new DeathListener(Player.getInstance(), playerView, world.getAliveMobs(), )); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
         // Utiliser un bind spécial pour le deathlistener (potentiellement)
         //TODO: ptet à déplacer dans actor ou actor view, demander à Rety son avis sur la question
 
@@ -277,7 +274,7 @@ public class GlobalController implements Initializable {
         this.mobView.add(new MobView(mob,world.getTileMap(), entitiesPane));
         mobView.getLast().camOffsetXProperty().bind(camera.currentCamXProperty());
         mobView.getLast().camOffsetYProperty().bind(camera.currentCamYProperty());
-        mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), lootManager));
+        //mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), lootManager));
     }
 /*
     private void createMob(ActorEnum mobActorEnum) { //TODO: essayer ptet de regrouper tous les créateur de mob/pnj en une méthode pour éviter la duplication
@@ -303,12 +300,12 @@ public class GlobalController implements Initializable {
     }
 */
     // Methode en com dans world
-    private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstruct/world quand on aura reparé les dialogues
+    private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstru ct/world quand on aura reparé les dialogues
         Pnj npc = new Pnj(0, 0,32, 64, Player.getInstance().getTileMap(), 2, 2, 10, 3, npcActorEnum, HitboxManager.getInstance());
         this.pnjView = new PnjView(npc, Player.getInstance().getTileMap(), entitiesPane);
         pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
         pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
-        npc.healthProperty().addListener(new DeathListener(npc, pnjView, world.getAliveMobs(),lootManager));
+        //npc.healthProperty().addListener(new DeathListener(npc, pnjView, world.getAliveMobs(),lootManager));
         dialogueCD = new Cooldown(0);
         world.getAliveMobs().add(npc); // TODO : même bordel ici
     }
