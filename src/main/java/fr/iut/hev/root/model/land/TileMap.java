@@ -70,6 +70,7 @@ public class TileMap {
             return null;
     }
     public void setMap(String Path) throws IOException {
+        // TODO : demander à akram de modifier puisqu'on a plus de système de save
         HashMap<Integer, TilesEnum> index = CreateHashmap.hashMapReader();
         int[][] save = SaveReader.map(Path);
         for (int y = 0; y < height; y++) {

@@ -4,6 +4,7 @@ import fr.iut.hev.root.controller.InputHandling.MouseItemActionInputHandler;
 import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.craft.CraftingManager;
 import fr.iut.hev.root.model.entities.Loot;
+import fr.iut.hev.root.model.inventory.PlayerInventory;
 import fr.iut.hev.root.model.physics.Gravity;
 import fr.iut.hev.root.model.inventory.Inventory;
 import fr.iut.hev.root.model.land.TileMap;
@@ -23,7 +24,7 @@ public class Player extends Actor {
 
     private static Player player = null; // Singleton
 
-    private Inventory inventory;
+    private PlayerInventory inventory;
     private Set<PlayerMouvementsEnum> playerMouvementEnums;
     private ObjectProperty<Item> itemInHandProperty; //TODO: (Lino) repenser le système de hotbar et d'item sélectionné ce suppot du diable
     private IntegerProperty quantityOfItemInHandProperty;
@@ -58,8 +59,8 @@ public class Player extends Actor {
         setType(ActorEnum.PLAYER);
         setHealth(10);
 
-        this.inventory = new Inventory();
-        this.craftingManager = new CraftingManager(this.inventory);
+        this.inventory = new PlayerInventory();
+        this.craftingManager = new CraftingManager((Inventory) this.inventory); // TODO : à vérifier parce que je pense que c'est pas bon
         this.playerMouvementEnums = new HashSet<>();
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
@@ -105,6 +106,7 @@ public class Player extends Actor {
     public void updateHorizontalMovement() {
         // Code pas propre a nettoyer
         // TODO : Utiliser un Design Pattern Stratégie pour ça
+        // TODO : je vais le faire maintenant.
         if (playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_RIGHT)
                 && playerMouvementEnums.contains(PlayerMouvementsEnum.MOVE_LEFT)) {
             super.setVelocityX(0);
@@ -148,10 +150,6 @@ public class Player extends Actor {
     public void pickUp(Loot loot) {
         this.inventory.add(loot.getItem(), loot.getQuantity());
         loot.removeSelf();
-    }
-
-    public Inventory getInventory() {
-        return this.inventory;
     }
 
     public boolean usesItemInHand(MouseItemActionInputHandler eventHandler) {

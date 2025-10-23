@@ -71,7 +71,4 @@ public class World {
         return this.lootManager;
     }
 
-    public ItemFactory getItemFactory() {
-        return itemFactory;
-    }
 }

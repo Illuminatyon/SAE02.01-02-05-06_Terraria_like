@@ -77,6 +77,5 @@ public class CraftingManager {
     }
 
     public RecipesEnum getSelectedRecipe() {return this.selectedRecipeProperty.getValue();}
-    public void setSelectedRecipe(RecipesEnum recipe) {this.selectedRecipeProperty.setValue(recipe);} // TODO : retirer cette methode
     public ObjectProperty<RecipesEnum> selectedRecipeProperty() {return this.selectedRecipeProperty;}
 }

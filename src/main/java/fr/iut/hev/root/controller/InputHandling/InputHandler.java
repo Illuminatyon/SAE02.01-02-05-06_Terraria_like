@@ -47,9 +47,6 @@ public class InputHandler {
             landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollInputHandler);
         });
     }
-
-    public KeyInputHandler getKeyInputHandler() {return this.keyInputHandler;}
     public MouseInventoryInputHandler getMouseInventoryInputHandler() {return this.mouseInventoryInputHandler;}
     public MouseItemActionInputHandler getMouseItemActionInputHandler() {return this.mouseItemActionInputHandler;}
-    public ScrollInputHandler getScrollInputHandler() {return this.scrollInputHandler;}
 }

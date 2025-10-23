@@ -14,7 +14,6 @@ public class Tile {
         this.health = tileEnum.getMaxHealth()*20;
         this.tileX = x;
         this.tileY = y;
-
     }
 
     public void takesDamage(int amount) {
@@ -40,18 +39,6 @@ public class Tile {
     public int getHealth() {return this.health;}
 
     public void resetHealth() {this.health = this.tileEnum.getMaxHealth()*20;}
-
-    /*public String toString() {
-        return "{"
-                .concat(this.name)
-                .concat(": ")
-                .concat(Boolean.toString(this.hasCollision))
-                .concat(", {")
-                .concat(Integer.toString(this.tileX))
-                .concat(", ")
-                .concat(Integer.toString(this.tileY))
-                .concat("}}");
-    }*/
 
     @Override
     public String toString() {
