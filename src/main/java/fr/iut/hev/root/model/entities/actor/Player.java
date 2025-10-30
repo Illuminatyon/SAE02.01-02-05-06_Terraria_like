@@ -24,7 +24,7 @@ public class Player extends Actor {
 
     private static Player player = null; // Singleton
 
-    private PlayerInventory inventory;
+    private Inventory inventory; //TODO: g refait un Inventory pour que ça soit compatible avec le reste
     private Set<PlayerMouvementsEnum> playerMouvementEnums;
     private ObjectProperty<Item> itemInHandProperty; //TODO: (Lino) repenser le système de hotbar et d'item sélectionné ce suppot du diable
     private IntegerProperty quantityOfItemInHandProperty;
@@ -59,8 +59,8 @@ public class Player extends Actor {
         setType(ActorEnum.PLAYER);
         setHealth(10);
 
-        this.inventory = new PlayerInventory();
-        this.craftingManager = new CraftingManager((Inventory) this.inventory); // TODO : à vérifier parce que je pense que c'est pas bon
+        this.inventory = new Inventory();
+        this.craftingManager = new CraftingManager(this.inventory); // TODO : à vérifier parce que je pense que c'est pas bon
         this.playerMouvementEnums = new HashSet<>();
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
@@ -71,6 +71,7 @@ public class Player extends Actor {
 
 
     public void update() {
+        System.out.println("essaye de bouger par pitié");
         updatePosition();
         Set<Loot> lootCopy = new HashSet<>(World.getInstance().getLootManager().getLootOnMap());
         for (Loot loot : lootCopy) {
@@ -82,6 +83,7 @@ public class Player extends Actor {
 
     @Override
     public void updatePosition() {
+        System.out.println("essaye de bouger");
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !super.getIsJumping()) {
             //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
@@ -204,6 +206,9 @@ public class Player extends Actor {
     public int getQuantityOfItemInHand() {return this.quantityOfItemInHandProperty.getValue();}
     public IntegerProperty quantityOfItemInHandProperty() {return this.quantityOfItemInHandProperty;}
     public CraftingManager getCraftingManager() {return this.craftingManager;}
-    public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {this.playerMouvementEnums.add(playerMouvementsEnum);}
+    public void addPlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {
+        this.playerMouvementEnums.add(playerMouvementsEnum);
+    }
     public void removePlayerMouvements(PlayerMouvementsEnum playerMouvementsEnum) {this.playerMouvementEnums.remove(playerMouvementsEnum);}
+    public Inventory getInventory() {return this.inventory;}
 }

@@ -118,8 +118,8 @@ public class GlobalController implements Initializable {
     }
 
     private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
-        initInputHandler();
         initPlayer();
+        initInputHandler();
         initCamera();
         System.out.println("crashed ?");
 //        createAggressiveMob(ActorEnum.ZOMBIE);
@@ -130,6 +130,7 @@ public class GlobalController implements Initializable {
 
 
     private void updateGameLoop() {
+        System.out.println("update ?");
         world.getPlayer().update();
         updateAliveMobs(); // TODO : C'est le world qui est censé gérer ca
         updateLoots();
@@ -265,7 +266,7 @@ public class GlobalController implements Initializable {
     }
 
     private void initInputHandler() {
-        inputHandler = new InputHandler(inventoryView,craftView,camera,globalView,hotbarView);
+        inputHandler = new InputHandler(playerView.getInventoryView(),playerView.getCraftView(),camera,globalView,playerView.getHotbarView());
         inputHandler.initInputHandler(landTileMap,hudAnchorPane);
     }
 

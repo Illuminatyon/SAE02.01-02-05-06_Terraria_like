@@ -44,7 +44,8 @@ public abstract class AbstractInventory {
         HashMap<Item, Integer> result;
 
         if (slot.isEmpty()) {
-            result = addToEmptySlot(slot, item, quantity);
+            addToEmptySlot(slot, item, quantity);
+            result = null;
         } else {
             result = addToOccupiedSlot(slot, item, quantity);
         }
@@ -128,7 +129,7 @@ public abstract class AbstractInventory {
     protected void onInventoryFull() {
     }
 
-    private HashMap<Item, Integer> addToEmptySlot(InventorySlot slot, Item item, int quantity) {
+    private void addToEmptySlot(InventorySlot slot, Item item, int quantity) {
         slot.setItem(item);
         slot.setQuantity(quantity);
         slotsOccupied++;
@@ -136,8 +137,6 @@ public abstract class AbstractInventory {
         if (isFull()) {
             onInventoryFull();
         }
-
-        return null;
     }
 
     private HashMap<Item, Integer> addToOccupiedSlot(InventorySlot slot, Item item, int quantity) {

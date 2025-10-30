@@ -27,7 +27,7 @@ public class InventoryView {
     private Pane backgroundMousePane;
     private CraftView craftView;
 
-    public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory, AnchorPane hudAnchorPane, CraftView craftView, InputHandler inputHandler) {
+    public InventoryView(Inventory inventory, GridPane hotbar, GridPane expandedInventory, AnchorPane hudAnchorPane, CraftView craftView) {
         this.inventory = inventory;
         this.hotbar = hotbar;
         this.expandedInventory = expandedInventory;
@@ -35,7 +35,6 @@ public class InventoryView {
         this.hudAnchorPane = hudAnchorPane;
         this.craftView = craftView;
         initInventory();
-        initMouseOnHoldListeners(inputHandler.getMouseInventoryInputHandler());
     }
 
     private void initInventory() {
@@ -78,15 +77,6 @@ public class InventoryView {
                 slotIndex++;
             }
         }
-    }
-
-    private void initMouseOnHoldListeners(MouseInventoryInputHandler mouseInventoryInputHandler) {
-        mouseInventoryInputHandler.onHoldProperty().addListener((observableValue, o, t1) ->
-                updateOnHoldPane(mouseInventoryInputHandler.getOnHold()));
-        mouseInventoryInputHandler.xProperty().addListener((observableValue, number, t1) ->
-                updateOnHoldPosition(mouseInventoryInputHandler.getX(), mouseInventoryInputHandler.getY()));
-        mouseInventoryInputHandler.yProperty().addListener((observableValue, number, t1) ->
-                updateOnHoldPosition(mouseInventoryInputHandler.getX(), mouseInventoryInputHandler.getY()));
     }
 
     private Pane createCell() {
@@ -159,8 +149,9 @@ public class InventoryView {
     public boolean getInventoryOpened() {return this.inventoryOpened;}
 
     public void setInventoryVisible() {
+        System.out.println(craftView);
         inventoryOpened = !inventoryOpened;
-        if (inventoryOpened == false)
+        if (!inventoryOpened)
             craftView.setCraftGUIVisible(inventoryOpened);
         expandedInventory.setVisible(inventoryOpened);
         expandedInventory.setMouseTransparent(!inventoryOpened);

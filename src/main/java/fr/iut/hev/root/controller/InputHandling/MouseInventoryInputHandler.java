@@ -39,6 +39,16 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
         this.onHoldProperty = new SimpleObjectProperty<>(null);
         this.xProperty = new SimpleDoubleProperty(0);
         this.yProperty = new SimpleDoubleProperty(0);
+        initMouseOnHoldListeners(inventoryView);
+    }
+
+    private void initMouseOnHoldListeners(InventoryView inventoryView) {
+        this.onHoldProperty().addListener((observableValue, o, t1) ->
+                inventoryView.updateOnHoldPane(this.getOnHold()));
+        this.xProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(this.getX(), this.getY()));
+        this.yProperty().addListener((observableValue, number, t1) ->
+                inventoryView.updateOnHoldPosition(this.getX(), this.getY()));
     }
 
     /**
@@ -80,7 +90,7 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
             if (getOnHold() == null) {
                 setOnHold(inventory.remove(slotIndex, inventory.getInventorySlot(slotIndex).getQuantity()));
             } else {
-                setOnHold(inventory.add(slotIndex, getOnHold().keySet().iterator().next(), getOnHold().get(getOnHold().keySet().iterator().next())));
+                setOnHold(inventory.addToSlot(slotIndex, getOnHold().keySet().iterator().next(), getOnHold().get(getOnHold().keySet().iterator().next())));
             }
         }
         else {

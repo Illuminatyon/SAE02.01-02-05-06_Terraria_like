@@ -26,11 +26,12 @@ public class PlayerView extends ActorView {
 
         this.heartsView = new HeartsView(Player.getInstance().healthProperty(),heartsHbox);
         this.craftView = new CraftView(recipeView,Player.getInstance().getCraftingManager().getRecipesAvailable(),craftButton,recipeDisplay);
-        this.inventoryView = new InventoryView(Player.getInstance().getInventory(),hotbarInventory,expandedInventory,hudAnchorPane,this.craftView,inputHandler);
+        this.inventoryView = new InventoryView(Player.getInstance().getInventory(),hotbarInventory,expandedInventory,hudAnchorPane,this.craftView);
         this.hotbarView = new HotbarView(hotbarInventory);
     }
 
     public HeartsView getHeartsView() {return this.heartsView;}
     public CraftView getCraftView() {return this.craftView;}
     public InventoryView getInventoryView() {return this.inventoryView;}
+    public HotbarView getHotbarView() {return this.hotbarView;}
 }
