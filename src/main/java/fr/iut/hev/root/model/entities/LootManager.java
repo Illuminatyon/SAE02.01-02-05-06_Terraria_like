@@ -53,27 +53,25 @@ public class LootManager {
                     (int) actor.getPosX() + random.nextInt(20) - 10,
                     (int) actor.getPosY(),
                     32,
-                    32,
-                    actor.getTileMap()
+                    32
             );
             lootsOnMap.add(loot);
             //System.out.println("[DEBUG_LOG] Dropped raw chicken at position (" + loot.getPosX() + ", " + loot.getPosY() + ")");
         }
     }
 
-    public Loot createLoot(ItemsEnum itemType, int quantity, int posX, int posY, int width, int height, TileMap tileMap) {
+    public ObservableSet<Loot> getLootOnMap() {
+        return FXCollections.unmodifiableObservableSet(lootsOnMap);
+    }
+
+    public Loot createLoot(ItemsEnum itemType, int quantity, int posX, int posY, int width, int height) {
         return new Loot(
                 itemFactory.createItem(itemType),
                 quantity,
                 posX,
                 posY,
                 width,
-                height,
-                tileMap
+                height
         );
-    }
-
-    public ObservableSet<Loot> getLootOnMap() {
-        return FXCollections.unmodifiableObservableSet(lootsOnMap);
     }
 }

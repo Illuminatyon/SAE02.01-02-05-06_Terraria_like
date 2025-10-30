@@ -5,6 +5,7 @@ import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.craft.CraftingManager;
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.inventory.PlayerInventory;
+import fr.iut.hev.root.model.items.enums.ItemsEnum;
 import fr.iut.hev.root.model.physics.Gravity;
 import fr.iut.hev.root.model.inventory.Inventory;
 import fr.iut.hev.root.model.land.TileMap;
@@ -46,12 +47,11 @@ public class Player extends Actor {
         return player;
     }
 
-    public void initPlayer(int posX, int posY, int width, int height, TileMap tileMap, int moveSpeed, int jumpForce, int reach) {
+    public void initPlayer(int posX, int posY, int width, int height, int moveSpeed, int jumpForce, int reach) {
         setPosX(posX);
         setPosY(posY);
         setWidth(width);
         setHeight(height);
-        this.setTileMap(tileMap);
         setMoveSpeed(moveSpeed);
         setJumpForce(jumpForce);
         setReach(reach);
@@ -65,13 +65,13 @@ public class Player extends Actor {
         this.itemInHandProperty = new SimpleObjectProperty<>(inventory.getInventorySlot(0).getItem());
         this.quantityOfItemInHandProperty = new SimpleIntegerProperty(inventory.getInventorySlot(0).getQuantity());
         getHitboxManager().createHitbox(this, HitboxType.INTERACTION);
+        this.inventory.add(new Item(ItemsEnum.WOOD),50);
     }
 
     public Set<PlayerMouvementsEnum> getPlayerMouvements() {return playerMouvementEnums;} // TODO: retirer le getter
 
 
     public void update() {
-        System.out.println("essaye de bouger par pitié");
         updatePosition();
         Set<Loot> lootCopy = new HashSet<>(World.getInstance().getLootManager().getLootOnMap());
         for (Loot loot : lootCopy) {
@@ -83,7 +83,6 @@ public class Player extends Actor {
 
     @Override
     public void updatePosition() {
-        System.out.println("essaye de bouger");
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !super.getIsJumping()) {
             //if (super.getVelocityY() < maxVelocityY)
             super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());

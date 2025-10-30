@@ -214,7 +214,7 @@ public class TileMap {
             Item item = itemFactory.createItem(currentTile.getTileEnum().getRelatedItem());
             currentTile.breaks();
             //Item item = new Item(currentTile.getTile().getRelatedItem()); // TODO: fix issue where this get some kind of null stuff
-            Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32, this);
+            Loot droppedLoot = new Loot(item, 1, currentTile.getX() * format, currentTile.getY() * format, 32, 32);
         }
     }
 

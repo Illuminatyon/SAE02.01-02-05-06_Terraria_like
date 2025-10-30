@@ -39,7 +39,7 @@ public abstract class Actor extends Entity {
     }; // TODO : faire un refactoring pour que les directions soient des enum
 
     public Actor(int posX, int posY, int width, int height, TileMap tileMap, int healthProperty, int moveSpeed, int jumpForce,int reach, ActorEnum type) {
-        super(posX, posY, width, height, tileMap);
+        super(posX, posY, width, height);
         this.healthProperty = new SimpleIntegerProperty(healthProperty);
         this.moveSpeed = moveSpeed;
         this.jumpForce = jumpForce;

@@ -9,8 +9,8 @@ public class Loot extends Entity {
     private final Item item;
     private final int quantity;
 
-    public Loot(Item item, int quantity, int posX, int posY, int width, int height, TileMap tileMap) {
-        super(posX, posY, width, height, tileMap);
+    public Loot(Item item, int quantity, int posX, int posY, int width, int height) {
+        super(posX, posY, width, height);
         this.item = item;
         this.quantity = quantity;
     }

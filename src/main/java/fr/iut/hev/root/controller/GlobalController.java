@@ -11,6 +11,7 @@ import fr.iut.hev.root.model.entities.actor.mobs.Mob;
 import fr.iut.hev.root.model.entities.actor.mobs.Pnj;
 import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.items.enums.ItemsEnum;
+import fr.iut.hev.root.model.land.TileMap;
 import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
 import fr.iut.hev.root.model.utilities.Cooldown;
 import fr.iut.hev.root.model.utilities.CooldownManager;
@@ -94,9 +95,9 @@ public class GlobalController implements Initializable {
         world = World.getInstance();
         world.initWorld(3840,1440);
         initItemEnums(); // Laisser la ou bouger dans world ?
-        initGameLoop(); // Laisser ici
         initViews(); // Obligatoire
         initPlayerViewsAndMobs(); // A changer absolument
+        initGameLoop(); // Laisser ici
     }
 
     private void initGameLoop(){
@@ -109,6 +110,8 @@ public class GlobalController implements Initializable {
                 Duration.seconds(0.017),
                 ev -> updateGameLoop()
         );
+        gameLoop.getKeyFrames().add(fk);
+        gameLoop.play();
     }
 
     // TODO : potentiellement le move dans la vue du coup
@@ -130,7 +133,6 @@ public class GlobalController implements Initializable {
 
 
     private void updateGameLoop() {
-        System.out.println("update ?");
         world.getPlayer().update();
         updateAliveMobs(); // TODO : C'est le world qui est censé gérer ca
         updateLoots();
@@ -302,8 +304,8 @@ public class GlobalController implements Initializable {
 */
     // Methode en com dans world
     private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstru ct/world quand on aura reparé les dialogues
-        Pnj npc = new Pnj(0, 0,32, 64, Player.getInstance().getTileMap(), 2, 2, 10, 3, npcActorEnum, HitboxManager.getInstance());
-        this.pnjView = new PnjView(npc, Player.getInstance().getTileMap(), entitiesPane);
+        Pnj npc = new Pnj(0, 0,32, 64, TileMap.getInstance(), 2, 2, 10, 3, npcActorEnum, HitboxManager.getInstance());
+        this.pnjView = new PnjView(npc, TileMap.getInstance(), entitiesPane);
         pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
         pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
         //npc.healthProperty().addListener(new DeathListener(npc, pnjView, world.getAliveMobs(),lootManager));
