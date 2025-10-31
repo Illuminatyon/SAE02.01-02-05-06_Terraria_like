@@ -45,7 +45,6 @@ public class LootManager {
 
     private void dropChickenLoot(Actor actor) {
         int numChicken = random.nextInt(3) + 1;
-        //System.out.println("[DEBUG_LOG] Chicken died, dropping " + numChicken + " raw chicken pieces");
         for (int i = 0; i < numChicken; i++) {
             Loot loot = createLoot(
                     ItemsEnum.RAW_CHICKEN,
@@ -56,7 +55,6 @@ public class LootManager {
                     32
             );
             lootsOnMap.add(loot);
-            //System.out.println("[DEBUG_LOG] Dropped raw chicken at position (" + loot.getPosX() + ", " + loot.getPosY() + ")");
         }
     }
 

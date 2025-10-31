@@ -28,7 +28,6 @@ public class BowView {
     private void loadBowSprite() {
         // Use the Bow_JE2_BE1 image for the bow
         String path = "/fr/iut/hev/root/img/items/bow.png";
-        System.out.println("Trying to load bow image from path: " + path);
 
         try (InputStream stream = getClass().getResourceAsStream(path)) {
             if (stream == null) {
@@ -48,8 +47,6 @@ public class BowView {
 
             // Add the bow sprite to the anchor pane
             anchorPane.getChildren().add(bowSprite);
-
-            System.out.println("Bow image loaded successfully");
         } catch (Exception e) {
             System.err.println("Exception while loading bow image");
             e.printStackTrace();

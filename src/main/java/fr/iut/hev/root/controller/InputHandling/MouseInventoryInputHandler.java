@@ -94,7 +94,7 @@ public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
             }
         }
         else {
-            System.out.println("item droped");
+            // TODO: Drop the item as loot (with the corresponding quantity) on the map at the player's position
         }
     }
 

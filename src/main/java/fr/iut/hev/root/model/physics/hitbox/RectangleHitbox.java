@@ -105,8 +105,6 @@ public class RectangleHitbox implements Hitbox {
     }
 
     public void setX(double x) {
-        /*System.out.println(x);
-        System.out.println(xProperty);*/
         this.xProperty.setValue(x);
     }
 

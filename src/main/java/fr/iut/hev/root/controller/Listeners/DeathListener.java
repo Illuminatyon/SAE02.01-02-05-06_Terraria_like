@@ -41,18 +41,12 @@ public class DeathListener implements ChangeListener<Number> {
     private void removeActorFromAliveList() {
         if (aliveActors.contains(actor)) {
             aliveActors.remove(actor);
-            System.out.println("[DEBUG_LOG] Actor " + actor.getName() + " removed from aliveActors list");
-        } else {
-            System.out.println("[DEBUG_LOG] Actor " + actor.getName() + " not found in aliveActors list");
         }
     }
 
     private void deleteActorSprite() {
         if (actorView != null) {
             actorView.deleteActorSprite();
-            System.out.println("[DEBUG_LOG] Actor " + actor.getName() + " sprite deleted");
-        } else {
-            System.out.println("[DEBUG_LOG] Actor " + actor.getName() + " view is null, cannot delete sprite");
         }
     }
 }

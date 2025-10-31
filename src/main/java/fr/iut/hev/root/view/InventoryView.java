@@ -149,7 +149,6 @@ public class InventoryView {
     public boolean getInventoryOpened() {return this.inventoryOpened;}
 
     public void setInventoryVisible() {
-        System.out.println(craftView);
         inventoryOpened = !inventoryOpened;
         if (!inventoryOpened)
             craftView.setCraftGUIVisible(inventoryOpened);

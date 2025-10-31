@@ -58,8 +58,6 @@ public class CraftingManager {
     }
 
     public void crafts() {
-        if (getSelectedRecipe().equals(RecipesEnum.CRAFTING_TABLE))
-            System.out.println("craft"); // TODO : remove this line
         if (craftPossible(getSelectedRecipe())) {
             destroysIngredientsFromInventory();
             inventory.addFromCraft(itemFactory.createItem(getSelectedRecipe().getCraftResult()),getSelectedRecipe().getItemCraftedQuantity());

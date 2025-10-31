@@ -43,7 +43,7 @@ public class World {
         this.itemFactory = ItemFactory.getInstance();
         this.lootManager = new LootManager(this.itemFactory);
         this.player = Player.getInstance();
-        this.player.initPlayer(100,100,32,48,5,10,3);
+        this.player.initPlayer(100,100,32,48,2,10,3);
         this.tileMap.initTileMap(itemFactory,width,height);
     }
 

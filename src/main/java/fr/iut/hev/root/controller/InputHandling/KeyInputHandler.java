@@ -50,11 +50,11 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
                         craftView.setCraftGUIVisible();
                 }
                 case KeyCode.SPACE -> player.addPlayerMouvements(PlayerMouvementsEnum.JUMP);
-                case KeyCode.TAB -> System.out.println("map opened");
-                case KeyCode.Z -> {
+                //case KeyCode.TAB -> System.out.println("map opened"); // TODO: Finish this feature (open and close map)
+                /*case KeyCode.Z -> {
                     player.receiveDamage(1);
                     System.out.println("pv = " + player.getHealth());
-                }
+                }*/ // DEBUG feature: Remove health from player
             }
         } else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {
             switch (keyEvent.getCode()) {

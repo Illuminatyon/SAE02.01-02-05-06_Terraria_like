@@ -48,7 +48,6 @@ public class CraftView {
             if (selectedRecipe != null) {
                 setSelectedRecipe(selectedRecipe);
                 displayRecipe();
-                System.out.println("Selection changed to: " + selectedRecipe.name());
             }
         });
 

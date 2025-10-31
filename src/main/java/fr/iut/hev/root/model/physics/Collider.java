@@ -24,17 +24,19 @@ public class Collider {
     private boolean hasCollision(double x, double y, boolean negativeCheckX, boolean negativeCheckY) {
         int tileX = 0;
         int tileY = 0;
-        if (negativeCheckX) {
-            tileX = (int) ((x + offsetX - 1) / TileMap.format);
+        /*if (negativeCheckX) {
+            tileX = (int) ((x + offsetX - 1) / TileMap.format * 2);
         } else {
-            tileX = (int) ((x + offsetX) / TileMap.format);
+            tileX = (int) ((x + offsetX) / TileMap.format * 2);
         }
 
         if (negativeCheckY) {
             tileY = (int) ((y + offsetY - 1) / TileMap.format);
         } else {
             tileY = (int) ((y + offsetY) / TileMap.format);
-        }
+        }*/
+        tileX = (int)x / TileMap.format;
+        tileY = (int)y / TileMap.format;
 
         if (tileX < 0 || tileY < 0 || tileX >= tileMap.getWidth() || tileY >= tileMap.getHeight()) {
             return true; // mettre des murs invisibles (colliders) au bords de la map

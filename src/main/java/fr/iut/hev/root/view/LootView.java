@@ -18,12 +18,10 @@ public class LootView {
 
         World.getInstance().getLootManager().getLootOnMap().addListener((SetChangeListener<Loot>) change -> {
             if (change.wasAdded()) {
-                System.out.println("Loot ajouté sur la map");
                 String path = "/fr/iut/hev/root/img/items/" + change.getElementAdded().getItem().getItemEnum().getName() + ".png";
                 Image img = new Image(getClass().getResource(path).toExternalForm());
                 ImageView imgv = new ImageView(img);
                 // Set initial position (will be updated with camera offset)
-                System.out.println("loot x = " + change.getElementAdded().getPosX() + " y = " + change.getElementAdded().getPosY());
                 imgv.setLayoutX(change.getElementAdded().getPosX());
                 imgv.setLayoutY(change.getElementAdded().getPosY());
                 lootImageViews.put(change.getElementAdded(), imgv);
@@ -35,7 +33,6 @@ public class LootView {
                     entitiesPane.getChildren().remove(imgView);
                 }
                 lootImageViews.remove(change.getElementRemoved());
-                System.out.println("Loot retiré de la map");
             }
         });
     }

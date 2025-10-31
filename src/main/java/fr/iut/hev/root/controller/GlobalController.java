@@ -124,11 +124,9 @@ public class GlobalController implements Initializable {
         initPlayer();
         initInputHandler();
         initCamera();
-        System.out.println("crashed ?");
-//        createAggressiveMob(ActorEnum.ZOMBIE);
-//        createMob(ActorEnum.POULET);
-        //createNPC(ActorEnum.HOMPS);
-        System.out.println("recrashed .");
+        /*createAggressiveMob(ActorEnum.ZOMBIE);
+        createMob(ActorEnum.POULET);
+        createNPC(ActorEnum.HOMPS);*/
     }
 
 

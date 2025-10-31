@@ -14,7 +14,7 @@ public class Block extends Item {
     public Block(ItemsEnum itemsEnum) {super(itemsEnum);}
 
     @Override
-    public boolean isUsed(MouseItemActionInputHandler eventHandler) {
+    public boolean isUsed(MouseItemActionInputHandler eventHandler) { // What is happening here (and why we pass the MouseItemActionInputHandler as a parameter) ?
         int x = (int)eventHandler.getX() / format;
         int y  = (int)eventHandler.getY() / format;
         TileMap tileMap = eventHandler.getTileMap();
@@ -27,7 +27,6 @@ public class Block extends Item {
 
         if (tileMap.isTileEmpty(x,y)) {
             TilesEnum currentItem = player.getItemInHand().getItemEnum().getRelatedTile();
-            System.out.println(currentItem);
             tileMap.addTile(new Tile(currentItem,x,y));
             //player.getInventory().remove(player.getIndexItemInHand(),1);//TODO: ta mère
             player.consumeOneItem();

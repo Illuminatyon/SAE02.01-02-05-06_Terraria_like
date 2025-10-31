@@ -32,7 +32,6 @@ public class KatanaView {
      */
     private void loadKatanaSprite() {
         String path = "/fr/iut/hev/root/img/items/katana.png";
-        System.out.println("Trying to load katana image from path: " + path);
 
         try (InputStream stream = getClass().getResourceAsStream(path)) {
             if (stream == null) {
@@ -52,8 +51,6 @@ public class KatanaView {
 
             // Add the katana sprite to the anchor pane
             anchorPane.getChildren().add(katanaSprite);
-
-            System.out.println("Katana image loaded successfully");
         } catch (Exception e) {
             System.err.println("Exception while loading katana image");
             e.printStackTrace();

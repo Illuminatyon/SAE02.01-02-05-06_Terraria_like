@@ -30,7 +30,6 @@ public class DaggerView {
      */
     private void loadDaggerSprite() {
         String path = "/fr/iut/hev/root/img/items/dagger.png";
-        System.out.println("Trying to load dagger image from path: " + path);
 
         try (InputStream stream = getClass().getResourceAsStream(path)) {
             if (stream == null) {
@@ -50,8 +49,6 @@ public class DaggerView {
 
             // Add the dagger sprite to the anchor pane
             anchorPane.getChildren().add(daggerSprite);
-
-            System.out.println("Dagger image loaded successfully");
         } catch (Exception e) {
             System.err.println("Exception while loading dagger image");
             e.printStackTrace();

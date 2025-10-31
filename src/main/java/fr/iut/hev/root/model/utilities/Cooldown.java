@@ -26,7 +26,6 @@ public class Cooldown {
 
     public void ticks() {
         this.ticks++;
-        System.out.println(ticks);
         if (ticks >= limit) {
             stop();
         }

@@ -21,5 +21,6 @@ public class PlayerInventory extends AbstractInventory {
     @Override
     protected void onInventoryFull() {
         System.out.println("Inventaire du joueur plein !");
+        // TODO: Show alert on a label that the inventory is full (Add it on the FXML and call it "AlertLabel")
     }
 }

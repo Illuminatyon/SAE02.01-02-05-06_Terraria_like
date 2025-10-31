@@ -198,7 +198,6 @@ public class Player extends Actor {
     }
 
     public Item getItemInHand() {
-        System.out.println(itemInHandProperty.getValue());
         return this.itemInHandProperty.getValue();
     }
     public ObjectProperty<Item> itemInHandProperty() {return this.itemInHandProperty;}

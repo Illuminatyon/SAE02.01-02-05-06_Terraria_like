@@ -48,7 +48,6 @@ public class ActorView {
     }*/
     public void load() {
         String path = "/fr/iut/hev/root/img/entities/actors/" + actor.getName() + ".png";
-        System.out.println("Trying to load image from path: " + path);
 
         Image image = new Image(getClass().getResource(path).toExternalForm());
         this.actorSprite = new ImageView(image);
@@ -58,8 +57,6 @@ public class ActorView {
         actorSprite.setFitHeight(actor.getHeight());
 
         // Set initial position (will be updated by the camera)
-        System.out.println(" cam" + camOffsetXProperty);
-        System.out.println(camOffsetYProperty);
         actorSprite.setLayoutX(getActor().getPosX());
         actorSprite.setLayoutY(getActor().getPosY());
         actorSprite.translateXProperty().bind(actor.posXProperty().add(camOffsetXProperty));
@@ -70,9 +67,6 @@ public class ActorView {
 
         // Ajouter à l'AnchorPane
         anchorPane.getChildren().add(actorSprite);
-
-        System.out.println("Image loaded successfully for actor: " + actor.getName());
-
     }
 
 
