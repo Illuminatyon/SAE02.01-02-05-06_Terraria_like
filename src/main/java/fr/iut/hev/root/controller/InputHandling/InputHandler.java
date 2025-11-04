@@ -16,10 +16,10 @@ public class InputHandler {
     private MouseItemActionInputHandler mouseItemActionInputHandler;
     private ScrollInputHandler scrollInputHandler;
 
-    public InputHandler(InventoryView inventoryView, CraftView craftView, Camera camera, GlobalView globalView, HotbarView hotbarView) {
+    public InputHandler(InventoryView inventoryView, CraftView craftView, Camera camera, TileMapView tileMapView, HotbarView hotbarView) {
         this.keyInputHandler = new KeyInputHandler(inventoryView,craftView);
         this.mouseInventoryInputHandler = new MouseInventoryInputHandler(Player.getInstance().getInventory(), inventoryView);
-        this.mouseItemActionInputHandler = new MouseItemActionInputHandler(camera,inventoryView,globalView);
+        this.mouseItemActionInputHandler = new MouseItemActionInputHandler(camera,inventoryView, tileMapView);
         this.scrollInputHandler = new ScrollInputHandler(Player.getInstance().getInventory(),hotbarView,inventoryView);
     }
 

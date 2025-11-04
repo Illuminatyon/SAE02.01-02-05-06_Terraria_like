@@ -2,9 +2,7 @@ package fr.iut.hev.root.controller;
 
 import fr.iut.hev.root.controller.InputHandling.*;
 import fr.iut.hev.root.model.World;
-import fr.iut.hev.root.model.entities.*;
 import fr.iut.hev.root.model.craft.RecipesEnum;
-import fr.iut.hev.root.model.entities.actor.Actor;
 import fr.iut.hev.root.model.entities.actor.ActorEnum;
 import fr.iut.hev.root.model.entities.actor.Player;
 import fr.iut.hev.root.model.entities.actor.mobs.Mob;
@@ -34,7 +32,6 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 public class GlobalController implements Initializable {
     private World world;
@@ -56,16 +53,17 @@ public class GlobalController implements Initializable {
     //private static Set<Mob> mobs; // N'a rien a faire dans le controller
     //private ItemFactory itemFactory;
 
-    private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
-    private HeartsView heartsView;
-    private PlayerView playerView; // A voir si on modifie
-    private InventoryView inventoryView;
-    private HotbarView hotbarView;
+    //private TileMapView tileMapView; // TODO: Rename to MapView instead for more clarity
+    //private HeartsView heartsView;
+    //private PlayerView playerView; // A voir si on modifie
+    //private InventoryView inventoryView;
+    //private HotbarView hotbarView;
     private ArrayList<MobView> mobView; // A voir si on modifie
     private PnjView pnjView; // A voir si on modifie
-    private CraftView craftView;
+    //private CraftView craftView;
     private Cooldown dialogueCD;
-    private LootView lootView;
+    //private LootView lootView;
+    private GlobalView globalView;
 
 
     // AnchorPane for actors that will move with the camera
@@ -96,8 +94,11 @@ public class GlobalController implements Initializable {
         world = World.getInstance();
         world.initWorld(3840,1440);
         initItemEnums(); // Laisser la ou bouger dans world ?
-        initViews(); // Obligatoire
-        initPlayerViewsAndMobs(); // A changer absolument
+        //initViews(); // Obligatoire
+        globalView = new GlobalView(landTileMap,backgroundTileMap,entitiesPane,heartsHbox,craftListView,craftButton,recipeDisplay,hotbarInventory,expandedInventory,hudAnchorPane);
+        //initPlayerViewsAndMobs(); // A changer absolument
+        initCamera();
+        initInputHandler();
         initGameLoop(); // Laisser ici
         for (int i =0; i<mobView.size(); i++){
             createNPCView(world.getAliveMobs().get(i));
@@ -119,23 +120,24 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
-    // TODO : potentiellement le move dans la vue du coup
-    private void initViews(){
-        globalView = new GlobalView(world.getTileMap(), landTileMap, backgroundTileMap);
-        lootView = new LootView(entitiesPane);
-    }
+    // DONE : potentiellement le move dans la vue du coup
+//    private void initViews() {
+//        globalView = new GlobalView(landTileMap,backgroundTileMap,entitiesPane,heartsHbox,craftListView,craftButton,recipeDisplay,hotbarInventory,expandedInventory,hudAnchorPane);
+////        tileMapView = new TileMapView(world.getTileMap(), landTileMap, backgroundTileMap);
+////        lootView = new LootView(entitiesPane);
+//    }
 
-    private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
-        initPlayer();
-        initInputHandler();
-        initCamera();
-    }
+//    private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
+////        initPlayer();
+//        initCamera();
+//        initInputHandler();
+//    }
 
 
     private void updateGameLoop() {
         world.updateWorld();
-        inputHandler.getMouseItemActionInputHandler().checkMouseInput();
         camera.update();
+        inputHandler.getMouseItemActionInputHandler().checkMouseInput();
         cooldownManager.allCooldownsTick();
     }
 
@@ -176,7 +178,7 @@ public class GlobalController implements Initializable {
         world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
     }*/
 
-    private void initPlayer() {
+//    private void initPlayer() {
         //DONE: déplacer ça dans une initialisation de player dans Word
         //ItemFactory itemFactory = world.getItemFactory(); // DONE: A deplacer
         //craftingManager = new CraftingManager(inventory,itemFactory);//DONE: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
@@ -190,7 +192,7 @@ public class GlobalController implements Initializable {
 //        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
 
         //DONE: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
-        playerView = new PlayerView(world.getTileMap(), entitiesPane, heartsHbox, craftListView, craftButton, recipeDisplay, hotbarInventory, expandedInventory, hudAnchorPane,inputHandler);
+//        playerView = new PlayerView(world.getTileMap(), entitiesPane, heartsHbox, craftListView, craftButton, recipeDisplay, hotbarInventory, expandedInventory, hudAnchorPane);
 
         //heartsView = new HeartsView(player.healthProperty(), heartsHbox); //DONE: regrouper l'initialisation des vues dans une seule méthode
         //craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
@@ -257,16 +259,16 @@ public class GlobalController implements Initializable {
 //            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
 //            landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
 //        });
-    }
+//    }
 
     private void initCamera() {
-        camera = new Camera(Player.getInstance(), landTileMap, backgroundTileMap, globalPane, lootView, 0.1);
-        playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        camera = new Camera(Player.getInstance(), landTileMap, backgroundTileMap, globalPane, globalView.getLootView(), 0.1);
+        globalView.getPlayerView().camOffsetXProperty().bind(camera.currentCamXProperty());
+        globalView.getPlayerView().camOffsetYProperty().bind(camera.currentCamYProperty());
     }
 
     private void initInputHandler() {
-        inputHandler = new InputHandler(playerView.getInventoryView(),playerView.getCraftView(),camera,globalView,playerView.getHotbarView());
+        inputHandler = new InputHandler(globalView.getPlayerView().getInventoryView(),globalView.getPlayerView().getCraftView(),camera, globalView.getTileMapView(),globalView.getPlayerView().getHotbarView());
         inputHandler.initInputHandler(landTileMap,hudAnchorPane);
     }
 

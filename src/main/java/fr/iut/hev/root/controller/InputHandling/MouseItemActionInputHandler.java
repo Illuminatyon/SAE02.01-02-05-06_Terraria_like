@@ -5,7 +5,7 @@ import fr.iut.hev.root.model.entities.actor.Player;
 import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.utilities.Cooldown;
 import fr.iut.hev.root.view.Camera;
-import fr.iut.hev.root.view.GlobalView;
+import fr.iut.hev.root.view.TileMapView;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
@@ -28,7 +28,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     private boolean mouseClickIsPressed;
     private boolean mouseClickIsReleased;
     private MouseEvent mouseEvent;
-    private GlobalView worldView;
+    private TileMapView worldView;
     private TileMap tileMap;
 
     /**
@@ -39,7 +39,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
      * @param inventoryView Vue de l'inventaire du joueur
      * @param worldView Vue globale du monde
      */
-    public MouseItemActionInputHandler(Camera camera, InventoryView inventoryView, GlobalView worldView) {
+    public MouseItemActionInputHandler(Camera camera, InventoryView inventoryView, TileMapView worldView) {
         this.inventoryView = inventoryView;
         this.player = Player.getInstance();
         this.camera = camera;
