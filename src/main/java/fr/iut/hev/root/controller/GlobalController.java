@@ -5,7 +5,6 @@ import fr.iut.hev.root.model.World;
 import fr.iut.hev.root.model.craft.RecipesEnum;
 import fr.iut.hev.root.model.entities.actor.ActorEnum;
 import fr.iut.hev.root.model.entities.actor.Player;
-import fr.iut.hev.root.model.entities.actor.mobs.Mob;
 import fr.iut.hev.root.model.entities.actor.mobs.Pnj;
 import fr.iut.hev.root.model.items.enums.ItemTypesEnum;
 import fr.iut.hev.root.model.items.enums.ItemsEnum;
@@ -15,7 +14,6 @@ import fr.iut.hev.root.model.utilities.Cooldown;
 import fr.iut.hev.root.model.utilities.CooldownManager;
 import fr.iut.hev.root.view.*;
 import fr.iut.hev.root.view.actor.MobView;
-import fr.iut.hev.root.view.actor.PlayerView;
 import fr.iut.hev.root.view.actor.PnjView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -53,12 +51,12 @@ public class GlobalController implements Initializable {
     //private static Set<Mob> mobs; // N'a rien a faire dans le controller
     //private ItemFactory itemFactory;
 
-    //private TileMapView tileMapView; // TODO: Rename to MapView instead for more clarity
+    //private TileMapView tileMapView; // DONE: Rename to MapView instead for more clarity
     //private HeartsView heartsView;
     //private PlayerView playerView; // A voir si on modifie
     //private InventoryView inventoryView;
     //private HotbarView hotbarView;
-    private ArrayList<MobView> mobView; // A voir si on modifie
+    //private ArrayList<MobView> mobView; // A voir si on modifie
     private PnjView pnjView; // A voir si on modifie
     //private CraftView craftView;
     private Cooldown dialogueCD;
@@ -71,7 +69,7 @@ public class GlobalController implements Initializable {
     private AnchorPane entitiesPane; // was in weapons
 
     // Idk what is this, name is not clear
-    @FXML private AnchorPane globalPane; // TODO: Rename to something more clear MAYBE
+    @FXML private AnchorPane parentPane; // DONE: Rename to something more clear MAYBE
 
     // Map
     @FXML private TilePane landTileMap, backgroundTileMap;
@@ -117,26 +115,45 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
-    // DONE : potentiellement le move dans la vue du coup
-//    private void initViews() {
-//        globalView = new GlobalView(landTileMap,backgroundTileMap,entitiesPane,heartsHbox,craftListView,craftButton,recipeDisplay,hotbarInventory,expandedInventory,hudAnchorPane);
-////        tileMapView = new TileMapView(world.getTileMap(), landTileMap, backgroundTileMap);
-////        lootView = new LootView(entitiesPane);
-//    }
-
-//    private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
-////        initPlayer();
-//        initCamera();
-//        initInputHandler();
-//    }
-
-
     private void updateGameLoop() {
         world.updateWorld();
         camera.update();
         inputHandler.getMouseItemActionInputHandler().checkMouseInput();
         cooldownManager.allCooldownsTick();
     }
+
+    private void initCamera() {
+        camera = new Camera(Player.getInstance(), landTileMap, backgroundTileMap, parentPane, globalView.getLootView(), 0.1);
+        globalView.getPlayerView().camOffsetXProperty().bind(camera.currentCamXProperty());
+        globalView.getPlayerView().camOffsetYProperty().bind(camera.currentCamYProperty());
+    }
+
+    private void initInputHandler() {
+        inputHandler = new InputHandler(globalView.getPlayerView().getInventoryView(),globalView.getPlayerView().getCraftView(),camera, globalView.getTileMapView(),globalView.getPlayerView().getHotbarView());
+        inputHandler.initInputHandler(landTileMap,hudAnchorPane);
+    }
+
+    private void initItemEnums() {
+        for (ItemsEnum itemsEnum : ItemsEnum.values()) {
+            if (itemsEnum.getItemType().equals(ItemTypesEnum.BLOCK) || itemsEnum.getItemType().equals(ItemTypesEnum.UTILITY)) {
+                itemsEnum.itemEnumInit();
+            }
+        }
+    }
+
+    ////        tileMapView = new TileMapView(world.getTileMap(), landTileMap, backgroundTileMap);
+    ////        lootView = new LootView(entitiesPane);
+    ////        initPlayer();
+//        initCamera();
+//        initInputHandler();
+//    }
+
+    // DONE : potentiellement le move dans la vue du coup
+//    private void initViews() {
+//        globalView = new GlobalView(landTileMap,backgroundTileMap,entitiesPane,heartsHbox,craftListView,craftButton,recipeDisplay,hotbarInventory,expandedInventory,hudAnchorPane);
+
+//    }
+//    private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
 
 
     // DONE : Mettre dans World
@@ -221,11 +238,11 @@ public class GlobalController implements Initializable {
         inventory.add(9,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
         inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);*/
 
-        //TODO: on le bouge pas tant qu'il est pas fix
-        //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        //world.getPlayer().healthProperty().addListener(new DeathListener(Player.getInstance(), playerView, world.getAliveMobs(), )); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
+        //DONE: on le bouge pas tant qu'il est pas fix
+//        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
+//        world.getPlayer().healthProperty().addListener(new DeathListener(Player.getInstance(), playerView, world.getAliveMobs(), )); //DONE: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
         // Utiliser un bind spécial pour le deathlistener (potentiellement)
-        //TODO: ptet à déplacer dans actor ou actor view, demander à Rety son avis sur la question
+        //DONE: ptet à déplacer dans actor ou actor view, demander à Rety son avis sur la question
 
         // DONE : On les gardes ici, mais on va essayer de décomposer la création des Handlers avec des méthodes voir une classe à part entière
 //        inputHandler = new InputHandler(inventoryView,craftView,camera,globalView,hotbarView);
@@ -258,16 +275,6 @@ public class GlobalController implements Initializable {
 //        });
 //    }
 
-    private void initCamera() {
-        camera = new Camera(Player.getInstance(), landTileMap, backgroundTileMap, globalPane, globalView.getLootView(), 0.1);
-        globalView.getPlayerView().camOffsetXProperty().bind(camera.currentCamXProperty());
-        globalView.getPlayerView().camOffsetYProperty().bind(camera.currentCamYProperty());
-    }
-
-    private void initInputHandler() {
-        inputHandler = new InputHandler(globalView.getPlayerView().getInventoryView(),globalView.getPlayerView().getCraftView(),camera, globalView.getTileMapView(),globalView.getPlayerView().getHotbarView());
-        inputHandler.initInputHandler(landTileMap,hudAnchorPane);
-    }
 
 //    private void createNPCView(Mob mob) {
 //
@@ -321,14 +328,6 @@ public class GlobalController implements Initializable {
             pnjView.speak();
             dialogueCD.setLimit(2);
             dialogueCD.start();
-        }
-    }
-
-    private void initItemEnums() {
-        for (ItemsEnum itemsEnum : ItemsEnum.values()) {
-            if (itemsEnum.getItemType().equals(ItemTypesEnum.BLOCK) || itemsEnum.getItemType().equals(ItemTypesEnum.UTILITY)) {
-                itemsEnum.itemEnumInit();
-            }
         }
     }
 
