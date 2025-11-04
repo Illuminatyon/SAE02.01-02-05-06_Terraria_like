@@ -21,8 +21,8 @@ public class PlayerView extends ActorView {
     private InventoryView inventoryView;
     private HotbarView hotbarView;
 
-    public PlayerView(TileMap tileMap, AnchorPane anchorPane, HBox heartsHbox, ListView<RecipesEnum> recipeView, Button craftButton, HBox recipeDisplay, GridPane hotbarInventory, GridPane expandedInventory, AnchorPane hudAnchorPane) {
-        super(Player.getInstance(),tileMap,anchorPane);
+    public PlayerView(AnchorPane anchorPane, HBox heartsHbox, ListView<RecipesEnum> recipeView, Button craftButton, HBox recipeDisplay, GridPane hotbarInventory, GridPane expandedInventory, AnchorPane hudAnchorPane) {
+        super(Player.getInstance(),anchorPane);
 
         this.heartsView = new HeartsView(Player.getInstance().healthProperty(),heartsHbox);
         this.craftView = new CraftView(recipeView,Player.getInstance().getCraftingManager().getRecipesAvailable(),craftButton,recipeDisplay);

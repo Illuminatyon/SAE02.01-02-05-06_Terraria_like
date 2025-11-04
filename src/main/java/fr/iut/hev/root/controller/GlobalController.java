@@ -100,10 +100,7 @@ public class GlobalController implements Initializable {
         initCamera();
         initInputHandler();
         initGameLoop(); // Laisser ici
-        for (int i =0; i<mobView.size(); i++){
-            createNPCView(world.getAliveMobs().get(i));
-
-        }
+        globalView.initMobViews(camera,entitiesPane);
     }
 
     private void initGameLoop(){
@@ -272,13 +269,13 @@ public class GlobalController implements Initializable {
         inputHandler.initInputHandler(landTileMap,hudAnchorPane);
     }
 
-    private void createNPCView(Mob mob) {
-
-        this.mobView.add(new MobView(mob,world.getTileMap(), entitiesPane));
-        mobView.getLast().camOffsetXProperty().bind(camera.currentCamXProperty());
-        mobView.getLast().camOffsetYProperty().bind(camera.currentCamYProperty());
-        //mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), lootManager));
-    }
+//    private void createNPCView(Mob mob) {
+//
+//        this.mobView.add(new MobView(mob,world.getTileMap(), entitiesPane));
+//        mobView.getLast().camOffsetXProperty().bind(camera.currentCamXProperty());
+//        mobView.getLast().camOffsetYProperty().bind(camera.currentCamYProperty());
+//        //mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), lootManager));
+//    }
 /*
     private void createMob(ActorEnum mobActorEnum) { //TODO: essayer ptet de regrouper tous les créateur de mob/pnj en une méthode pour éviter la duplication
         Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
@@ -305,7 +302,7 @@ public class GlobalController implements Initializable {
     // Methode en com dans world
     private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstru ct/world quand on aura reparé les dialogues
         Pnj npc = new Pnj(0, 0,32, 64, TileMap.getInstance(), 2, 2, 10, 3, npcActorEnum, HitboxManager.getInstance());
-        this.pnjView = new PnjView(npc, TileMap.getInstance(), entitiesPane);
+        this.pnjView = new PnjView(npc, entitiesPane);
         pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
         pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
         //npc.healthProperty().addListener(new DeathListener(npc, pnjView, world.getAliveMobs(),lootManager));

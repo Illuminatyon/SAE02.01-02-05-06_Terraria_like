@@ -14,8 +14,8 @@ public class PnjView extends ActorView {
     private Label phrase = new Label();
     private int count = 0;
 
-    public PnjView(Pnj actor, TileMap tileMap, AnchorPane anchorPane) {
-        super(actor, tileMap, anchorPane);
+    public PnjView(Pnj actor, AnchorPane anchorPane) {
+        super(actor, anchorPane);
         this.phrase.setFont(new Font("Arial", 14));
         this.phrase.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5;");
         this.phrase.setVisible(false);
