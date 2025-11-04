@@ -53,7 +53,7 @@ public class GlobalController implements Initializable {
     //private CraftingManager craftingManager; // peut etre dans le joueur
     //private HitboxManager hitboxManager; // world ou controller
     //public static Mob mob ;
-    private static Set<Mob> mobs; // N'a rien a faire dans le controller
+    //private static Set<Mob> mobs; // N'a rien a faire dans le controller
     //private ItemFactory itemFactory;
 
     private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
@@ -124,50 +124,43 @@ public class GlobalController implements Initializable {
         initPlayer();
         initInputHandler();
         initCamera();
-        System.out.println("crashed ?");
-//        createAggressiveMob(ActorEnum.ZOMBIE);
-//        createMob(ActorEnum.POULET);
-        //createNPC(ActorEnum.HOMPS);
-        System.out.println("recrashed .");
     }
 
 
     private void updateGameLoop() {
-        world.getPlayer().update();
-        updateAliveMobs(); // TODO : C'est le world qui est censé gérer ca
-        updateLoots();
-        handleMouseInput();
+        world.updateWorld();
+        inputHandler.getMouseItemActionInputHandler().checkMouseInput();
         camera.update();
         cooldownManager.allCooldownsTick();
     }
 
 
-    // TODO : Mettre dans World
-    private void updateAliveMobs() {
-        for (int i = world.getAliveMobs().size() - 1; i >= 0; i--) { // TODO : Chercher pourquoi on a choisi de faire le parcours à l'envers
-            Actor currentActor = world.getAliveMobs().get(i);
-            if (currentActor != null) {
-                currentActor.updatePosition();
-            } else {
-                world.getAliveMobs().remove(i);
-            }
-        }
-    }
+    // DONE : Mettre dans World
+//    private void updateAliveMobs() {
+//        for (int i = world.getAliveMobs().size() - 1; i >= 0; i--) {
+//            Actor currentActor = world.getAliveMobs().get(i);
+//            if (currentActor != null) {
+//                currentActor.updatePosition();
+//            } else {
+//                world.getAliveMobs().remove(i);
+//            }
+//        }
+//    }
 
-    private void updateLoots() {
-        for (Loot loot : world.getLootManager().getLootOnMap()) {
-            loot.updatePosition();
-        }
-    }
+//    private void updateLoots() {
+//        for (Loot loot : world.getLootManager().getLootOnMap()) {
+//            loot.updatePosition();
+//        }
+//    }
 
-    private void handleMouseInput() {
-        if (inputHandler.getMouseItemActionInputHandler().getMouseClickIsPressed()) {
-            inputHandler.getMouseItemActionInputHandler().onClickPressedLoop();
-        }
-        if (inputHandler.getMouseItemActionInputHandler().getMouseClickIsReleased()) {
-            inputHandler.getMouseItemActionInputHandler().onClickReleasedLoop();
-        }
-    }
+//    private void handleMouseInput() {
+//        if (inputHandler.getMouseItemActionInputHandler().getMouseClickIsPressed()) {
+//            inputHandler.getMouseItemActionInputHandler().onClickPressedLoop();
+//        }
+//        if (inputHandler.getMouseItemActionInputHandler().getMouseClickIsReleased()) {
+//            inputHandler.getMouseItemActionInputHandler().onClickReleasedLoop();
+//        }
+//    }
     /*private void initWorld() throws IOException {
         hitboxManager = new HitboxManager();
         itemFactory = ItemFactory.getInstance();

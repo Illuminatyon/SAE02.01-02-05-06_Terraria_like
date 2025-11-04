@@ -1,5 +1,6 @@
 package fr.iut.hev.root.model;
 
+import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.entities.LootManager;
 import fr.iut.hev.root.model.land.TileMap;
 import fr.iut.hev.root.model.entities.actor.Actor;
@@ -45,6 +46,29 @@ public class World {
         this.player = Player.getInstance();
         this.player.initPlayer(100,100,32,48,5,10,3);
         this.tileMap.initTileMap(itemFactory,width,height);
+    }
+
+    private void updateAliveMobs() {
+        for (int i = aliveMobs.size() - 1; i >= 0; i--) {
+            Actor currentActor = aliveMobs.get(i);
+            if (currentActor != null) {
+                currentActor.updatePosition();
+            } else {
+                aliveMobs.remove(i);
+            }
+        }
+    }
+
+    private void updateLoots() {
+        for (Loot loot : lootManager.getLootOnMap()) {
+            loot.updatePosition();
+        }
+    }
+
+    public void updateWorld() {
+        player.update();
+        updateAliveMobs();
+        updateLoots();
     }
 
     public TileMap getTileMap() {

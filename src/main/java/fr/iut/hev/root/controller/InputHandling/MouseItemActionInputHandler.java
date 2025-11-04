@@ -171,6 +171,13 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
             itemUseCooldown.setLimit(0);
     }
 
+    public void checkMouseInput() {
+        if (mouseClickIsPressed)
+            onClickPressedLoop();
+        if (mouseClickIsReleased)
+            onClickReleasedLoop();
+    }
+
     public Player getPlayer() {
         return player;
     }
