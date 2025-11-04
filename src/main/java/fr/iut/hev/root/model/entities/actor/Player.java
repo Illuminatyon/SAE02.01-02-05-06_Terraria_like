@@ -47,14 +47,14 @@ public class Player extends Actor {
         return player;
     }
 
-    public void initPlayer(int posX, int posY, int width, int height, int moveSpeed, int jumpForce, int reach) {
+    public void initPlayer(int posX, int posY) {
         setPosX(posX);
         setPosY(posY);
-        setWidth(width);
-        setHeight(height);
-        setMoveSpeed(moveSpeed);
-        setJumpForce(jumpForce);
-        setReach(reach);
+        setWidth(ActorEnum.PLAYER.getWidth());
+        setHeight(ActorEnum.PLAYER.getHeight());
+        setMoveSpeed(ActorEnum.PLAYER.getMoveSpeed());
+        setJumpForce(ActorEnum.PLAYER.getJumpForce());
+        setReach(ActorEnum.PLAYER.getReach());
         setHitboxManager(HitboxManager.getInstance());
         setType(ActorEnum.PLAYER);
         setHealth(10);

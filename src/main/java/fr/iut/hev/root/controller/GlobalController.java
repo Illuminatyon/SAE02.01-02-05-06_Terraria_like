@@ -67,6 +67,7 @@ public class GlobalController implements Initializable {
     private Cooldown dialogueCD;
     private LootView lootView;
 
+
     // AnchorPane for actors that will move with the camera
     @FXML
     private AnchorPane entitiesPane; // was in weapons
@@ -98,6 +99,10 @@ public class GlobalController implements Initializable {
         initViews(); // Obligatoire
         initPlayerViewsAndMobs(); // A changer absolument
         initGameLoop(); // Laisser ici
+        for (int i =0; i<mobView.size(); i++){
+            createNPCView(world.getAliveMobs().get(i));
+
+        }
     }
 
     private void initGameLoop(){

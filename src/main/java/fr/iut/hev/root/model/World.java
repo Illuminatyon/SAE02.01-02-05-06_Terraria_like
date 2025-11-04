@@ -2,6 +2,10 @@ package fr.iut.hev.root.model;
 
 import fr.iut.hev.root.model.entities.Loot;
 import fr.iut.hev.root.model.entities.LootManager;
+import fr.iut.hev.root.model.entities.actor.ActorEnum;
+import fr.iut.hev.root.model.entities.actor.NpcFactory.NPCFactory;
+import fr.iut.hev.root.model.entities.actor.NpcFactory.PassiveNpcFactory;
+import fr.iut.hev.root.model.entities.actor.mobs.Mob;
 import fr.iut.hev.root.model.land.TileMap;
 import fr.iut.hev.root.model.entities.actor.Actor;
 import fr.iut.hev.root.model.entities.actor.Player;
@@ -18,7 +22,7 @@ public class World {
     private TileMap tileMap;
     private Player player;
     private HitboxManager hitboxManager;
-    private ArrayList<Actor> aliveMobs;
+    private ArrayList<Mob> aliveMobs;
     private LootManager lootManager;
 
     private World() {
@@ -44,7 +48,7 @@ public class World {
         this.itemFactory = ItemFactory.getInstance();
         this.lootManager = new LootManager(this.itemFactory);
         this.player = Player.getInstance();
-        this.player.initPlayer(100,100,32,48,5,10,3);
+        this.player.initPlayer(100,100);
         this.tileMap.initTileMap(itemFactory,width,height);
     }
 
@@ -71,6 +75,12 @@ public class World {
         updateLoots();
     }
 
+    public void addMob(ActorEnum actor) {// Fonction temporaire Vue qu'onn a pas vrm de logique de spawn
+        Mob poulet = new PassiveNpcFactory().mobFactory(actor, 110, 100);
+        this.aliveMobs.add(poulet);
+
+    }
+
     public TileMap getTileMap() {
         return this.tileMap;
     }
@@ -87,7 +97,7 @@ public class World {
         this.player = player;
     }
 
-    public ArrayList<Actor> getAliveMobs() {
+    public ArrayList<Mob> getAliveMobs() {
         return this.aliveMobs;
     }
 

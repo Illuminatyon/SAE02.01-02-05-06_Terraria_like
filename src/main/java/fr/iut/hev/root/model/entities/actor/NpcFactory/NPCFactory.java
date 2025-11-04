@@ -24,6 +24,7 @@ public abstract class NPCFactory {
         mob.setJumpForce(actor.getJumpForce());
         mob.setReach(actor.getReach());
         mob.setHitboxManager(HitboxManager.getInstance());
+        mob.setType(actor);
         return mob;
     }
 
