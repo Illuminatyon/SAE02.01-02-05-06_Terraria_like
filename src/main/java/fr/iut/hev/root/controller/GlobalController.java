@@ -277,53 +277,7 @@ public class GlobalController implements Initializable {
         mobView.getLast().camOffsetYProperty().bind(camera.currentCamYProperty());
         //mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), lootManager));
     }
-/*
-    private void createMob(ActorEnum mobActorEnum) { //TODO: essayer ptet de regrouper tous les créateur de mob/pnj en une méthode pour éviter la duplication
-        Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
-        mobView = new MobView(mob, tileMap, );
-        mobView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        mobView.camOffsetYProperty().bind(camera.currentCamYProperty());
-        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
-        hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
-        world.getAliveMobs().add(mob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
-    }
 
-    // Methode en com dans world
-    private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
-        AggressiveMob aggressiveMob = new AggressiveMob(
-                0, 0, 32, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
-        );
-        this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
-        aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty());
-        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
-        world.getAliveMobs().add(aggressiveMob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
-    }
-*/
-    // Methode en com dans world
-    private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstru ct/world quand on aura reparé les dialogues
-        Pnj npc = new Pnj(0, 0,32, 64, TileMap.getInstance(), 2, 2, 10, 3, npcActorEnum, HitboxManager.getInstance());
-        this.pnjView = new PnjView(npc, TileMap.getInstance(), entitiesPane);
-        pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
-        //npc.healthProperty().addListener(new DeathListener(npc, pnjView, world.getAliveMobs(),lootManager));
-        dialogueCD = new Cooldown(0);
-        world.getAliveMobs().add(npc); // TODO : même bordel ici
-    }
-
-    /**
-     * Checks if the player is near a PNJ and triggers dialogue if needed
-     */
-    private void checkPnjDialogue() { //TODO: fix les dialogues avec Old Marc (problème de collision et de manière de trigger le dialogue si je dis pas de conneries)
-        if (Player.getInstance() == null || pnjView == null || dialogueCD == null) {
-            return;
-        }
-        if ((Player.getInstance().getCollider().hasCollisionRight() || Player.getInstance().getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
-            pnjView.speak();
-            dialogueCD.setLimit(2);
-            dialogueCD.start();
-        }
-    }
 
     private void initItemEnums() {
         for (ItemsEnum itemsEnum : ItemsEnum.values()) {
