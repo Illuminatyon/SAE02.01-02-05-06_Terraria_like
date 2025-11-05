@@ -16,11 +16,11 @@ public class ActorView {
     private DoubleProperty camOffsetXProperty;
     private DoubleProperty camOffsetYProperty;
 
-    public ActorView(Actor actor, TileMap tileMap, AnchorPane anchorPane) {
+    public ActorView(Actor actor, AnchorPane anchorPane) {
         this.camOffsetXProperty = new SimpleDoubleProperty(0);
         this.camOffsetYProperty = new SimpleDoubleProperty(0);
         this.actor = actor;
-        this.tileMap = tileMap;
+        this.tileMap = TileMap.getInstance();
         this.anchorPane = anchorPane;
         this.load();
     }

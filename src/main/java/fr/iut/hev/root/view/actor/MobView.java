@@ -10,12 +10,12 @@ public class MobView extends ActorView {
     private Mob mob;
     private ImageView mobsprite;
 
-    public MobView(Mob mob, TileMap tileMap, AnchorPane anchorPane) {
-        super(mob, tileMap,anchorPane);
+    public MobView(Mob mob, AnchorPane anchorPane) {
+        super(mob,anchorPane);
     }
 
     public MobView(AggressiveMob mob, TileMap tileMap, AnchorPane anchorPane) {
-        super(mob, tileMap,anchorPane);
+        super(mob,anchorPane);
     }
 }
 

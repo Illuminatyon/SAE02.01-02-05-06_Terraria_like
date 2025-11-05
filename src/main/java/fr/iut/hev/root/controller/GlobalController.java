@@ -56,16 +56,17 @@ public class GlobalController implements Initializable {
     //private static Set<Mob> mobs; // N'a rien a faire dans le controller
     //private ItemFactory itemFactory;
 
-    private GlobalView globalView; // TODO: Rename to MapView instead for more clarity
-    private HeartsView heartsView;
-    private PlayerView playerView; // A voir si on modifie
-    private InventoryView inventoryView;
-    private HotbarView hotbarView;
-    private ArrayList<MobView> mobView; // A voir si on modifie
+    //private TileMapView tileMapView; // DONE: Rename to MapView instead for more clarity
+    //private HeartsView heartsView;
+    //private PlayerView playerView; // A voir si on modifie
+    //private InventoryView inventoryView;
+    //private HotbarView hotbarView;
+    //private ArrayList<MobView> mobView; // A voir si on modifie
     private PnjView pnjView; // A voir si on modifie
-    private CraftView craftView;
+    //private CraftView craftView;
     private Cooldown dialogueCD;
-    private LootView lootView;
+    //private LootView lootView;
+    private GlobalView globalView;
 
 
     // AnchorPane for actors that will move with the camera
@@ -73,7 +74,7 @@ public class GlobalController implements Initializable {
     private AnchorPane entitiesPane; // was in weapons
 
     // Idk what is this, name is not clear
-    @FXML private AnchorPane globalPane; // TODO: Rename to something more clear MAYBE
+    @FXML private AnchorPane parentPane; // DONE: Rename to something more clear MAYBE
 
     // Map
     @FXML private TilePane landTileMap, backgroundTileMap;
@@ -96,13 +97,13 @@ public class GlobalController implements Initializable {
         world = World.getInstance();
         world.initWorld(3840,1440);
         initItemEnums(); // Laisser la ou bouger dans world ?
-        initViews(); // Obligatoire
-        initPlayerViewsAndMobs(); // A changer absolument
+        //initViews(); // Obligatoire
+        globalView = new GlobalView(landTileMap,backgroundTileMap,entitiesPane,heartsHbox,craftListView,craftButton,recipeDisplay,hotbarInventory,expandedInventory,hudAnchorPane);
+        //initPlayerViewsAndMobs(); // A changer absolument
+        initCamera();
+        initInputHandler();
         initGameLoop(); // Laisser ici
-        for (int i =0; i<mobView.size(); i++){
-            createNPCView(world.getAliveMobs().get(i));
-
-        }
+        globalView.initMobViews(camera,entitiesPane);
     }
 
     private void initGameLoop(){
@@ -119,25 +120,45 @@ public class GlobalController implements Initializable {
         gameLoop.play();
     }
 
-    // TODO : potentiellement le move dans la vue du coup
-    private void initViews(){
-        globalView = new GlobalView(world.getTileMap(), landTileMap, backgroundTileMap);
-        lootView = new LootView(entitiesPane);
-    }
-
-    private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
-        initPlayer();
-        initInputHandler();
-        initCamera();
-    }
-
-
     private void updateGameLoop() {
         world.updateWorld();
-        inputHandler.getMouseItemActionInputHandler().checkMouseInput();
         camera.update();
+        inputHandler.getMouseItemActionInputHandler().checkMouseInput();
         cooldownManager.allCooldownsTick();
     }
+
+    private void initCamera() {
+        camera = new Camera(Player.getInstance(), landTileMap, backgroundTileMap, parentPane, globalView.getLootView(), 0.1);
+        globalView.getPlayerView().camOffsetXProperty().bind(camera.currentCamXProperty());
+        globalView.getPlayerView().camOffsetYProperty().bind(camera.currentCamYProperty());
+    }
+
+    private void initInputHandler() {
+        inputHandler = new InputHandler(globalView.getPlayerView().getInventoryView(),globalView.getPlayerView().getCraftView(),camera, globalView.getTileMapView(),globalView.getPlayerView().getHotbarView());
+        inputHandler.initInputHandler(landTileMap,hudAnchorPane);
+    }
+
+    private void initItemEnums() {
+        for (ItemsEnum itemsEnum : ItemsEnum.values()) {
+            if (itemsEnum.getItemType().equals(ItemTypesEnum.BLOCK) || itemsEnum.getItemType().equals(ItemTypesEnum.UTILITY)) {
+                itemsEnum.itemEnumInit();
+            }
+        }
+    }
+
+    ////        tileMapView = new TileMapView(world.getTileMap(), landTileMap, backgroundTileMap);
+    ////        lootView = new LootView(entitiesPane);
+    ////        initPlayer();
+//        initCamera();
+//        initInputHandler();
+//    }
+
+    // DONE : potentiellement le move dans la vue du coup
+//    private void initViews() {
+//        globalView = new GlobalView(landTileMap,backgroundTileMap,entitiesPane,heartsHbox,craftListView,craftButton,recipeDisplay,hotbarInventory,expandedInventory,hudAnchorPane);
+
+//    }
+//    private void initPlayerViewsAndMobs() { // Les mobs crée sont des tests
 
 
     // DONE : Mettre dans World
@@ -176,7 +197,7 @@ public class GlobalController implements Initializable {
         world = new World("Default World", tileMap, player, aliveActors, hitboxManager, itemFactory);
     }*/
 
-    private void initPlayer() {
+//    private void initPlayer() {
         //DONE: déplacer ça dans une initialisation de player dans Word
         //ItemFactory itemFactory = world.getItemFactory(); // DONE: A deplacer
         //craftingManager = new CraftingManager(inventory,itemFactory);//DONE: déplacer le crafting manager dans player sachant qu'il faut faire le refactor de la playerview avant étant donné qu'il est impliqué dans la playerview
@@ -190,7 +211,7 @@ public class GlobalController implements Initializable {
 //        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
 
         //DONE: bouger ça dans une méthode ou quelque chose consacré à l'initialisation de la vue
-        playerView = new PlayerView(world.getTileMap(), entitiesPane, heartsHbox, craftListView, craftButton, recipeDisplay, hotbarInventory, expandedInventory, hudAnchorPane,inputHandler);
+//        playerView = new PlayerView(world.getTileMap(), entitiesPane, heartsHbox, craftListView, craftButton, recipeDisplay, hotbarInventory, expandedInventory, hudAnchorPane);
 
         //heartsView = new HeartsView(player.healthProperty(), heartsHbox); //DONE: regrouper l'initialisation des vues dans une seule méthode
         //craftView = new CraftView(craftListView,craftingManager.getRecipesAvailable(),craftButton,recipeDisplay);
@@ -222,11 +243,11 @@ public class GlobalController implements Initializable {
         inventory.add(9,itemFactory.createItem(ItemsEnum.WOODEN_PICKAXE),1);
         inventory.add(10,itemFactory.createItem(ItemsEnum.WOODEN_SHOVEL),1);*/
 
-        //TODO: on le bouge pas tant qu'il est pas fix
-        //player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
-        //world.getPlayer().healthProperty().addListener(new DeathListener(Player.getInstance(), playerView, world.getAliveMobs(), )); //TODO: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
+        //DONE: on le bouge pas tant qu'il est pas fix
+//        player.healthProperty().addListener(((obs, old, t1) -> hudView.updateHealth(t1)));
+//        world.getPlayer().healthProperty().addListener(new DeathListener(Player.getInstance(), playerView, world.getAliveMobs(), )); //DONE: il faut une réorganisation claire de tous les bind, listener tout en tenant compte de l'ordre d'initialisation
         // Utiliser un bind spécial pour le deathlistener (potentiellement)
-        //TODO: ptet à déplacer dans actor ou actor view, demander à Rety son avis sur la question
+        //DONE: ptet à déplacer dans actor ou actor view, demander à Rety son avis sur la question
 
         // DONE : On les gardes ici, mais on va essayer de décomposer la création des Handlers avec des méthodes voir une classe à part entière
 //        inputHandler = new InputHandler(inventoryView,craftView,camera,globalView,hotbarView);
@@ -257,19 +278,26 @@ public class GlobalController implements Initializable {
 //            hudAnchorPane.addEventHandler(MouseEvent.MOUSE_MOVED,mouseInventoryHandler);
 //            landTileMap.getScene().addEventHandler(ScrollEvent.SCROLL,scrollHotbarHandler);
 //        });
-    }
+//    }
 
-    private void initCamera() {
-        camera = new Camera(Player.getInstance(), landTileMap, backgroundTileMap, globalPane, lootView, 0.1);
-        playerView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        playerView.camOffsetYProperty().bind(camera.currentCamYProperty());
-    }
 
-    private void initInputHandler() {
-        inputHandler = new InputHandler(playerView.getInventoryView(),playerView.getCraftView(),camera,globalView,playerView.getHotbarView());
-        inputHandler.initInputHandler(landTileMap,hudAnchorPane);
+//    private void createNPCView(Mob mob) {
+//
+//        this.mobView.add(new MobView(mob,world.getTileMap(), entitiesPane));
+//        mobView.getLast().camOffsetXProperty().bind(camera.currentCamXProperty());
+//        mobView.getLast().camOffsetYProperty().bind(camera.currentCamYProperty());
+//        //mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), lootManager));
+//    }
+/*
+    private void createMob(ActorEnum mobActorEnum) { //TODO: essayer ptet de regrouper tous les créateur de mob/pnj en une méthode pour éviter la duplication
+        Mob mob = new Mob(0, 0, 32, 32, tileMap, 2, 2, 15, 3, mobActorEnum, hitboxManager);
+        mobView = new MobView(mob, tileMap, );
+        mobView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        mobView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        mob.healthProperty().addListener(new DeathListener(mob, mobView, aliveActors, world.getItemFactory()));
+        hitboxManager.createHitbox(mob, HitboxType.VULNERABLE);
+        world.getAliveMobs().add(mob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
     }
-
     private void createNPCView(Mob mob) {
 
         this.mobView.add(new MobView(mob,world.getTileMap(), entitiesPane));
@@ -278,12 +306,40 @@ public class GlobalController implements Initializable {
         //mob.healthProperty().addListener(new DeathListener(mob, mobView.getLast(), world.getAliveMobs(), lootManager));
     }
 
+    // Methode en com dans world
+    private void createAggressiveMob(ActorEnum aggressiveMobActorEnum) {
+        AggressiveMob aggressiveMob = new AggressiveMob(
+                0, 0, 32, 54, tileMap, 5, 1, 15, 10, aggressiveMobActorEnum, player, 20, 1500, aliveActors, entitiesPane, 1, this.hitboxManager // Use actorsPane instead of globalPane
+        );
+        this.aggressiveMobView = new MobView(aggressiveMob, tileMap, entitiesPane);
+        aggressiveMobView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        aggressiveMobView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        aggressiveMob.healthProperty().addListener(new DeathListener(aggressiveMob, aggressiveMobView, aliveActors,world.getItemFactory()));
+        world.getAliveMobs().add(aggressiveMob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
+    }
+*/
+    // Methode en com dans world
+    private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstru ct/world quand on aura reparé les dialogues
+        Pnj npc = new Pnj(0, 0,32, 64, TileMap.getInstance(), 2, 2, 10, 3, npcActorEnum, HitboxManager.getInstance());
+        this.pnjView = new PnjView(npc, entitiesPane);
+        pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
+        pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
+        //npc.healthProperty().addListener(new DeathListener(npc, pnjView, world.getAliveMobs(),lootManager));
+        dialogueCD = new Cooldown(0);
+        world.getAliveMobs().add(npc); // TODO : même bordel ici
+    }
 
-    private void initItemEnums() {
-        for (ItemsEnum itemsEnum : ItemsEnum.values()) {
-            if (itemsEnum.getItemType().equals(ItemTypesEnum.BLOCK) || itemsEnum.getItemType().equals(ItemTypesEnum.UTILITY)) {
-                itemsEnum.itemEnumInit();
-            }
+    /**
+     * Checks if the player is near a PNJ and triggers dialogue if needed
+     */
+    private void checkPnjDialogue() { //TODO: fix les dialogues avec Old Marc (problème de collision et de manière de trigger le dialogue si je dis pas de conneries)
+        if (Player.getInstance() == null || pnjView == null || dialogueCD == null) {
+            return;
+        }
+        if ((Player.getInstance().getCollider().hasCollisionRight() || Player.getInstance().getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
+            pnjView.speak();
+            dialogueCD.setLimit(2);
+            dialogueCD.start();
         }
     }
 
