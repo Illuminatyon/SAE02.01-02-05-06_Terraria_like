@@ -318,30 +318,7 @@ public class GlobalController implements Initializable {
         world.getAliveMobs().add(aggressiveMob); // TODO : faire en sorte de faire déjà tout ça avec des design pattern templates
     }
 */
-    // Methode en com dans world
-    private void createNPC(ActorEnum npcActorEnum) {// TODO : il passera dans le mobviewconstru ct/world quand on aura reparé les dialogues
-        Pnj npc = new Pnj(0, 0,32, 64, TileMap.getInstance(), 2, 2, 10, 3, npcActorEnum, HitboxManager.getInstance());
-        this.pnjView = new PnjView(npc, entitiesPane);
-        pnjView.camOffsetXProperty().bind(camera.currentCamXProperty());
-        pnjView.camOffsetYProperty().bind(camera.currentCamYProperty());
-        //npc.healthProperty().addListener(new DeathListener(npc, pnjView, world.getAliveMobs(),lootManager));
-        dialogueCD = new Cooldown(0);
-        world.getAliveMobs().add(npc); // TODO : même bordel ici
-    }
 
-    /**
-     * Checks if the player is near a PNJ and triggers dialogue if needed
-     */
-    private void checkPnjDialogue() { //TODO: fix les dialogues avec Old Marc (problème de collision et de manière de trigger le dialogue si je dis pas de conneries)
-        if (Player.getInstance() == null || pnjView == null || dialogueCD == null) {
-            return;
-        }
-        if ((Player.getInstance().getCollider().hasCollisionRight() || Player.getInstance().getCollider().hasCollisionLeft()) && !dialogueCD.getOnGoing()) {
-            pnjView.speak();
-            dialogueCD.setLimit(2);
-            dialogueCD.start();
-        }
-    }
 
     /**
      * Gets the item factory
