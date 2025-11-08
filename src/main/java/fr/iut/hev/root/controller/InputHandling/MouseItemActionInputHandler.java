@@ -161,7 +161,6 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         itemUseCooldown.start();
     }
     public void onRightClickReleased() {
-
     }
 
     public void updateCooldown() {
