@@ -33,6 +33,7 @@ public class DeathListener implements ChangeListener<Number> {
 
     // Ce ne sont que des fonctions afin de juste faire des affichages, pour comprendre un peu le déroulé du code
     // et si on a besoin de faire des appels du coup
+    // ajouter des logs si possible, on le fera pour la semaine prochaine je pense, ça pourrait être pas mal
 
     private void logActorDeath() {
         System.out.println("[DEBUG_LOG] Actor " + actor.getName() + " health is " + actor.getHealth() + ", removing from aliveActors list");

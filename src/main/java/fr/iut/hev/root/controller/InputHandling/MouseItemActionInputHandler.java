@@ -67,7 +67,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
         if (!inventoryView.getInventoryOpened() && !itemUseCooldown.getOnGoing()) {
 
             if (player.getItemInHand() == null) {
-                System.out.println("prout");
+                System.out.println("OK");
             }
             else {
                 if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.WEAPON) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY)) {

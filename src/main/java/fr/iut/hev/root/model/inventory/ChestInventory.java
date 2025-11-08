@@ -3,7 +3,7 @@ package fr.iut.hev.root.model.inventory;
 import fr.iut.hev.root.model.items.Item;
 
 /**
- * Inventaire d'un coffre.
+ * Inventaire d'un coffre qui pourrait être dans le jeu.
  * Plus grand que l'inventaire du joueur (100 slots).
  */
 public class ChestInventory extends AbstractInventory {
