@@ -131,7 +131,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public void onLeftClickPressedLoop() {
         if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY))
-                worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
+                worldView.updateTile(tileMap.getTile((int)x, (int)y));
         }
     }
 
@@ -147,7 +147,7 @@ public class MouseItemActionInputHandler implements EventHandler<MouseEvent> {
     public void onLeftClickReleasedLoop() {
         if (player.usesItemInHand(this)) {
             if (player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.TOOL) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.BLOCK) || player.getItemInHand().getItemEnum().getItemType().equals(ItemTypesEnum.UTILITY))
-                worldView.updateTile(tileMap.getTile((int)x / format,(int)y / format));
+                worldView.updateTile(tileMap.getTile((int)x,(int)y));
         }
         this.mouseClickIsReleased = false;
     }

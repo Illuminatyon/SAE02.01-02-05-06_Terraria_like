@@ -28,11 +28,11 @@ public class Tile {
         this.tileEnum = tileEnum;
     }
 
-    public int getX() {
+    public int getTileX() {
         return this.tileX;
     }
 
-    public int getY() {
+    public int getTileY() {
         return this.tileY;
     }
 

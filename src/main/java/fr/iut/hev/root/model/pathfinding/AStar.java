@@ -179,7 +179,7 @@ public class AStar {
      */
     public boolean isValidPosition(int x, int y) {
         // Check if position is within bounds
-        if (x < 0 || y < 0 || x >= tileMap.getWidth() || y >= tileMap.getHeight()) {
+        if (x < 0 || y < 0 || x >= tileMap.getPixelsWidth() || y >= tileMap.getPixelsHeight()) {
             return false;
         }
 

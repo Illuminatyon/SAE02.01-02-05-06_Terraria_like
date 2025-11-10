@@ -21,8 +21,8 @@ public class Utility extends Item {
 
     @Override
     public boolean isUsed(MouseItemActionInputHandler eventHandler) {
-        int x = (int)eventHandler.getX() / format;
-        int y  = (int)eventHandler.getY() / format;
+        int x = (int)eventHandler.getX();
+        int y  = (int)eventHandler.getY();
         TileMap tileMap = eventHandler.getTileMap();
         Player player = eventHandler.getPlayer();
 

@@ -172,7 +172,7 @@ public class GlobalController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         world = World.getInstance();
-        world.initWorld(3840,1440);
+        world.initWorld(120, 45);
         initItemEnums();
         globalView = new GlobalView(landTileMap,backgroundTileMap,entitiesPane,heartsHbox,craftListView,craftButton,recipeDisplay,hotbarInventory,expandedInventory,hudAnchorPane);
         initCamera();

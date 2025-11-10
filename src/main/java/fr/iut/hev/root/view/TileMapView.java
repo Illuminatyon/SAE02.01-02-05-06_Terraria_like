@@ -29,9 +29,9 @@ public class TileMapView {
         ImageView tileBreakable;
         ImageView tileBackground;
         int index = 0;
-        for (int i = 0; i < this.tileMap.getHeight(); i++) {
-            for (int j = 0; j < this.tileMap.getWidth(); j++) {
-                currentTile = this.tileMap.getTile(j,i);
+        for (int i = 0; i < this.tileMap.getTilesHeight(); i++) {
+            for (int j = 0; j < this.tileMap.getTilesWidth(); j++) {
+                currentTile = this.tileMap.getTile(j * format, i * format);
                 tileBreakable = new ImageView(getTexture(currentTile,4));
                 tileBackground = new ImageView(getTexture_background(currentTile));
                 tileBreakable.setId(Integer.toString(index));
@@ -68,17 +68,17 @@ public class TileMapView {
         if (tileHealth > 0) {
             tileView = new ImageView(getTexture(tile, textureNumber));
             if (!(tile.getTileEnum().getType().equals(TileTypesEnum.UTILITIES))) {
-                tileMapLand.getChildren().set(tile.getY() * 120 + tile.getX(), tileView);
+                tileMapLand.getChildren().set(tile.getTileY() * 120 + tile.getTileX(), tileView);
             } else {
-                tileMapBackground.getChildren().set(tile.getY() * 120 + tile.getX(), tileView);
+                tileMapBackground.getChildren().set(tile.getTileY() * 120 + tile.getTileX(), tileView);
             }
         }
         else {
             if (brokenTile.equals(TileTypesEnum.BLOCK)) {
-                tileMapLand.getChildren().set(tile.getY() * 120 + tile.getX(), new ImageView());
+                tileMapLand.getChildren().set(tile.getTileY() * 120 + tile.getTileX(), new ImageView());
             }
             else {
-                tileMapBackground.getChildren().set(tile.getY() * 120 + tile.getX(), new ImageView());
+                tileMapBackground.getChildren().set(tile.getTileY() * 120 + tile.getTileX(), new ImageView());
             }
             brokenTile = null;
         }

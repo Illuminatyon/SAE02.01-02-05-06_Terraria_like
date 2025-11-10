@@ -283,8 +283,8 @@ public class AggressiveMob extends Mob {
         int direction = getLookDirection();
 
         // Get the mob's position in tile coordinates
-        int mobTileX = getPosX() / TileMap.format;
-        int mobTileY = getPosY() / TileMap.format;
+        int mobTileX = getPosX();
+        int mobTileY = getPosY();
 
         // Check the tile in front of the mob
         int frontTileX = mobTileX + (direction > 0 ? 1 : -1);

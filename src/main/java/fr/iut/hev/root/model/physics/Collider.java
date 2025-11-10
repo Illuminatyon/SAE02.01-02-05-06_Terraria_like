@@ -22,25 +22,25 @@ public class Collider {
     }
 
     private boolean hasCollision(double x, double y, boolean negativeCheckX, boolean negativeCheckY) {
-        int tileX = 0;
-        int tileY = 0;
+        int coordX = 0;
+        int coordY = 0;
         if (negativeCheckX) {
-            tileX = (int) ((x + offsetX - 1) / TileMap.format);
+            coordX = (int) ((x + offsetX - 1));
         } else {
-            tileX = (int) ((x + offsetX) / TileMap.format);
+            coordX = (int) ((x + offsetX));
         }
 
         if (negativeCheckY) {
-            tileY = (int) ((y + offsetY - 1) / TileMap.format);
+            coordY = (int) ((y + offsetY - 1));
         } else {
-            tileY = (int) ((y + offsetY) / TileMap.format);
+            coordY = (int) ((y + offsetY));
         }
 
-        if (tileX < 0 || tileY < 0 || tileX >= tileMap.getWidth() || tileY >= tileMap.getHeight()) {
+        if (coordX < 0 || coordY < 0 || coordX >= tileMap.getPixelsWidth() || coordY >= tileMap.getPixelsHeight()) {
             return true; // mettre des murs invisibles (colliders) au bords de la map
         }
 
-        return tileMap.getTile(tileX, tileY).getTileEnum().getType().getHasCollision();
+        return tileMap.getTile(coordX, coordY).getTileEnum().getType().getHasCollision();
     }
 
     public boolean hasCollisionTop(int n) {
