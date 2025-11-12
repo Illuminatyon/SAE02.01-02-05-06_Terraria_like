@@ -98,7 +98,7 @@ public class KeyInputHandler implements EventHandler<KeyEvent> {
     public KeyInputHandler(InventoryView inventoryView, CraftView craftView) {
         this.inventoryView = inventoryView;
         this.craftView = craftView;
-        this.playerStrategy = new PlayerInput();
+        this.playerStrategy = new PlayerInput(inventoryView);
         this.inventoryStrategy = new InventoryInput(inventoryView, craftView);
         this.currentStrategy = playerStrategy;
     }

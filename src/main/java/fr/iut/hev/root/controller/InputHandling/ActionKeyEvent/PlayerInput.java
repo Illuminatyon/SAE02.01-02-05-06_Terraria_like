@@ -3,6 +3,7 @@ package fr.iut.hev.root.controller.InputHandling.ActionKeyEvent;
 
 import fr.iut.hev.root.model.entities.actor.Player;
 import fr.iut.hev.root.model.entities.actor.PlayerMouvementsEnum;
+import fr.iut.hev.root.view.InventoryView;
 import javafx.scene.input.KeyCode;
 
 /**
@@ -84,6 +85,11 @@ public class PlayerInput implements KeyCodeInterface {
      * Toutes les commandes sont appliquées directement sur cette instance unique.
      */
     private final Player player = Player.getInstance();
+    private final InventoryView inventoryView;
+
+    public PlayerInput(InventoryView inventoryView) {
+        this.inventoryView = inventoryView;
+    }
 
     /**
      * <h3>Gestion des touches pressées</h3>
@@ -120,6 +126,10 @@ public class PlayerInput implements KeyCodeInterface {
             case Q -> player.addPlayerMouvements(PlayerMouvementsEnum.MOVE_LEFT);
             case D -> player.addPlayerMouvements(PlayerMouvementsEnum.MOVE_RIGHT);
             case SPACE -> player.addPlayerMouvements(PlayerMouvementsEnum.JUMP);
+            case E -> {
+                if(!inventoryView.getInventoryOpened())
+                    inventoryView.setInventoryVisible();
+            }
         }
     }
 

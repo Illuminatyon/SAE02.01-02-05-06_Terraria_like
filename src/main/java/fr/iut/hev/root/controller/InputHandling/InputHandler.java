@@ -22,7 +22,7 @@ import javafx.scene.layout.TilePane;
  * InputHandler (Façade)
  *    ├── KeyInputHandler          → Clavier (mouvements, inventaire)
  *    ├── MouseInventoryInputHandler → Souris dans l'inventaire
- *    ├── MouseItemActionInputHandler → Souris dans le monde (casser/placer blocs)
+ *    ├── MouseItemActionInputHandler → Souris dans le monde (usage d'item)
  *    └── ScrollInputHandler       → Molette (sélection hotbar)
  * </pre>
  *
