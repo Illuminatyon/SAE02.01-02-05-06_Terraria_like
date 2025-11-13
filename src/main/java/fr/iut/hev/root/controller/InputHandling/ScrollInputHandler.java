@@ -13,25 +13,18 @@ import fr.iut.hev.root.model.items.Item;
 
 /**
  * Gestionnaire des événements de molette pour la navigation dans la hotbar.
- * Permet de changer dynamiquement l'item sélectionné dans la hotbar via la molette de la souris.
- * Met à jour l'affichage et les propriétés liées à l'item tenu en main.
  */
 public class ScrollInputHandler implements EventHandler<ScrollEvent> {
-    private static final int HOTBAR_SIZE = 10; // Nombre de slots dans la hotbar
-    private final Inventory inventory; // Référence à l'inventaire du joueur
-    private final HotbarView hotbarView; // Vue de la hotbar pour la mise à jour visuelle
-    private final InventoryView inventoryView; // Vue de l'inventaire pour vérifier son état
+    private static final int HOTBAR_SIZE = 10;
+    private final Inventory inventory;
+    private final HotbarView hotbarView;
+    private final InventoryView inventoryView;
 
-    // Propriétés observables pour la synchronisation avec le modèle
-    private final ObjectProperty<Item> onHandItemProperty; // Item actuellement sélectionné dans la hotbar
-    private final IntegerProperty quantityProperty; // Quantité de l'item sélectionné
-    private final IntegerProperty directionProperty; // Direction du scroll (1: haut, -1: bas, 0: aucun)
-    private int currentSlotIndex; // Index du slot actuellement sélectionné dans la hotbar
+    private final ObjectProperty<Item> onHandItemProperty;
+    private final IntegerProperty quantityProperty;
+    private final IntegerProperty directionProperty;
+    private int currentSlotIndex;
 
-    /**
-     * Constructeur du gestionnaire de molette.
-     * Initialise les propriétés et les références aux vues et à l'inventaire.
-     */
     public ScrollInputHandler(Inventory inventory, HotbarView hotbarView, InventoryView inventoryView) {
         this.inventory = inventory;
         this.hotbarView = hotbarView;
@@ -39,59 +32,55 @@ public class ScrollInputHandler implements EventHandler<ScrollEvent> {
         this.onHandItemProperty = new SimpleObjectProperty<>();
         this.quantityProperty = new SimpleIntegerProperty(0);
         this.directionProperty = new SimpleIntegerProperty(0);
-        this.currentSlotIndex = 0; // Slot 0 sélectionné par défaut
+        this.currentSlotIndex = 0;
+
+        // Assurer que le slot initial est bien en surbrillance et que les propriétés sont initialisées
+        hotbarView.setHighlight(currentSlotIndex);
+        Item initialItem = inventory.getInventorySlot(currentSlotIndex).getItem();
+        int initialQuantity = inventory.getInventorySlot(currentSlotIndex).getQuantity();
+        onHandItemProperty.set(initialItem);
+        quantityProperty.set(initialQuantity);
     }
 
-    /**
-     * Gère les événements de molette.
-     * Met à jour la direction du scroll si l'inventaire est fermé.
-     * - Molette vers le haut : direction = 1 (défilement vers la droite)
-     * - Molette vers le bas : direction = -1 (défilement vers la gauche)
-     */
     @Override
     public void handle(ScrollEvent event) {
         if (!inventoryView.getInventoryOpened()) {
             if (event.getDeltaY() > 0) {
-                directionProperty.set(1); // Défilement vers la droite
+                directionProperty.set(1);
             } else if (event.getDeltaY() < 0) {
-                directionProperty.set(-1); // Défilement vers la gauche
+                directionProperty.set(-1);
             }
+            // Note : on ne fait pas l'update directement ici afin de séparer l'événement d'entrée
+            // et la logique qui met à jour l'affichage (ex: appelée depuis la boucle de jeu ou un tick).
         }
     }
 
-    /**
-     * Met à jour la hotbar en fonction de la direction du scroll.
-     * - Réinitialise la mise en surbrillance du slot actuel.
-     * - Calcule le nouvel index du slot (en tenant compte de la taille de la hotbar).
-     * - Met à jour l'item et la quantité sélectionnés.
-     * - Met en surbrillance le nouveau slot sélectionné.
-     */
     public void updateHotbar() {
-        // Réinitialise la mise en surbrillance du slot actuel
-        hotbarView.resetHighlight(currentSlotIndex);
-
-        // Calcule le nouvel index du slot (en boucle)
-        currentSlotIndex = (currentSlotIndex + getDirection()) % HOTBAR_SIZE;
-        if (currentSlotIndex < 0) {
-            currentSlotIndex += HOTBAR_SIZE; // Gestion du modulo négatif
+        int dir = getDirection();
+        if (dir == 0) {
+            return; // rien à faire si pas de direction
         }
 
-        // Récupère l'item et la quantité du nouveau slot
+        // Réinitialise l'ancien slot
+        hotbarView.resetHighlight(currentSlotIndex);
+
+        // Utilise floorMod pour un wrapping correct (aucune confusion avec les négatifs)
+        currentSlotIndex = Math.floorMod(currentSlotIndex + dir, HOTBAR_SIZE);
+
+        // Met à jour l'item et la quantité du nouveau slot
         Item newItem = inventory.getInventorySlot(currentSlotIndex).getItem();
         int newQuantity = inventory.getInventorySlot(currentSlotIndex).getQuantity();
-
-        // Met à jour les propriétés observables
         onHandItemProperty.set(newItem);
         quantityProperty.set(newQuantity);
 
         // Met en surbrillance le nouveau slot sélectionné
         hotbarView.setHighlight(currentSlotIndex);
 
-        // Réinitialise la direction pour éviter les mises à jour répétées
+        // Réinitialise la direction pour éviter les updates répétées
         directionProperty.set(0);
     }
 
-    // --- Getters pour les propriétés observables ---
+    // Getters
     public ObjectProperty<Item> onHandItemProperty() {
         return this.onHandItemProperty;
     }
