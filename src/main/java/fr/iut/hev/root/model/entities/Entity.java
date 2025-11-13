@@ -40,11 +40,12 @@ import javafx.beans.property.SimpleIntegerProperty;
  * @see Gravity
  * @since 1.0
  */
-public class Entity {
+
     /**
      * Property de la position horizontale (X) de l'entité.
      * Utilise IntegerProperty pour le binding avec l'UI.
      */
+public abstract class  Entity {
     private IntegerProperty posXProperty;
 
     /**
@@ -119,26 +120,24 @@ public class Entity {
 
     }
 
-    /**
-     * <h3>Mise à jour de la position</h3>
-     *
-     * <p>Applique la gravité puis déplace l'entité selon ses vélocités.
-     * Cette méthode devrait être appelée à chaque frame de la game loop.</p>
-     *
-     * <p><strong>Ordre d'exécution :</strong></p>
-     * <ol>
-     *   <li>Application de la gravité (modifie velocityY)</li>
-     *   <li>Déplacement horizontal (posX += velocityX)</li>
-     *   <li>Déplacement vertical (posY += velocityY)</li>
-     * </ol>
-     *
-     * @see #applyGravity()
-     */
-    public void updatePosition() {
-        applyGravity();
-        posXProperty.set(posXProperty.getValue() + velocityX);
-        posYProperty.set(posYProperty.getValue() + velocityY);
-    }
+        /**
+         * <h3>Mise à jour de la position</h3>
+         *
+         * <p>Applique la gravité puis déplace l'entité selon ses vélocités.
+         * Cette méthode devrait être appelée à chaque frame de la game loop.</p>
+         *
+         * <p><strong>Ordre d'exécution :</strong></p>
+         * <ol>
+         *   <li>Application de la gravité (modifie velocityY)</li>
+         *   <li>Déplacement horizontal (posX += velocityX)</li>
+         *   <li>Déplacement vertical (posY += velocityY)</li>
+         * </ol>
+         *
+         * @see #applyGravity()
+         */
+    public abstract void updatePosition();
+
+
 
     /**
      * <h3>Application de la gravité</h3>
@@ -157,7 +156,7 @@ public class Entity {
      * @see Collider#hasCollisionBottom(int)
      */
     public void applyGravity() {
-        if (!this.collider.hasCollisionBottom(this.velocityY + 1)) {
+        if (!this.collider.hasCollisionBottom(this.velocityY + 1) && gravityCondition()) {
             //if (super.getVelocityY() < maxVelocityY)
             velocityY += Gravity.getGravityForce();
         } else {
@@ -165,11 +164,15 @@ public class Entity {
         } // TODO : peut être le refactor ? (enlever les if)
     }
 
-    // ==================== GETTERS / SETTERS ====================
+    public boolean gravityCondition(){ // pour eviter la duplication dans actor
+        return true;
+    }
+        // ==================== GETTERS / SETTERS ====================
 
-    /**
-     * @return La position X actuelle de l'entité
-     */
+        /**
+         * @return La position X actuelle de l'entité
+         */
+
     public final int getPosX() {
         return this.posXProperty.getValue();
     }

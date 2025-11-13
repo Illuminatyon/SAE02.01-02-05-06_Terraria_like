@@ -1,7 +1,6 @@
 package fr.iut.hev.root.model.entities.actor;
 
 import fr.iut.hev.root.model.entities.Entity;
-import fr.iut.hev.root.model.physics.Gravity;
 import fr.iut.hev.root.model.land.TileMap;
 import fr.iut.hev.root.model.physics.hitbox.HitboxType;
 import fr.iut.hev.root.model.physics.hitbox.HitboxManager;
@@ -59,9 +58,9 @@ public abstract class Actor extends Entity {
         updateVerticalMovement();
         super.posXProperty().set(super.posXProperty().getValue() + super.getVelocityX() * moveSpeed);
         super.posYProperty().set(super.posYProperty().getValue() + super.getVelocityY());
-    } // TODO : Potentiellement faire un refactoring ? Parce que dans la classe Entity, y'a déjà une fonction qui a le même nom | ptet essayer d'économiser le plus de code entre les deux fonctionnements (ateurs et entité comme looot par exemple
+    } // Done : Potentiellement faire un refactoring ? Parce que dans la classe Entity, y'a déjà une fonction qui a le même nom | ptet essayer d'économiser le plus de code entre les deux fonctionnements (ateurs et entité comme looot par exemple
 
-    @Override
+   /* @Override
     public void applyGravity() {
         if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1) && !isJumping) {
             //if (super.getVelocityY() < maxVelocityY)
@@ -69,7 +68,15 @@ public abstract class Actor extends Entity {
         } else {
             super.setVelocityY(0);
         }
-    } // TODO : Même chose ici je pense, on retrouve le même problème
+    } // Done : Même chose ici je pense, on retrouve le même problème*/
+
+    @Override
+    public boolean gravityCondition(){
+        if (!isJumping){
+            return true;
+        }
+        return false;
+    }
 
     public HitboxManager getHitboxManager() {
         return hitboxManager;

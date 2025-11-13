@@ -12,27 +12,5 @@ public class Pnj extends Mob {
         getHitboxManager().createHitbox(this,HitboxType.INTERACTION);
     }
 
-    @Override
-    public void updateHorizontalMovement (){
-        int currentDirection=super.Changement();
 
-        // Appliquer la direction actuelle
-        if ((currentDirection == -1 )&& (getPosX()>32) ) {
-            super.setLookDirection(LookDirections.LEFT );
-            if (!super.getCollider().hasCollisionLeft()) {
-                super.setVelocityX(-super.getMoveSpeed());
-            } else {
-                updateVerticalMovement(); // Saut si bloqué
-            }
-        } else if ((currentDirection == 1) &&(getPosX()<342 ) ){
-            super.setLookDirection(LookDirections.RIGHT);
-            if (!super.getCollider().hasCollisionRight()) {
-                super.setVelocityX(super.getMoveSpeed());
-            } else {
-                updateVerticalMovement(); // Saut si bloqué
-            }
-        } else {
-            super.setVelocityX(0);
-        }
-    }
 }

@@ -1,9 +1,7 @@
 package fr.iut.hev.root.model.entities;
 
 import fr.iut.hev.root.model.World;
-import fr.iut.hev.root.model.physics.Gravity;
 import fr.iut.hev.root.model.items.Item;
-import fr.iut.hev.root.model.land.TileMap;
 
 public class Loot extends Entity {
     private final Item item;
@@ -23,14 +21,7 @@ public class Loot extends Entity {
         return quantity;
     }
 
-    @Override
-    public void applyGravity() {
-        if (!super.getCollider().hasCollisionBottom(super.getVelocityY() + 1)) {
-            super.setVelocityY(super.getVelocityY() + Gravity.getGravityForce());
-        } else {
-            super.setVelocityY(0);
-        }
-    }
+
 
     public void updatePosition() {
         applyGravity();

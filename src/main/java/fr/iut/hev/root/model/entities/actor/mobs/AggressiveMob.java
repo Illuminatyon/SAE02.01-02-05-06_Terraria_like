@@ -23,11 +23,7 @@ public class AggressiveMob extends Mob {
                             // TODO : plus de l'ordre de la position, donc je pense que je pourrais déplacer ceci
     private long lastInRangeTime = 0; // Time when player was last in range
     private static final long AGGRO_TIMEOUT = 5000; // 5 seconds timeout
-    private int jumpCooldown = 1000; // 1 second cooldown between jumps
-    private long lastJumpTime = 0; // Time of the last jump
     private List<Actor> aliveActors; // List of all alive actors
-    private int currentDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour stationnaire
-    private long lastDirectionChangeTime = 0;
     private AStar pathfinder; // A* pathfinding algorithm
 
     public AggressiveMob() {
@@ -38,11 +34,7 @@ public class AggressiveMob extends Mob {
     // TODO : Faire un refactoring par exemple avec tout ce qui concerne l'aggro, les dommages, enfin tout ce qui concerne
     // TODO : les interactions aggressives entres les entitées
 
-    @Override
-    public void updatePosition() {
-        // Use Mob's implementation for physical behavior
-        super.updatePosition();
-    }
+
 
     public AggressiveMob(
             int posX, int posY, int width, int height,
@@ -61,7 +53,6 @@ public class AggressiveMob extends Mob {
         this.isAggroed = false;
         this.path = new ArrayList<>();
         this.lastInRangeTime = System.currentTimeMillis(); // Initialize the last in-range time
-        this.lastJumpTime = System.currentTimeMillis(); // Initialize the last jump time
         this.aliveActors = aliveActors; // Store the list of alive actors
         this.pathfinder = new AStar(tileMap); // Initialize the pathfinder
         getHitboxManager().createHitbox(this, HitboxType.ATTACK);
@@ -86,12 +77,16 @@ public class AggressiveMob extends Mob {
     } // TODO : Potentiellement, les méthodes qui sont à l'intérieur de la classe, on pourrait les mettres autre part
 
 
-    @Override
-    public void updateHorizontalMovement() {
+    public int calculateManhattanDistance() {
         // Calculate Manhattan distance to player (in pixels)
         int dx = Math.abs(target.getPosX() - getPosX());
         int dy = Math.abs(target.getPosY() - getPosY());
-        int distance = dx + dy;
+        return dx + dy;
+    }
+
+    @Override
+    public void updateHorizontalMovement() {
+        int distance=calculateManhattanDistance();
 
         // Convert to tile distance
         int tileDistance = distance / TileMap.format;
@@ -116,19 +111,79 @@ public class AggressiveMob extends Mob {
             }
         }
 
-        if (isAggroed) {
-            // Update path every few frames or when needed
-            if (path.isEmpty() || Math.random() < 0.05) { // 5% chance to recalculate path each frame
-                findPathToPlayer();
-            }
-            followPlayer();
-        } else {
-            // Use the parent Mob class's behavior directly when not aggressive
-            super.updateHorizontalMovement();
+        MouvementSelonAggro();
+    }
 
-            // Additional check for entities in front (specific to AggressiveMob)
-            if (isEntityInFront() && super.getCollider().hasCollisionBottom(1)) {
-                updateVerticalMovement(); // saute si un obstacle (entité) est devant
+public void MouvementSelonAggro(){
+    if (isAggroed) {
+        // Update path every few frames or when needed
+        if (path.isEmpty() || Math.random() < 0.05) { // 5% chance to recalculate path each frame
+            findPathToPlayer();
+        }
+        followPlayer();
+    } else {
+        // Use the parent Mob class's behavior directly when not aggressive
+        super.updateHorizontalMovement();
+
+        // Additional check for entities in front (specific to AggressiveMob)
+        if (isEntityInFront() && super.getCollider().hasCollisionBottom(1)) {
+            updateVerticalMovement(); // saute si un obstacle (entité) est devant
+        }
+    }
+}
+
+    private void verticalMovement(int nextX) {
+        if (nextX < getPosX()) {
+            setLookDirection(LookDirections.LEFT);
+            if (!getCollider().hasCollisionLeft()) {
+                setVelocityX(-getMoveSpeed());
+            }
+        } else if (nextX > getPosX()) {
+            setLookDirection(LookDirections.RIGHT);
+            if (!getCollider().hasCollisionRight()) {
+                setVelocityX(getMoveSpeed());
+            }
+        }
+    }
+    private void followPath(){
+        // Get the next point in the path
+        Point nextPoint = path.get(0);
+        // Convert tile coordinates to pixel coordinates (center of the tile)
+        int nextX = nextPoint.x * TileMap.format + TileMap.format / 2;
+        int nextY = nextPoint.y * TileMap.format + TileMap.format / 2;
+        // Move towards the next point horizontally
+        verticalMovement(nextX);
+
+        // Handle vertical movement
+        int verticalDiff = nextY - getPosY();
+        // If the next point is above us and we're on the ground, jump
+        if (verticalDiff < -TileMap.format / 2 && super.getCollider().hasCollisionBottom(1)) {
+            updateVerticalMovement(); // Jump to reach higher points
+        }
+        // If we're close enough to the next point, remove it from the path
+        int distanceToNext = Math.abs(nextX - getPosX()) + Math.abs(nextY - getPosY());
+        if (distanceToNext < TileMap.format) {
+            path.remove(0);
+        }
+        // Jump if blocked horizontally or if there's an entity in front, but only if the obstacle is one tile high
+        if ((((super.getCollider().hasCollisionLeft() || super.getCollider().hasCollisionRight())
+                && super.getCollider().hasCollisionBottom(1)) ||
+                (isEntityInFront() && super.getCollider().hasCollisionBottom(1)))
+                && isObstacleOneTileHigh()) {
+            updateVerticalMovement(); // saute si bloqué ou si un obstacle (entité) est devant et que l'obstacle fait exactement une tile de hauteur
+        }
+    }
+
+    private void noPathFound(){
+        if ((target.getPosX() < getPosX())) {
+            setLookDirection(LookDirections.LEFT);
+            if (!getCollider().hasCollisionLeft()) {
+                setVelocityX(-getMoveSpeed());
+            }
+        } else if (target.getPosX() > getPosX()) {
+            setLookDirection(LookDirections.RIGHT);
+            if (!getCollider().hasCollisionRight()) {
+                setVelocityX(getMoveSpeed());
             }
         }
     }
@@ -136,60 +191,11 @@ public class AggressiveMob extends Mob {
     private void followPlayer() {
         // If we have a path, follow it
         if (!path.isEmpty()) {
-            // Get the next point in the path
-            Point nextPoint = path.get(0);
-
-            // Convert tile coordinates to pixel coordinates (center of the tile)
-            int nextX = nextPoint.x * TileMap.format + TileMap.format / 2;
-            int nextY = nextPoint.y * TileMap.format + TileMap.format / 2;
-
-            // Move towards the next point horizontally
-            if (nextX < getPosX()) {
-                setLookDirection(LookDirections.LEFT);
-                if (!getCollider().hasCollisionLeft()) {
-                    setVelocityX(-getMoveSpeed());
-                }
-            } else if (nextX > getPosX()) {
-                setLookDirection(LookDirections.RIGHT);
-                if (!getCollider().hasCollisionRight()) {
-                    setVelocityX(getMoveSpeed());
-                }
-            }
-
-            // Handle vertical movement
-            int verticalDiff = nextY - getPosY();
-
-            // If the next point is above us and we're on the ground, jump
-            if (verticalDiff < -TileMap.format / 2 && super.getCollider().hasCollisionBottom(1)) {
-                updateVerticalMovement(); // Jump to reach higher points
-            }
-
-            // If we're close enough to the next point, remove it from the path
-            int distanceToNext = Math.abs(nextX - getPosX()) + Math.abs(nextY - getPosY());
-            if (distanceToNext < TileMap.format) {
-                path.remove(0);
-            }
-
-            // Jump if blocked horizontally or if there's an entity in front, but only if the obstacle is one tile high
-            if ((((super.getCollider().hasCollisionLeft() || super.getCollider().hasCollisionRight())
-                    && super.getCollider().hasCollisionBottom(1)) ||
-                    (isEntityInFront() && super.getCollider().hasCollisionBottom(1)))
-                    && isObstacleOneTileHigh()) {
-                updateVerticalMovement(); // saute si bloqué ou si un obstacle (entité) est devant et que l'obstacle fait exactement une tile de hauteur
-            }
+            followPath();
         } else {
             // Direct movement if no path is found
-            if ((target.getPosX() < getPosX())) {
-                setLookDirection(LookDirections.LEFT);
-                if (!getCollider().hasCollisionLeft()) {
-                    setVelocityX(-getMoveSpeed());
-                }
-            } else if (target.getPosX() > getPosX()) {
-                setLookDirection(LookDirections.RIGHT);
-                if (!getCollider().hasCollisionRight()) {
-                    setVelocityX(getMoveSpeed());
-                }
-            }
+            noPathFound();
+
 
             // Check if player is above and jump if needed
             int verticalDiff = target.getPosY() - getPosY();
