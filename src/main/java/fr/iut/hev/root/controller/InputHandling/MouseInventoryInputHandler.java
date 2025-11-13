@@ -1,140 +1,195 @@
 package fr.iut.hev.root.controller.InputHandling;
 
-import fr.iut.hev.root.model.inventory.PlayerInventory;
+import fr.iut.hev.root.model.inventory.Inventory;
+import fr.iut.hev.root.model.inventory.InventorySlot;
+import fr.iut.hev.root.model.items.Item;
 import fr.iut.hev.root.view.InventoryView;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import java.util.HashMap;
+
 /**
- * <h2>Gestionnaire des interactions souris dans l'inventaire</h2>
- *
- * <p>Cette classe gère tous les événements de souris spécifiques à l'interface
- * de l'inventaire du joueur. Elle permet de déplacer, empiler et réorganiser
- * les items via des clics et des drags.</p>
- *
- * <p><strong>Fonctionnalités principales :</strong></p>
- * <ul>
- *   <li><strong>Clic gauche :</strong> Sélectionner/déposer un item</li>
- *   <li><strong>Clic droit :</strong> Prendre/déposer la moitié d'une pile</li>
- *   <li><strong>Survol :</strong> Afficher les informations de l'item (tooltip)</li>
- *   <li><strong>Drag & Drop :</strong> Déplacer les items entre les slots</li>
- * </ul>
- *
- * <p><strong>Système de click-and-hold :</strong></p>
- * <p>Le joueur peut "prendre" un item en cliquant dessus. L'item suit alors
- * le curseur jusqu'à ce que le joueur clique sur un autre slot pour le déposer.
- * Ce système est inspiré des inventaires de jeux comme Minecraft ou Terraria.</p>
- *
- * <p><strong>Architecture :</strong></p>
- * <pre>
- * MouseInventoryInputHandler
- *    ├── PlayerInventory (modèle)
- *    └── InventoryView (vue)
- *         ├── Affichage des slots
- *         ├── Item "en main" (curseur)
- *         └── Tooltips
- * </pre>
- *
- * <p><strong>Types de clics gérés :</strong></p>
- * <table border="1">
- *   <tr>
- *     <th>Bouton</th>
- *     <th>Slot vide</th>
- *     <th>Slot occupé</th>
- *     <th>Avec item en main</th>
- *   </tr>
- *   <tr>
- *     <td>Gauche</td>
- *     <td>Dépose l'item en main</td>
- *     <td>Prend l'item</td>
- *     <td>Échange ou empile</td>
- *   </tr>
- *   <tr>
- *     <td>Droit</td>
- *     <td>Dépose 1 item</td>
- *     <td>Prend la moitié</td>
- *     <td>Dépose 1 item</td>
- *   </tr>
- * </table>
- *
- * <p><strong>Pattern utilisé :</strong> Observer - Les modifications du modèle
- * (PlayerInventory) sont automatiquement reflétées dans la vue (InventoryView)
- * grâce aux JavaFX Properties.</p>
- *
- * @author Équipe de développement
- * @version 1.0
- * @see PlayerInventory
- * @see InventoryView
- * @see EventHandler
- * @since 1.0
+ * Gestionnaire des interactions souris dans l'inventaire.
+ * Permet de déplacer les items entre les slots via clics gauche/droit,
+ * avec un aperçu visuel de l'item tenu par le curseur.
  */
 public class MouseInventoryInputHandler implements EventHandler<MouseEvent> {
-
-    /**
-     * Inventaire du joueur (modèle).
-     * Contient les données des items et leur organisation dans les slots.
-     */
-    private final PlayerInventory playerInventory;
-
-    /**
-     * Vue de l'inventaire (interface graphique).
-     * Affiche les items et gère les interactions visuelles.
-     */
+    private final Inventory inventory;
     private final InventoryView inventoryView;
+    private Item heldItem; // Item actuellement tenu par le curseur
+    private int heldQuantity; // Quantité de l'item tenu
+    private int sourceSlotIndex; // Index du slot source de l'item tenu
 
-    /**
-     * Constructeur du gestionnaire d'interactions souris dans l'inventaire.
-     *
-     * <p>Initialise le gestionnaire avec les références au modèle et à la vue
-     * nécessaires pour coordonner les interactions.</p>
-     *
-     * @param playerInventory L'inventaire du joueur (modèle de données)
-     * @param inventoryView La vue de l'inventaire (interface graphique)
-     * @throws NullPointerException si un des paramètres est null
-     */
-    public MouseInventoryInputHandler(PlayerInventory playerInventory, InventoryView inventoryView) {
-        this.playerInventory = playerInventory;
+    public MouseInventoryInputHandler(Inventory inventory, InventoryView inventoryView) {
+        this.inventory = inventory;
         this.inventoryView = inventoryView;
     }
 
     /**
-     * <h3>Gestion des événements souris</h3>
-     *
-     * <p>Point d'entrée principal pour tous les événements souris dans l'inventaire.
-     * Détermine le type d'événement et route vers la logique appropriée.</p>
-     *
-     * <p><strong>Types d'événements traités :</strong></p>
-     * <ul>
-     *   <li><strong>MOUSE_PRESSED :</strong> Début d'un clic (prendre/déposer item)</li>
-     *   <li><strong>MOUSE_MOVED :</strong> Déplacement du curseur (tooltip, preview)</li>
-     *   <li><strong>MOUSE_DRAGGED :</strong> Drag d'un item entre les slots</li>
-     * </ul>
-     *
-     * <p><strong>Logique de détection de slot :</strong></p>
-     * <ol>
-     *   <li>Récupère les coordonnées de la souris</li>
-     *   <li>Détermine quel slot est sous le curseur</li>
-     *   <li>Applique l'action appropriée selon le bouton et l'état</li>
-     * </ol>
-     *
-     * <p><strong>Note importante :</strong> Les événements sont filtrés pour ne
-     * s'appliquer que lorsque l'inventaire est visible et que le curseur est
-     * au-dessus de la zone d'inventaire.</p>
-     *
-     * @param event L'événement souris à traiter
-     * @see MouseEvent
-     * @see MouseEvent#getEventType()
-     * @see MouseButton
+     * Gère les événements souris (mouvement, clic gauche/droit).
+     * - Met à jour la position de l'aperçu de l'item tenu.
+     * - Traite les clics pour prendre/déposer des items.
      */
     @Override
     public void handle(MouseEvent event) {
-        // L'implémentation détaillée dépend de votre code existant
-        // Cette javadoc décrit le comportement général attendu
+        if (!inventoryView.getInventoryOpened()) return;
 
-        // TODO: Implémenter la logique selon le type d'événement
-        // - MOUSE_PRESSED: handleClick(event)
-        // - MOUSE_MOVED: handleHover(event)
-        // - MOUSE_DRAGGED: handleDrag(event)
+        // Met à jour la position de l'aperçu de l'item tenu
+        if (event.getEventType() == MouseEvent.MOUSE_MOVED || event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+            updateHeldItemDisplay(event.getX(), event.getY());
+        }
+
+        // Traite les clics pour prendre/déposer des items
+        if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+            int clickedSlot = getSlotIndexFromEvent(event);
+            if (clickedSlot == -1) return;
+
+            if (event.getButton() == MouseButton.PRIMARY) {
+                handleLeftClick(clickedSlot); // Clic gauche : prendre/déposer tout le stack
+            } else if (event.getButton() == MouseButton.SECONDARY) {
+                handleRightClick(clickedSlot); // Clic droit : prendre/déposer la moitié du stack
+            }
+        }
+    }
+
+    /**
+     * Met à jour l'affichage de l'item tenu par le curseur.
+     * Affiche un aperçu visuel de l'item à côté du curseur.
+     */
+    private void updateHeldItemDisplay(double mouseX, double mouseY) {
+        if (heldItem != null) {
+            HashMap<Item, Integer> heldItemMap = new HashMap<>();
+            heldItemMap.put(heldItem, heldQuantity);
+            inventoryView.updateOnHoldPane(heldItemMap);
+            inventoryView.updateOnHoldPosition(mouseX + 10, mouseY - 10);
+        } else {
+            inventoryView.updateOnHoldPane(null);
+        }
+    }
+
+    /**
+     * Gère le clic gauche : prendre ou déposer tout le stack d'un item.
+     * - Si aucun item n'est tenu, prend tout le stack du slot cliqué.
+     * - Si un item est tenu, le dépose dans le slot cliqué (fusionne si possible).
+     */
+    private void handleLeftClick(int targetSlot) {
+        InventorySlot slot = inventory.getInventorySlot(targetSlot);
+
+        // Si aucun item n'est tenu, prendre tout le stack du slot cliqué
+        if (heldItem == null) {
+            if (slot.getItem() != null) {
+                heldItem = slot.getItem();
+                heldQuantity = slot.getQuantity();
+                sourceSlotIndex = targetSlot;
+                slot.setItem(null);
+                slot.setQuantity(0);
+            }
+        }
+        // Si un item est tenu, le déposer dans le slot cliqué
+        else {
+            // Si le slot est vide, déposer tout l'item tenu
+            if (slot.getItem() == null) {
+                slot.setItem(heldItem);
+                slot.setQuantity(heldQuantity);
+                clearHeldItem();
+            }
+            // Si le slot contient le même type d'item, fusionner les stacks
+            else if (slot.getItem().getItemEnum() == heldItem.getItemEnum()) {
+                int spaceAvailable = slot.getItem().getItemEnum().getLimitStacking() - slot.getQuantity();
+                if (spaceAvailable >= heldQuantity) {
+                    slot.setQuantity(slot.getQuantity() + heldQuantity);
+                    clearHeldItem();
+                } else {
+                    slot.setQuantity(slot.getItem().getItemEnum().getLimitStacking());
+                    heldQuantity -= spaceAvailable;
+                }
+            }
+            // Si le slot contient un item différent, échanger les items
+            else {
+                Item tempItem = slot.getItem();
+                int tempQuantity = slot.getQuantity();
+                slot.setItem(heldItem);
+                slot.setQuantity(heldQuantity);
+                heldItem = tempItem;
+                heldQuantity = tempQuantity;
+                sourceSlotIndex = targetSlot;
+            }
+        }
+    }
+
+    /**
+     * Gère le clic droit : prendre ou déposer la moitié du stack d'un item.
+     * - Si aucun item n'est tenu, prend la moitié du stack du slot cliqué.
+     * - Si un item est tenu, dépose 1 unité dans le slot cliqué (fusionne si possible).
+     */
+    private void handleRightClick(int targetSlot) {
+        InventorySlot slot = inventory.getInventorySlot(targetSlot);
+
+        // Si aucun item n'est tenu, prendre la moitié du stack du slot cliqué
+        if (heldItem == null) {
+            if (slot.getItem() != null && slot.getQuantity() > 0) {
+                int half = (slot.getQuantity() + 1) / 2;
+                heldItem = slot.getItem();
+                heldQuantity = half;
+                sourceSlotIndex = targetSlot;
+                slot.setQuantity(slot.getQuantity() - half);
+                if (slot.getQuantity() == 0) {
+                    slot.setItem(null);
+                }
+            }
+        }
+        // Si un item est tenu, déposer 1 unité dans le slot cliqué
+        else {
+            // Si le slot est vide, déposer 1 unité de l'item tenu
+            if (slot.getItem() == null) {
+                slot.setItem(heldItem);
+                slot.setQuantity(1);
+                heldQuantity--;
+                if (heldQuantity == 0) {
+                    clearHeldItem();
+                }
+            }
+            // Si le slot contient le même type d'item, ajouter 1 unité
+            else if (slot.getItem().getItemEnum() == heldItem.getItemEnum()) {
+                if (slot.getQuantity() < slot.getItem().getItemEnum().getLimitStacking()) {
+                    slot.setQuantity(slot.getQuantity() + 1);
+                    heldQuantity--;
+                    if (heldQuantity == 0) {
+                        clearHeldItem();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Extrait l'index du slot depuis l'événement souris.
+     * Parse la chaîne de caractères de l'événement pour récupérer l'ID du slot cliqué.
+     *
+     * @return L'index du slot, ou -1 si l'ID n'a pas pu être extrait.
+     */
+    private int getSlotIndexFromEvent(MouseEvent event) {
+        try {
+            String target = event.getTarget().toString();
+            int idStart = target.indexOf("id=") + 3;
+            int idEnd = target.indexOf(",", idStart);
+            if (idEnd == -1) idEnd = target.indexOf("]", idStart);
+            return Integer.parseInt(target.substring(idStart, idEnd));
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Réinitialise l'item tenu par le curseur.
+     * Efface l'aperçu visuel et réinitialise les variables.
+     */
+    private void clearHeldItem() {
+        heldItem = null;
+        heldQuantity = 0;
+        sourceSlotIndex = -1;
+        inventoryView.updateOnHoldPane(null);
     }
 }
