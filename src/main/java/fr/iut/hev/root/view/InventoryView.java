@@ -42,27 +42,55 @@ public class InventoryView {
         initGrid(expandedInventory, expandedInventory.getColumnCount(), expandedInventory.getRowCount());
         initHold();
 
-        inventory.getSlots().forEach(slot -> {
-            //slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
-            //slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot)); // TODO: utiliser un bind ici
-            for (Node child : ((Pane) findCell(slot.getIndex())).getChildren()) {
-                if (child instanceof ImageView imageView) {
-                    imageView.imageProperty().bind(Bindings.createObjectBinding(
-                            () -> getImageFromSlot(slot),
-                            slot.itemProperty()
-                    ));
-                } else if (child instanceof Label label) {
-                    //label.textProperty().bind(slot.quantityProperty().asString());
-                    label.textProperty().bind(Bindings.createStringBinding(
-                            () -> {
-                                int quantity = slot.getQuantity();
-                                return quantity == 0 ? "" : String.valueOf(quantity);
-                            },
-                            slot.quantityProperty()
-                    ));
+//        inventory.getSlots().forEach(slot -> {
+//            //slot.itemProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot));
+//            //slot.quantityProperty().addListener((obs, oldVal, newVal) -> updateSlot(slot)); // TODO: utiliser un bind ici
+//            for (Node child : ((Pane) findCell(slot.getIndex())).getChildren()) {
+//                if (child instanceof ImageView imageView) {
+//                    imageView.imageProperty().bind(Bindings.createObjectBinding(
+//                            () -> getImageFromSlot(slot),
+//                            slot.itemProperty()
+//                    ));
+//                } else if (child instanceof Label label) {
+//                    //label.textProperty().bind(slot.quantityProperty().asString());
+//                    label.textProperty().bind(Bindings.createStringBinding(
+//                            () -> {
+//                                int quantity = slot.getQuantity();
+//                                return quantity == 0 ? "" : String.valueOf(quantity);
+//                            },
+//                            slot.quantityProperty()
+//                    ));
+//                }
+//            }
+//        });
+
+        InventorySlot slot;
+        for (int i  = 0; i < inventory.getRowsNumber(); i++) {
+            for (int j = 0; j < 10; j++) {
+                slot = inventory.getInventorySlotFromDoubleIndex(i,j);
+                for (Node child : ((Pane) findCell(slot.getIndex())).getChildren()) {
+                    if (child instanceof ImageView imageView) {
+                        InventorySlot finalSlot1 = slot;
+                        imageView.imageProperty().bind(Bindings.createObjectBinding(
+                                () -> getImageFromSlot(finalSlot1),
+                                slot.itemProperty()
+                        ));
+                    } else if (child instanceof Label label) {
+                        //label.textProperty().bind(slot.quantityProperty().asString());
+                        InventorySlot finalSlot = slot;
+                        label.textProperty().bind(Bindings.createStringBinding(
+                                () -> {
+                                    int quantity = finalSlot.getQuantity();
+                                    return quantity == 0 ? "" : String.valueOf(quantity);
+                                },
+                                slot.quantityProperty()
+                        ));
+                    }
                 }
             }
-        });
+        }
+
+
         hotbar.setMouseTransparent(true);
         expandedInventory.setMouseTransparent(true);
         expandedInventory.setVisible(false);

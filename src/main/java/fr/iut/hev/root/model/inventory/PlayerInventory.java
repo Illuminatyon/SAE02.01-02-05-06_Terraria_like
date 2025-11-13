@@ -6,11 +6,11 @@ import fr.iut.hev.root.model.items.Item;
  * Inventaire du joueur principal.
  * Accepte tous les types d'items et a une capacité de 50 slots.
  */
-public class PlayerInventory extends AbstractInventory {
-    private static final int PLAYER_INVENTORY_SIZE = 50;
+public class PlayerInventory extends newAbstractInventory {
+    private static final int PLAYER_INVENTORY_ROW_SIZE = 4;
 
     public PlayerInventory() {
-        super(PLAYER_INVENTORY_SIZE);
+        super(PLAYER_INVENTORY_ROW_SIZE);
     }
 
     @Override

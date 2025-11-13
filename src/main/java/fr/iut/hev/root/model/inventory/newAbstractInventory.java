@@ -24,9 +24,9 @@ public abstract class newAbstractInventory {
     }
 
     private void initializeSlots() {
-        for (int i = 0; i < size; i++) {
-            slots.add(new InventorySlot(i));
-        }
+//        for (int i = 0; i < size; i++) {
+//            slots.add(new InventorySlot(i));
+//        }
 
         for (int i = 0; i < rowsNumber; i++) {
             for (int j = 0; j < 10; j++) {
@@ -45,7 +45,7 @@ public abstract class newAbstractInventory {
             return null;
         }
 
-        InventorySlot slot = slots.get(slotIndex);
+        InventorySlot slot = getInventorySlot(slotIndex);
         HashMap<Item, Integer> result;
 
         if (slot.isEmpty()) {
@@ -92,7 +92,7 @@ public abstract class newAbstractInventory {
             return null;
         }
 
-        InventorySlot slot = slots.get(slotIndex);
+        InventorySlot slot = getInventorySlot(slotIndex);
         if (slot.isEmpty()) {
             return null;
         }
@@ -201,10 +201,12 @@ public abstract class newAbstractInventory {
     }
 
     private Optional<Integer> findPartialStackSlot(Item item) {
-        for (int i = 0; i < size; i++) {
-            InventorySlot slot = slots.get(i);
-            if (isPartialStackOfItem(slot, item)) {
-                return Optional.of(i);
+        for (int i = 0; i < rowsNumber; i++) {
+            for (int j = 0; j < 10; j++) {
+                InventorySlot slot = slotsArray[i][j];
+                if (isPartialStackOfItem(slot, item)) {
+                    return Optional.of(i*10+j);
+                }
             }
         }
         return Optional.empty();
@@ -218,8 +220,10 @@ public abstract class newAbstractInventory {
 
     private Optional<Integer> findFirstEmptySlot() {
         for (int i = 0; i < size; i++) {
-            if (slots.get(i).isEmpty()) {
-                return Optional.of(i);
+            for (int j = 0; j < 10; j++) {
+                if (slotsArray[i][j].isEmpty()) {
+                    return Optional.of(i*10+j);
+                }
             }
         }
         return Optional.empty();
@@ -228,13 +232,25 @@ public abstract class newAbstractInventory {
     private int fillExistingStacks(Item item, int quantity) {
         int remaining = quantity;
 
-        for (InventorySlot slot : slots) {
-            if (remaining <= 0) {
-                return 0;
-            }
+//        for (InventorySlot slot : slots) {
+//            if (remaining <= 0) {
+//                return 0;
+//            }
+//
+//            if (isPartialStackOfItem(slot, item)) {
+//                remaining = fillSlotWithItem(slot, item, remaining);
+//            }
+//        }
 
-            if (isPartialStackOfItem(slot, item)) {
-                remaining = fillSlotWithItem(slot, item, remaining);
+        for (int i = 0; i < rowsNumber; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (remaining <= 0) {
+                    return 0;
+                }
+                InventorySlot slot = slotsArray[i][j];
+                if (isPartialStackOfItem(slot,item)) {
+                    remaining = fillSlotWithItem(slot,item,remaining);
+                }
             }
         }
 
@@ -258,17 +274,33 @@ public abstract class newAbstractInventory {
         int remaining = quantity;
         int stackLimit = item.getItemEnum().getLimitStacking();
 
-        for (InventorySlot slot : slots) {
-            if (remaining <= 0) {
-                return;
-            }
+//        for (InventorySlot slot : slots) {
+//            if (remaining <= 0) {
+//                return;
+//            }
+//
+//            if (slot.isEmpty()) {
+//                int quantityToAdd = Math.min(remaining, stackLimit);
+//                slot.setItem(item);
+//                slot.setQuantity(quantityToAdd
+//                );
+//                remaining -= quantityToAdd;
+//                slotsOccupied++;
+//            }
+//        }
 
-            if (slot.isEmpty()) {
-                int quantityToAdd = Math.min(remaining, stackLimit);
-                slot.setItem(item);
-                slot.setQuantity(quantityToAdd);
-                remaining -= quantityToAdd;
-                slotsOccupied++;
+        for (int i = 0; i < rowsNumber; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (remaining <= 0)
+                    return;
+                InventorySlot slot = slotsArray[i][j];
+                if (slot.isEmpty()) {
+                    int quantityToAdd = Math.min(remaining, stackLimit);
+                    slot.setItem(item);
+                    slot.setQuantity(quantityToAdd);
+                    remaining -= quantityToAdd;
+                    slotsOccupied++;
+                }
             }
         }
     }
@@ -276,13 +308,23 @@ public abstract class newAbstractInventory {
     private void removeItemsFromSlots(ItemsEnum itemType, int quantityToRemove) {
         int remaining = quantityToRemove;
 
-        for (InventorySlot slot : slots) {
-            if (remaining <= 0) {
-                return;
-            }
+//        for (InventorySlot slot : slots) {
+//            if (remaining <= 0) {
+//                return;
+//            }
+//
+//            if (slotContainsItem(slot, itemType)) {
+//                remaining = removeFromSlotUntilEmpty(slot, remaining);
+//            }
+//        }
 
-            if (slotContainsItem(slot, itemType)) {
-                remaining = removeFromSlotUntilEmpty(slot, remaining);
+        for (int i = 0; i < rowsNumber; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (remaining <= 0)
+                    return;
+                InventorySlot slot = slotsArray[i][j];
+                if (slotContainsItem(slot,itemType))
+                    remaining =  removeFromSlotUntilEmpty(slot,remaining);
             }
         }
     }
@@ -302,26 +344,48 @@ public abstract class newAbstractInventory {
     }
 
     public int getItemCount(ItemsEnum itemType) {
+        int count = 0;
+        InventorySlot slot;
+
         if (itemType == null) {
             return 0;
         }
-
-        return slots.stream()
-                .filter(slot -> !slot.isEmpty() && slot.getItem().getItemEnum() == itemType)
-                .mapToInt(InventorySlot::getQuantity)
-                .sum();
+        for (int i = 0; i < rowsNumber; i++) {
+            for (int j = 0; j < 10; j++) {
+                slot = slotsArray[i][j];
+                if (!slot.isEmpty() && slot.getItem().getItemEnum() == itemType) {
+                    count += slot.getQuantity();
+                }
+            }
+        }
+        return count;
+//
+//        return slots.stream()
+//                .filter(slot -> !slot.isEmpty() && slot.getItem().getItemEnum() == itemType)
+//                .mapToInt(InventorySlot::getQuantity)
+//                .sum();
     }
 
     public int getAvailableRoomForItem(Item item) {
+        InventorySlot slot;
         if (item == null) {
             return 0;
         }
         int availableRoom = 0;
         int stackLimit = item.getItemEnum().getLimitStacking();
 
-        for (InventorySlot slot : slots) {
-            if (!slot.isEmpty() && slot.getItem().getItemEnum() == item.getItemEnum()) {
-                availableRoom += stackLimit - slot.getQuantity();
+//        for (InventorySlot slot : slots) {
+//            if (!slot.isEmpty() && slot.getItem().getItemEnum() == item.getItemEnum()) {
+//                availableRoom += stackLimit - slot.getQuantity();
+//            }
+//        }
+
+        for (int i = 0; i < rowsNumber; i++) {
+            for (int j = 0; j < 10; j++) {
+                slot = slotsArray[i][j];
+                if (!slot.isEmpty() && slot.getItem().getItemEnum() == item.getItemEnum()) {
+                    availableRoom += stackLimit - slot.getQuantity();
+                }
             }
         }
 
@@ -336,16 +400,16 @@ public abstract class newAbstractInventory {
         return index >= 0 && index < size;
     }
 
-    public ArrayList<InventorySlot> getSlots() {
-        return this.slots;
+    public InventorySlot[][] getSlots() {
+        return this.slotsArray;
     }
 
-    public InventorySlot getInventorySlot(int slotIndex) {
-        if (!isValidSlotIndex(slotIndex)) {
-            throw new IllegalArgumentException("Invalid slot index: " + slotIndex);
-        }
-        return this.slots.get(slotIndex);
-    }
+//    public InventorySlot getInventorySlot(int slotIndex) {
+//        if (!isValidSlotIndex(slotIndex)) {
+//            throw new IllegalArgumentException("Invalid slot index: " + slotIndex);
+//        }
+//        return this.slots.get(slotIndex);
+//    }
 
     public int getSize() {
         return this.size;
@@ -359,7 +423,16 @@ public abstract class newAbstractInventory {
         return slotsOccupied >= size;
     }
 
-    public InventorySlot getInventorySlot(int index) {return slotsArray[index]}
+    public InventorySlot getInventorySlot(int index) {
+        if (isValidSlotIndex(index))
+            return slotsArray[index/10][index%10];
+        else
+            return null;
+    }
+
+    public int getRowsNumber() {return rowsNumber;}
+
+    public InventorySlot getInventorySlotFromDoubleIndex(int row, int columns) {return slotsArray[row][columns];}
 
     @Deprecated
     public HashMap<Item, Integer> remove(int slotIndex, int quantity) {
