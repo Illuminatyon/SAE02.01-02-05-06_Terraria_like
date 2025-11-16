@@ -1,7 +1,7 @@
 package fr.iut.hev.root.model.entities.actor;
 
 public enum ActorEnum {
-  ZOMBIE("evil and intimidating codsworth",32,54,2,15,3,5,1,1500,20),
+    ZOMBIE("evil and intimidating codsworth",32,54,2,15,3,5,1,1500,20),
     PLAYER("jhon_fallout",32,64,3,10,3,10),
     POULET("poulet",32,32,2,15,3,4),
     HOMPS("homps",32,64,3,10,3,10);

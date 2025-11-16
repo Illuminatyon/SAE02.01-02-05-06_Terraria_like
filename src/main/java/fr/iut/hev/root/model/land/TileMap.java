@@ -34,11 +34,11 @@ public class TileMap {
         return tileMap;
     }
 
-    public void initTileMap(ItemFactory itemFactory, int tilesWidth, int tilesHeight) {
+    public void initTileMap(int tilesWidth, int tilesHeight) {
         /**
          * TileMap's initializer
          */
-        this.itemFactory = itemFactory;
+        this.itemFactory = ItemFactory.getInstance();
         this.tilesWidth = tilesWidth;
         this.tilesHeight = tilesHeight;
         this.tileArray = new Tile[tilesHeight][tilesWidth];

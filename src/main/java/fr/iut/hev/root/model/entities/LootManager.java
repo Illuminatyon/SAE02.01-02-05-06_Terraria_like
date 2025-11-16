@@ -14,9 +14,9 @@ public class LootManager {
     private final ItemFactory itemFactory;
     private final Random random;
 
-    public LootManager(ItemFactory itemFactory) {
+    public LootManager() {
         this.lootsOnMap = FXCollections.observableSet();
-        this.itemFactory = itemFactory;
+        this.itemFactory = ItemFactory.getInstance();
         this.random = new Random();
     }
 

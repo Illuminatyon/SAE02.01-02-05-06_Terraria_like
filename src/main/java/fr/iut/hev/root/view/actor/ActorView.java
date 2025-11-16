@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 public class ActorView {
     private Actor actor;
     private ImageView actorSprite;
-    private TileMap tileMap;
     private AnchorPane anchorPane;
     private DoubleProperty camOffsetXProperty;
     private DoubleProperty camOffsetYProperty;
@@ -20,7 +19,6 @@ public class ActorView {
         this.camOffsetXProperty = new SimpleDoubleProperty(0);
         this.camOffsetYProperty = new SimpleDoubleProperty(0);
         this.actor = actor;
-        this.tileMap = TileMap.getInstance();
         this.anchorPane = anchorPane;
         this.load();
     }
@@ -60,8 +58,8 @@ public class ActorView {
         // Set initial position (will be updated by the camera)
         System.out.println(" cam" + camOffsetXProperty);
         System.out.println(camOffsetYProperty);
-        actorSprite.setLayoutX(getActor().getPosX());
-        actorSprite.setLayoutY(getActor().getPosY());
+        actorSprite.setLayoutX(getActor().getPosX() - 112);
+        actorSprite.setLayoutY(getActor().getPosY() - 132);
         actorSprite.translateXProperty().bind(actor.posXProperty().add(camOffsetXProperty));
         actorSprite.translateYProperty().bind(actor.posYProperty().add(camOffsetYProperty));
 

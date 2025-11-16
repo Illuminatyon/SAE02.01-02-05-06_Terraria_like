@@ -25,7 +25,7 @@ public class Player extends Actor {
 
     private Inventory inventory; //TODO: g refait un Inventory pour que ça soit compatible avec le reste
     private Set<PlayerMouvementsEnum> playerMouvementEnums;
-    private ObjectProperty<Item> itemInHandProperty; //TODO: (Lino) repenser le système de hotbar et d'item sélectionné ce suppot du diable
+    private ObjectProperty<Item> itemInHandProperty;
     private IntegerProperty quantityOfItemInHandProperty;
     private CraftingManager craftingManager;
 

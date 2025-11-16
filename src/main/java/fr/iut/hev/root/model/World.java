@@ -18,7 +18,6 @@ public class World {
 
     private static World world = null;
 
-    private ItemFactory itemFactory;
     private TileMap tileMap;
     private Player player;
     private HitboxManager hitboxManager;
@@ -26,7 +25,6 @@ public class World {
     private LootManager lootManager;
 
     private World() {
-        this.itemFactory = null;
         this.tileMap = null;
         this.player = null;
         this.hitboxManager = null;
@@ -45,11 +43,10 @@ public class World {
         this.hitboxManager = HitboxManager.getInstance();
         this.aliveMobs = new ArrayList<>();
         this.tileMap = TileMap.getInstance();
-        this.itemFactory = ItemFactory.getInstance();
-        this.lootManager = new LootManager(this.itemFactory);
+        this.lootManager = new LootManager();
         this.player = Player.getInstance();
         this.player.initPlayer(100,100);
-        this.tileMap.initTileMap(itemFactory,width,height);
+        this.tileMap.initTileMap(width,height);
     }
 
     private void updateAliveMobs() {
